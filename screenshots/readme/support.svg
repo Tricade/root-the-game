@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 56" role="img" aria-labelledby="title">
+  <title id="title">Support Tricade on Ko-fi</title>
+  <rect x=".5" y=".5" width="255" height="55" rx="11" fill="#1e2b1b" stroke="#63834b"/>
+  <g fill="none" stroke="#c6ec8d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 22h21v12q0 7-10.5 7T21 34zM42 25h3q8 0 5 7-1 3-8 3M24 46h22M27 16v-4M36 16v-4"/>
+  </g>
+  <text x="68" y="33" fill="#e0f0d0" font-family="Arial,Helvetica,sans-serif" font-size="16" font-weight="700">Support on Ko-fi</text>
+</svg>

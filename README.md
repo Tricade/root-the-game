@@ -6,7 +6,7 @@ ROOT is a local, persistent infrastructure simulation designed for occasional ch
 
 ![ROOT control room with live wall displays and original workstations](screenshots/control-room.jpg)
 
-*Actual application capture with synthetic demonstration data.*
+_Actual application capture with synthetic demonstration data._
 
 > **AI transparency:** Development, documentation and procedural assets received substantial generative-AI assistance. No AI provider is contacted while running ROOT. Read the [AI disclosure](AI-DISCLOSURE.md) for scope and verification limits.
 
@@ -27,25 +27,25 @@ The server binds to loopback and stores progress locally. `ROOT_PORT` and `ROOT_
 - **One network, two interfaces.** Use the web UI or operate terminals, racks and wall displays in the 3D facility. Installed hardware and faults are reflected in the room.
 - **Hardware with tradeoffs.** CPU, storage, edge and AI/GPU servers consume rack space, power and cooling. Connections, switches and upgrades affect usable capacity.
 - **Consequences and recovery.** Defects, maintenance, outages and incidents can interrupt work. Repairs, backups, agent assignments and automation help protect the network. Major incidents wait for your decision.
-- **An expanding underground facility.** Six racks fit in a server room; four server rooms form a floor. Corridors connect rooms, and stairs connect existing adjacent floors. Central cooling, UPS and power distribution unlock in sectors 4, 6 and 8.
+- **An expanding underground facility.** Start with one server room and a corridor. Buy each additional room, plant room and basement separately. Six racks fit in a server room; four server rooms fit on a floor. Corridors connect owned rooms, and stairs connect completed adjacent floors. Central cooling, UPS and power distribution unlock in sectors 4, 6 and 8 and require their plant rooms.
 - **A control room with live instruments.** Monitor operations, building systems and protection on interactive wall displays, with furnished workstations and a lounge.
 - **Persistent progress.** Up to 12 hours of offline progress is simulated. Automatic saves, a previous-write backup and JSON export/import provide recovery paths.
 
-This is an evolving **1.4 preview**. In this published baseline, new server rooms and floors are allocated automatically as racks are added. Separately purchased construction and a revised economy are under development; they are not included in this baseline. Economy tuning and 3D presentation remain active areas for contributions.
+This is an evolving **1.4 preview**. Excavating the next server room starts at **20 million credits / 30 minutes**; the next basement starts at **500 million / 2 hours**. Prices and durations rise with expansion. Pay at the start, wait for construction to finish, then install racks or systems separately. One contractor handles one build at a time while existing operations and emergency repairs continue. Completed construction appears in both interfaces and produces a notification. Existing saves retain their previously accessible rooms and equipment. See [construction and economy](docs/construction.md) for progression, migration and balance limits.
 
 Progression extends beyond six racks. Validation currently accepts up to **10,000 racks**, **10,000 servers** and **1,000,000 sectors**, with five central-utility levels. These are implementation limits. Only the selected room is rendered; maximum-size save validation does not establish real-time performance at that size.
 
 ## Controls
 
-| Control | Action |
-| --- | --- |
-| WASD | Move |
-| Mouse drag / left and right arrows | Look around |
-| E on a closed rack | Open its door |
-| E on exposed hardware | Open hardware controls |
-| E on a door or terminal | Operate the target |
-| Escape | Close the active dialog/console, then leave walking mode |
-| Room / floor selectors | Navigate without walking |
+| Control                            | Action                                                   |
+| ---------------------------------- | -------------------------------------------------------- |
+| WASD                               | Move                                                     |
+| Mouse drag / left and right arrows | Look around                                              |
+| E on a closed rack                 | Open its door                                            |
+| E on exposed hardware              | Open hardware controls                                   |
+| E on a door or terminal            | Operate the target                                       |
+| Escape                             | Close the active dialog/console, then leave walking mode |
+| Room / floor selectors             | Navigate without walking                                 |
 
 Room doors work from either side and close after passage once the swing area is clear. If pointer lock is unavailable, mouse drag remains usable. Reloading restores the selected room/floor and the saved walking position within that browser tab, with a safe entrance as fallback.
 
@@ -62,7 +62,8 @@ ROOT has no telemetry, analytics, accounts, online AI calls or runtime downloads
 ## Build with us
 
 ```sh
-npm test
+npm ci --ignore-scripts
+npm run check
 ```
 
 Runtime source is plain JavaScript, HTML and CSS, with vendored **Three.js 0.186.1**. There is no application build step. Start with the [contributor guide](CONTRIBUTING.md), [architecture](docs/development.md) and [runtime notes](docs/runtime-1.4.md).
@@ -94,4 +95,4 @@ Project code is [MIT licensed](LICENSE). Original generated models/maps are prov
 
 **ROOT starten.cmd** oder `node server.cjs` startet die lokale Leitstelle. Unter **Einstellungen → Sprache / Language** kannst du Deutsch oder Englisch wählen. Betrieb, Wartung und Ausbau sind über die Weboberfläche und die Terminals im Cyberbunker erreichbar. Fortschritt und Sicherungen bleiben lokal in `data/`.
 
-Diese Vorschau legt weitere Räume und Etagen noch mit den Rackkäufen an. Kostenpflichtiger unterirdischer Bau und neues Balancing werden separat entwickelt. Zum Mitbauen: einen eigenen Themenbranch erstellen, `npm test` ausführen und einen Pull Request gegen `main` öffnen. Die Asset-Generatoren und bearbeitbaren Quelldateien sind enthalten.
+Neue Installationen beginnen mit einem Serverraum und einem Flur. Weitere Räume, Technikräume und Untergeschosse werden einzeln gekauft und gebaut. Der nächste Serverraum kostet anfangs 20 Millionen Credits, das nächste Untergeschoss 500 Millionen; mit dem Ausbau steigen Kosten und Bauzeit. Racks und Anlagen werden danach separat installiert. Bestehende Speicherstände behalten ihre bisher zugänglichen Flächen. Zum Mitbauen: einen eigenen Themenbranch erstellen, `npm ci --ignore-scripts` und `npm run check` ausführen und einen Pull Request gegen `main` öffnen. Die Asset-Generatoren und bearbeitbaren Quelldateien sind enthalten.

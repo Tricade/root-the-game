@@ -1,463 +1,19 @@
 (function (root, factory) {
-  const api = factory(root);
+  const createEnglish =
+    typeof module === 'object' && module.exports
+      ? require('./locales/en.js')
+      : root.RootEnglishCatalog;
+  const api = factory(root, createEnglish);
   if (typeof module === 'object' && module.exports) module.exports = api;
   if (root) root.ROOTI18N = api;
-})(typeof globalThis !== 'undefined' ? globalThis : this, function (root) {
+})(typeof globalThis !== 'undefined' ? globalThis : this, function (root, createEnglish) {
   'use strict';
 
   // Source strings are German because the local app is authored in German.
   // Keep values as plain text: callers can translate text nodes, attributes,
   // and canvas labels without changing markup or interpolated user data.
-  const en = Object.create(null);
   const localizers = new Set();
-  const add = (pairs) => { for (const [de, english] of pairs) en[de] = english; };
-  add([
-    ["Raum betreten öffnet die Ego-Ansicht. WASD bewegt dich, Maus oder Pfeiltasten links/rechts drehen den Blick. Am Rack öffnet E zuerst die Tür und danach die freiliegende Hardware. E an der Tür schließt sie. Raumtüren lassen sich von beiden Seiten bedienen und schließen nach dem Durchgehen. Escape führt zurück. Ohne Mausbindung halte die Maustaste zum Umsehen gedrückt. Die Geräte-Liste führt auch direkt zu jedem Server. Die Monitore an den Leitständen und die Konsole öffnen alle Verwaltungsbereiche direkt im Raum. Escape schließt zuerst den Dialog, dann die Konsole; Weboberfläche beendet den Rundgang.","Entering the room opens first-person view. Use WASD to move and the mouse or left/right arrow keys to turn. Press E while targeting a rack to open its door. Press E while targeting the open door to close it; target the exposed hardware to manage it. Room doors can be operated from either side and close after you pass through. Press Escape to return. If pointer lock is unavailable, hold the mouse button to look around. The device list also links directly to each server. The control desk monitors and console open every management area in the room. Escape closes the dialog first, then the console; switch to the web interface to leave the tour."],
-    ['Weboberfläche und Raumkonsole','Web interface and room console'],
-    ['Zugang zum Cyberbunker','Cyberbunker access'],
-    ['Eine kurze Kamerafahrt führt von außen durch die Sicherheitsschleusen. Reduzierte Animationen werden berücksichtigt.','A short camera sequence takes you through the security airlocks. Reduced motion preferences are respected.'],
-    ['Verbindungsflur','Connecting corridor'],['Leitstelle / Betrieb','Control room / operations'],
-    ['% ausgelastet','% in use'],['· Lokales Netzwerk','· Local network'],
-    ['Raumkonsole','Room console'],['Backups & Betrieb','Operations & Resilience'],['Protokoll','Log'],['Betriebsbackup','Operations backup'],
-    ['ausgefallen ·','failed ·'],['FP geschützt','RP protected'],['Verbraucht:','Spent:'],['Überspringen · Esc','Skip · Esc'],
-    ['Die laufende Infrastrukturmaßnahme muss zuerst abgeschlossen werden.','The current infrastructure operation must finish first.'],
-    ['16 HE BETRIEBSMODUL / ROOT','16 RU OPERATING MODULE / ROOT'],['NICHT BESTÜCKT','NOT POPULATED'],
-    ['Entscheidungen','Decisions'],
-    ['KI-Workload','AI workload'],
-    ['Die Leitstelle bündelt alle Systeme. Der Ausgang führt zurück in den Verbindungsflur.','The control room brings all systems together. The exit leads back to the connecting corridor.'],
-    ['Öffne eine Tür mit E oder einem Klick und gehe hindurch. Die Treppen verbinden vorhandene Untergeschosse.','Press E or click a door to open it and walk through. The stairs connect existing basements.'],
-    ['Ungültiger Netzwerkstand:','Invalid network state:'],
-    ['Die lokale Sicherungsdatei und ihre Sicherung konnten nicht gelesen werden.','The local save file and its backup could not be read.'],
-    ['Deine Dateien bleiben erhalten. Prüfe data/save.json und data/save.backup.json im ROOT-Ordner.','Your files are preserved. Check data/save.json and data/save.backup.json in the ROOT folder.'],
-    ['Nach dem Wiederherstellen einer Sicherung kannst du diese Seite neu laden.','After restoring a backup, you can reload this page.'],
-    ['Dein Netzwerk ist bereits in einem anderen Tab geöffnet.','Your network is already open in another tab.'],
-    ['Schließe den anderen ROOT-Tab und lade diese Seite neu.','Close the other ROOT tab and reload this page.'],
-    ['Der Simulationskern fehlt. Bitte starte ROOT aus dem vollständigen ROOT-Ordner.','The simulation engine is missing. Start ROOT from the complete ROOT folder.'],
-    ['↑ Treppe nach oben','↑ Stairs up'],['↓ Treppe nach unten','↓ Stairs down'],
-    ['Gebäudeplan','Building plan'],['Räume & Versorgung','Rooms & utilities'],['ZUGANG ZUM FLUR','CORRIDOR ACCESS'],
-    ['Raum & Etage wählen','Choose room & basement'],['Hardware & Wartung','Hardware & maintenance'],['Racks · Server · Anschlüsse','Racks · servers · connections'],
-    ['STROMVERTEILUNG','POWER DISTRIBUTION'],['QUELLE A','SOURCE A'],['QUELLE B','SOURCE B'],
-    ['Rack in diesem Raum','Rack in this room'],
-    ['Tür öffnet …','Door opening …'],
-    ['Rack verwalten','Manage rack'],['Versorgung & Verbindung','Utilities & connectivity'],['Strombudget','Power budget'],['RECHENZENTRUM / RACK','DATA CENTER / RACK'],['19 Zoll','19 in'],['der Anforderung','of required capacity'],
-    ['Eine kurze Kamerafahrt führt von außen durch die Sicherheitsschleusen. Sie läuft beim ersten Start pro Browser-Tab. Nach F5 bleibt dein letzter Standort erhalten. Reduzierte Animationen werden berücksichtigt.','A short camera ride leads from outside through the security airlocks. It runs on the first start in each browser tab. Reloading with F5 keeps your last location. Reduced-motion preferences are respected.'],
-    ['EINGANG / SCHUTZBAU','ENTRANCE / SHELTER'],['ÄUSSERE SCHLEUSE','OUTER AIRLOCK'],['DRUCKSCHLEUSE','PRESSURE AIRLOCK'],
-    ['Verlauf der letzten Messwerte','Recent measurements'],['Simulierter Serverraum','Simulated server room'],['Wird gespeichert …','Saving …'],
-    ['Türen öffnen · Räume erkunden · Treppen benutzen','Open doors · explore rooms · use stairs'],
-    ['Ziele auf einen Server, ein Rack oder ein Terminal.','Aim at a server, rack, or terminal.'],
-    ['Tür offen · Hindurchgehen / E: schließen','Door open · Walk through / E: close'],
-    ['E / Klick: Tür öffnen','E / click: open door'],['ROOMS & UTILITIES','ROOMS & UTILITIES'],
-    ['Der lokale Dienst wurde noch nicht bestätigt. Dein Stand liegt nur im Browser; ROOT sendet ihn erst nach einem erfolgreichen Laden des Serverstands.','The local service has not been verified yet. Your progress is only in the browser; ROOT will send it after successfully loading the server state.'],
-    ['Der Netzwerkstand konnte nicht bestätigt oder lokal gespeichert werden. Exportiere ihn aus den Einstellungen.','Your network progress could not be verified or saved locally. Export it from Settings.'],
-    ['Der lokale Dienst ist nicht erreichbar. Dein aktueller Stand ist im Browser gesichert. Starte ROOT über den Desktop-Starter, um wieder in die lokale Sicherungsdatei zu speichern.','The local service is unavailable. Your current progress is saved in the browser. Start ROOT from the desktop launcher to resume saving to the local backup file.'],
-    ['Der Netzwerkstand konnte nicht gespeichert werden. Exportiere ihn in den Einstellungen und starte ROOT über den Desktop-Starter.','Your network progress could not be saved. Export it in Settings and start ROOT from the desktop launcher.'],
-    ['Diese Sitzung pausiert. Bitte Seite neu laden.','This session is paused. Reload the page.'],
-    ['Diese Sitzung pausiert. Lade zuerst den aktuellen Serverstand neu.','This session is paused. Reload the current server state first.'],
-    ['Diese Sitzung pausiert. Lade zuerst den Serverstand neu.','This session is paused. Reload the server state first.'],
-    ['Dein Netzwerk ist bereit.','Your network is ready.'],
-    ['Der Stand ist nur im Browser gesichert. Der Server hat die Änderung noch nicht bestätigt.','Progress is only saved in the browser. The server has not confirmed the change yet.'],
-    ['Netzwerkstand als Datei exportiert.','Network progress exported to a file.'],
-    ['Stand nur im Browser gesichert; Serverbestätigung fehlt.','Progress saved only in the browser; server confirmation is missing.'],
-    ['Der Server ist leer. Die abweichende Browserkopie wurde separat gesichert und kann aus den Einstellungen exportiert oder importiert werden.','The server is empty. The alternate browser copy was saved separately and can be exported or imported from Settings.'],
-    ['Der aktuelle Serverstand wurde geladen. Deine abweichende Browserkopie kann aus den Einstellungen exportiert werden.','The current server state was loaded. Your alternate browser copy can be exported from Settings.']
-  ]);
-  add([
-    ['Übersicht','Overview'],['Rechenzentrum','Data Center'],['Agenten','Agents'],['Aufträge','Jobs'],['Forschung','Research'],['Automatisierung','Automation'],['Betrieb & Schutz','Operations & Resilience'],['Entscheidungen','Decisions'],['Aktivitätslog','Activity Log'],
-    ['Leitstelle','Control Room'],['Betrieb','Operations'],['Einstellungen','Settings'],['Handbuch','Guide'],['Zurück','Back'],['Schließen','Close'],['Speichern','Save'],['Abbrechen','Cancel'],['Bestätigen','Confirm'],['Weiter','Continue'],['Jetzt speichern','Save now'],['Zur Übersicht','Go to overview'],['Zur Leitstelle','Go to control room'],['Navigation öffnen','Open navigation'],['Entscheidungen öffnen','Open decisions'],['Einstellungen öffnen','Open settings'],
-    ['Server hinzufügen','Add server'],['Server einbauen','Install server'],['Server ansehen','View server'],['Server im Betrieb','Servers online'],['Server online','Servers online'],['Agenten aktiv','Active agents'],['Aufträge entdecken','Explore jobs'],['Aufträge verwalten','Manage jobs'],['Alle Aufträge','All jobs'],['Auftrag annehmen','Accept job'],['Annehmen','Accept'],['Ablehnen','Decline'],['Angebot ablehnen','Decline offer'],['Ausbauen','Upgrade'],['Entwickeln','Develop'],['Erforschen','Research'],['Einsatz planen','Plan assignment'],['Einsatz ansehen','View assignment'],['Einsatz starten','Start assignment'],['Agent einstellen','Hire agent'],['Sektor erschließen','Expand sector'],['Sektor erweitern','Expand sector'],['Horizont erweitern','Expand your horizons'],['Sicherung exportieren','Export backup'],['Sicherung importieren','Import backup'],['Neu anfangen','Start over'],['Vorfall ansehen','View incident'],['Vorfall bearbeiten','Handle incident'],['Raum betreten','Enter room'],['Leitstelle','Control room'],['Geräte-Liste','Device list'],['Zurück in den Raum · Esc','Back to room · Esc'],['Gerät auswählen · Freien Platz belegen','Select a device · Fill an empty slot'],['Verkabelung','Wiring'],['Front','Front'],
-    ['Verfügbare Credits','Available credits'],['Rechenkapazität','Compute capacity'],['Forschungspunkte','Research points'],['Zuverlässigkeit','Reliability'],['ausgelastet','in use'],['Upgrades','upgrades'],['Wärmstes Rack','Warmest rack'],['Durchsatz','Throughput'],['Live aus deinem Netzwerk','Live from your network'],['Infrastruktur verwalten','Manage infrastructure'],['Netzwerkübersicht','Network overview'],['Alles im Blick. Dein Netzwerk arbeitet für dich.','Your network at a glance. It works for you.'],['Dein Rechenzentrum','Your data center'],['Aktive Aufträge','Active jobs'],['Deine Agenten','Your agents'],['Verwalten','Manage'],['Zuletzt im Netzwerk','Recent activity'],['Netzwerkstand gespeichert','Network saved'],['Netzwerkname','Network name'],['Lokales Netzwerk','Local network'],['Sektor','Sector'],['Workspace','Workspace'],['Hauptnavigation','Main navigation'],['Offene Belohnungen','Unclaimed rewards'],['Einführung ausblenden','Hide introduction'],['Willkommen in deiner Leitstelle.','Welcome to your control room.'],['Baue Kapazität auf, wähle passende Aufträge und gib deinen Agenten einen Schwerpunkt.','Build capacity, choose suitable jobs, and assign your agents a focus.'],['So funktioniert ROOT','How ROOT works'],['Neue Kapazitäten. Größere Aufträge. Dein nächster Schritt.','More capacity. Bigger jobs. Your next step.'],['Sektor wartet.','Sector is waiting.'],['Sektor erschließen','Expand sector'],
-    ['Auftragsarbeit','Job work'],['Netzwerkpflege','Network maintenance'],['Ausgewogen','Balanced'],['Leistung','Performance'],['Öko','Eco'],['Monitoring','Monitoring'],['Migration','Migration'],['Audit','Audit'],['Optimierung','Optimization'],['Wiederherstellung','Recovery'],['KI-Workload','AI workload'],['Operator','Operator'],['Techniker','Technician'],['Analyst','Analyst'],['Schwerpunkt im Normalbetrieb','Focus during normal operations'],['Normalbetrieb','Normal operations'],['Sondereinsatz','Special assignment'],['Einsatzstatus','Assignment status'],['Schwerpunkt frei wählbar','Choose a focus'],['Wen kannst du gerade entbehren?','Who can you spare right now?'],['Agenten arbeiten autonom an deinen Aufträgen. Jede Rolle bringt einen eigenen Vorteil ins Netzwerk.','Agents work autonomously on your jobs. Each role brings a distinct benefit to your network.'],['Stufe','Level'],['STUFE','LEVEL'],['SONDEREINSATZ','SPECIAL ASSIGNMENT'],['EINSATZSTATUS','ASSIGNMENT STATUS'],['Erholungszeit danach','recovery time afterward'],
-    ['Auftragsboard','Job board'],['Wähle Arbeit, die zu deinem Netzwerk passt. Neue Angebote entstehen laufend.','Choose work that fits your network. New offers arrive continuously.'],['In Bearbeitung','In progress'],['GPU belegt / nutzbar','GPU used / available'],['Freie Kapazität','Available capacity'],['Gemeinsamer Durchsatz','Shared throughput'],['Abgeschlossen','Completed'],['Verfügbare Aufträge','Available jobs'],['Angebote bleiben verfügbar','Offers remain available'],['Neue Angebote sind unterwegs','New offers are on the way'],['Dein Netzwerk wird in Kürze wieder angefragt. Die automatische Vergabe übernimmt auf Wunsch neue passende Aufträge.','Your network will receive new offers soon. Automatic assignment can accept suitable jobs for you.'],['Teile die Arbeit bewusst auf.','Distribute work thoughtfully.'],['Alle Aufträge teilen sich die Leistung deiner Agenten. Mehr parallele Arbeit belegt mehr Kapazität. Mit einer Priorität unter Automatisierung kannst du lukrative oder forschungsintensive Aufträge vorziehen.','All jobs share your agents’ capacity. More simultaneous work uses more capacity. Set a priority under Automation to favor lucrative or research-heavy jobs.'],['Automatik','Automation'],['aktivieren','enable'],['Automatische Vergabe aktiv','Automatic assignment active'],['Aufträge werden manuell angenommen','Jobs are accepted manually'],['Automatisieren','Automate'],
-    ['Forschung & Entwicklung','Research & Development'],['Verbessere die Architektur deines Netzwerks – Stufe für Stufe.','Improve your network architecture, one level at a time.'],['FORSCHUNGSPUNKTE','RESEARCH POINTS'],['Erfolge & Meilensteine','Achievements & milestones'],['Belohnungen verfügbar','rewards available'],['Deine nächsten Ziele','Your next goals'],['ERREICHT','ACHIEVED'],['Dauerhaft aktiv · Ausbau bleibt erhalten','Always active · upgrades are permanent'],['Lege die Regeln fest. Dein Netzwerk kümmert sich um die Routine.','Set the rules. Your network handles routine work.'],['AUTONOMER BETRIEB','AUTONOMOUS OPERATIONS'],['Betriebsregeln','Operating rules'],['Automatische Auftragsvergabe','Automatic job assignment'],['Automatische Netzwerkpflege','Automatic network maintenance'],['Freie Kapazitäten werden mit passenden Angeboten belegt. Deine Priorität bestimmt die Auswahl.','Available capacity is filled with suitable offers. Your priority determines the selection.'],['Reserve & Automatik','Reserve & automation'],['Geschützte Geldreserve','Protected cash reserve'],['Ersatzteile im Lager','Spare parts in stock'],['Automatische Betriebsbackups','Automatic operations backups'],['Sicherungen innerhalb deines Wartungsbudgets und deiner Geldreserve.','Backups within your maintenance budget and cash reserve.'],['Entscheidungs-Inbox','Decision inbox'],['Besondere Situationen. Mehrere Wege. Du bestimmst die Richtung.','Special situations. Several options. You choose the direction.'],['Alles geklärt. Dein Netzwerk arbeitet.','All clear. Your network is running.'],['Besondere Anfragen und Entdeckungen landen hier. Deine nächste Entscheidung kommt, während das Netzwerk wächst.','Special requests and discoveries appear here. Your next decision will arrive as the network grows.'],['Du gibst den Takt vor.','You set the pace.'],['Diese Entscheidungen haben kein Zeitlimit. Bis zu drei Ereignisse warten auf dich; der reguläre Betrieb geht währenddessen weiter.','These decisions have no time limit. Up to three events can wait for you while normal operations continue.'],
-    ['Rechenzentrum','Data center'],['Rack hinzufügen','Add rack'],['Racks / verfügbar','Racks / available'],['Belegte Höheneinheiten','Rack units occupied'],['Stromaufnahme','Power draw'],['Netzwerkleistung','Network capacity'],['Jede Verbindung zählt. Vom einzelnen Port bis zur Versorgung des ganzen Racks.','Every connection matters, from an individual port to the power supply for the entire rack.'],['Strom / Link','Power / link'],['Aktivität','Activity'],['Störung','Fault'],['Position','Location'],['Wähle einen Server, einen Switch-Port oder die Versorgung direkt am Rack. Freie Höheneinheiten lassen sich mit neuer Hardware belegen.','Select a server, switch port, or rack power supply. Empty rack units can be filled with new hardware.'],['Einbauformat','Form factor'],['Nutzbare Höheneinheiten','Usable rack units'],['Freier Einbauplatz','Available rack space'],['Verbundene Server','Connected servers'],['Switch & Uplink','Switch & uplink'],['Stromversorgung','Power supply'],['Kühlung','Cooling'],['Switch-Ausbau','Switch upgrade'],['Kühlstufe','Cooling level'],['Versorgungsstufe','Power level'],['Rack-Luft','Rack air'],['Gerätedetails','Device details'],['Betriebsmodus','Operating mode'],['Hochfahren','Power on'],['Ausschalten','Power off'],['Umsetzen / Umpatchen','Move / repatch'],['Reparatur prüfen','Review repair'],['Blaue Positions-LED markieren','Mark with blue locator LED'],['Prozessor','Processor'],['Kerne','cores'],['Arbeitsspeicher','Memory'],['Beschleuniger','Accelerators'],['Speicher','Storage'],['Kapazität','Capacity'],['Zustand','Condition'],['Verbindung','Connection'],['Port deaktivieren','Disable port'],['Port aktivieren','Enable port'],['Switch verwalten','Manage switch'],['Frontansicht','Front view'],['Rackansicht','Rack view'],['Gerät auswählen','Select a device'],['Portzuordnung & Stromanschlüsse','Port mapping & power connections'],['Rack umsetzen','Move rack'],['Ziel-Rack','Destination rack'],['Unterste Höheneinheit','Lowest rack unit'],['Switch-Port','Switch port'],['Einbauen','Install'],['Einbau in','Install in'],['Keine Credits','No credits'],['Maßnahme starten','Start operation'],['Ausbau prüfen','Review upgrade'],['Hardware einbauen','Install hardware'],['Infrastruktur ändern','Modify infrastructure'],['Rechenzentrum / Rack','Data center / rack'],['AUSSTATTUNG','EQUIPMENT'],['PHYSICAL INFRASTRUCTURE','PHYSICAL INFRASTRUCTURE'],['WORKSPACE / PHYSICAL INFRASTRUCTURE','WORKSPACE / PHYSICAL INFRASTRUCTURE'],
-    ['Begehe deinen Serverraum','Explore your server room'],['Raum betreten öffnet die Ego-Ansicht. WASD bewegt dich, Maus oder Pfeiltasten links/rechts drehen den Blick. Am Rack öffnet E zuerst die Tür und danach die freiliegende Hardware. E an der Tür schließt sie. Raumtüren lassen sich von beiden Seiten bedienen und schließen nach dem Durchgehen. Escape führt zurück. Ohne Mausbindung halte die Maustaste zum Umsehen gedrückt. Die Geräte-Liste führt auch direkt zu jedem Server. Die Monitore an den Leitständen und die Konsole öffnen alle Verwaltungsbereiche direkt im Raum. Escape schließt zuerst den Dialog, dann die Konsole; Weboberfläche beendet den Rundgang.','Enter room opens the first-person view. WASD moves you; use the mouse or left/right arrow keys to turn. E opens the targeted device; Escape returns. If mouse capture is unavailable, hold the mouse button to look around. The device list also links directly to each server. The control desk monitors and console open every management area in the room. Escape closes the dialog first, then the console; Web UI ends the tour.'],['Plane dein Rechenzentrum','Plan your data center'],['Gib Agenten einen Schwerpunkt','Assign agents a focus'],['Wähle passende Aufträge','Choose suitable jobs'],['Lass die Routine laufen','Automate routine work'],['Investiere in Entwicklung','Invest in development'],['Schütze deinen Betrieb','Protect your operations'],['Plane gezielte Einsätze','Plan targeted assignments'],['Beachte die Verbindungen','Mind the connections'],['Komm in deinem Tempo zurück','Return at your own pace'],['ROOT ist deine eigene Netzwerk-Leitstelle. Es gibt keinen Zeitdruck: Gute Entscheidungen, ein durchdachter Ausbau und passende Regeln bringen dich weiter.','ROOT is your own network control room. There is no time pressure: good decisions, thoughtful expansion, and suitable rules help you progress.'],['TASTATUR · 1–9: Bereiche wechseln · ?: Hilfe · Escape: Schließen','KEYBOARD · 1–9: switch areas · ?: help · Escape: close'],['Dein Netzwerk','Your network'],['Ein eigener Name für deine Leitstelle.','Choose a name for your control room.'],['Netzwerkstand & Sicherung','Network state & backup'],['Neues Netzwerk','New network'],['Beginne mit einer neuen Ausgangslage. Dein bisheriger Stand wird vorher automatisch als Datei exportiert.','Start with a clean slate. Your current progress will be exported to a file first.'],['Deine lokale Netzwerk-Leitstelle. Alle Server und Agenten sind Teil der Simulation. Fortschritt während der Abwesenheit: maximal 12 Stunden. Beende zum Schließen einfach den Browser-Tab.','Your local network control room. All servers and agents are part of the simulation. Offline progress is capped at 12 hours. Close the app by closing this browser tab.'],['Dein Netzwerk erweitern','Expand your network'],['Dein Team erweitern','Expand your team'],['Nächsten Sektor erschließen','Expand the next sector'],['Willkommen bei ROOT','Welcome to ROOT'],['Ein neues Netzwerk beginnen','Start a new network'],['Sicherung wiederherstellen','Restore backup'],['Reparatur planen','Plan repair'],['Folgen deiner Entscheidung','Consequences of your decision'],['Agent gezielt einsetzen','Assign an agent'],['Umsetzen / Umpatchen','Move / repatch'],['Dein Netzwerk war fleißig','Your network has been busy'],['Während deiner Abwesenheit hat ROOT','While you were away, ROOT worked for'],['Credits erwirtschaftet','Credits earned'],['Vorfall ansehen','View incident'],['Alles im Blick','At a glance'],['Server hinzufügen','Add server'],['Bewegung','Move'],['Gerät öffnen','Open device'],['Racks und Server','Racks and servers'],['Begehbarer Serverraum','Walkable server room'],['Lokale Infrastruktur · Live-Simulation','Local infrastructure · Live simulation'],['SERVERRAUM','SERVER ROOM'],['SYSTEM ONLINE','SYSTEM ONLINE'],['SIMULATION','SIMULATION'],['WASD bewegen','WASD to move'],['Maus ziehen / ← → drehen','Drag mouse / ← → to turn'],['Raum betreten','Enter room'],['Leitstelle','Control room'],['Geräte-Liste','Device list'],['Bereiche der Raumkonsole','Room console sections'],['Bereiche der Raumkonsole','Room console sections'],['Netzwerk online','Network online'],
-    ['Krisenpause aktiv','Crisis pause active'],['verfügbar','available'],['Zuverlässigkeit','Reliability'],['Sektor','Sector'],['AGENTEN','AGENTS'],['SEKTOR','SECTOR'],['Einsatz','assignment'],['Schutzmodus','resilience mode'],['Entscheidung erforderlich','Decision required'],['Maßnahme läuft','Operation in progress'],['Weitere Folgeschäden sind gestoppt.','Further damage has been stopped.'],['Diese Entscheidung wartet ohne Zeitlimit auf dich.','This decision will wait for you; there is no time limit.'],['Die Folgen deiner Auswahl werden einmalig angewendet.','The consequences of your choice are applied once.'],['Folgen prüfen','Review consequences'],['NOTWEG','LAST RESORT'],['SCHUTZMODUS AKTIV','RESILIENCE MODE ACTIVE'],['Vorsorge verändert die Folgen.','Preparation changes the outcome.'],['Zustand der Server','Server condition'],['Maßnahmen prüfen','Review actions'],['Keine aktive Störung','No active fault'],['Aktuelle Aufnahme','Current draw'],['Leistungsbudget','Power budget'],['Angeforderter Verkehr','Requested traffic'],['Verlauf','Trend'],['Alle Geräte eines Racks teilen sich Uplink, Strom und Kühlung.','All devices in a rack share its uplink, power, and cooling.'],['Der Netzwerkname muss mindestens zwei Zeichen lang sein.','The network name must be at least two characters.'],['Netzwerk umbenannt.','Network renamed.'],['Betriebsmodus angepasst.','Operating mode updated.'],['Ersatzteile eingelagert.','Spare parts stocked.'],['Betriebssicherung wird erstellt.','Operations backup is being created.'],['Untersuchen','Investigate'],['Datensatz lizenzieren','License dataset'],['Neue Erkenntnisse sichern.','Secure new findings.'],['Eine sichere Vergütung erhalten.','Receive a guaranteed payment.'],
-  ]);
-  add([
-    ['Kontrollraum','Control room'],['Raum','Room'],['Etage','Basement'],['Raum wechseln','Change room'],['Zum Kontrollraum','Go to control room'],['Nächste Etage','Next basement'],['Vorherige Etage','Previous basement'],['Rackdetails','Rack details'],['Server anzeigen','View server'],['Keine Server eingebaut','No servers installed'],['Standort','Location'],['Raumplan','Room map'],['Tür öffnen','Open door'],['Tür schließen','Close door'],['Sprachwechsel übernehmen','Apply language change'],['Rack-Details','Rack details'],
-    ['Lokale Infrastruktur · Live-Simulation','Local infrastructure · Live simulation'],['SERVERRAUM','SERVER ROOM'],['SYSTEM ONLINE','SYSTEM ONLINE'],['SIMULATION','SIMULATION'],['ROOT / OPERATIONS TERMINAL','ROOT / OPERATIONS TERMINAL'],['WORKSPACE / PHYSICAL INFRASTRUCTURE','WORKSPACE / PHYSICAL INFRASTRUCTURE'],
-    ['Systemstart','Startup'],['Wartung aktiv','Maintenance active'],['Port deaktiviert','Port disabled'],['Ausgefallen','Failed'],['Online','Online'],['Fehler','Fault'],['Bereit','Ready'],['Unbekannt','Unknown'],['Aktiv','Active'],['Pausiert','Paused'],['Wartend','Waiting'],['Manuell','Manual'],['Automatisch','Automatic'],['Sofort','Immediate'],['Nach Abschluss','After completion'],['Dauer','Duration'],['Kosten','Cost'],['Grund','Reason'],['Beschreibung','Description'],['Ziel','Target'],['Ereignisse','Events'],['Aufträge abgeschlossen','Jobs completed'],['Erholung','Recovery'],['Störung','Fault'],['Ausfall','Outage'],['Folgeschäden','Consequential damage'],['Betriebsausstoß','Operational output'],['Betriebsschutz','Operational protection'],['Datenkorruption','Data corruption'],['Datenverlust','Data loss'],['Forschung und laufende Aufträge','Research and active jobs'],['Laufende Aufträge','Active jobs'],['gesichert','protected'],['geschützt','protected'],['verfügbar','available'],['Offen','Open'],['OFFEN','OPEN'],['Netzwerkereignis','Network event'],['NETZWERKEREIGNIS','NETWORK EVENT'],['Ereignis','Event'],['Belohnung','Reward'],['Erfolge','Achievements'],['Meilenstein eingelöst','Milestone claimed'],['Auftrag abgeschlossen','Job completed'],['Betriebssicherung abgeschlossen','Operations backup completed'],['Krisenmaßnahme abgeschlossen','Crisis response completed'],['Hardwarefehler erkannt','Hardware fault detected'],['Der geschützte Betrieb ist wieder freigegeben.','Protected operations have resumed.'],
-    ['ROOT ist bereit. Dein erster Überwachungsauftrag läuft.','ROOT is ready. Your first monitoring job is underway.'],['Jeder Knoten liefert Grundversorgung und Rechenkapazität. Wähle die passende Architektur für dein Netzwerk.','Each node provides baseline service and compute capacity. Choose the right architecture for your network.'],['Agenten arbeiten autonom an deinen Aufträgen. Jede Rolle bringt einen eigenen Vorteil ins Netzwerk.','Agents work autonomously on your jobs. Each role brings a distinct benefit to your network.'],['Stufe 1 · Autonom aktiv','Level 1 · Working autonomously'],['Basiskapazität','Base capacity'],['Grundverbrauch','Base power draw'],['Plätze belegt','slots occupied'],['Budget','Budget'],['Kapazitäten sind frei','Capacity is available'],['Nimm einen Auftrag an oder aktiviere die automatische Vergabe.','Accept a job or enable automatic assignment.'],['Für dein Netzwerk','For your network'],['Schwerpunkt','Focus'],['Netzwerk arbeiten lassen','Let the network work'],['ROOT arbeitet während deiner Abwesenheit autonom.','ROOT works autonomously while you are away.'],['Erweiterung nicht verfügbar','Expansion unavailable'],['Wartungsmodus','Maintenance mode'],['Normaler Betrieb','Normal operations'],['Zurück in den Raum','Back to room'],['Schutzmodus aktiv','Resilience mode active'],['Dein Netzwerk wartet auf deine Entscheidung.','Your network is waiting for your decision.'],
-    ['Der Server bleibt eingeschaltet und benötigt weiterhin Strom.','The server remains powered on and continues to use power.'],['Dieser Anschluss ist frei. Beim Einbau oder Umsetzen kannst du ihm einen Server zuordnen.','This port is free. You can assign a server to it when installing or moving hardware.'],['Alle Server dieses Racks teilen sich den Uplink. Ein abgeschalteter Port trennt den zugeordneten Server vom Netz.','All servers in this rack share the uplink. Disabling a port disconnects its assigned server from the network.'],['Die Stromversorgung begrenzt die gemeinsame Leistung im Rack. Zusätzliche Reserve hilft bei Ausbau und Leistungsprofilen.','The power supply limits the rack’s shared capacity. Extra headroom helps with expansion and high performance modes.'],['Die Kühlleistung bestimmt, wie viel Wärme das Rack abführen kann. Zu hohe Temperaturen drosseln die Leistung und erhöhen den Verschleiß.','Cooling capacity determines how much heat the rack can dissipate. High temperatures throttle performance and increase wear.'],['Während des Umbaus ist das gesamte Rack vorübergehend nicht verfügbar. Bestehende Defekte bleiben erhalten.','The entire rack is temporarily unavailable during the upgrade. Existing faults remain.'],['Die Luft im Rack kühlt allmählich ab; Restwärme bleibt auch bei abgeschalteten Servern erhalten.','The air in the rack cools gradually; residual heat remains even when servers are powered off.'],['Ein Neustart dauert 30 Sekunden. Ausschalten, Umsetzen oder ein Portwechsel beheben keinen Defekt.','A restart takes 30 seconds. Powering off, moving a server, or changing ports will not fix a fault.'],['Die Verbindung wird getrennt.','The connection will be disconnected.'],['Das Trennen dieses Anschlusses nimmt','Disconnecting this port removes'],['aus dem Netzwerk.','from the network.'],['Freie Höheneinheiten','Available rack units'],['Switch-Stufe','Switch level'],['Anschlüsse','Ports'],['Uplink','Uplink'],['Kühlleistung','Cooling capacity'],['Aktuelle Aufnahme','Current draw'],['Netzwerkleistung','Network capacity'],['Installierte Server','Installed servers'],['Vollständig erhalten','Fully preserved'],['Automatische Einsätze','Automatic assignments'],['Wartungsreserve','Maintenance reserve'],['Geschützte Forschung','Protected research'],['Gesicherte Aufträge','Backed up jobs'],['Nächste manuelle Sicherung','Next manual backup'],['Geschützte Forschung und laufende Aufträge','Protected research and active jobs'],['Diese Sicherung schützt Forschung und laufende Aufträge bis zum Sicherungszeitpunkt.','This backup protects research and active jobs up to the backup time.'],
-    ['Der Netzwerkname muss mindestens zwei Zeichen lang sein.','The network name must be at least two characters.'],['Du startest mit einem neuen Netzwerk. Dein bisheriger Stand wird vorher automatisch als Datei exportiert.','You are starting a new network. Your current progress will be exported to a file first.'],['Die lokale Datei liegt im ROOT-Ordner unter data/save.json.','The local file is in the ROOT folder at data/save.json.'],['Ein Export enthält deinen vollständigen Fortschritt.','An export contains all your progress.'],['Das Betriebsbackup unter „Betrieb & Schutz“ schützt dagegen gezielt vor Datenkorruption im Netzwerk.','The operations backup under “Operations & Resilience” specifically protects against network data corruption.'],['Export sichern','Export backup'],['Sicherung wiederherstellen','Restore backup'],['Import erfolgreich','Import successful'],['Import fehlgeschlagen','Import failed'],['Datei auswählen','Choose file'],['JSON-Sicherung','JSON backup'],['Netzwerk sichern','Back up network'],['Netzwerk wiederherstellen','Restore network'],['Daten wurden exportiert.','Data exported.'],['Daten wurden importiert.','Data imported.'],
-    ['WASD bewegen','WASD to move'],['Maus ziehen / ← → drehen','Drag mouse / ← → to turn'],['E Öffnen','E to open'],['Raum betreten','Enter room'],['Leitstelle','Control room'],['Geräte-Liste','Device list'],['Begehbarer Serverraum','Walkable server room'],['Bewege dich mit WASD.','Move with WASD.'],['Drehe dich mit der Maus oder den Pfeiltasten.','Turn with the mouse or arrow keys.'],['Drücke E, um das Gerät zu öffnen.','Press E to open the device.'],['Drücke Escape, um zurückzukehren.','Press Escape to return.']
-  ]);
-  add([
-    ['Edge-Knoten','Edge node'],['Rechenknoten','Compute node'],['Speicherknoten','Storage node'],['KI-Beschleuniger','AI accelerator'],
-    ['Liefert schnelle, verlässliche Grundlast und verbindet neue Standorte.','Provides fast, reliable baseline capacity and connects new locations.'],
-    ['Viel Durchsatz für anspruchsvolle Aufträge und Forschung.','High throughput for demanding jobs and research.'],
-    ['Günstige Kapazität mit niedriger Last und stabiler Grundversorgung.','Affordable capacity with low load and reliable baseline service.'],
-    ['Vier simulierte Beschleuniger mit je 80 GB VRAM für begrenzte KI-Inferenz und Training; hoher Strom- und Uplinkbedarf.','Four simulated accelerators with 80 GB VRAM each for limited AI inference and training; high power and uplink demand.'],
-    ['Hält Aufträge am Laufen und steigert die Netzwerkerlöse.','Keeps jobs running and increases network revenue.'],
-    ['Verwandelt laufende Arbeit in zusätzliche Forschungspunkte.','Turns ongoing work into additional research points.'],
-    ['Senkt Wartungslast und verbessert Zuverlässigkeit.','Reduces maintenance load and improves reliability.'],
-    ['Adaptives Routing','Adaptive routing'],['Mehr Durchsatz pro Agent. Wiederholbar: +12 Prozentpunkte Arbeitstempo je Stufe.','More throughput per agent. Repeatable: +12 percentage points to work speed per level.'],
-    ['Flüssigkühlung','Liquid cooling'],['Weniger Wärme und Ausfallrisiko. Wiederholbar: −8 % Wärme je Stufe.','Less heat and lower failure risk. Repeatable: −8% heat per level.'],
-    ['Vertragsanalyse','Contract analysis'],['Bessere Vergütung für Aufträge. Wiederholbar: +10 % Auftragswert je Stufe.','Better job rewards. Repeatable: +10% job value per level.'],
-    ['Selbstheilende Abläufe','Self-healing workflows'],['Wartung und passive Erlöse werden effizienter. Wiederholbar: +9 % Netzwerkerlös je Stufe.','Maintenance and passive income become more efficient. Repeatable: +9% network revenue per level.'],
-    ['Wissenssynthese','Knowledge synthesis'],['Analysen liefern mehr Erkenntnisse. Wiederholbar: +15 % Forschung je Stufe.','Analysis yields more insights. Repeatable: +15% research per level.'],
-    ['Erster Auftrag','First job'],['Schließe den ersten Auftrag ab.','Complete your first job.'],['Stabiles Netz','Stable network'],['Erreiche 90 % Zuverlässigkeit.','Reach 90% reliability.'],['Dreifach redundant','Triple redundancy'],['Betreibe mindestens drei Server.','Run at least three servers.'],['Neuer Horizont','New horizons'],['Erschließe Sektor 2.','Unlock sector 2.'],['Netzwerkvermögen','Network wealth'],['Erwirtschaftete insgesamt 10.000 Credits.','Earn 10,000 credits in total.'],
-    ['Randknoten','Edge node'],['zuverlässig','reliable'],['neugierig','curious'],['Mein Netzwerk','My Network'],['Telemetrie prüfen','Inspect telemetry'],
-    ['Rack kaufen','Buy rack'],['Switch-Ausbau','Switch upgrade'],['Stromversorgung ausbauen','Upgrade power supply'],['Kühlung ausbauen','Upgrade cooling'],['Rack','Rack'],['Ausstattung','Equipment'],['Einschübe','bays'],['Laufwerkseinschübe','drive bays'],['Infrastruktur','Infrastructure'],['Betriebssicherung','Operations backup'],['Ersatzteile','spare parts'],['Knoten','nodes'],['Port','Port'],['Ports','ports'],['Versorgung','power supply'],['Wartung','maintenance'],['Wartungszeit','maintenance time'],['Wieder verfügbar','Available again'],['Betriebsstunde','operating hour'],['Sicherung','Backup'],['Erholungszeit','Recovery time'],['Einsatzzeit','Assignment duration'],['Arbeitstempo','work speed'],['Netzwerkerlös','network revenue'],['Auftragswert','job value'],['Ausfallrisiko','failure risk'],['Leistungsprofil','performance profile'],['Inferenz und Training','inference and training'],['Training','training'],['Inferenz','inference'],['Reparatur','Repair'],['Überholung','Overhaul'],['Wartungsbudget','maintenance budget'],['Geldreserve','cash reserve'],['Ersatzteile im Lager','Spare parts in stock']
-  ]);
-
-  add([
-    ['Verfügbarkeitsprüfung','Availability check'],['Datenmigration begleiten','Oversee data migration'],['Zugriffsrechte auditieren','Audit access permissions'],['Lastspitzen glätten','Smooth load spikes'],['Archiv wiederherstellen','Restore archive'],['Anomalien klassifizieren','Classify anomalies'],['KI-Modell trainieren','Train AI model'],['KI-Inferenz auswerten','Evaluate AI inference'],
-    ['Ungewöhnliche Messreihe','Unusual sensor readings'],['Ein Sensorverbund meldet ein neues Muster. Beide Wege bringen sicheren Nutzen.','A sensor network has detected a new pattern. Both options provide a guaranteed benefit.'],['Muster analysieren','Analyze pattern'],['+8 Forschung und +1 Ansehen.','+8 research and +1 reputation.'],['+48 Credits.','+48 credits.'],
-    ['Förderfenster geöffnet','Funding opportunity opened'],['Ein regionales Programm unterstützt offene Infrastruktur oder gemeinsame Forschung.','A regional program supports open infrastructure or collaborative research.'],['Infrastruktur fördern','Fund infrastructure'],['+85 Credits.','+85 credits.'],['Forschung teilen','Share research'],['+12 Forschung und +2 Ansehen.','+12 research and +2 reputation.'],
-    ['Wartungsfenster verfügbar','Maintenance window available'],['Ein Partner stellt Zeit für vorsorgliche Pflege oder eine Effizienzstudie bereit.','A partner is offering time for preventive maintenance or an efficiency study.'],['Netzpflege durchführen','Perform network maintenance'],['+4 Ansehen und +4 Forschung.','+4 reputation and +4 research.'],['Effizienzstudie nutzen','Run efficiency study'],['+55 Credits und +1 Ansehen.','+55 credits and +1 reputation.'],
-    ['Anfrage aus dem Feld','Field request'],['Ein Kunde braucht kurzfristige Unterstützung und bietet eine sichere Anschlussleistung an.','A customer needs urgent support and offers guaranteed follow-on work.'],['Soforthilfe leisten','Provide immediate support'],['+72 Credits und +1 Ansehen.','+72 credits and +1 reputation.'],['Wissen weitergeben','Share knowledge'],['+9 Forschung und +2 Ansehen.','+9 research and +2 reputation.'],
-    ['Neue Anomalie entdeckt','New anomaly discovered'],['Eine seltene Abweichung lässt sich dokumentieren oder genauer untersuchen.','A rare anomaly can be documented or investigated further.'],['Tiefer untersuchen','Investigate further'],['+15 Forschung.','+15 research.'],['Befund veröffentlichen','Publish findings'],['+42 Credits und +3 Ansehen.','+42 credits and +3 reputation.'],
-    ['Gemeinsame Beschaffung','Joint procurement'],['Ein Verbundprojekt bietet Mittel für Ausstattung oder technische Evaluation.','A consortium project is offering funds for equipment or technical evaluation.'],['Beschaffungsbudget sichern','Secure procurement budget'],['+105 Credits.','+105 credits.'],['Technik evaluieren','Evaluate technology'],['+11 Forschung und +2 Ansehen.','+11 research and +2 reputation.'],
-    ['Stromversorgung ausgefallen','Power supply failure'],['Eine Schutzschaltung hat mehrere Knoten getrennt. Die betroffenen Server bleiben offline, bis eine sichere Umschaltung abgeschlossen ist.','A protection circuit disconnected several nodes. The affected servers will remain offline until a safe switchover is complete.'],['Aufträge pausieren bis zur Entscheidung; Wiederanlauf braucht eine gewählte Schaltmaßnahme.','Jobs are paused until a decision is made; restarting requires a selected switching action.'],
-    ['Kühlkreislauf überhitzt','Cooling circuit overheated'],['Die Temperaturgrenze wurde überschritten. Betroffene Knoten wurden zum Schutz vor Folgeschäden abgeschaltet.','The temperature limit was exceeded. Affected nodes were shut down to prevent further damage.'],['Aufträge pausieren; ohne Reparatur bleibt die Kapazität reduziert.','Jobs are paused; capacity remains reduced until repairs are made.'],
-    ['Datenintegrität beschädigt','Data integrity compromised'],['Prüfsummenfehler haben den Betriebsbestand beeinträchtigt. Änderungen bleiben angehalten, bis eine Wiederherstellung gewählt ist.','Checksum errors have compromised operational data. Changes remain paused until a recovery option is selected.'],['Forschung und Auftragsstände sind gefährdet; ein gespeicherter Betriebsstand kann ungesicherte Fortschritte kosten.','Research and job progress are at risk; restoring a saved operational state may discard unsaved progress.'],
-    ['Schnellreparatur','Quick repair'],['Generalüberholung','Overhaul'],['Manuelle Wiederherstellung','Manual recovery'],['Last umleiten','Reroute load'],['Schaltmodul ersetzen','Replace switching module'],['Manuelle Notumschaltung','Manual emergency switchover'],['Last abwerfen','Shed load'],['Kühlaggregat tauschen','Replace cooling unit'],['Notlüftung öffnen','Open emergency ventilation'],['Letzte Betriebssicherung laden','Load last operations backup'],['Datenbestand neu aufbauen','Rebuild data store'],['Manuelle Datenrettung','Manual data recovery'],['Leitet die betroffenen Knoten zurück auf einen sicheren Betriebsmodus.','Returns the affected nodes to a safe operating mode.'],['Ersetzt das defekte Modul und stellt die volle Netzleistung wieder her.','Replaces the faulty module and restores full network capacity.'],['Kostenfrei, aber langsam; der Kunde erhält eine Gutschrift und laufende Arbeit geht teilweise verloren.','Free but slow; the customer receives a credit and some active work is lost.'],['Schaltet betroffene Knoten vorsichtig wieder frei, senkt aber laufende Auftragsarbeit.','Carefully brings affected nodes back online, but reduces active job throughput.'],['Tauscht das Aggregat und bringt die betroffenen Knoten fast in den Neuzustand.','Replaces the unit and restores affected nodes to near-new condition.'],['Kostenfreie Notlösung mit langem Stillstand und eingeschränkter Leistung.','Free emergency option with long downtime and reduced performance.'],['Stellt den letzten validierten Stand wieder her.','Restores the last validated state.'],['Rekonstruiert den Datenbestand aus aktiven Knoten.','Reconstructs the data store from active nodes.'],['Kostenfreie Notrettung; langsam, mit starkem Fortschritts- und Ansehensverlust.','Free emergency recovery; slow, with major losses to progress and reputation.'],['Es gibt noch keine Betriebssicherung.','No operations backup exists yet.'],
-    ['Ein gleicher Einsatz läuft bereits; Wirkungen lassen sich nicht stapeln.','The same assignment is already running; effects cannot be stacked.'],['Eine Diagnosewirkung ist bereits aktiv.','A diagnosis effect is already active.'],['Eine Optimierungswirkung ist bereits aktiv.','An optimization effect is already active.'],['Dieser Server ist ausreichend intakt.','This server is in adequate condition.'],['Eine andere Wartungs- oder Krisenmaßnahme läuft.','Another maintenance or crisis operation is in progress.'],['Die Krisenmaßnahme läuft bereits; ihre Folgen sind festgelegt.','The crisis response is already underway; its consequences are locked in.'],
-    ['ROOT speichert regelmäßig lokal; Export sichert einen Stand zusätzlich.','ROOT saves locally at regular intervals; exports provide an additional backup.'],['Bis zu 12 Stunden Fortschritt werden nachgeholt.','Up to 12 hours of progress are simulated when you return.']
-  ]);
-
-  add([
-    ['Server belegen echte Höheneinheiten in deinen Racks. Wähle Geräte, Ports, Kühlung und Stromversorgung direkt im Rechenzentrum aus. Ein freier Einbauplatz öffnet die passende Hardwareauswahl.','Servers occupy physical rack units. Choose devices, ports, cooling, and power directly in the data center. An empty slot opens the matching hardware options.'],
-    ['Agenten teilen ihre Leistung auf deine laufenden Aufträge auf. Rolle, Stufe und Schwerpunkt verändern Durchsatz, Forschung und Pflege.','Agents distribute their capacity across your active jobs. Role, level, and focus affect throughput, research, and maintenance.'],
-    ['Aufträge bringen Credits, Forschung und Ansehen. Die Vergütung kommt beim Abschluss. Grundversorgung und Forschung laufen zusätzlich stetig weiter.','Jobs earn credits, research, and reputation. Rewards are paid on completion. Baseline service and research income continue steadily.'],
-    ['Aktiviere die automatische Vergabe. Sie nimmt passende Angebote an und beachtet deine Priorität. So arbeitet das Netzwerk auch während deiner Abwesenheit.','Enable automatic assignment. It accepts suitable offers and follows your priorities, so the network keeps working while you are away.'],
-    ['Forschung verbessert die ganze Flotte. Meilensteine geben zusätzliche Credits. Neue Sektoren öffnen anspruchsvollere Aufträge und anfangs mehr Plätze.','Research improves your entire fleet. Milestones grant extra credits. New sectors unlock more demanding jobs and additional slots.'],
-    ['Verschleiß und Hitze können Server ausfallen lassen. Reparaturen kosten Zeit und Ressourcen. Betriebsbackups sichern Forschung und laufende Arbeit; große Krisen warten im Schutzmodus auf dich.','Wear and heat can cause server failures. Repairs cost time and resources. Operations backups protect research and active work; major crises wait for you in resilience mode.'],
-    ['Diagnose und Optimierung helfen dem ganzen Netz. Forschung liefert Punkte nach Abschluss. Währenddessen fehlt der Agent im Normalbetrieb; anschließend gilt eine Erholungszeit.','Diagnostics and optimization help the whole network. Research assignments grant points when completed. The agent is unavailable for normal operations during the assignment, followed by a cooldown.'],
-    ['Abgeschaltete Server und getrennte Switch-Ports liefern keine Kapazität. Ein Neustart oder Umsetzen dauert 30 Sekunden. Rack-Umbauten legen das betroffene Rack für 45–90 Sekunden still. Strom, Kühlung und Uplink begrenzen den Durchsatz; die Anzeigen zeigen dir die Engpässe.','Powered-off servers and disconnected switch ports provide no capacity. Restarting or moving a server takes 30 seconds. Rack upgrades take the affected rack offline for 45–90 seconds. Power, cooling, and uplink limit throughput; indicators show bottlenecks.'],
-    ['Der A480 belegt 4 HE und liefert vier GPUs mit 320 GB VRAM. Inferenz- und Trainingsaufträge brauchen freie GPU-Kapazität zusätzlich zu CU. Ausfälle, Porttrennung, Strom-, Kühlungs- und Uplink-Engpässe begrenzen diese Leistung. Ein stärkerer KI-Auftrag bindet mehr GPUs und bringt entsprechend mehr Arbeit, Vergütung und Forschung.','The A480 occupies 4 RU and provides four GPUs with 320 GB VRAM. Inference and training jobs require available GPU capacity in addition to CU. Failures, disconnected ports, power, cooling, and uplink bottlenecks limit this capacity. A larger AI job reserves more GPUs and brings more work, rewards, and research.'],
-    ['Ereignisse warten ohne Zeitlimit. Bis zu 12 Stunden Fortschritt werden nachgeholt. ROOT speichert regelmäßig lokal; Export sichert einen Stand zusätzlich.','Events wait without a time limit. Up to 12 hours of progress are simulated when you return. ROOT saves locally at regular intervals; exports provide an additional backup.'],
-    ['Automatisches Speichern alle 15 Sekunden und nach jeder Entscheidung. Die lokale Datei liegt im ROOT-Ordner unter data/save.json. Ein Export enthält deinen vollständigen Fortschritt. Das Betriebsbackup unter „Betrieb & Schutz“ schützt dagegen gezielt vor Datenkorruption im Netzwerk.','Automatically saves every 15 seconds and after each decision. The local file is in the ROOT folder at data/save.json. An export contains all your progress. The operations backup under “Operations & Resilience” specifically protects against network data corruption.'],
-    ['Deine lokale Netzwerk-Leitstelle. Alle Server und Agenten sind Teil der Simulation. Fortschritt während der Abwesenheit: maximal 12 Stunden. Beende zum Schließen einfach den Browser-Tab.','Your local network control room. All servers and agents are part of the simulation. Offline progress is capped at 12 hours. Close the app by closing this browser tab.'],
-    ['Netzdiagnose','Network diagnostics'],['Last optimieren','Optimize load'],['Forschungsauftrag','Research assignment'],['Risikodiagnose aktiv','Risk diagnostics active'],['Optimierungsprofil aktiv','Optimization profile active'],['Verringert das Störungsrisiko um bis zu 12 Prozentpunkte pro Stunde für 20 Minuten.','Reduces incident risk by up to 12 percentage points per hour for 20 minutes.'],['Erhöht den Auftragsdurchsatz um 15% für 15 Minuten.','Increases job throughput by 15% for 15 minutes.'],['Alle laufenden Agenteneinsätze bleiben angehalten, bis die offene Krise behoben ist.','All active agent assignments remain paused until the open crisis is resolved.'],
-    ['Schutzschaltung','protection circuit'],['Schaltmaßnahme','switching action'],['Netzleistung','network capacity'],['Betriebsausfall','operational outage'],['Zustand danach','condition afterward'],['Ansehen','reputation'],['Ausfallzeit','downtime'],['Arbeitseinheiten','work units'],['Auftragsfortschritt','job progress'],['Krisenbetrieb','crisis response'],['Schaltmodul','switching module'],['Kühlaggregat','cooling unit'],['Notlüftung','emergency ventilation'],['Betriebsbestand','operational data'],['Prüfsummenfehler','checksum errors'],['Datenbestand','data store'],['Sicherer Betriebsmodus','safe operating mode'],['Netzwerkereignis','network event'],['Alles geklärt. Dein Netzwerk arbeitet.','All clear. Your network is running.'],['Ausfallgrund','Failure reason'],['Höhe','Height'],['Strombedarf','Power demand'],['Forschung erhalten','Research preserved'],['Arbeitsfortschritt erhalten','Work progress preserved'],['Neues Netzwerk','New network'],['Sicherung exportieren','Export backup'],['Sicherung importieren','Import backup'],['Daten sichern','Back up data'],['Zurück zur Weboberfläche','Return to web interface']
-  ]);
-
-  add([
-    ['Gebäudetechnik','Building systems'],['Unterirdisches Rechenzentrum','Underground data center'],['Zugangsschleuse','Access airlock'],['Kontrollraum','Control room'],['Aufzug','Elevator'],['Sicherheitsschleuse','Security airlock'],['Untergeschoss','Basement'],['Kameraeinfahrt','Camera entrance'],['Überspringen','Skip'],['Bunker betreten','Enter bunker'],['Zentrale Kühlung','Central cooling'],['USV','UPS'],['Stromverteilung','Power distribution'],['Technikraum','Plant room'],['Automatische Schutzfunktionen','Automatic safeguards'],['Installieren','Install'],['Ausbauen','Upgrade'],['Ab Sektor','From sector'],['VORFALL · BACKUP','INCIDENT · BACKUP'],
-    ['Raum wechseln','Change room'],['Zum Kontrollraum','Go to control room'],['Rackdetails','Rack details'],['Server anzeigen','View server'],['Keine Server eingebaut','No servers installed'],['Standort','Location'],['Raumplan','Room map'],['Tür öffnen','Open door'],['Tür schließen','Close door'],['Nächste Etage','Next basement'],['Vorherige Etage','Previous basement'],['Etage','Basement'],['Etagen','Basements'],['Kontrollraum','Control room'],['Raum','Room'],
-  ]);
-
-  add([
-    ['Dreidimensionaler, simulierter Serverraum. Tastatur und Maus zum Erkunden; Server und Racks öffnen die Verwaltung.','Three-dimensional simulated server room. Explore with keyboard and mouse; servers and racks open their management views.'],['Standardmodelle · Assetpaket nicht verfügbar','Standard models · asset pack unavailable'],['3D-Ansicht nicht verfügbar. Die Simulation und Rackauswahl funktionieren weiterhin über die Liste.','3D view unavailable. The simulation and rack selection are still available through the list.'],['BETRIEB EINGESCHRÄNKT','OPERATIONS LIMITED'],['Keine Maßnahme aktiv','No operation active'],['Reparatur läuft','Repair in progress'],['Kapazität begrenzt','Capacity limited'],[' · E / Klick: Terminal öffnen',' · E / click: open terminal'],['Klicke ein Gerät, um die vorhandene Verwaltung zu öffnen.','Click a device to open its management view.'],['<kbd>Maus</kbd> Umsehen · Esc zurück','<kbd>Mouse</kbd> Look around · Esc to return'],['Maus','Mouse'],['Ziehen / ← → drehen','Drag / ← → turn'],['Bewegen','Move'],['Öffnen','Open'],['Umsehen','Look around'],['Esc zurück','Esc to return'],['BETRIEB EINGESCHRÄNKT','OPERATIONS LIMITED'],['PERSONAL · EINSÄTZE','STAFF · ASSIGNMENTS'],['INTEGRITÄT · RISIKO','INTEGRITY · RISK'],['Monitorfläche fehlt: ','Monitor surface missing: '],['Vergütung','Reward'],['KAPAZITÄT','CAPACITY'],['GPU BELEGT / VERFÜGBAR','GPU USED / AVAILABLE'],['Keine aktiven Aufträge','No active jobs'],['Abläufe','Workflows'],['PRIORITÄT','PRIORITY'],['Keine Maßnahme','No operation'],['INTEGRITÄT','INTEGRITY'],['STÖRUNGSRISIKO','INCIDENT RISK'],['EINGESCHRÄNKT','LIMITED'],['LAST / KAPAZITÄT','LOAD / CAPACITY'],['Tür schließen','Close door'],['Tür öffnen','Open door'],['Weboberfläche','Web interface'],['Zum Webinterface','Go to web interface'],
-    ['Während einer Krise oder laufenden Infrastrukturmaßnahme nicht verfügbar.','Unavailable during a crisis or active infrastructure operation.'],['Höchste Ausbaustufe erreicht.','Maximum upgrade level reached.'],['GPU-Kapazität ist belegt; der Auftrag wartet auf freie Beschleuniger.','GPU capacity is occupied; this job is waiting for free accelerators.'],['KI-Aufträge pausieren während der offenen Versorgungskrise.','AI jobs are paused during the active supply crisis.'],['Kein ROOT A480 mit verfügbaren GPUs installiert.','No ROOT A480 with available GPUs is installed.'],['KI-Aufträge pausieren während der Rack-Wartung.','AI jobs are paused during rack maintenance.'],['KI-Aufträge pausieren: Beschleuniger-Server ist ausgeschaltet.','AI jobs are paused: the accelerator server is powered off.'],['KI-Aufträge pausieren: Beschleuniger-Server startet noch.','AI jobs are paused: the accelerator server is still starting up.'],['KI-Aufträge pausieren: Beschleuniger-Server ist ausgefallen oder in Wartung.','AI jobs are paused: the accelerator server has failed or is under maintenance.'],['KI-Aufträge pausieren: keine betriebsbereite GPU-Verbindung verfügbar.','AI jobs are paused: no operational GPU connection is available.'],['Das Gerät passt nicht in die freien Höheneinheiten dieses Racks.','The device does not fit in this rack’s available units.'],['Die Standortgrenze für Racks ist erreicht.','The rack limit for this location has been reached.'],['Unbekannter Gerätetyp.','Unknown device type.'],['Kein passender freier Rackplatz oder Switch-Port verfügbar.','No suitable rack space or switch port is available.'],['Die Rack-Stromlast überschreitet danach die Nennleistung; Knoten werden gedrosselt und wärmer.','Rack power draw will exceed its rated capacity; nodes will be throttled and run hotter.'],['Schaltzustand ist ungültig.','Invalid power state.'],['30 Sekunden Bootzeit; währenddessen keine Produktion.','30-second boot time; no production during startup.'],['Switch-Port ist ungültig.','Invalid switch port.'],['Nur betriebsbereite Server können umgesetzt werden.','Only operational servers can be moved.'],['Rack-Stromlast liegt über der Nennleistung.','Rack power draw exceeds its rated capacity.'],['Während einer Krise oder laufenden Infrastrukturmaßnahme nicht verfügbar.','Unavailable during a crisis or active infrastructure operation.'],
-    ['Diese Aktion ist ungültig.','This action is invalid.'],['Diese Hardwareaktion ist derzeit nicht verfügbar.','This hardware action is currently unavailable.'],['Dieser Server hat die höchste Ausbaustufe erreicht.','This server is at the maximum upgrade level.'],['Dieser Betriebsmodus ist ungültig.','This operating mode is invalid.'],['Der Agent ist im Einsatz; der Schwerpunkt lässt sich danach wieder ändern.','The agent is on assignment; you can change their focus afterward.'],['Dieser Schwerpunkt ist ungültig.','This focus is invalid.'],['Dieser Agent hat die höchste Entwicklungsstufe erreicht.','This agent is at the maximum development level.'],['Dieser Einsatz ist derzeit nicht verfügbar.','This assignment is currently unavailable.'],['Dieser Auftrag ist nicht mehr verfügbar.','This job is no longer available.'],['Alle Auftragsplätze sind belegt.','All job slots are occupied.'],['Während einer offenen Krise bleiben neue Aufträge in der Warteschlange.','New jobs remain queued during an active crisis.'],['Dafür fehlt derzeit Serverkapazität.','There is not enough server capacity for this.'],['Dafür sind nicht genügend freie GPUs verfügbar.','There are not enough free GPUs available for this.'],['Forschung bleibt während der offenen Daten- oder Versorgungskrise gesperrt.','Research is unavailable during an active data or supply crisis.'],['Diese Forschungsreihe hat ihre höchste Stufe erreicht.','This research line is at its maximum level.'],['Diese Richtlinieneinstellung ist ungültig.','This policy setting is invalid.'],['Ereignisse bleiben während des Krisenbetriebs in der Warteschlange.','Events remain queued during crisis operations.'],['Diese Entscheidung ist nicht mehr verfügbar.','This decision is no longer available.'],['Diese Auswahl ist ungültig.','This choice is invalid.'],['Diese Auswahl wird nicht unterstützt.','This choice is not supported.'],['Dieser Meilenstein wurde bereits eingelöst.','This milestone has already been claimed.'],['Diese Reparaturmethode ist ungültig.','This repair method is invalid.'],['Diese Reparatur ist derzeit nicht verfügbar.','This repair is currently unavailable.'],['Eine Betriebssicherung ist derzeit nicht verfügbar.','An operations backup is currently unavailable.'],['Ersatzteile sind derzeit nicht verfügbar.','Spare parts are currently unavailable.'],['Diese Krisenmaßnahme ist ungültig.','This crisis response is invalid.'],['Diese Krisenmaßnahme ist derzeit nicht verfügbar.','This crisis response is currently unavailable.'],['Diese Aktion wird nicht unterstützt.','This action is not supported.'],['Ungültiger Netzwerkstand.','Invalid network state.'],['Diese Netzwerkstand-Version wird nicht unterstützt.','This network state version is not supported.'],['Ungültige Rackanlage.','Invalid rack configuration.'],['Ungültiges Rack.','Invalid rack.'],['Ungültige oder doppelte Rack-ID.','Invalid or duplicate rack ID.'],['Ungültige Switch-Ports.','Invalid switch ports.'],['Server überschreitet die Rackhöhe.','Server exceeds rack height.'],['Rack-Geräte überlappen sich.','Rack devices overlap.'],['Ungültiger Server-Schaltzustand.','Invalid server power state.'],['Ungültiger Bootvorgang.','Invalid boot process.'],['Ungültiger Rack-Ausbau.','Invalid rack upgrade.'],['Ungültiges Ausbauziel.','Invalid upgrade target.'],['Rack-Ausbaukosten stimmen nicht mit dem Ausbauziel überein.','Rack upgrade cost does not match the upgrade target.'],['Rack-ID kollidiert mit einer Geräte- oder Auftrags-ID.','Rack ID conflicts with a device or job ID.'],['Ungültige Liste: ','Invalid list: '],['Ungültige oder doppelte ID: ','Invalid or duplicate ID: '],['Ungültiger Netzwerkname.','Invalid network name.'],['Ungültiger Servertyp.','Invalid server type.'],['Ungültiger Servermodus.','Invalid server mode.'],['Ungültiger Serverzustand.','Invalid server state.'],['Ungültige Agentenrolle oder Schwerpunkt.','Invalid agent role or focus.'],['Ungültiger Agenteneinsatz.','Invalid agent assignment.'],['Agent kann während einer Abklingzeit nicht im Einsatz sein.','An agent cannot be assigned during cooldown.'],['Ungültige Auftragsart.','Invalid job type.'],['Ungültiger GPU-Bedarf.','Invalid GPU requirement.'],['Ungültiges Ereignis.','Invalid event.'],['Ungültige Ereignisauswahl.','Invalid event choice.'],['Ungültige Forschung.','Invalid research.'],['Ungültige Richtlinien.','Invalid policies.'],['Ungültige Meilensteine.','Invalid milestones.'],['Ungültige Meilensteinfreigaben.','Invalid achievement unlocks.'],['Ungültige Betriebsabsicherung.','Invalid operations protection.'],['Ungültige Betriebssicherung.','Invalid operations backup.'],['Ungültiger gesicherter Auftragsverweis.','Invalid backed-up job reference.'],['Ungültiger Auftragsverlust.','Invalid job loss.'],['Ungültiger Wiederherstellungsknoten.','Invalid recovery node.'],['Ungültiger Krisenfall.','Invalid crisis.'],['Ungültiger Krisenknoten.','Invalid crisis node.'],['Ungültige Krisenmaßnahme.','Invalid crisis response.'],['Ungültiger Betriebsablauf.','Invalid operations process.'],['Ungültiger Sicherungsablauf.','Invalid backup process.'],['Wiederherstellung ohne gültige Sicherung.','Recovery without a valid backup.'],['Krisenstatus und laufende Maßnahme stimmen nicht überein.','Crisis status does not match the active operation.'],['Krisenmaßnahme ohne offenen Krisenfall.','Crisis response without an active crisis.'],['Wartungsstatus und laufender Ablauf stimmen nicht überein.','Maintenance status does not match the active process.'],['Ungültiges Wartungsbudget-Fenster.','Invalid maintenance budget window.'],['Ungültige Agentenwirkungen.','Invalid agent effects.'],['Datenintegrität passt nicht zum Krisenstatus.','Data integrity does not match the crisis status.'],['Agenteneffekte dürfen nicht parallel gestapelt werden.','Agent effects cannot be stacked concurrently.'],['Netzwerkstand überschreitet Sektorgrenzen.','Network state exceeds sector limits.'],['Wiederherstellung ohne gültige Sicherung.','Recovery without a valid backup.'],['Krisen- oder Wartungsmaßnahme verhindert gerade eine neue Sicherung.','A crisis or maintenance operation is currently preventing a new backup.'],['Das Stundenbudget gilt für automatische Reparaturen und automatische Betriebssicherungen; manuelle Eingriffe sind ausgenommen.','The hourly budget applies to automatic repairs and automatic operations backups; manual actions are excluded.'],['Krisenbetrieb: Einsätze beginnen erst nach der Wiederherstellung.','During a crisis, assignments begin only after recovery.'],['erhöht','elevated'],['niedrig','low'],['hoch','high'],['kritisch','critical']
-  ]);
-
-  add([
-    ['IM DIENST','ON DUTY'],['EINSATZSTATUS','ASSIGNMENT STATUS'],['QUEUE','QUEUE'],['KAPAZITÄT','CAPACITY'],['GPU BELEGT / VERFÜGBAR','GPU USED / AVAILABLE'],['WARTESCHLANGE','QUEUE'],['FORSCHUNGSPUNKTE','RESEARCH POINTS'],['ZUWACHS','GROWTH'],['SEKTOR','SECTOR'],['AUFTRAGSVERGABE','JOB ASSIGNMENT'],['REPARATUR','REPAIR'],['PRIORITÄT','PRIORITY'],['ENERGIEPROFIL','POWER PROFILE'],['LAUFENDE MASSNAHME','CURRENT OPERATION'],['AGENTEN','AGENTS'],['INTEGRITÄT','INTEGRITY'],['STÖRUNGSRISIKO','INCIDENT RISK'],['SERVER','SERVERS'],['ERSATZTEILE','SPARE PARTS'],['VORFALL','INCIDENT'],['OFFENE EREIGNISSE','OPEN EVENTS'],['POSTEINGANG','INBOX'],['BETRIEBSVORFALL','OPERATIONS INCIDENT'],['NETZSTATUS','NETWORK STATUS'],['SERVER / AGENTEN','SERVERS / AGENTS'],['LAST / KAPAZITÄT','LOAD / CAPACITY'],['LEISTUNG / RACKTEMP.','POWER / RACK TEMP.'],['GUTHABEN','BALANCE'],['SCHUTZMODUS','RESILIENCE MODE'],['STABIL','STABLE'],['ONLINE','ONLINE'],['EINGESCHRÄNKT','LIMITED'],['PERSONAL · EINSÄTZE','STAFF · ASSIGNMENTS'],['QUEUE · DURCHSATZ','QUEUE · THROUGHPUT'],['LABOR · ERKENNTNISSE','LAB · INSIGHTS'],['POLICY · ROUTINEN','POLICY · ROUTINES'],['POSTEINGANG · ENTSCHEIDUNGEN','INBOX · DECISIONS'],['ROOT · LEITSTAND','ROOT · CONTROL DESK'],['Automatik','Automation'],['Routing','Routing'],['Synthese','Synthesis'],['Vertragsanalyse','Contract analysis'],['Ausgeglichen','Balanced'],['Ausgewogen','Balanced'],['Manuelle Freigabe','Manual approval'],['Automatik aktiv','Automation active'],['Manuelle Wartung','Manual maintenance'],['Keine Maßnahme','No operation'],['Kein offener Vorfall','No active incident'],['Keine Krisenmeldung','No crisis alert'],['Keine offenen Meldungen','No open messages'],['Keine aktiven Aufträge','No active jobs'],['im Lager','in stock'],['installiert','installed'],['im Einsatz','on assignment'],['frei','free'],['ausgefallen','failed'],['aktiv','active'],['Angebote','offers'],['Einheiten','units'],['Minute','minute'],['Minuten','minutes'],['GPU Bedarf','GPU demand'],['Entscheidung','decision'],['Entscheidungen','Decisions'],['Stufe','Level'],['Zuverlässigkeit','Reliability'],['max.','max.'],['Einsatz','assignment'],['aktive Netzwerkeffekte','active network effects']
-  ]);
-
-  add([
-    ['KONTROLLRAUM','CONTROL ROOM'],['Kapazität & Ausbau','Capacity & expansion'],['Mit weiteren Racks verfügbar','Available with more racks'],['Installation verfügbar','Installation available'],['Ausbau am Terminal starten','Start expansion at the terminal'],['E / Klick: Terminal öffnen','E / click: open terminal'],['Neue 3D-Modelle werden geladen …','Loading new 3D models …'],['Rackplätze freigeschaltet','rack slots unlocked'],['Über die Türen erreichst du die Serverräume und die Gebäudetechnik. Der Aufzug verbindet weitere Etagen.','Use the doors to reach the server rooms and building systems. The elevator connects additional basements.'],['Kapazität, laufende Kosten und Ausbau steuerst du am Terminal.','Manage capacity, operating costs, and expansion at the terminal.'],['höchste Racktemperatur','hottest rack temperature'],['Leistungsaufnahme','Power draw'],['Uplink-Leistung','Uplink capacity'],['Reparatur läuft','Repair in progress'],['Rack-Wartung','Rack maintenance'],['Kapazität begrenzt','Capacity limited'],['Betrieb stabil','Operations stable'],['SYSTEM ONLINE','SYSTEM ONLINE'],['NETZWERK OFFLINE','NETWORK OFFLINE'],['WARTUNG AKTIV','MAINTENANCE ACTIVE'],['WARTUNG / LASTBEGRENZUNG','MAINTENANCE / LOAD LIMIT'],['SCHUTZMODUS','RESILIENCE MODE'],['BETRIEB EINGESCHRÄNKT','OPERATIONS LIMITED'],['Rackdetails','Rack details'],['Keine Server eingebaut','No servers installed'],['Tür öffnen','Open door'],['Tür schließen','Close door'],['Überspringen','Skip'],['Sicherheitsschleuse','Security airlock'],['Untergeschoss','Basement'],['Kameraeinfahrt','Camera entrance'],['Zugangsschleuse','Access airlock'],['Bunker betreten','Enter bunker'],['Unterirdisches Rechenzentrum','Underground data center']
-  ]);
-
-  add([
-    ['Zentrale Klimaanlage','Central air conditioning'],['Unterbrechungsfreie Stromversorgung','Uninterruptible power supply'],['Zentrale Stromverteilung','Central power distribution'],['Zentrale Klimaanlage ausbauen','Upgrade central air conditioning'],['Unterbrechungsfreie Stromversorgung ausbauen','Upgrade uninterruptible power supply'],['Zentrale Stromverteilung ausbauen','Upgrade central power distribution'],['Defekt','Faulty'],['In Reparatur','Under repair'],['Ausgeschaltet','Powered off'],['Startet','Starting'],['Kein Link','No link'],['Wartungsfenster','Maintenance window'],['Begrenzt','Limited'],['Noch keine Betriebssicherung','No operations backup yet'],
-    ['Zentrale Versorgung für deine wachsende Anlage.','Central utilities for your growing facility.'],['Serverräume','Server rooms'],['Etagen','Basements'],['Technikverbrauch','Utility power draw'],['Technikkosten','Utility costs'],['Ausbau prüfen','Review upgrade'],['Technikraum betreten','Enter plant room'],['Raumplan','Room plan'],['Sechs Racks pro Raum, vier Serverräume pro Etage. Neue Räume und Etagen entstehen mit zusätzlichen Racks.','Six racks per room, four server rooms per basement. New rooms and basements are added as you install more racks.'],['Bestehende Wartungsregeln, Backups und der Schutzmodus bleiben aktiv. Zentrale Anlagen kosten laufend Credits. Während eines Ausbaus ist kein weiterer Wartungseingriff möglich; der bisherige Anlagenstand arbeitet weiter.','Existing maintenance rules, backups, and resilience mode remain active. Central utilities have ongoing credit costs. No other maintenance action is available during an upgrade; the existing utility configuration keeps running.'],
-    ['Zusätzliche Kühlleistung wird auf aktive Racks verteilt. Die Anlage benötigt selbst Strom; Temperaturen sinken allmählich.','Additional cooling capacity is distributed across active racks. The system uses power; temperatures decrease gradually.'],['Die USV schützt nur die Last innerhalb ihrer Leistungskapazität. Sie senkt Wahrscheinlichkeit und Schwere von Stromausfällen.','The UPS protects only the load within its capacity. It reduces the likelihood and severity of power outages.'],['Ein endliches zusätzliches Strombudget wird auf aktive Racks verteilt. Leere Racks verbrauchen keine Reserve.','A finite amount of extra power is distributed across active racks. Empty racks use no reserve.'],
-    ['Zusätzliche Kühlleistung, auf aktive Racks verteilt.','Additional cooling capacity, distributed across active racks.'],['USV-Leistung','UPS capacity'],['zusätzliche Kühlleistung','additional cooling capacity'],['auf aktive Racks verteilt','distributed across active racks'],['zusätzliche Gesamtreserve','additional total reserve'],['gleichmäßig auf aktive Racks verteilt','distributed evenly across active racks'],['sie senkt bei passender Lastabdeckung die Chance schwerer Stromausfälle um bis zu','it reduces the risk of severe power outages by up to'],['und mindert deren Folgen','and reduces their impact'],['Last abgedeckt','load covered'],['aktive Racks','active racks'],['aktives Rack','active rack'],['gesamt','total'],['Bisherige Anlage arbeitet weiter','Existing system remains operational'],['Zentrale Anlage','Central utility'],['Wartungseingriff','maintenance action'],['Racks pro Raum','racks per room'],['Serverräume pro Etage','server rooms per basement'],['Racks freigeschaltet','racks unlocked'],['Neue Räume und Etagen','New rooms and basements'],['Rack-Wartung','Rack maintenance'],['Noch nicht freigeschaltet','Not unlocked yet'],['E / Klick: Raum betreten','E / click: enter room'],['E / Klick: Server verwalten','E / click: manage server'],['E / Klick: Rack verwalten','E / click: manage rack'],['E / F / Klick: ','E / F / click: '],['Zielen Sie auf einen Server oder ein Rack.','Aim at a server or rack.'],['Klicke ein Gerät, um die vorhandene Verwaltung zu öffnen.','Click a device to open its management view.'],['E / Klick: Terminal öffnen','E / click: open terminal'],['Etage','Basement'],['Standort','Location'],['Raum wechseln','Change room'],['Zum Kontrollraum','Go to control room'],['Rackplätze freigeschaltet','rack slots unlocked'],['Kontrollraum','Control room'],['Gebäudetechnik verwalten','Manage building systems'],['Noch nicht freigeschaltet','Not unlocked yet'],['Racks / verfügbar','Racks / available'],['Serverräume','Server rooms'],['Raum','Room'],['Aufzug','Elevator'],['Kapazität & Ausbau','Capacity & expansion'],['Installation verfügbar','Installation available'],['Ausbau am Terminal starten','Start expansion at the terminal'],['Mit weiteren Racks verfügbar','Available with more racks']
-  ]);
-
-  add([
-    ['Zum Inhalt','Skip to content'],['Dialog schließen','Close dialog'],['Willkommen zurück.','Welcome back.'],['Konsole','Console'],['HORIZONT ERWEITERN','EXPAND YOUR HORIZONS'],['KAPAZITÄT BEGRENZT','CAPACITY LIMITED'],['ENTSCHEIDUNG OFFEN','DECISION PENDING'],['AUFTRÄGE','JOBS'],['STUFE','LEVEL'],['ERFOLG','SUCCESS'],['MASSNAHMEN','ACTIONS'],['NODES','NODES'],['CONDITION','CONDITION'],['STATUS','STATUS'],['Zum Inhalt springen','Skip to content'],['wartet.','is waiting.'],[' wartet.',' is waiting.'],[' · Lokales Netzwerk',' · Local network'],['Mio.','M'],['Tsd.','K'],['ausgelastet','in use'],['Wartung empfohlen','Maintenance recommended'],['Stabiler Betrieb','Stable operations'],['Kühlung empfohlen','Cooling recommended'],['Optionen ansehen','View options'],['Wartet auf dich. Ohne Zeitlimit.','Waiting for you. No time limit.'],['Noch','In'],['Aktualisierung in','Refresh in'],['Automatik an','Automation on'],['Verfügbare Aufträge','Available jobs'],['Aktuelle Zuverlässigkeit','Current reliability'],['Netto-Grundversorgung','Net baseline income'],['Laufende Betriebskosten','Ongoing operating costs'],['Gemeinsamer Arbeitsdurchsatz','Shared work throughput'],['Globales Energieprofil','Global power profile'],['Priorität der Auftragsarbeit','Job work priority'],['Ein Netzwerk, das auch ohne dich weiterkommt.','A network that keeps going without you.'],['Beim nächsten Öffnen wird bis zu 12 Stunden Abwesenheit nachgeholt. Deine Regeln gelten auch dann. Größere Krisen pausieren die Auftragsarbeit und warten im Schutzmodus auf dich. Backups, Budget und Geldreserve legst du unter Betrieb & Schutz fest.','When you return, up to 12 hours of offline progress will be simulated. Your rules still apply. Major crises pause job work and wait for you in resilience mode. Configure backups, budgets, and cash reserves under Operations & Resilience.'],['Pflegt das Netz und repariert kleinere Defekte mit Ersatzteilen innerhalb von Budget und Geldreserve. Laufende Pflege kostet zusätzlich Betriebskosten.','Maintains the network and repairs minor faults using spare parts within your budget and cash reserve. Ongoing maintenance also adds operating costs.'],['Öko reduziert Stromkosten und Durchsatz. Leistung beschleunigt die Arbeit, erzeugt aber mehr Wärme. Das Profil ergänzt den Betriebsmodus jedes einzelnen Servers.','Eco reduces power costs and throughput. Performance speeds up work but generates more heat. This profile complements each server’s individual operating mode.'],['Verteile die Agentenleistung gleichmäßig oder bevorzuge Aufträge mit höherer Vergütung beziehungsweise mehr Forschung pro Arbeitseinheit.','Distribute agent capacity evenly or prioritize jobs with higher rewards or more research per unit of work.'],['Im Sondereinsatz fehlt ein Agent bei Aufträgen, Forschung und Pflege. Techniker diagnostizieren schneller, Operatoren optimieren schneller, Analysten liefern mehr Forschung. Die Wirkung beginnt erst nach Abschluss. Danach ist der Agent wieder im Normalbetrieb; ein weiterer Sondereinsatz muss bis zum Ende der Erholungszeit warten. Große Krisen pausieren laufende Einsätze.','An agent on a special assignment is unavailable for jobs, research, and maintenance. Technicians diagnose faster, operators optimize faster, and analysts provide more research. The effect begins only when the assignment is complete. The agent then returns to normal operations; another assignment must wait until the cooldown ends. Major crises pause active assignments.'],['reliable','reliable'],['curious','curious'],['umsichtig','prudent'],['aufmerksam','attentive'],['pragmatisch','pragmatic'],['zuverlässig','reliable'],['neugierig','curious'],['VERFÜGBAR','AVAILABLE'],['Für Sondereinsatz verfügbar','Available for special assignment'],['Techniker · Senkt Wartungslast und verbessert Zuverlässigkeit.','Technician · Reduces maintenance load and improves reliability.'],['Operator · Hält Aufträge am Laufen und steigert die Netzwerkerlöse.','Operator · Keeps jobs running and increases network revenue.'],['Analyst · Verwandelt laufende Arbeit in zusätzliche Forschungspunkte.','Analyst · Turns ongoing work into additional research points.'],['Die Geschichte deines Netzwerks. Ein Ereignis nach dem anderen.','The story of your network, one event at a time.'],['Alle','All'],['Fortschritte','Progress'],['Netzwerkprotokoll','Network log'],['Betriebszeit','Uptime'],['DEIN NETZWERK. DEINE REGELN.','YOUR NETWORK. YOUR RULES.'],['Sechs Racks pro Raum, vier Serverräume pro Untergeschoss. Neue Räume und Untergeschosse entstehen mit zusätzlichen Racks.','Six racks per room, four server rooms per basement. New rooms and basements are added as you install more racks.'],['Untergeschosse','Basements'],['Untergeschoss','Basement'],['No active fault','No active fault'],['1 Ersatzteil kaufen','Buy 1 spare part'],['Betriebssicherung erstellen','Create operations backup'],['Noch keine Betriebssicherung','No operations backup yet'],['Noch keines','None yet'],['Jetzt möglich','Available now'],['Die Reserve begrenzt automatische Eingriffe. Manuell freigegebene Maßnahmen können sie nutzen. Ein Wechsel der Einstellungen setzt verbrauchte Budgets nicht zurück.','The reserve limits automatic actions. Manually approved actions may use it. Changing settings does not reset spent budgets.'],['Kleinere Reparaturen mit verfügbaren Ersatzteilen. Größere Krisen warten auf dich.','Minor repairs use available spare parts. Major crises wait for you.'],['Server verfügbar','Available servers'],['ausgefallen','failed'],['in Reparatur','under repair'],['Durchschnittlicher Zustand','Average condition'],['Datenintegrität','Data integrity'],['Störungsrisiko','Incident risk'],['Anlaufschutz','Startup protection'],['Letztes Betriebsbackup','Last operations backup'],['geschützt','protected'],['Maximale automatische Ausgaben pro Betriebsstunde','Maximum automatic spending per operating hour'],['Verbraucht','Spent'],['Über die Türen erreichst du die Serverräume und die Gebäudetechnik. Der Aufzug verbindet weitere Etagen.','Use the doors to reach the server rooms and building systems. The elevator connects additional basements.'],['Kapazität, laufende Kosten und Ausbau steuerst du am Terminal.','Manage capacity, operating costs, and expansion at the terminal.'],['Ausbau bedeutet mehr als zusätzliche Server.','Expansion means more than adding servers.'],['Alle Geräte eines Racks teilen sich Uplink, Strom und Kühlung. Verteile dichte oder leistungsstarke Hardware auf mehrere Racks oder verbessere deren Versorgung. Vor jeder Maßnahme siehst du Kosten und Stillstand. Größere Krisen warten weiterhin im Schutzmodus auf dich.','All devices in a rack share its uplink, power, and cooling. Distribute dense or high-performance hardware across multiple racks, or upgrade their utilities. Costs and downtime are shown before each action. Major crises still wait for you in resilience mode.'],['No active fault','No active fault'],['Room plan','Room plan']
-  ]);
-
-  add([
-    ['Kühlung ausbauen','Upgrade cooling'],['Stromversorgung ausbauen','Upgrade power supply'],['KI-Inferenz auswerten','Evaluate AI inference'],['Zugriffsrechte auditieren','Audit access permissions'],['Anomalien klassifizieren','Classify anomalies'],['Archiv wiederherstellen','Restore archive'],['Verfügbarkeitsprüfung','Availability check'],['Datenmigration begleiten','Oversee data migration'],['Lastspitzen glätten','Smooth load spikes'],['KI-Modell trainieren','Train AI model'],
-    ['Gesundheit, Wiederherstellung und Vorsorge für dein Netzwerk.','Health, recovery, and preparation for your network.'],['Schützt vorhandene Forschung und laufende Aufträge bis zum Sicherungszeitpunkt. Spätere Änderungen sind erst im nächsten Backup enthalten.','Protects existing research and active jobs up to the backup time. Later changes are included in the next backup.'],['Betriebssicherung erstellen','Create operations backup'],['Ersatzteil kaufen','Buy spare part'],['Maximale automatische Ausgaben pro Betriebsstunde','Maximum automatic spending per operating hour'],['Verbraucht','Spent'],['Die Reserve begrenzt automatische Eingriffe. Manuell freigegebene Maßnahmen können sie nutzen. Ein Wechsel der Einstellungen setzt verbrauchte Budgets nicht zurück.','The reserve limits automatic interventions. Manually approved actions may use it. Changing settings does not reset spent budgets.'],['Kleinere Reparaturen mit verfügbaren Ersatzteilen. Größere Krisen warten auf dich.','Minor repairs use available spare parts. Major crises wait for you.'],['Hohe Leistung, Hitze und Verschleiß erhöhen das Risiko. Eine schnelle Reparatur spart Zeit und hinterlässt mehr Verschleiß. Eine Überholung kostet Ersatzteile und bringt den Zustand vollständig zurück. Backups begrenzen Datenverluste; ihr Alter entscheidet darüber, wie viel erhalten bleibt. Eine zusätzliche JSON-Sicherung deiner gesamten Leitstelle findest du in den Einstellungen.','High performance, heat, and wear increase risk. A quick repair saves time but leaves more wear. An overhaul costs spare parts and fully restores condition. Backups limit data loss; their age determines how much is preserved. You can export an additional JSON backup of your entire control room in Settings.'],['Pflegt das Netz und repariert kleinere Defekte mit Ersatzteilen innerhalb von Budget und Geldreserve. Laufende Pflege kostet zusätzlich Betriebskosten.','Maintains the network and repairs minor faults using spare parts within your budget and cash reserve. Ongoing maintenance adds operating costs.'],['Öko reduziert Stromkosten und Durchsatz. Leistung beschleunigt die Arbeit, erzeugt aber mehr Wärme. Das Profil ergänzt den Betriebsmodus jedes einzelnen Servers.','Eco reduces power costs and throughput. Performance speeds up work but generates more heat. The profile complements each server’s operating mode.'],['Verteile die Agentenleistung gleichmäßig oder bevorzuge Aufträge mit höherer Vergütung beziehungsweise mehr Forschung pro Arbeitseinheit.','Distribute agent capacity evenly or prioritize jobs with higher rewards or more research per unit of work.'],['Aktueller Betrieb','Current operations'],['Netto-Grundversorgung','Net baseline income'],['Laufende Betriebskosten','Ongoing operating costs'],['Gemeinsamer Arbeitsdurchsatz','Shared work throughput'],['Aktuelle Zuverlässigkeit','Current reliability'],['Globales Energieprofil','Global power profile'],['Priorität der Auftragsarbeit','Job work priority'],['Ein Netzwerk, das auch ohne dich weiterkommt.','A network that keeps going without you.'],['Beim nächsten Öffnen wird bis zu 12 Stunden Abwesenheit nachgeholt. Deine Regeln gelten auch dann. Größere Krisen pausieren die Auftragsarbeit und warten im Schutzmodus auf dich. Backups, Budget und Geldreserve legst du unter Betrieb & Schutz fest.','When you return, up to 12 hours of offline progress will be simulated. Your rules still apply. Major crises pause job work and wait for you in resilience mode. Configure backups, budgets, and cash reserves under Operations & Resilience.'],['Die Geschichte deines Netzwerks. Ein Ereignis nach dem anderen.','The story of your network, one event at a time.'],['Netzwerkprotokoll','Network log'],['Fortschritte','Progress'],['Alle','All'],['Betriebszeit','Uptime'],['DEIN NETZWERK. DEINE REGELN.','YOUR NETWORK. YOUR RULES.'],['No active fault','No active fault'],['No open events','No open events'],['Persönliche Eigenschaften','Personal traits'],['Risikodiagnose aktiv','Risk diagnostics active'],['Optimierungsprofil aktiv','Optimization profile active'],['Dauerhaft aktiv · Ausbau bleibt erhalten','Always active · upgrade is permanent'],['Angebote bleiben verfügbar','Offers remain available'],['Aktualisierung','Refresh'],['Netzwerkereignis','Network event'],['Wiederherstellung','Recovery'],['Forschung & Entwicklung','Research & Development'],['Erfolge & Meilensteine','Achievements & milestones'],['Ausbau bedeutet mehr als zusätzliche Server.','Expansion means more than adding servers.'],['Alle Geräte eines Racks teilen sich Uplink, Strom und Kühlung. Verteile dichte oder leistungsstarke Hardware auf mehrere Racks oder verbessere deren Versorgung. Vor jeder Maßnahme siehst du Kosten und Stillstand. Größere Krisen warten weiterhin im Schutzmodus auf dich.','All devices in a rack share its uplink, power, and cooling. Distribute dense or high-performance hardware across multiple racks or upgrade their utilities. Costs and downtime are shown before each action. Major crises still wait for you in resilience mode.'],['Betrieb stabil','Operations stable'],['Jetzt möglich','Available now'],['Noch keines','None yet'],['Bereit','Ready'],['Dafür fehlt derzeit Serverkapazität.','There is not enough server capacity for this.'],['Kapazität und Einnahmen sind reduziert. Prüfe die verfügbaren Reparaturen.','Capacity and income are reduced. Review the available repairs.'],['Schutzmodus aktiv. Weitere Schäden sind gestoppt; eine Entscheidung wartet auf dich.','Resilience mode is active. Further damage has stopped; a decision is waiting for you.'],['Alle Plätze belegt – erschließe einen neuen Sektor.','All slots are full—unlock a new sector.'],['Dieser Knoten muss zuerst wieder verfügbar sein.','This node must be available again first.'],['Mehr freie Auftragsplätze oder Serverkapazität nötig.','More open job slots or server capacity are required.'],['Nicht genügend freie GPU-Kapazität. Prüfe KI-Server, Uplink, Strom und Kühlung.','Not enough free GPU capacity. Check AI servers, uplink, power, and cooling.'],['Nach dem Start läuft die Maßnahme bis zum Abschluss.','After it starts, the operation continues until complete.'],['Diese Entscheidung verbraucht die angegebenen Ressourcen und kann ungesicherten Fortschritt dauerhaft verwerfen. Nach dem Start läuft die Maßnahme bis zum Abschluss.','This decision uses the listed resources and may permanently discard unsaved progress. Once started, the operation continues until complete.']
-  ]);
-
-  add([
-    ['Selbstständig im Hintergrund aktiv','Running autonomously in the background'],
-    ['Kühlung ausbauen','Upgrade cooling'],
-    ['Kühlbudget','Cooling budget'],
-    ['Gib deinem Team einen Schwerpunkt — und gezielte Einsätze.','Assign your team a focus—and plan targeted assignments.'],
-    ['Dialog schließen','Close dialog'],['Willkommen zurück.','Welcome back.'],
-    ['Bewegen','Move'],['Ziehen / ← → drehen','Drag / ← → rotate'],['Öffnen','Open'],['Konsole','Console'],
-    ['höchste Racktemperatur','Highest rack temperature'],['Leistungsaufnahme','Power draw'],['Uplink-Leistung','Uplink capacity'],
-    ['ENTSCHEIDUNG OFFEN','DECISION PENDING'],['Optionen ansehen','View options'],['Wartet auf dich. Ohne Zeitlimit.','Waiting for you. No time limit.'],
-    ['Automatik an','Automation on'],['Aktueller Betrieb','Current operations'],['Netto-Grundversorgung','Net baseline income'],
-    ['Laufende Betriebskosten','Ongoing operating costs'],['Aktuelle Zuverlässigkeit','Current reliability'],['Globales Energieprofil','Global power profile'],['Priorität der Auftragsarbeit','Job work priority'],
-    ['Öko reduziert Stromkosten und Durchsatz. Leistung beschleunigt die Arbeit, erzeugt aber mehr Wärme. Das Profil ergänzt den Betriebsmodus jedes einzelnen Servers.','Eco reduces power costs and throughput. Performance speeds up work but generates more heat. The profile complements each server’s operating mode.'],
-    ['Verteile die Agentenleistung gleichmäßig oder bevorzuge Aufträge mit höherer Vergütung beziehungsweise mehr Forschung pro Arbeitseinheit.','Distribute agent capacity evenly or prioritize jobs with higher rewards or more research per unit of work.'],
-    ['12 im Normalbetrieb / 12 Plätze','12 on regular duty / 12 slots'],
-    ['44.0 TB · 2 Einschübe','44.0 TB · 2 slots'],
-    ['Sektor','Sector'],['Lokales Netzwerk','Local network'],
-    ['DEIN NETZWERK. DEINE REGELN.','YOUR NETWORK. YOUR RULES.']
-  ]);
-  add([
-    ['Abweichende Browserkopie exportieren','Export alternate browser copy'],
-    ['Eine andere Browser-Sitzung hat einen neueren Stand gespeichert. Diese Sitzung pausiert. Lade die Seite neu; deine abweichende Kopie bleibt in den Einstellungen exportierbar.','Another browser session saved a newer version. This session is paused. Reload the page; your alternate copy remains available to export in Settings.'],
-    ['Diese Oberfläche ist veraltet. Lade die Seite neu, bevor du fortfährst.','This app version is out of date. Reload the page before continuing.'],
-    ['Speichern abgelehnt','Save was rejected'],
-    ['Der lokale Dienst ist nicht erreichbar. Dein aktueller Stand ist im Browser gesichert. Starte ROOT über den Desktop-Starter, um wieder in die Sicherungsdatei zu speichern.','The local service is unavailable. Your current progress is saved in the browser. Start ROOT from the desktop launcher to resume saving to the backup file.'],
-    ['Der Netzwerkstand konnte nicht gespeichert werden. Exportiere ihn in den Einstellungen und starte ROOT über den Desktop-Starter.','Your network progress could not be saved. Export it in Settings and start ROOT from the desktop launcher.'],
-    ['Die Browserkopie war beschädigt. ROOT versucht, deinen lokalen Netzwerkstand zu laden.','The browser copy was damaged. ROOT is trying to load your local network progress.'],
-    ['ROOT verwendet die Browserkopie. Öffne ROOT über „ROOT starten“, damit dein Fortschritt zusätzlich in der lokalen Sicherungsdatei gespeichert wird.','ROOT is using the browser copy. Open ROOT with “Start ROOT” to also save your progress to the local backup file.'],
-    ['Der Netzwerkstand ist zu groß. Maximal 16 MiB.','The network save is too large. Maximum size: 16 MiB.'],
-    ['Einfahrt beim Start anzeigen','Show arrival sequence at startup'],
-    ['Einfahrt ansehen','Replay arrival sequence'],
-    ['Racks gesamt','Total racks'],['Server gesamt','Total servers'],['Racks in diesem Raum','Racks in this room'],
-    ['Untergeschoss 01 / Kontrollraum','Basement 01 / Control Room']
-  ]);
-  const patterns = [
-    [/^(.+?) Credits; (\d+) Sekunden Wartung\. (.+) Laufende Mehrkosten: ([\d,]+) CR\/s; zusätzliche Leistungsaufnahme: (\d+) W\.$/, (whole,price,seconds,effect,upkeep,power)=>`${price} credits; ${seconds} seconds of maintenance. ${translate(effect,'en')} Additional running costs: ${upkeep.replace(',','.')} credits/s; additional power draw: ${power} W.`],
-    [/^(\d+) W zusätzliche Kühlleistung; danach (\d+) W zentral\. Auf aktive Racks verteilt\.$/, '$1 W more cooling capacity; $2 W total central capacity afterward. Distributed across active racks.'],
-    [/^(\d+) W zusätzliche Gesamtreserve; danach (\d+) W zentral\. Gleichmäßig auf aktive Racks verteilt\.$/, '$1 W more total reserve; $2 W total central reserve afterward. Distributed evenly across active racks.'],
-    [/^(\d+) W zusätzliche USV-Leistung; danach (\d+) W gesamt\. Bei passender Lastabdeckung sinkt die Chance schwerer Stromausfälle um bis zu 65 %; deren Folgen werden gemindert\.$/, '$1 W more UPS capacity; $2 W total afterward. With sufficient load coverage, the chance of severe power outages is reduced by up to 65%, and their impact is mitigated.'],
-    [/^Ungültiger Netzwerkstand: (.+)$/, 'Invalid network state: $1'],
-    [/^(.+?) in (Rack \d+) completed\. (.+)$/, (whole, operation, rack, suffix) => `${translate(operation, 'en')} in ${rack} completed. ${suffix}`],
-    [/^Untergeschoss (\d+) · Raum (\d+) · (\d+) Racks$/, (whole, floor, room, count) => `Basement ${floor} · Room ${room} · ${count} rack${count === '1' ? '' : 's'}`],
-    [/^STUFE (\d+)$/, 'LEVEL $1'],
-    [/^(\d+) KNOTEN$/, '$1 NODES'],
-    [/^(\d+) OFFEN$/, '$1 OPEN'],
-    [/^Ausbauen · ([\d,.]+) CR$/, 'Upgrade · $1 CR'],
-    [/^([\d,.]+) CR · (\d+) Ersatzteile?$/, (whole, credits, count) => `${credits} CR · ${count} spare part${count === '1' ? '' : 's'}`],
-    [/^(.+?) for (.+?) completed(?:: (.+))?$/, (whole, title, client, result) => `${translate(title, 'en')} for ${client} completed${result ? `: ${result}` : ''}`],
-    [/^(.+?) · (\d+(?:\.\d+)?) TB · (\d+) Einschübe$/, '$1 · $2 TB · $3 slots'],
-    [/^(\d+) im Normalbetrieb \/ (\d+) Plätze$/, '$1 on regular duty / $2 slots'],
-    [/^(\d+) % erledigt$/, '$1% complete'],
-    [/^1 Sekunde$/, '1 second'],[/^(\d+) Sekunden$/, '$1 seconds'],[/^1 Minute$/, '1 minute'],[/^(\d+) Minuten$/, '$1 minutes'],[/^1 Stunde$/, '1 hour'],[/^(\d+) Stunden$/, '$1 hours'],
-    [/^(\d+) GPU benötigt$/, '$1 GPU required'],
-    [/^Sektor (\d+) wartet\.$/, 'Sector $1 is waiting.'],
-    [/^Sektor (\d+) erschließen$/, 'Expand sector $1'],
-    [/^Sektor (\d+) ist noch nicht bereit\. Schließe weitere Aufträge ab und baue das Netz aus\.$/, 'Sector $1 is not ready yet. Complete more jobs and expand your network.'],
-    [/^Sektor (\d+) erschlossen\.$/, 'Sector $1 unlocked.'],
-    [/^Es fehlen ([\d.,]+) Credits\.$/, '$1 more credits required.'],
-    [/^Benötigt (.+?) Credits; verfügbar sind (.+?)\.$/, 'Requires $1 credits; $2 available.'],
-    [/^Benötigt (.+?) Ersatzteile, vorhanden sind (.+?)\.$/, 'Requires $1 spare parts; $2 available.'],
-    [/^Wieder verfügbar in (.+?) Sekunden\.$/, 'Available again in $1 seconds.'],
-    [/^Die Betriebssicherung ist erst in (.+?) Sekunden wieder verfügbar\.$/, 'The operations backup will be available again in $1 seconds.'],
-    [/^Höheneinheit U(\d+) ist bereits belegt\.$/, 'Rack unit U$1 is already occupied.'],
-    [/^Systemstart · noch (.+)$/, 'Starting up · $1 remaining'],
-    [/^Port (\d+)$/, 'Port $1'],
-    [/^Sektor (\d+) erschlossen$/, 'Sector $1 unlocked'],
-    [/^(.+?) · (\d+) HE · Stufe (\d+)$/, '$1 · $2 RU · Level $3'],
-    [/^(.+?) ist während des Umbaus nicht verfügbar\.$/, '$1 is unavailable during this upgrade.'],
-    [/^(.+?) für (.+?) abgeschlossen: (.+?) Credits\.$/, (whole, jobTitle, client, credits) => `${translate(jobTitle, 'en')} for ${client} completed: ${credits} credits.`],
-    [/^(.+?): Hardwarefehler erkannt\. Aufträge laufen auf verbleibenden Knoten weiter\.$/, '$1: Hardware fault detected. Jobs continue on the remaining nodes.'],
-    [/^(.+?): Modus (.+?)\.$/, '$1: $2 mode.'],
-    [/^(.+?) beginnt „(.+?)“ für (.+?) Credits; normaler Betriebsausstoß ruht für (.+?) Sekunden\.$/, '$1 starts “$2” for $3 credits; normal operations pause for $4 seconds.'],
-    [/^(.+?) für (.+?) gestartet\.$/, '$1 started for $2.'],
-    [/^(.+?) gestartet\.$/, '$1 started.'],
-    [/^(.+?) abgeschlossen\. Die Maßnahme wartet auf deine Entscheidung\.$/, '$1 completed. The operation is waiting for your decision.'],
-    [/^(.+?) mit Switch, Stromversorgung und Kühlung installiert\.$/, '$1 installed with a switch, power supply, and cooling.'],
-    [/^(.+?) mit Switch, Stromversorgung und Kühlung$/, '$1 with switch, power supply, and cooling'],
-    [/^(.+?) %$/, '$1%'],
-    [/^(.+?) HE frei$/, '$1 RU free'],
-    [/^(.+?) · belegt$/, '$1 · occupied'],
-    [/^(.+?) CR zurückhalten$/, 'Keep $1 credits in reserve'],
-    [/^(.+?) CR \/ Stunde$/, '$1 credits / hour'],
-    [/^(.+?) \/ s$/, '$1 / s'],
-    [/^Etage (\d+) · Raum (\d+)$/, 'Basement $1 · Room $2'],
-    [/^(\d+) Racks · (\d+) Server$/, (whole,racks,servers)=>`${racks} rack${racks==='1'?'':'s'} · ${servers} server${servers==='1'?'':'s'}`],
-    [/^(\d+) Racks? · (\d+) eingebaute Server\.$/, (whole,racks,servers)=>`${racks} rack${racks==='1'?'':'s'} · ${servers} installed server${servers==='1'?'':'s'}.`],
-    [/^Begehbarer Serverraum: (\d+) Racks und (\d+) eingebaute Server\. WASD bewegen, Maus oder Pfeiltasten drehen, E Gerät öffnen, Escape zurück\.$/, (whole,racks,servers)=>`Walkable server room: ${racks} rack${racks==='1'?'':'s'} and ${servers} installed server${servers==='1'?'':'s'}. WASD to move, mouse or arrow keys to turn, E to open a device, Escape to return.`],
-    [/^Während deiner Abwesenheit hat ROOT (.+?) weitergearbeitet\. Berücksichtigt wurden maximal 12 Stunden\.$/, (whole, duration) => `While you were away, ROOT continued working for ${translate(duration, 'en')}. A maximum of 12 hours was included.`],
-    [/^Während deiner Abwesenheit hat ROOT (.+?) weitergearbeitet\.$/, (whole, duration) => `While you were away, ROOT continued working for ${translate(duration, 'en')}.`],
-    [/^ Berücksichtigt wurden maximal 12 Stunden\.$/, ' Up to 12 hours were included.'],
-    [/^(.+?) hat (.+?) abgeschlossen\.$/, '$1 completed $2.'],
-    [/^(.+?) · noch (.+)$/, '$1 · $2 remaining'],
-    [/^(.+?) verfügbar · (.+?) belegt$/, '$1 available · $2 occupied'],
-    [/^(.+?) Einsatz · (.+?) verfügbar$/, '$1 assigned · $2 available'],
-    [/^Sektor (.+?) · Zuverlässigkeit (.+?) %$/, 'Sector $1 · Reliability $2%'],
-    [/^Rack (.+?) ist während des Umbaus nicht verfügbar\.$/, 'Rack $1 is unavailable during the upgrade.'],
-    [/^(.+?): Hardwarefehler erkannt\. Aufträge laufen auf verbleibenden Knoten weiter\.$/, '$1: Hardware fault detected. Jobs continue on the remaining nodes.'],
-    [/^(.+?): betroffene Knoten (.+?)\. Die Maßnahme wartet auf deine Entscheidung\.$/, '$1: affected nodes $2. The operation is waiting for your decision.'],
-    [/^Betriebssicherung abgeschlossen: (.+?) Forschung und (.+?) Auftragsstände geschützt\.$/, 'Operations backup complete: protected $1 research and $2 job states.'],
-    [/^Krisenmaßnahme abgeschlossen: (.+?)\. Der geschützte Betrieb ist wieder freigegeben\.$/, 'Crisis response complete: $1. Protected operations have resumed.'],
-    [/^(\d+(?:[.,]\d+)?) Credits, (\d+) Ersatzteile und (\d+) Sekunden Krisenbetrieb\. Zustand der betroffenen Knoten danach ([\d.,]+)%(.*)$/, (whole, cost, parts, seconds, condition, details) => {
-      const suffix = details.replace(/^\./, '').split(/(?<=\.) /).filter(Boolean).map(part => translate(part, 'en')).join('');
-      return `${cost} credits, ${parts} spare parts, and ${seconds} seconds of crisis response. Affected nodes will be at ${condition}% condition afterward.${suffix}`;
-    }],
-    [/^(.+?) (\d+(?:[.,]\d+)?) Credits, (\d+) Ersatzteile und (\d+) Sekunden Krisenbetrieb\. Zustand der betroffenen Knoten danach ([\d.,]+)%(.*)$/, (whole, action, cost, parts, seconds, condition, details) => {
-      const suffix = details.replace(/^\./, '').split(/(?<=\.) /).filter(Boolean).map(part => translate(part, 'en')).join('');
-      return `${translate(action, 'en')} ${cost} credits, ${parts} spare parts, and ${seconds} seconds of crisis response. Affected nodes will be at ${condition}% condition afterward.${suffix}`;
-    }],
-    [/^(.+?) für (.+?) abgeschlossen: (.+?) Credits\.$/, '$1 for $2 completed: $3 credits.'],
-    [/^(.+?) in (.+?) abgeschlossen\. Versorgung und Verbindungen sind wieder verfügbar\.$/, (whole, operation, location) => `${translate(operation, 'en')} in ${location} completed. Power and connections are available again.`],
-    [/^(.+?) erschlossen\. Neue Verträge und Ausbauplätze sind verfügbar\.$/, '$1 unlocked. New contracts and expansion slots are available.'],
-    [/^Meilenstein eingelöst: (.+?) \(\+(.+?) Credits\)\.$/, 'Milestone claimed: $1 (+$2 credits).'],
-    [/^(.+?): \+(.+?) Credits\.$/, '$1: +$2 credits.'],
-    [/^(.+?) in (.+?) installiert\.$/, '$1 installed in $2.'],
-    [/^Rack (.+?) mit Switch, Stromversorgung und Kühlung installiert\.$/, 'Rack $1 installed with a switch, power supply, and cooling.'],
-    [/^Portzuordnung für (.+?) aktualisiert\.$/, 'Port assignment updated for $1.'],
-    [/^(.+?) hat (.+?) Credits verdient\.$/, '$1 earned $2 credits.'],
-    [/^(.+?) wird in (.+?) Sekunden wieder verfügbar\.$/, '$1 will be available again in $2 seconds.'],
-    [/^(.+?) arbeitet an „(.+?)“\.$/, '$1 is working on “$2”.'],
-    [/^(.+?) hat den Auftrag „(.+?)“ abgeschlossen\.$/, '$1 completed the job “$2”.'],
-    [/^(.+?) für (.+?) gestartet\.$/, '$1 started for $2.'],
-    [/^(.+?) · (\d+) Racks · (\d+) Server$/, '$1 · $2 racks · $3 servers'],
-    [/^(.+?) Credits; (.+?) Sekunden Wartung\. Rack und angeschlossene Server sind währenddessen nicht verfügbar\.$/, '$1 credits; $2 seconds of maintenance. The rack and connected servers are unavailable during this time.'],
-    [/^(.+?) Credits, (.+?) Ersatzteile, (.+?) Sekunden Ausfallzeit; Zustand danach (.+?)%\. Dabei gehen (.+?) Arbeitseinheiten verloren\.$/, '$1 credits, $2 spare parts, $3 seconds of downtime; condition afterward: $4%. $5 work units will be lost.'],
-    [/^(.+?) Credits, (.+?) Ersatzteile, (.+?) Sekunden Ausfallzeit; Zustand danach (.+?)%\. Kein Auftragsfortschritt geht verloren\.$/, '$1 credits, $2 spare parts, $3 seconds of downtime; condition afterward: $4%. No job progress is lost.'],
-    [/^(.+?) Credits, (.+?) Ersatzteile und (.+?) Sekunden Krisenbetrieb\. Zustand der betroffenen Knoten danach (.+?)%\.(.*)$/, '$1 credits, $2 spare parts, and $3 seconds of crisis response. Affected nodes will be at $4% condition afterward.$5'],
-    [/^(.+?) Credits und (.+?) Sekunden mit halbiertem Auftragsdurchsatz; speichert (.+?) Forschung und (.+?) aktive Aufträge\. Kein Datenverlust\.$/, '$1 credits and $2 seconds at half job throughput; saves $3 research and $4 active jobs. No data is lost.'],
-    [/^(.+?) Credits für (.+?) Ersatzteile; keine Ausfallzeit\.$/, '$1 credits for $2 spare parts; no downtime.'],
-    [/^(.+?) Credits, (.+?) Sekunden Einsatzzeit, danach (.+?) Sekunden Abklingzeit\. (.+?) (.+?) liefert während des Einsatzes keine normale Betriebsleistung\.$/, '$1 credits, $2 seconds on assignment, followed by $3 seconds of cooldown. $4 $5 does not contribute to normal operations during the assignment.'],
-    [/^(.+?) Credits; (.+?) Sekunden Wartung\. Rack und angeschlossene Server sind währenddessen nicht verfügbar\.$/, '$1 credits; $2 seconds of maintenance. The rack and connected servers are unavailable during this time.'],
-    [/^(.+?) Credits, (.+?) Ersatzteile, (.+?) Sekunden Ausfallzeit; Zustand danach (.+?)%\. Dabei gehen (.+?) Arbeitseinheiten verloren\.$/, '$1 credits, $2 spare parts, $3 seconds of downtime; condition afterward: $4%. $5 work units will be lost.'],
-    [/^(.+?) Credits, (.+?) Ersatzteile, (.+?) Sekunden Ausfallzeit; Zustand danach (.+?)%\. Kein Auftragsfortschritt geht verloren\.$/, '$1 credits, $2 spare parts, $3 seconds of downtime; condition afterward: $4%. No job progress is lost.'],
-    [/^(.+?) (.+?) Credits, (.+?) Ersatzteile und (.+?) Sekunden Krisenbetrieb\. Zustand der betroffenen Knoten danach (.+?)%\.(.*)$/, '$1 $2 credits, $3 spare parts, and $4 seconds of crisis response. Affected nodes will be at $5% condition afterward.$6'],
-    [/^(.+?) (.+?) Credits, (.+?) Ersatzteile und (.+?) Sekunden Krisenbetrieb\. Zustand der betroffenen Knoten danach (.+?)%\. Verlust: (.+?) Forschung\.$/, '$1 $2 credits, $3 spare parts, and $4 seconds of crisis response. Affected nodes will be at $5% condition afterward. Loss: $6 research.'],
-    [/^(.+?) (.+?) Credits, (.+?) Ersatzteile und (.+?) Sekunden Krisenbetrieb\. Zustand der betroffenen Knoten danach (.+?)%\. Wiederherstellung: (.+?) Forschung aus der Sicherung\.$/, '$1 $2 credits, $3 spare parts, and $4 seconds of crisis response. Affected nodes will be at $5% condition afterward. Restored: $6 research from backup.'],
-    [/^ Verlust: (.+?) Forschung\.$/, ' Loss: $1 research.'],
-    [/^ Wiederherstellung: (.+?) Forschung aus der Sicherung\.$/, ' Restored: $1 research from backup.'],
-    [/^ Verlust: (.+?) Arbeitseinheiten\.$/, ' Loss: $1 work units.'],
-    [/^ Wiederherstellung: (.+?) gespeicherte Arbeitseinheiten\.$/, ' Restored: $1 saved work units.'],
-    [/^ Ansehensverlust: (.+?)\.$/, ' Reputation loss: $1.'],
-    [/^Verlust: (.+?) Forschung\.$/, 'Loss: $1 research.'],
-    [/^Wiederherstellung: (.+?) Forschung aus der Sicherung\.$/, 'Restored: $1 research from backup.'],
-    [/^Verlust: (.+?) Arbeitseinheiten\.$/, 'Loss: $1 work units.'],
-    [/^Wiederherstellung: (.+?) gespeicherte Arbeitseinheiten\.$/, 'Restored: $1 saved work units.'],
-    [/^Ansehensverlust: (.+?)\.$/, 'Reputation loss: $1.'],
-    [/^(.+?) (.+?) Credits, (.+?) Ersatzteile und (.+?) Sekunden Krisenbetrieb\. Zustand der betroffenen Knoten danach (.+?)%(\..*)$/, match => {
-      const suffix = match[6].split(/(?<=\.) /).filter(Boolean).map(part => translate(part, 'en')).join('');
-      return `${translate(match[1], 'en')} ${match[2]} credits, ${match[3]} spare parts, and ${match[4]} seconds of crisis response. Affected nodes will be at ${match[5]}% condition afterward.${suffix}`;
-    }],
-    [/^(.+?) Sekunden, (.+?) Credits\. Rack und angeschlossene Server sind währenddessen nicht verfügbar\.$/, '$1 seconds, $2 credits. The rack and connected servers are unavailable during this time.'],
-    [/^(.+?) · (.+?) HE · (.+?) Kerne$/, '$1 · $2 RU · $3 cores'],
-    [/^(.+?) GB RAM · (.+?) TB$/, '$1 GB RAM · $2 TB'],
-    [/^(.+?) GPUs · (.+?) GB VRAM$/, '$1 GPUs · $2 GB VRAM'],
-    [/^(.+?) kW · Inferenz und Training$/, '$1 kW · inference and training'],
-    [/^Sektor (\d+) · Zuverlässigkeit (.+?) %$/, 'Sector $1 · Reliability $2%'],
-    [/^(.+?) ist während des Umbaus nicht verfügbar\.$/, '$1 is unavailable during the upgrade.'],
-    [/^(.+?) · (\d+) Server · (\d+) \/ (\d+) HE$/, '$1 · $2 servers · $3 / $4 RU'],
-    [/^(\d+) frei\s+\/\s+(\d+) im Einsatz$/, '$1 free / $2 on assignment'],
-    [/^Ab Sektor (\d+)$/, 'From sector $1'],
-    [/^Raum (\d+)$/, 'Room $1'],
-    [/^Etage (\d+)$/, 'Basement $1'],
-    [/^Stufe (\d+) \/ (\d+)$/, 'Level $1 / $2'],
-    [/^Etage (\d+) \/ (\d+)$/, 'Basement $1 / $2'],
-    [/^Rackplätze freigeschaltet$/, 'rack slots unlocked'],
-    [/^(\d+) Rackplätze freigeschaltet$/, '$1 rack slots unlocked'],
-    [/^Rackdetails · (\d+) Server$/, (whole,count)=>`Rack details · ${count} server${count==='1'?'':'s'}`],
-    [/^(\d+) Server · (.+?) °C$/, (whole,count,temp)=>`${count} server${count==='1'?'':'s'} · ${temp} °C`],
-    [/^(\d+) \/ 16 HE$/, '$1 / 16 RU'],
-    [/^(\d+) Störung(en)?$/, (whole, count) => `${count} fault${count === '1' ? '' : 's'}`],
-    [/^Stufe (\d+)$/, 'Level $1'],
-    [/^(\d+) aktive Netzwerkeffekte$/, '$1 active network effects'],
-    [/^(\d+) %\s+Last abgedeckt$/, '$1% load covered'],
-    [/^Etage (\d+) · Raum (\d+)$/, 'Basement $1 · Room $2'],
-    [/^Freischaltung ab Sektor (\d+)\.$/, 'Unlocks at sector $1.'],
-    [/^Ab Sektor (\d+)$/, 'From sector $1'],
-    [/^(.+?) Credits; (\d+) Sekunden Wartung\. (\d+) W zusätzliche Kühlleistung, auf aktive Racks verteilt\.$/, '$1 credits; $2 seconds of maintenance. $3 W of additional cooling capacity, distributed across active racks.'],
-    [/^(.+?) Credits; (\d+) Sekunden Wartung\. (\d+) W USV-Leistung; sie senkt bei passender Lastabdeckung die Chance schwerer Stromausfälle um bis zu 65 % und mindert deren Folgen\.$/, '$1 credits; $2 seconds of maintenance. $3 W of UPS capacity; with sufficient load coverage, it reduces the chance of severe power outages by up to 65% and mitigates their impact.'],
-    [/^(.+?) Credits; (\d+) Sekunden Wartung\. (\d+) W zusätzliche Gesamtreserve, gleichmäßig auf aktive Racks verteilt\.$/, '$1 credits; $2 seconds of maintenance. $3 W of additional total reserve, distributed evenly across active racks.'],
-    [/^(\d+) W zusätzliche Kühlleistung, auf aktive Racks verteilt\.$/, '$1 W of additional cooling capacity, distributed across active racks.'],
-    [/^(\d+) W USV-Leistung; sie senkt bei passender Lastabdeckung die Chance schwerer Stromausfälle um bis zu 65 % und mindert deren Folgen\.$/, '$1 W of UPS capacity; with sufficient load coverage, it reduces the chance of severe power outages by up to 65% and mitigates their impact.'],
-    [/^(\d+) W zusätzliche Gesamtreserve, gleichmäßig auf aktive Racks verteilt\.$/, '$1 W of additional total reserve, distributed evenly across active racks.'],
-    [/^(.+?) · E \/ Klick: Terminal öffnen$/, (whole, label) => `${translate(label, 'en')} · E / click: open terminal`],
-    [/^(.+?) · E \/ Klick: Raum betreten$/, (whole, label) => `${translate(label, 'en')} · E / click: enter room`],
-    [/^(.+?) · E \/ Klick: Noch nicht freigeschaltet$/, (whole, label) => `${translate(label, 'en')} · E / Not unlocked yet`],
-    [/^(.+?) · E: (Tür schließen|Tür öffnen)$/, (whole, rackName, action) => `${rackName} · E: ${translate(action, 'en')}`],
-    [/^(\d+) Server · (\d+) \/ (\d+) RU$/, (whole,count,used,total)=>`${count} ${count==='1'?'server':'servers'} · ${used} / ${total} RU`],
-    [/^(.+?)% der Anforderung$/, '$1% of required capacity'],
-    [/^Kühlung von (.+) verwalten$/, 'Manage cooling for $1'],
-    [/^Stromversorgung von (.+) verwalten$/, 'Manage power supply for $1'],
-    [/^Switch in (.+) verwalten$/, 'Manage switch in $1'],
-    [/^Port (\d+), frei$/, 'Port $1, free'],
-    [/^(.+?), (ROOT [^,]+), (\d+) Höheneinheiten, (.+)$/, (whole,name,model,units,status)=>`${name}, ${model}, ${units} rack ${units==='1'?'unit':'units'}, ${translate(status,'en')}`],
-    [/^(.+?) · Tür öffnet …$/, (whole, rackName) => `${rackName} · Door opening …`],
-    [/^(.+?) · (.+?) · E \/ Klick: Server verwalten$/, (whole, serverName, status) => `${serverName} · ${translate(status, 'en')} · E / click: manage server`],
-    [/^(.+?) · (.+?) °C · E \/ Klick: Rack verwalten$/, (whole, rackName, temperature) => `${rackName} · ${temperature.replace(',', '.')} °C · E / click: manage rack`],
-    [/^VORFALL · (.+)$/, (whole, title) => `INCIDENT · ${translate(title, 'en')}`],
-    [/^(.+?) · noch (.+)$/, (whole, label, remaining) => `${translate(label, 'en')} · ${remaining} remaining`],
-    [/^Agenten: (.+)$/, (whole, assignments) => {
-      const paused = assignments.endsWith(' · pausiert');
-      const parts = (paused ? assignments.slice(0, -' · pausiert'.length) : assignments).split(' · ');
-      const translated = parts.map(part => {
-        const separator = part.indexOf(': ');
-        return separator < 0 ? translate(part, 'en') : `${part.slice(0, separator)}: ${translate(part.slice(separator + 2), 'en')}`;
-      }).join(' · ');
-      return `Agents: ${translated}${paused ? ' · paused' : ''}`;
-    }],
-    [/^Netzeffekte: (.+)$/, (whole, effects) => `Network effects: ${effects.split(' · ').map(part => translate(part, 'en')).join(' · ')}`],
-    [/^Letzte Sicherung vor (.+)$/, (whole, age) => `Last backup ${age} ago`],
-    [/^Ausbau prüfen · (.+?) CR$/, 'Review upgrade · $1 CR'],
-    [/^(\d+) aktiv\s+\/\s+(\d+) Angebote$/, '$1 active / $2 offers'],
-    [/^(.+) \/ (.+) Einheiten$/, '$1 / $2 units'],
-    [/^(.+) \/ (.+) · (.+) installiert$/, '$1 / $2 · $3 installed'],
-    [/^(.+) % · (.+) CR(?: · (.+) GPU Bedarf)?$/, (whole, progress, credits, gpu) => `${progress}% · ${credits} CR${gpu ? ` · ${gpu} GPU demand` : ''}`],
-    [/^(.+) FP \/ Minute$/, '$1 RP / minute'],
-    [/^Stufe (\d+)$/, 'Level $1'],
-    [/^(\d+) Entscheidung(en)?$/, (whole, count) => `${count} ${count === '1' ? 'decision' : 'decisions'}`],
-    [/^(.+?) %$/, '$1%'],
-    [/^(.+) GPU Bedarf$/, '$1 GPU demand'],
-    [/^(\d+) im Lager$/, '$1 in stock'],
-    [/^(\d+) online · (\d+) ausgefallen$/, '$1 online · $2 failed'],
-    [/^(\d+) · (.+) Server online$/, '$1 · $2 servers online'],
-    [/^(.+) · Zuverlässigkeit (.+) %$/, '$1 · Reliability $2%'],
-    [/^(.+) · (.+) \/ h$/, '$1 · $2 / h'],
-    [/^(.+) kW · max\. (.+) °C$/, '$1 kW · max. $2 °C'],
-    [/^(.+) % · (.+) Einheiten$/, '$1% · $2 units'],
-    [/^(.+) CR\s+·\s+(.+) FP$/, '$1 CR · $2 RP'],
-    [/^(.+?) Mio\.$/, '$1M'],
-    [/^(.+?) Tsd\.$/, '$1K'],
-    [/^(.+?) % ausgelastet$/, '$1% in use'],
-    [/^Sektor (\d+) · Lokales Netzwerk$/, 'Sector $1 · Local network'],
-    [/^Sektor (\d+) wartet\.$/, 'Sector $1 is waiting.'],
-    [/^Verfügbare Aufträge \/ (\d+)$/, 'Available jobs / $1'],
-    [/^Angebote bleiben verfügbar · Aktualisierung in (.+)$/, 'Offers remain available · Refresh in $1'],
-    [/^Noch (.+)$/, '$1 remaining'],
-    [/^(\d+) Server$/, '$1 servers'],
-    [/^(.+)%der Anforderung$/, '$1% of required capacity'],
-    [/^(.+) W über Nennleistung (.+) W; Server werden gedrosselt\.$/, 'Load $1 W exceeds rated capacity of $2 W; servers are throttled.'],
-    [/^(.+) %\/ h$/, '$1% / h'],
-    [/^(.+) %\/h$/, '$1% / h'],
-    [/^(\d+) ausgefallen · (\d+) in Reparatur$/, '$1 failed · $2 under repair'],
-    [/^Datenintegrität (.+) %$/, 'Data integrity $1%'],
-    [/^Anlaufschutz: (.+)$/, 'Startup protection: $1'],
-    [/^(.+) FP geschützt$/, '$1 RP protected'],
-    [/^Verbraucht: (.+?) von (.+?) CR$/, 'Spent: $1 of $2 CR'],
-    [/^Untergeschoss (\d+)$/, 'Basement $1'],
-    [/^Untergeschoss (\d+) · Raum (\d+)$/, 'Basement $1 · Room $2'],
-    [/^(.+?) · (.+?) abgeschlossen: (.+?) Credits\.$/, (whole, jobTitle, client, credits) => `${translate(jobTitle, 'en')} · ${client} completed: ${credits} credits.`],
-    [/^(.+?) für (.+?) abgeschlossen: (.+?) Credits\.$/, (whole, jobTitle, client, credits) => `${translate(jobTitle, 'en')} for ${client} completed: ${credits} credits.`],
-    [/^(.+?) in (.+?) abgeschlossen\. Versorgung und Verbindungen sind wieder verfügbar\.$/, (whole, operation, location) => `${translate(operation, 'en')} in ${location} completed. Power and connections are available again.`],
-    [/^(.+?) begonnen: (.+?); (.+?) Credits und (.+?) Sekunden Wartung\.$/, (whole, operation, location, credits, seconds) => `${translate(operation, 'en')} started: ${location}; ${credits} credits and ${seconds} seconds of maintenance.`],
-    [/^(.+?) startet; Bootzeit (\d+) Sekunden\.$/, '$1 is starting; boot time: $2 seconds.'],
-    [/^(.+?) wurde ausgeschaltet\.$/, '$1 was powered off.'],
-    [/^(.+?): (.+?) umgesetzt\.$/, (whole, eventTitle, choice) => `${translate(eventTitle, 'en')}: ${translate(choice, 'en')} selected.`],
-    [/^Betriebszeit (.+)$/, 'Uptime $1'],
-    [/^Entwickeln · (.+?) CR$/, 'Develop · $1 CR'],
-    [/^Erforschen · (.+?) FP$/, 'Research · $1 RP'],
-    [/^(.+?) HE belegt$/, '$1 RU occupied'],
-    [/^(.+?) Ersatzteil(e)? kaufen$/, (whole, count) => `Buy ${count} spare part${count === '1' ? '' : 's'}`],
-    [/^(.+?) · (.+?) Server$/, '$1 · $2 servers'],
-    [/^(.+?) \/ (.+?) AUFTRÄGE$/, '$1 / $2 JOBS'],
-    [/^(.+?) HE belegt$/, '$1 RU occupied'],
-    [/^ \/ (.+?) HE$/, ' / $1 RU'],
-    [/^(.+?) HE$/, '$1 RU'],
-    [/^(.+?) FP$/, '$1 RP'],
-    [/^(.+?) Mio\.$/, '$1M'],
-    [/^(.+?) Tsd\.$/, '$1K'],
-    [/^(.+?) % ausgelastet$/, '$1% in use'],
-    [/^Sektor (\d+) · Lokales Netzwerk$/, 'Sector $1 · Local network'],
-    [/^Sektor (\d+) wartet\.$/, 'Sector $1 is waiting.'],
-    [/^Verfügbare Aufträge \/ (\d+)$/, 'Available jobs / $1'],
-    [/^Angebote bleiben verfügbar · Aktualisierung in (.+)$/, 'Offers remain available · Refresh in $1'],
-    [/^Noch (.+)$/, '$1 remaining'],
-    [/^(.+)%der Anforderung$/, '$1% of required capacity'],
-    [/^Last (.+?) W über Nennleistung (.+?) W; Server werden gedrosselt\.$/, 'Load $1 W exceeds rated capacity of $2 W; servers are throttled.'],
-    [/^(.+?)%\/ h$/, '$1% / h'],
-    [/^(.+?)%\/h$/, '$1% / h'],
-    [/^(\d+) ausgefallen · (\d+) in Reparatur$/, '$1 failed · $2 under repair'],
-    [/^Datenintegrität (.+?) %$/, 'Data integrity $1%'],
-    [/^Anlaufschutz: (.+)$/, 'Startup protection: $1'],
-    [/^(.+?) FP geschützt$/, '$1 RP protected'],
-    [/^Verbraucht: (.+?) von (.+?) CR$/, 'Spent: $1 of $2 CR'],
-    [/^Untergeschoss (\d+)$/, 'Basement $1'],
-    [/^Untergeschoss (\d+) · Raum (\d+)$/, 'Basement $1 · Room $2'],
-    [/^(.+?) Ersatzteil(e)? kaufen$/, (whole, count) => `Buy ${count} spare part${count === '1' ? '' : 's'}`],
-    [/^Betriebszeit (.+)$/, 'Uptime $1'],
-    [/^Entwickeln · (.+?) CR$/, 'Develop · $1 CR'],
-    [/^Erforschen · (.+?) FP$/, 'Research · $1 RP'],
-    [/^(.+?) kWtotal$/, '$1 kW total'],
-    [/^(.+?) Rackplätze freigeschaltet$/, '$1 rack slots unlocked'],
-  ];
+  const { en, patterns } = createEnglish(translate);
 
   function translate(text, locale) {
     if (typeof text !== 'string') return text;
@@ -478,21 +34,31 @@
     return text;
   }
   function getLanguage() {
-    try { return root && root.localStorage && root.localStorage.getItem('root.language') === 'en' ? 'en' : 'de'; }
-    catch (_) { return 'de'; }
+    try {
+      return root && root.localStorage && root.localStorage.getItem('root.language') === 'en'
+        ? 'en'
+        : 'de';
+    } catch (_) {
+      return 'de';
+    }
   }
   function setLanguage(locale) {
     const lang = locale === 'en' ? 'en' : 'de';
-    try { if (root && root.localStorage) root.localStorage.setItem('root.language', lang); } catch (_) {}
-    if (root && root.document && root.document.documentElement) root.document.documentElement.lang = lang;
+    try {
+      if (root && root.localStorage) root.localStorage.setItem('root.language', lang);
+    } catch (_) {}
+    if (root && root.document && root.document.documentElement)
+      root.document.documentElement.lang = lang;
     for (const instance of localizers) instance.refresh();
     return lang;
   }
   function installLocalization(options = {}) {
     const doc = root && root.document;
     const Observer = root && root.MutationObserver;
-    if (!doc || !doc.documentElement || !Observer) return Object.freeze({ refresh() {}, localize() {}, dispose() {} });
-    const getProtectedText = typeof options.getProtectedText === 'function' ? options.getProtectedText : () => [];
+    if (!doc || !doc.documentElement || !Observer)
+      return Object.freeze({ refresh() {}, localize() {}, dispose() {} });
+    const getProtectedText =
+      typeof options.getProtectedText === 'function' ? options.getProtectedText : () => [];
     const textSources = new WeakMap();
     const attrSources = new WeakMap();
     const internalTextWrites = new WeakMap();
@@ -533,16 +99,26 @@
       if (!textSources.has(node)) textSources.set(node, current);
       let source = textSources.get(node);
       if (protectedSet.has(source)) {
-        if (current !== source) { internalTextWrites.set(node, source); node.data = source; }
+        if (current !== source) {
+          internalTextWrites.set(node, source);
+          node.data = source;
+        }
         return;
       }
       const next = translate(source);
-      if (current !== next) { internalTextWrites.set(node, next); node.data = next; }
+      if (current !== next) {
+        internalTextWrites.set(node, next);
+        node.data = next;
+      }
     }
     function applyAttribute(element, name, protectedSet) {
-      if (!element || element.nodeType !== 1 || excluded(element) || !element.hasAttribute(name)) return;
+      if (!element || element.nodeType !== 1 || excluded(element) || !element.hasAttribute(name))
+        return;
       let sources = attrSources.get(element);
-      if (!sources) { sources = new Map(); attrSources.set(element, sources); }
+      if (!sources) {
+        sources = new Map();
+        attrSources.set(element, sources);
+      }
       const current = element.getAttribute(name);
       let writes = internalAttributeWrites.get(element);
       const expected = writes && writes.get(name);
@@ -553,7 +129,10 @@
       const source = sources.get(name);
       if (protectedSet.has(source)) {
         if (current !== source) {
-          if (!writes) { writes = new Map(); internalAttributeWrites.set(element, writes); }
+          if (!writes) {
+            writes = new Map();
+            internalAttributeWrites.set(element, writes);
+          }
           writes.set(name, source);
           element.setAttribute(name, source);
         }
@@ -561,22 +140,36 @@
       }
       const next = translate(source);
       if (current !== next) {
-        if (!writes) { writes = new Map(); internalAttributeWrites.set(element, writes); }
+        if (!writes) {
+          writes = new Map();
+          internalAttributeWrites.set(element, writes);
+        }
         writes.set(name, next);
         element.setAttribute(name, next);
       }
     }
     function visit(node, protectedSet) {
       if (!node) return;
-      if (node.nodeType === 3) { applyText(node, protectedSet); return; }
+      if (node.nodeType === 3) {
+        applyText(node, protectedSet);
+        return;
+      }
       if (node.nodeType !== 1 && node.nodeType !== 9 && node.nodeType !== 11) return;
       if (node.nodeType === 1 && excluded(node)) return;
-      if (node.nodeType === 1) for (const name of ['title', 'aria-label', 'placeholder']) applyAttribute(node, name, protectedSet);
-      const walker = doc.createTreeWalker(node, (root.NodeFilter ? root.NodeFilter.SHOW_ELEMENT : 1) | (root.NodeFilter ? root.NodeFilter.SHOW_TEXT : 4));
+      if (node.nodeType === 1)
+        for (const name of ['title', 'aria-label', 'placeholder'])
+          applyAttribute(node, name, protectedSet);
+      const walker = doc.createTreeWalker(
+        node,
+        (root.NodeFilter ? root.NodeFilter.SHOW_ELEMENT : 1) |
+          (root.NodeFilter ? root.NodeFilter.SHOW_TEXT : 4),
+      );
       let current;
       while ((current = walker.nextNode())) {
         if (current.nodeType === 3) applyText(current, protectedSet);
-        else if (!excluded(current)) for (const name of ['title', 'aria-label', 'placeholder']) applyAttribute(current, name, protectedSet);
+        else if (!excluded(current))
+          for (const name of ['title', 'aria-label', 'placeholder'])
+            applyAttribute(current, name, protectedSet);
       }
     }
     function runPending() {
@@ -595,32 +188,45 @@
     }
     function schedule() {
       if (scheduled || disposed) return;
-      const raf = root.requestAnimationFrame || (callback => root.setTimeout(callback, 0));
+      const raf = root.requestAnimationFrame || ((callback) => root.setTimeout(callback, 0));
       scheduled = raf(runPending) || -1;
     }
-    function refresh() { pendingFullRefresh = true; schedule(); }
-    const observer = new Observer(records => {
+    function refresh() {
+      pendingFullRefresh = true;
+      schedule();
+    }
+    const observer = new Observer((records) => {
       if (disposed) return;
       for (const record of records) {
         if (record.type === 'characterData') {
           const node = record.target;
           const current = node.data;
           const expected = internalTextWrites.get(node);
-          if (expected !== undefined && current === expected) { internalTextWrites.delete(node); continue; }
+          if (expected !== undefined && current === expected) {
+            internalTextWrites.delete(node);
+            continue;
+          }
           textSources.set(node, current);
           pendingRoots.add(node);
         } else if (record.type === 'attributes') {
-          const element = record.target, name = record.attributeName;
+          const element = record.target,
+            name = record.attributeName;
           const current = element.getAttribute(name);
           const writes = internalAttributeWrites.get(element);
           const expected = writes && writes.get(name);
-          if (expected !== undefined && current === expected) { writes.delete(name); continue; }
+          if (expected !== undefined && current === expected) {
+            writes.delete(name);
+            continue;
+          }
           if (current === null) {
             const sources = attrSources.get(element);
             if (sources) sources.delete(name);
           } else {
             let sources = attrSources.get(element);
-            if (!sources) { sources = new Map(); attrSources.set(element, sources); }
+            if (!sources) {
+              sources = new Map();
+              attrSources.set(element, sources);
+            }
             sources.set(name, current);
           }
           pendingRoots.add(element);
@@ -630,19 +236,40 @@
       }
       schedule();
     });
-    observer.observe(doc.documentElement, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ['title', 'aria-label', 'placeholder'] });
-    const instance = { refresh, localize(node) { if(!disposed)visit(node||doc.documentElement,protectedValues()); }, dispose() {
-      if (disposed) return;
-      disposed = true;
-      observer.disconnect();
-      if (scheduled && root.cancelAnimationFrame) root.cancelAnimationFrame(scheduled);
-      localizers.delete(instance);
-    } };
+    observer.observe(doc.documentElement, {
+      subtree: true,
+      childList: true,
+      characterData: true,
+      attributes: true,
+      attributeFilter: ['title', 'aria-label', 'placeholder'],
+    });
+    const instance = {
+      refresh,
+      localize(node) {
+        if (!disposed) visit(node || doc.documentElement, protectedValues());
+      },
+      dispose() {
+        if (disposed) return;
+        disposed = true;
+        observer.disconnect();
+        if (scheduled && root.cancelAnimationFrame) root.cancelAnimationFrame(scheduled);
+        localizers.delete(instance);
+      },
+    };
     localizers.add(instance);
     if (doc.documentElement) doc.documentElement.lang = getLanguage();
     refresh();
     return Object.freeze(instance);
   }
-  function localize(node) { for(const instance of localizers)instance.localize(node); }
-  return Object.freeze({ translate, getLanguage, setLanguage, installLocalization, localize, supportedLanguages: Object.freeze(['de', 'en']) });
+  function localize(node) {
+    for (const instance of localizers) instance.localize(node);
+  }
+  return Object.freeze({
+    translate,
+    getLanguage,
+    setLanguage,
+    installLocalization,
+    localize,
+    supportedLanguages: Object.freeze(['de', 'en']),
+  });
 });

@@ -24,7 +24,8 @@ jobs:
         with:
           node-version: '24.22.1'
           package-manager-cache: false
-      - run: npm test
+      - run: npm ci --ignore-scripts
+      - run: npm run check
 
   python-assets:
     runs-on: ubuntu-latest

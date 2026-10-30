@@ -4,11 +4,11 @@ Local procedural generators, editable glTF sources and a safe build entry point 
 
 ## What is included
 
-| Target | Source | Output |
-| --- | --- | --- |
-| `base` | `base/*.py`, supplied package 1.0 sources | Racks, servers, switches, architecture, stations, PBR atlases and an example scene |
-| `facility` | `build_facility_assets.py`, `gltf_builder.py` | Five maintained facility models: UPS, distribution, lift, airlock and stairs |
-| `interiors` | `build_interiors.mjs` | Original ROOT chair, sofa, coffee station, plant and weave/leaf material maps |
+| Target      | Source                                        | Output                                                                             |
+| ----------- | --------------------------------------------- | ---------------------------------------------------------------------------------- |
+| `base`      | `base/*.py`, supplied package 1.0 sources     | Racks, servers, switches, architecture, stations, PBR atlases and an example scene |
+| `facility`  | `build_facility_assets.py`, `gltf_builder.py` | Five maintained facility models: UPS, distribution, lift, airlock and stairs       |
+| `interiors` | `build_interiors.mjs`                         | Original ROOT chair, sofa, coffee station, plant and weave/leaf material maps      |
 
 The base sources are a **historical generator**, not a byte-for-byte regeneration of every currently maintained runtime model. Geometry fixes and scene layout are also applied by the application. The generated example scene is a reference, not the live bunker. Do not replace the complete runtime pack with a base build.
 

@@ -1,0 +1,18 @@
+# Vendored or supplied inputs retain their original bytes and provenance.
+vendor/
+asset-pack/
+tools/asset-generator/base/
+tools/asset-generator/build_interiors.mjs
+tools/asset-generator/UPSTREAM_LICENSE.md
+node_modules/
+.asset-build/
+.local-data/
+data/
+test-results/
+coverage/
+package-lock.json
+*.cmd
+*.ps1
+*.svg
+*.py
+*.txt

@@ -1,127 +1,312 @@
-/* ROOT · Physical infrastructure console. All telemetry comes from the simulation. */
-(function () {
-  'use strict';
-  const names={online:'Online',failed:'Defekt',repairing:'In Reparatur',standby:'Ausgeschaltet',booting:'Startet',disconnected:'Kein Link',maintenance:'Wartungsfenster',limited:'Begrenzt'};
-  const componentNames={switch:'Switch & Uplink',power:'Stromversorgung',cooling:'Kühlung'};
-  window.RootRacks={create(ctx){
-    const {E,icon,esc,fmt,dec,duration,getState}=ctx;
-    let selectedRack=null, selected={kind:'server',id:null}, mode='front', wireLayer='network', identify=false, moveDraft=null;
-    const state=()=>getState(), model=()=>E.getRackModel(state());
-    const watts=n=>n>=1000?dec(n/1000)+' kW':fmt(n)+' W';
-    const speed=n=>n>=1000?dec(n/1000)+' Gb/s':fmt(n)+' Mb/s';
-    const live=(key,value='',cls='')=>`<span class="${cls}" data-hw-stat="${esc(key)}">${esc(value)}</span>`;
-    const rackKey=(id,key)=>'rack:'+id+':'+key;
-    const nodeKey=(id,key)=>'node:'+id+':'+key;
-    const getRack=m=>m.racks.find(x=>x.id===selectedRack)||m.racks[0];
-    const allServers=m=>m.racks.flatMap(r=>r.servers);
-    function current(){const m=model(),rack=getRack(m);if(rack)selectedRack=rack.id;if(selected.kind==='server'&&!allServers(m).some(s=>s.id===selected.id))selected={kind: rack?.servers.length?'server':'rack',id:rack?.servers[0]?.id||rack?.id};return{m,rack};}
-    function button(action,payload,label,cls='',confirm=false){const q=E.quoteHardware(state(),action,payload);return `<button class="button ${cls}" data-hw-action="${action}" data-hw-payload="${esc(JSON.stringify(payload))}" ${confirm?'data-hw-confirm="true"':''} ${q.enabled?'':'disabled'} title="${esc(q.reason||'')}">${label||esc(q.label)}</button>`;}
-    function led(type,on=false,phase=0){return `<i class="rack-led ${type} ${on?'lit':''}" style="--led-phase:-${phase}s" aria-hidden="true"></i>`;}
-    function meter(key,value,label,tone=''){return `<div class="rack-meter"><div><span>${label}</span>${live(key+'Text')}</div><div class="rack-meter-track"><i class="${tone}" data-hw-meter="${esc(key)}" style="width:${Math.min(100,value)}%"></i></div></div>`;}
-    function driveBays(s){return `<div class="drive-bank bays-${s.driveBays}">${Array.from({length:s.driveBays},(_,i)=>`<span class="drive-bay"><span class="drive-latch"></span><span class="drive-slot"></span><i class="rack-led traffic" data-drive-led="${s.id}" style="--led-phase:-${(i*.37+s.port*.23).toFixed(2)}s"></i><small>${String(i+1).padStart(2,'0')}</small></span>`).join('')}</div>`;}
-    function serverFace(s){
-      const row=19-s.unit-s.units+1;
-      return `<button class="rack-device server-face server-${s.type} height-${s.units} ${selected.kind==='server'&&selected.id===s.id?'selected':''}" style="grid-row:${row}/span ${s.units}" data-rack-command="server" data-id="${s.id}" data-rack-device="${s.id}" aria-label="${esc(s.name)}, ${esc(s.model)}, ${s.units} Höheneinheiten, ${names[s.status]}"><span class="rack-ear left"><i></i><i></i></span><span class="rack-ear right"><i></i><i></i></span><span class="device-front"><span class="server-brand"><b>ROOT</b><span>${esc(s.model)}</span></span><span class="server-face-label"><strong>${esc(s.name)}</strong><small>${s.cores}C · ${s.ramGB} GB · ${s.storageTB} TB</small></span><span class="server-grille"></span>${driveBays(s)}<span class="server-lights"><i class="rack-led power" data-power-led="${s.id}"></i><i class="rack-led traffic" data-activity-led="${s.id}" style="--led-phase:-${s.port*.31}s"></i><i class="rack-led fault" data-fault-led="${s.id}"></i><i class="rack-led identify ${identify&&selected.id===s.id?'lit':''}"></i></span><span class="server-power-symbol">⏻</span></span><span class="device-back"><span class="rear-fans"><i></i><i></i></span><span class="rear-serial">${esc(s.model)}<small>${esc(s.name)}</small></span><span class="rear-nic"><span></span><small>ETH ${s.port}</small></span><span class="rear-psu"><span></span><small>PSU</small></span></span></button>`;
-    }
-    function switchFace(r){return `<div class="rack-device switch-face" style="grid-row:1" data-switch-device="${r.id}"><span class="rack-ear left"><i></i><i></i></span><span class="rack-ear right"><i></i><i></i></span><button class="switch-model" data-rack-command="component" data-component="switch" data-rack-id="${r.id}" aria-label="Switch in ${esc(r.name)} verwalten"><b>ROOT</b><span>SW-${String(r.ports.length).padStart(2,'0')} / L${r.switchLevel}</span></button><div class="switch-port-bank" style="--port-count:${r.ports.length}">${r.ports.map(p=>`<button class="switch-port ${selected.kind==='port'&&selected.id===String(p.number)?'selected':''}" data-rack-command="port" data-rack-id="${r.id}" data-port="${p.number}" data-switch-port="${r.id}:${p.number}" aria-label="Port ${p.number}${p.serverId?', '+esc(r.servers.find(s=>s.id===p.serverId)?.name):', frei'}"><span class="port-socket"><i></i><i></i><i></i><i></i></span><span class="port-leds">${led('power',p.link)}${led('traffic',p.trafficMbps>0,p.number*.21)}</span><small>${p.number}</small></button>`).join('')}</div><button class="switch-uplink" data-rack-command="component" data-component="switch" data-rack-id="${r.id}" aria-label="Uplink ${speed(r.uplinkMbps)}"><i></i><span>UPLINK</span></button></div>`;}
-    function activeWire(r){return selected.kind==='server'?selected.id:selected.kind==='port'?r.ports.find(p=>p.number===Number(selected.id))?.serverId:null;}
-    function cables(r){return `<svg class="rack-cables measured-cables" data-cable-rack="${r.id}" preserveAspectRatio="none" aria-hidden="true">${r.servers.map(s=>`<g data-wire="${s.id}"><path class="network-cable" data-cable="${s.id}" data-rack-command="server" data-id="${s.id}"/><path class="cable-flow" data-flow="${s.id}"/><circle class="wire-end network-end" data-wire-end="${s.id}:network:from" r="3"/><circle class="wire-end network-end" data-wire-end="${s.id}:network:to" r="3"/><path class="power-cable" data-power-cable="${s.id}" data-rack-command="server" data-id="${s.id}"/><circle class="wire-end power-end" data-wire-end="${s.id}:power:from" r="3"/><circle class="wire-end power-end" data-wire-end="${s.id}:power:to" r="3"/></g>`).join('')}</svg>`;}
-    function wiringTools(r){return `<div class="wiring-tools"><div><strong>Verbindung verfolgen</strong><p>Wähle einen Server, Port oder Eintrag im Patchplan. Beide Anschlüsse und das zugehörige Kabel werden markiert.</p></div><div class="rack-view-tabs" role="group" aria-label="Kabeltyp"><button data-rack-command="wire-network" class="${wireLayer==='network'?'active':''}" aria-pressed="${wireLayer==='network'}">Netzwerk</button><button data-rack-command="wire-power" class="${wireLayer==='power'?'active':''}" aria-pressed="${wireLayer==='power'}">Strom</button></div></div>`;}
-    function patchPlan(r){const active=activeWire(r);return `<section class="patch-plan" aria-label="Patchplan"><header><h3>${wireLayer==='network'?'Netzwerkverbindungen':'Stromanschlüsse'}</h3><span>${r.servers.length} VERBINDUNGEN</span></header>${r.servers.map((s,i)=>`<button class="patch-row ${s.id===active?'selected':''}" data-rack-command="server" data-id="${s.id}" aria-pressed="${s.id===active}"><span class="patch-dot"></span><strong>${esc(s.name)}</strong><span class="patch-destination">${wireLayer==='network'?'ETH → SW / Port '+s.port:'PSU → PDU / Abgang '+(s.unit-1)}</span><small data-wire-status="${s.id}"></small>${icon('arrow')}</button>`).join('')}<p>${wireLayer==='network'?'Port anklicken: Verbindung prüfen oder trennen. Über „Umsetzen / Umpatchen“ kannst du einen anderen freien Port wählen.':'Die PDU versorgt die Server dieses Racks. Die Abgänge folgen dem Einbauplatz (U02 → 1). Abschalten trennt die Stromaufnahme; für mehr Reserven kannst du die Stromversorgung ausbauen.'}</p></section>`;}
-    function drawCables(m){
-      if(mode!=='wiring')return;
-      const svg=document.querySelector('[data-cable-rack]');if(!svg)return;
-      const r=m.racks.find(x=>x.id===svg.dataset.cableRack);if(!r)return;
-      const box=svg.getBoundingClientRect();if(!box.width||!box.height)return;
-      const active=activeWire(r),cab=svg.closest('.rack-cabinet');
-      const point=el=>{if(!el)return null;const b=el.getBoundingClientRect();return{x:b.left-box.left+b.width/2,y:b.top-box.top+b.height/2};};
-      const positions=r.servers.map((s,i)=>{const device=cab.querySelector(`[data-rack-device="${s.id}"]`);return{s,i,from:point(cab.querySelector(`[data-switch-port="${r.id}:${s.port}"] .port-socket`)),to:point(device?.querySelector('.rear-nic>span')),powerFrom:point(cab.querySelector(`[data-pdu-socket="${r.id}:${s.unit-1}"]`)),powerTo:point(device?.querySelector('.rear-psu>span'))};});
-      svg.setAttribute('viewBox',`0 0 ${box.width} ${box.height}`);
-      svg.classList.toggle('show-power',wireLayer==='power');svg.classList.toggle('has-trace',!!active);
-      cab.querySelectorAll('.traced-connector').forEach(el=>el.classList.remove('traced-connector'));
-      for(const {s,i,from,to,powerFrom,powerTo} of positions){
-        const g=svg.querySelector(`[data-wire="${s.id}"]`),chosen=s.id===active,p=r.ports.find(x=>x.number===s.port);
-        g.classList.toggle('traced',chosen);g.classList.toggle('linked',s.link);g.classList.toggle('has-traffic',s.link&&p.trafficMbps>0);g.classList.toggle('powered',s.powerW>0);
-        const route=(a,b,lane,up)=>{const bend=7,dy=up?-bend:bend;return `M${a.x} ${a.y} L${a.x} ${a.y+dy} Q${a.x} ${a.y+dy*2} ${a.x+bend} ${a.y+dy*2} L${lane-bend} ${a.y+dy*2} Q${lane} ${a.y+dy*2} ${lane} ${a.y+dy*3} L${lane} ${b.y-bend} Q${lane} ${b.y} ${lane-bend} ${b.y} L${b.x} ${b.y}`;};
-        for(const [kind,a,b] of [['network',from,to],['power',powerFrom,powerTo]]){
-          if(!a||!b)continue;
-          const lane=box.width-5-(i%16)*1.8,d=route(a,b,lane,kind==='power');
-          g.querySelector(kind==='network'?'[data-cable]':'[data-power-cable]').setAttribute('d',d);
-          if(kind==='network')g.querySelector('[data-flow]').setAttribute('d',d);
-          for(const [end,pt] of [['from',a],['to',b]]){const dot=g.querySelector(`[data-wire-end="${s.id}:${kind}:${end}"]`);dot.setAttribute('cx',pt.x);dot.setAttribute('cy',pt.y);}
-        }
-        if(chosen){const a=wireLayer==='network'?cab.querySelector(`[data-switch-port="${r.id}:${s.port}"] .port-socket`):cab.querySelector(`[data-pdu-socket="${r.id}:${s.unit-1}"]`);const b=cab.querySelector(`[data-rack-device="${s.id}"] ${wireLayer==='network'?'.rear-nic>span':'.rear-psu>span'}`);a?.classList.add('traced-connector');b?.classList.add('traced-connector');}
-      }
-    }
-    function cabinet(r){
-      const occupied=new Set([1,18]);for(const s of r.servers)for(let u=s.unit;u<s.unit+s.units;u++)occupied.add(u);
-      return `<section class="rack-cabinet ${mode==='wiring'?'wiring-mode':''} ${r.status==='maintenance'?'under-maintenance':''}"><div class="cabinet-crown"><div><span class="cabinet-id">ROOT / 19″ CABINET</span><strong>${esc(r.name)}</strong></div><button class="cabinet-cooling" data-rack-command="component" data-component="cooling" data-rack-id="${r.id}" aria-label="Kühlung von ${esc(r.name)} verwalten"><span class="cooling-grille"></span>${icon('heat')}${live(rackKey(r.id,'temperature'),'','mono')}</button></div><div class="rack-rail-area"><div class="rack-unit-ruler">${Array.from({length:18},(_,i)=>`<span>${String(18-i).padStart(2,'0')}</span>`).join('')}</div><div class="rack-interior">${switchFace(r)}${r.servers.map(serverFace).join('')}${Array.from({length:16},(_,i)=>i+2).filter(u=>!occupied.has(u)).map(u=>`<button class="rack-empty-slot" style="grid-row:${19-u}" data-rack-command="add-server" data-rack-id="${r.id}" data-unit="${u}" aria-label="Server in ${esc(r.name)} ab U${u} einbauen"><span>+</span><small>FREIER EINBAUPLATZ</small></button>`).join('')}<button class="rack-device pdu-face" style="grid-row:18" data-rack-command="component" data-component="power" data-rack-id="${r.id}" aria-label="Stromversorgung von ${esc(r.name)} verwalten"><span class="rack-ear left"><i></i><i></i></span><span class="pdu-brand">ROOT <small>PDU</small></span><span class="pdu-outlets">${Array.from({length:16},(_,i)=>`<i data-pdu-socket="${r.id}:${i+1}" class="${r.servers.find(s=>s.unit-1===i+1)?.powered?'active':''}" title="Abgang ${i+1}"></i>`).join('')}</span><span class="pdu-display">${live(rackKey(r.id,'power'),'','mono')}</span>${led('power',true)}</button></div>${cables(r)}<div class="rack-bolt-rail">${Array.from({length:18},()=>'<i></i>').join('')}</div></div><div class="cabinet-base"><span>19″ · 18 HE</span><span>${live(rackKey(r.id,'occupancy'))}</span><button data-rack-command="rack" data-rack-id="${r.id}">Rack verwalten ${icon('arrow')}</button></div></section>`;
-    }
-    function telemetry(r){return `<section class="rack-telemetry"><div class="rack-telemetry-head"><h3>Versorgung & Verbindung</h3><span class="tag" data-rack-status="${r.id}">${names[r.status]}</span></div>${meter(rackKey(r.id,'powerMeter'),r.powerW/r.powerCapacityW*100,'Strombudget')}${meter(rackKey(r.id,'coolingMeter'),r.powerW/r.coolingW*100,'Kühlbudget','blue')}${meter(rackKey(r.id,'networkMeter'),r.networkDemandMbps/r.uplinkMbps*100,'Uplink','amber')}<div class="rack-live-warnings" data-rack-warnings="${r.id}">${r.warnings.map(esc).join(' · ')}</div></section>`;}
-    function specRow(label,value){return `<div class="hardware-spec"><span>${label}</span><strong>${value}</strong></div>`;}
-    function componentInspector(r,kind){const q=r.upgrades[kind];return `<div class="hardware-inspector-icon">${icon(kind==='switch'?'globe':kind==='power'?'automation':'heat')}</div><div class="eyebrow">${esc(r.name)} / AUSSTATTUNG</div><h2>${componentNames[kind]}</h2><p class="hardware-description">${kind==='switch'?'Alle Server dieses Racks teilen sich den Uplink. Ein abgeschalteter Port trennt den zugeordneten Server vom Netz.':kind==='power'?'Die Stromversorgung begrenzt die gemeinsame Leistung im Rack. Zusätzliche Reserve hilft bei Ausbau und Leistungsprofilen.':'Die Kühlleistung bestimmt, wie viel Wärme das Rack abführen kann. Zu hohe Temperaturen drosseln die Leistung und erhöhen den Verschleiß.'}</p><div class="hardware-specs">${kind==='switch'?specRow('Switch-Stufe',r.switchLevel)+specRow('Anschlüsse',r.ports.length+' Ports')+specRow('Uplink',live(rackKey(r.id,'uplink')))+specRow('Angeforderter Verkehr',live(rackKey(r.id,'networkDemand'))):kind==='power'?specRow('Versorgungsstufe',r.powerLevel)+specRow('Leistungsbudget',watts(r.powerCapacityW))+specRow('Aktuelle Aufnahme',live(rackKey(r.id,'power'))):specRow('Kühlstufe',r.coolingLevel)+specRow('Kühlleistung',watts(r.coolingW))+specRow('Rack-Luft',live(rackKey(r.id,'temperature')))+specRow('Verlauf',live(rackKey(r.id,'thermalTrend')))}</div><div class="hardware-quote"><p>${esc(q.description)}</p><div class="hardware-price">${fmt(q.cost)} CR · ${duration(q.duration)}</div>${button('upgradeRack',{rackId:r.id,component:kind},`${icon('plus')}Ausbau prüfen`,'primary block',true)}<small data-hw-reason>${esc(q.reason)}</small></div><p class="hardware-note">Während des Umbaus ist das gesamte Rack vorübergehend nicht verfügbar. Bestehende Defekte bleiben erhalten.${kind==='cooling'?' Die Luft im Rack kühlt allmählich ab; Restwärme bleibt auch bei abgeschalteten Servern erhalten.':''}</p>`;}
-    function portInspector(r){const p=r.ports.find(x=>x.number===Number(selected.id));if(!p)return componentInspector(r,'switch');const s=r.servers.find(x=>x.id===p.serverId);return `<div class="hardware-inspector-icon">${icon('globe')}</div><div class="eyebrow">${esc(r.name)} / SWITCH</div><h2>Port ${String(p.number).padStart(2,'0')}</h2><span class="tag ${p.link?'green':'amber'}" data-port-status="${r.id}:${p.number}">${p.link?'LINK AKTIV':p.enabled?'KEIN LINK':'DEAKTIVIERT'}</span><div class="hardware-specs">${specRow('Verbundenes Gerät',s?esc(s.name):'Nicht belegt')}${specRow('Portgeschwindigkeit',speed(p.speedMbps))}${specRow('Verkehr',live('port:'+r.id+':'+p.number+':traffic'))}</div><p class="hardware-description">${s?'Das Trennen dieses Anschlusses nimmt '+esc(s.name)+' aus dem Netzwerk. Der Server bleibt eingeschaltet und benötigt weiterhin Strom.':'Dieser Anschluss ist frei. Beim Einbau oder Umsetzen kannst du ihm einen Server zuordnen.'}</p>${button('setSwitchPort',{rackId:r.id,port:p.number,enabled:!p.enabled},icon(p.enabled?'cross':'check')+(p.enabled?'Port deaktivieren':'Port aktivieren'),(p.enabled?'ghost':'primary')+' block',true)}${s?`<button class="button block section-spacer" data-rack-command="server" data-id="${s.id}">${icon('server')}Server ansehen</button>`:''}<button class="text-button section-spacer" data-rack-command="component" data-component="switch" data-rack-id="${r.id}">Switch verwalten${icon('arrow')}</button>`;}
-    function serverInspector(r,s){return `<div class="hardware-inspector-top"><div class="hardware-inspector-icon">${icon(s.type==='storage'?'storage':s.type==='compute'?'cpu':'server')}</div><button class="button small ${identify?'active':''}" data-rack-command="identify" aria-pressed="${identify}" title="Blaue Positions-LED markieren">${icon('spark')}UID</button></div><div class="eyebrow">${esc(r.name)} / U${String(s.unit).padStart(2,'0')}${s.units>1?'–U'+String(s.unit+s.units-1).padStart(2,'0'):''}</div><h2>${esc(s.name)}</h2><p class="hardware-model">${esc(s.model)} · ${s.units} HE · Stufe ${s.level}</p><span class="tag" data-device-status="${s.id}">${names[s.status]}</span><div class="hardware-specs">${specRow('Prozessor',s.cores+' Kerne')}${specRow('Arbeitsspeicher',fmt(s.ramGB)+' GB ECC')+(s.gpuCount?specRow('Beschleuniger',s.gpuCount+' GPUs · '+s.vramGB+' GB VRAM')+specRow('GPU belegt / nutzbar',live(nodeKey(s.id,'gpu'))):'')}${specRow('Speicher',dec(s.storageTB)+' TB · '+s.driveBays+' Einschübe')}${specRow('Kapazität',live(nodeKey(s.id,'capacity')))}${specRow('Stromaufnahme',live(nodeKey(s.id,'power')))}${specRow('Rack-Luft',live(nodeKey(s.id,'temperature')))}${specRow('Zustand',live(nodeKey(s.id,'condition')))}${specRow('Verbindung',`<button class="text-button" data-rack-command="port" data-rack-id="${r.id}" data-port="${s.port}">Port ${s.port}${icon('arrow')}</button>`)}</div><div class="device-live-note" data-device-note="${s.id}"></div><label class="field-label hardware-mode">Betriebsmodus<select class="select" data-change="server-mode" data-id="${s.id}" aria-label="Betriebsmodus ${esc(s.name)}">${Object.entries({balanced:"Ausgewogen",performance:"Leistung",eco:"Öko"}).map(([value,label])=>`<option value="${value}" ${state().servers.find(x=>x.id===s.id)?.mode===value?"selected":""}>${label}</option>`).join("")}</select></label><div class="hardware-actions">${button('setServerPower',{id:s.id,on:!s.powered},icon('pulse')+(s.powered?'Ausschalten':'Hochfahren'),s.powered?'ghost':'primary',true)}<button class="button ghost" data-rack-command="move" data-id="${s.id}">${icon('layers')}Umsetzen / Umpatchen</button><button class="button" data-action="upgradeServer" data-id="${s.id}" data-cost-kind="serverUpgrade" data-cost-id="${s.id}">${icon('plus')}Ausbauen · ${fmt(E.cost(state(),'serverUpgrade',s.id))} CR</button><button class="button ghost" data-modal="repair" data-id="${s.id}">${icon('settings')}Reparatur prüfen</button></div><p class="hardware-note">Ein Neustart dauert 30 Sekunden. Ausschalten, Umsetzen oder ein Portwechsel beheben keinen Defekt.</p>`;}
-    function inspector(r){let body;if(selected.kind==='server'){const s=r.servers.find(x=>x.id===selected.id);body=s?serverInspector(r,s):componentInspector(r,'switch');}else if(selected.kind==='port')body=portInspector(r);else if(componentNames[selected.kind])body=componentInspector(r,selected.kind);else body=`<div class="hardware-inspector-icon">${icon('server')}</div><div class="eyebrow">RECHENZENTRUM / RACK</div><h2>${esc(r.name)}</h2><p class="hardware-description">Wähle einen Server, einen Switch-Port oder die Versorgung direkt am Rack. Freie Höheneinheiten lassen sich mit neuer Hardware belegen.</p><div class="hardware-specs">${specRow('Einbauformat','19 Zoll · 18 HE')}${specRow('Nutzbare Höheneinheiten','16 HE')}${specRow('Freier Einbauplatz',r.freeUnits+' HE')}${specRow('Verbundene Server',r.servers.length)}</div><div class="hardware-actions">${Object.entries(componentNames).map(([k,v])=>`<button class="button" data-rack-command="component" data-component="${k}" data-rack-id="${r.id}">${esc(v)}${icon('arrow')}</button>`).join('')}<button class="button primary" data-rack-command="add-server" data-rack-id="${r.id}">${icon('plus')}Server einbauen</button></div>`;return `<aside class="hardware-inspector" aria-label="Gerätedetails">${body}</aside>`;}
-    function operation(m){if(!m.operation)return '';const op=m.operation;return `<div class="rack-operation"><div>${icon('settings')}<strong>${esc(op.label)}</strong><span>${esc(m.racks.find(r=>r.id===op.rackId)?.name||'Rack')} ist während des Umbaus nicht verfügbar.</span></div><strong data-hw-stat="operationEta"></strong><div class="rack-operation-track"><i data-hw-operation-progress></i></div></div>`;}
-    function view(){const {m,rack}=current();if(!rack)return '';const layout=E.getFacilityLayout(state()),room=layout.rooms.find(r=>r.rackIds.includes(rack.id));return `<div class="page-heading"><div><div class="eyebrow">WORKSPACE / PHYSICAL INFRASTRUCTURE</div><h1>Rechenzentrum</h1><p class="page-description">Jede Verbindung zählt. Vom einzelnen Port bis zur Versorgung des ganzen Racks.</p></div><div class="heading-actions">${button('buyRack',{},`${icon('plus')}Rack hinzufügen`,'',true)}<button class="button primary" data-rack-command="add-server" data-rack-id="${rack.id}">${icon('plus')}Server einbauen</button></div></div><div class="rack-summary"><div><span>Racks / verfügbar</span><strong>${m.racks.length}<small> / ${m.rackLimit}</small></strong></div><div><span>Belegte Höheneinheiten</span><strong>${live('usedUnits')}<small> / ${m.racks.length*16} HE</small></strong></div><div><span>Stromaufnahme</span><strong>${live('totalPower')}<small>gesamt</small></strong></div><div><span>Netzwerkleistung</span><strong>${live('networkFactor')}<small>der Anforderung</small></strong></div></div>${operation(m)}<div class="hardware-room-selector"><label for="hardware-room">Standort</label><select class="select" id="hardware-room" data-rack-change="room">${layout.rooms.map(item=>`<option value="${item.id}" ${item.id===room.id?'selected':''}>Untergeschoss ${item.floor} · Raum ${item.number} · ${item.rackCount} Racks</option>`).join('')}</select><button class="button small" data-nav="facility">Gebäudetechnik</button></div><div class="rack-selector">${m.racks.filter(r=>room.rackIds.includes(r.id)).map(r=>`<button class="rack-tab ${r.id===rack.id?'selected':''}" data-rack-command="rack-select" data-rack-id="${r.id}" aria-pressed="${r.id===rack.id}"><span class="mini-rack">${Array.from({length:5},(_,i)=>`<i class="${i<r.servers.length?'filled':''}"></i>`).join('')}</span><span><strong>${esc(r.name)}</strong><small>${r.servers.length} Server · ${r.usedUnits} / 16 HE</small></span><i class="rack-tab-light" data-rack-health="${r.id}"></i></button>`).join('')}</div><div class="physical-workspace"><div class="rack-stage"><div class="rack-stage-toolbar"><div class="rack-view-tabs" role="group" aria-label="Rackansicht"><button data-rack-command="front" class="${mode==='front'?'active':''}" aria-pressed="${mode==='front'}">${icon('server')}Front</button><button data-rack-command="wiring" class="${mode==='wiring'?'active':''}" aria-pressed="${mode==='wiring'}">${icon('globe')}Verkabelung</button></div><span>${mode==='wiring'?'Portzuordnung & Stromanschlüsse':'Gerät auswählen · Freien Platz belegen'}</span></div>${mode==='wiring'?wiringTools(rack):''}${cabinet(rack)}${mode==='wiring'?patchPlan(rack):''}<div class="rack-legend"><span>${led('power',true)}Strom / Link</span><span>${led('traffic',true)}Aktivität</span><span>${led('fault',true)}Störung</span><span>${led('identify',true)}Position</span></div>${telemetry(rack)}</div>${inspector(rack)}</div><div class="helper-card"><h3>Ausbau bedeutet mehr als zusätzliche Server.</h3><p>Alle Geräte eines Racks teilen sich Uplink, Strom und Kühlung. Verteile dichte oder leistungsstarke Hardware auf mehrere Racks oder verbessere deren Versorgung. Vor jeder Maßnahme siehst du Kosten und Stillstand. Größere Krisen warten weiterhin im Schutzmodus auf dich.</p></div>`;}
-    function actionQuote(action,payload,label){const q=E.quoteHardware(state(),action,payload);return `<div class="hardware-confirm"><div class="hardware-inspector-icon">${icon(action==='buyRack'?'server':'settings')}</div><h3>${esc(q.label)}</h3><p data-hw-quote-description>${esc(q.description)}</p><div class="hardware-confirm-cost" data-hw-quote-cost>${q.cost?fmt(q.cost)+' CR':'Keine Credits'}${q.duration?' · '+duration(q.duration):''}</div><p class="hardware-confirm-reason" data-hw-quote-reason>${esc(q.reason||'')}</p>${button(action,payload,label||'Maßnahme starten','primary block')}</div>`;}
-    function shop(extra={}){const m=model(),r=m.racks.find(x=>x.id===extra.rackId)||getRack(m);const payload={rackId:r.id,...(extra.unit?{unit:Number(extra.unit)}:{})};return `<p class="modal-intro">Einbau in <strong>${esc(r.name)}</strong>${extra.unit?' ab U'+extra.unit:''}. Ein Switch-Port wird automatisch zugeordnet. Vorhandene Verkabelung und zusammenhängende freie Höheneinheiten bestimmen, was hier passt.</p><div class="rack-shop-grid">${Object.entries(E.catalog.servers).map(([type,c])=>{const p={type,...payload},q=E.quoteHardware(state(),'buyServer',p);return `<article class="rack-shop-card"><div class="mini-server mini-${type}"><i></i><i></i><i></i><i></i></div><span class="eyebrow">${esc(c.model)}</span><h3>${esc(c.name)}</h3><p>${c.units} HE · ${c.cores} Kerne<br>${c.ramGB} GB RAM · ${c.storageTB} TB<br>${c.driveBays} Laufwerkseinschübe${c.gpuCount?`<br><strong class="gpu-label">${c.gpuCount} GPUs · ${c.vramGB} GB VRAM</strong><br>1,5 kW · Inferenz und Training`:""}</p><p class="hardware-purchase-detail">${esc(q.description)}${q.warnings?.length?" "+q.warnings.map(esc).join(" "):""}</p><div class="hardware-price">${fmt(q.cost)} CR</div>${button('buyServer',p,'Einbauen','primary block')}<small data-hw-reason>${esc(q.reason||'')}</small></article>`;}).join('')}</div>`;}
-    function moveModal(id){const m=model(),s=allServers(m).find(x=>x.id===id);if(!s)return '';if(!moveDraft||moveDraft.id!==id)moveDraft={id,rackId:s.rackId||m.racks.find(r=>r.servers.some(x=>x.id===id)).id,unit:s.unit,port:s.port};const r=m.racks.find(x=>x.id===moveDraft.rackId),q=E.quoteHardware(state(),'moveServer',moveDraft);return `<p class="modal-intro">${esc(s.name)} belegt ${s.units} zusammenhängende Höheneinheiten. Beim Umsetzen wird der Server kurz abgeschaltet und neu verbunden.</p><div class="rack-move-fields"><label class="field-label">Ziel-Rack<select class="select" data-rack-change="move-rack" aria-label="Ziel-Rack">${m.racks.map(x=>`<option value="${x.id}" ${x.id===r.id?'selected':''}>${esc(x.name)} · ${x.freeUnits} HE frei</option>`).join('')}</select></label><label class="field-label">Unterste Höheneinheit<select class="select" data-rack-change="move-unit" aria-label="Unterste Höheneinheit">${Array.from({length:16},(_,i)=>i+2).map(u=>`<option value="${u}" ${u===moveDraft.unit?'selected':''}>U${String(u).padStart(2,'0')}</option>`).join('')}</select></label><label class="field-label">Switch-Port<select class="select" data-rack-change="move-port" aria-label="Switch-Port">${r.ports.map(p=>`<option value="${p.number}" ${p.number===moveDraft.port?'selected':''}>${p.number}${p.serverId&&p.serverId!==id?' · belegt':''}</option>`).join('')}</select></label></div><div class="hardware-confirm"><p data-hw-quote-description>${esc(q.description)}</p><div class="hardware-confirm-cost" data-hw-quote-cost></div><p data-hw-quote-reason></p>${button('moveServer',moveDraft,'Server umsetzen','primary block')}</div>`;}
-    function modal(type,extra){if(type==='hardware-shop')return shop(extra);if(type==='hardware-move')return moveModal(extra.id);if(type==='hardware-confirm')return actionQuote(extra.action,extra.payload);return '';}
-    function click(t){
-      if(t.dataset.hwAction){let payload;try{payload=JSON.parse(t.dataset.hwPayload||'{}');}catch{return{}};return t.dataset.hwConfirm?{modal:'hardware-confirm',extra:{action:t.dataset.hwAction,payload}}:{action:t.dataset.hwAction,payload};}
-      const cmd=t.dataset.rackCommand;if(!cmd)return null;
-      if(cmd==='front'||cmd==='wiring'){mode=cmd;return{render:true};}
-      if(cmd==='wire-network'||cmd==='wire-power'){wireLayer=cmd==='wire-power'?'power':'network';return{render:true};}
-      if(cmd==='identify'){identify=!identify;return{render:true};}
-      if(cmd==='server'){const m=model(),r=m.racks.find(x=>x.servers.some(s=>s.id===t.dataset.id));if(r)selectedRack=r.id;selected={kind:'server',id:t.dataset.id};identify=false;return{render:true};}
-      if(cmd==='rack-select'||cmd==='rack'){selectedRack=t.dataset.rackId;selected={kind:'rack',id:selectedRack};identify=false;return{render:true};}
-      if(cmd==='port'){selectedRack=t.dataset.rackId;selected={kind:'port',id:t.dataset.port};return{render:true};}
-      if(cmd==='component'){selectedRack=t.dataset.rackId;selected={kind:t.dataset.component,id:selectedRack};return{render:true};}
-      if(cmd==='add-server')return{modal:'hardware-shop',extra:{rackId:t.dataset.rackId||selectedRack,unit:t.dataset.unit?Number(t.dataset.unit):undefined}};
-      if(cmd==='move'){moveDraft=null;return{modal:'hardware-move',extra:{id:t.dataset.id}};}
-      return null;
-    }
-    function change(el){if(el.dataset.rackChange==='room'){const room=E.getFacilityLayout(state()).rooms.find(r=>r.id===el.value);if(room){select(room.rackIds[0]);return{render:true};}}if(!el.dataset.rackChange||!moveDraft)return null;const kind=el.dataset.rackChange;if(kind==='move-rack'){moveDraft.rackId=el.value;const r=model().racks.find(x=>x.id===el.value);moveDraft.port=r.ports.find(p=>!p.serverId||p.serverId===moveDraft.id)?.number||1;return{refreshModal:true};}if(kind==='move-unit')moveDraft.unit=Number(el.value);if(kind==='move-port')moveDraft.port=Number(el.value);document.querySelectorAll('[data-hw-action="moveServer"]').forEach(b=>b.dataset.hwPayload=JSON.stringify(moveDraft));updateLive();return{};}
-    function signature(){const m=model();return [m.operation?.kind,m.operation?.rackId,...m.racks.map(r=>[r.id,r.switchLevel,r.powerLevel,r.coolingLevel,r.status==='maintenance',r.ports.map(p=>p.enabled),r.servers.map(s=>[s.id,s.level,s.unit,s.port,s.status,s.powered])].join(':'))].join('|');}
-    function updateLive(snapshot){
-      // Index each attribute once per tick instead of searching the whole DOM per device.
-      const attributeIndexes=new Map();
-      function liveQuery(selector){
-        const match=/^\[([\w-]+)(?:="([^"]*)")?\]/.exec(selector);
-        if(!match)return document.querySelectorAll(selector);
-        const [,attribute,value]=match;
-        if(!attributeIndexes.has(attribute)){
-          const all=[...document.querySelectorAll('['+attribute+']')],values=new Map();
-          for(const node of all){const key=node.getAttribute(attribute);if(!values.has(key))values.set(key,[]);values.get(key).push(node);}
-          attributeIndexes.set(attribute,{all,values});
-        }
-        const index=attributeIndexes.get(attribute),nodes=value===undefined?index.all:index.values.get(value)||[];
-        return nodes.filter(node=>node.matches(selector));
-      }
-      const liveOne=selector=>liveQuery(selector)[0]||null;
+import { createRackFaces } from './ui/racks/faces.js';
+import { createRackWiring } from './ui/racks/wiring.js';
+import { createRackInspector } from './ui/racks/inspector.js';
+import { createRackView } from './ui/racks/view.js';
+import { createRackTelemetry } from './ui/racks/telemetry.js';
+const names = {
+  online: 'Online',
+  failed: 'Defekt',
+  repairing: 'In Reparatur',
+  standby: 'Ausgeschaltet',
+  booting: 'Startet',
+  disconnected: 'Kein Link',
+  maintenance: 'Wartungsfenster',
+  limited: 'Begrenzt',
+};
+const componentNames = {
+  switch: 'Switch & Uplink',
+  power: 'Stromversorgung',
+  cooling: 'Kühlung',
+};
 
-      const m=snapshot||model(),values={usedUnits:fmt(m.usedUnits),totalPower:watts(m.totalPowerW),networkFactor:fmt(m.networkFactor*100)+' %',operationEta:m.operation?duration(m.operation.remaining):''},meters={};
-      const setLed=(selector,on,blink=false)=>liveQuery(selector).forEach(el=>{el.classList.toggle('lit',!!on);el.classList.toggle('blinking',!!on&&blink);});
-      m.racks.forEach(r=>{
-        const rk=k=>rackKey(r.id,k);Object.assign(values,{[rk('power')]:watts(r.powerW),[rk('temperature')]:dec(r.temperature)+' °C',[rk('thermalTrend')]:r.temperature-r.targetTemperature>.2?'Kühlt ab':r.targetTemperature-r.temperature>.2?'Wärmt sich auf':'Temperatur stabil',[rk('occupancy')]:r.usedUnits+' / 16 HE belegt',[rk('uplink')]:speed(r.uplinkMbps),[rk('networkDemand')]:speed(r.networkDemandMbps),[rk('powerMeterText')]:watts(r.powerW)+' / '+watts(r.powerCapacityW),[rk('coolingMeterText')]:watts(r.powerW)+' / '+watts(r.coolingW),[rk('networkMeterText')]:speed(r.networkDemandMbps)+' / '+speed(r.uplinkMbps)});
-        meters[rk('powerMeter')]=r.powerW/r.powerCapacityW*100;meters[rk('coolingMeter')]=r.powerW/r.coolingW*100;meters[rk('networkMeter')]=r.networkDemandMbps/r.uplinkMbps*100;
-        liveQuery(`[data-rack-status="${r.id}"]`).forEach(el=>{el.textContent=names[r.status];el.classList.toggle('amber',r.status!=='online');});
-        liveQuery(`[data-rack-health="${r.id}"]`).forEach(el=>el.classList.toggle('warning',r.status!=='online'));
-        liveQuery(`[data-rack-warnings="${r.id}"]`).forEach(el=>el.textContent=r.warnings.join(' · '));
-        r.ports.forEach(p=>{values['port:'+r.id+':'+p.number+':traffic']=speed(p.trafficMbps);const el=liveOne(`[data-switch-port="${r.id}:${p.number}"]`);if(el){el.classList.toggle('linked',p.link);el.classList.toggle('disabled-port',!p.enabled);el.querySelector('.rack-led.power')?.classList.toggle('lit',p.link);const traffic=el.querySelector('.rack-led.traffic');traffic?.classList.toggle('lit',p.link&&p.trafficMbps>0);traffic?.classList.toggle('blinking',p.link&&p.trafficMbps>0);}liveQuery(`[data-port-status="${r.id}:${p.number}"]`).forEach(el=>{el.textContent=p.link?'LINK AKTIV':p.enabled?'KEIN LINK':'DEAKTIVIERT';});});
-        r.servers.forEach(s=>{const nk=k=>nodeKey(s.id,k);liveQuery(`[data-wire-status="${s.id}"]`).forEach(el=>{const p=r.ports.find(p=>p.number===s.port);el.textContent=wireLayer==='power'?watts(s.powerW):!p.enabled?'Port deaktiviert':s.link?speed(p.trafficMbps):names[s.status];});Object.assign(values,{[nk('gpu')]:dec(s.gpuUsed||0)+' / '+dec(s.gpuCapacity||0),[nk('capacity')]:dec(s.capacity)+' CU',[nk('power')]:watts(s.powerW),[nk('temperature')]:dec(s.temperature)+' °C',[nk('condition')]:dec(s.condition)+' %'});setLed(`[data-power-led="${s.id}"]`,s.powered&&r.status!=='maintenance');setLed(`[data-activity-led="${s.id}"]`,s.link&&s.activity>0,s.activity>0);setLed(`[data-drive-led="${s.id}"]`,s.status==='online'&&s.activity>0,s.activity>0);setLed(`[data-fault-led="${s.id}"]`,['failed','repairing'].includes(s.status));liveQuery(`[data-device-status="${s.id}"]`).forEach(el=>{el.textContent=names[s.status];el.classList.toggle('green',s.status==='online');el.classList.toggle('amber',s.status!=='online'&&s.status!=='failed');el.classList.toggle('red',s.status==='failed');});liveQuery(`[data-change="server-mode"][data-id="${s.id}"]`).forEach(el=>{el.disabled=s.status!=="online";});liveQuery(`[data-device-note="${s.id}"]`).forEach(el=>{el.textContent=s.bootRemaining>0?'Systemstart · noch '+duration(s.bootRemaining):s.warnings.join(' · ');});liveQuery(`[data-rack-device="${s.id}"]`).forEach(el=>{el.classList.toggle('offline-device',!s.powered||r.status==='maintenance');el.classList.toggle('faulted-device',s.status==='failed');el.setAttribute('aria-label',`${s.name}, ${s.model}, ${s.units} Höheneinheiten, ${names[s.status]}`);});liveQuery(`[data-cable="${s.id}"]`).forEach(el=>el.classList.toggle('linked',s.link));});
-      });
-      liveQuery('[data-hw-stat]').forEach(el=>{const v=String(values[el.dataset.hwStat]??'');if(el.textContent!==v)el.textContent=v;});
-      liveQuery('[data-hw-meter]').forEach(el=>{const n=meters[el.dataset.hwMeter]||0;el.style.width=Math.min(100,n)+'%';el.classList.toggle('over-budget',n>100);});
-      liveQuery('[data-hw-operation-progress]').forEach(el=>{if(m.operation)el.style.width=(1-m.operation.remaining/m.operation.total)*100+'%';});
-      liveQuery('[data-hw-action]').forEach(b=>{let p;try{p=JSON.parse(b.dataset.hwPayload||'{}');}catch{return;}const q=E.quoteHardware(state(),b.dataset.hwAction,p);b.disabled=!q.enabled;b.title=q.reason||'';const card=b.closest('.hardware-confirm,.hardware-quote,.rack-shop-card');if(card){const reason=card.querySelector('[data-hw-reason],[data-hw-quote-reason]');if(reason)reason.textContent=q.reason||'';const desc=card.querySelector('[data-hw-quote-description]');if(desc)desc.textContent=q.description;const cost=card.querySelector('[data-hw-quote-cost]');if(cost)cost.textContent=(q.cost?fmt(q.cost)+' CR':'Keine Credits')+(q.duration?' · '+duration(q.duration):'');}});
-      drawCables(m);
+/** Rack selection and commands. Empty rooms deliberately keep their own selection. */
+export function createRacks(services) {
+  const {
+    E,
+    icon,
+    esc,
+    fmt,
+    dec,
+    duration,
+    getState,
+    tr = (value) => globalThis.ROOTI18N?.translate(String(value)) || String(value),
+  } = services;
+  let selectedRoom = null,
+    selectedRack = null,
+    selected = { kind: 'server', id: null },
+    mode = 'front',
+    wireLayer = 'network',
+    identify = false,
+    moveDraft = null;
+  const state = () => getState(),
+    model = () => E.getRackModel(state());
+  const watts = (n) => (n >= 1000 ? dec(n / 1000) + ' kW' : fmt(n) + ' W');
+  const speed = (n) => (n >= 1000 ? dec(n / 1000) + ' Gb/s' : fmt(n) + ' Mb/s');
+  const live = (key, value = '', cls = '') =>
+    `<span class="${cls}" data-hw-stat="${esc(key)}">${esc(value)}</span>`;
+  const rackKey = (id, key) => 'rack:' + id + ':' + key;
+  const nodeKey = (id, key) => 'node:' + id + ':' + key;
+  const getRoom = (layout = E.getFacilityLayout(state())) =>
+    layout.rooms.find((room) => room.id === selectedRoom) ||
+    layout.rooms.find((room) => room.rackIds.includes(selectedRack)) ||
+    layout.rooms[0];
+  const getRack = (m, room = getRoom()) =>
+    m.racks.find((rack) => rack.id === selectedRack && room.rackIds.includes(rack.id)) ||
+    m.racks.find((rack) => room.rackIds.includes(rack.id));
+  const allServers = (m) => m.racks.flatMap((r) => r.servers);
+
+  const ctx = {
+    tr,
+    get E() {
+      return E;
+    },
+    get allServers() {
+      return allServers;
+    },
+    get componentNames() {
+      return componentNames;
+    },
+    get current() {
+      return current;
+    },
+    get dec() {
+      return dec;
+    },
+    get duration() {
+      return duration;
+    },
+    get esc() {
+      return esc;
+    },
+    get fmt() {
+      return fmt;
+    },
+    get getRack() {
+      return getRack;
+    },
+    get icon() {
+      return icon;
+    },
+    get identify() {
+      return identify;
+    },
+    set identify(value) {
+      identify = value;
+    },
+    get live() {
+      return live;
+    },
+    get mode() {
+      return mode;
+    },
+    set mode(value) {
+      mode = value;
+    },
+    get model() {
+      return model;
+    },
+    get moveDraft() {
+      return moveDraft;
+    },
+    set moveDraft(value) {
+      moveDraft = value;
+    },
+    get names() {
+      return names;
+    },
+    get nodeKey() {
+      return nodeKey;
+    },
+    get rackKey() {
+      return rackKey;
+    },
+    get selected() {
+      return selected;
+    },
+    set selected(value) {
+      selected = value;
+    },
+    get speed() {
+      return speed;
+    },
+    get state() {
+      return state;
+    },
+    get watts() {
+      return watts;
+    },
+    get wireLayer() {
+      return wireLayer;
+    },
+    set wireLayer(value) {
+      wireLayer = value;
+    },
+  };
+  Object.assign(ctx, createRackFaces(ctx));
+  Object.assign(ctx, createRackWiring(ctx));
+  Object.assign(ctx, createRackInspector(ctx));
+  Object.assign(ctx, createRackView(ctx));
+  Object.assign(ctx, createRackTelemetry(ctx));
+  function current() {
+    const m = model(),
+      layout = E.getFacilityLayout(state()),
+      room = getRoom(layout),
+      rack = getRack(m, room);
+    selectedRoom = room.id;
+    selectedRack = rack?.id || null;
+    if (selected.kind === 'server' && !rack?.servers.some((server) => server.id === selected.id))
+      selected = { kind: 'rack', id: selectedRack };
+    return { m, rack, room, layout };
+  }
+
+  function click(t) {
+    if (t.dataset.hwAction) {
+      let payload;
+      try {
+        payload = JSON.parse(t.dataset.hwPayload || '{}');
+      } catch {
+        return {};
+      }
+      return t.dataset.hwConfirm
+        ? { modal: 'hardware-confirm', extra: { action: t.dataset.hwAction, payload } }
+        : { action: t.dataset.hwAction, payload };
     }
-    window.addEventListener('resize',()=>{if(mode==='wiring')requestAnimationFrame(()=>drawCables(model()));});
-    function serverStatus(id,fallback){return allServers(model()).find(s=>s.id===id)?.status||fallback;}
-    function select(rackId,serverId){selectedRack=rackId;selected={kind:serverId?'server':'rack',id:serverId||rackId};identify=false;}
-    return{view,modal,shop,click,change,signature,updateLive,serverStatus,select,statusNames:names};
-  }};
-})();
+    const cmd = t.dataset.rackCommand;
+    if (!cmd) return null;
+    if (cmd === 'front' || cmd === 'wiring') {
+      mode = cmd;
+      return { render: true };
+    }
+    if (cmd === 'wire-network' || cmd === 'wire-power') {
+      wireLayer = cmd === 'wire-power' ? 'power' : 'network';
+      return { render: true };
+    }
+    if (cmd === 'identify') {
+      identify = !identify;
+      return { render: true };
+    }
+    if (cmd === 'server') {
+      const m = model(),
+        r = m.racks.find((x) => x.servers.some((s) => s.id === t.dataset.id));
+      if (r) select(r.id, t.dataset.id);
+      selected = { kind: 'server', id: t.dataset.id };
+      identify = false;
+      return { render: true };
+    }
+    if (cmd === 'rack-select' || cmd === 'rack') {
+      select(t.dataset.rackId);
+      identify = false;
+      return { render: true };
+    }
+    if (cmd === 'port') {
+      select(t.dataset.rackId);
+      selected = { kind: 'port', id: t.dataset.port };
+      return { render: true };
+    }
+    if (cmd === 'component') {
+      select(t.dataset.rackId);
+      selected = { kind: t.dataset.component, id: selectedRack };
+      return { render: true };
+    }
+    if (cmd === 'add-server')
+      return {
+        modal: 'hardware-shop',
+        extra: {
+          rackId: t.dataset.rackId || selectedRack,
+          unit: t.dataset.unit ? Number(t.dataset.unit) : undefined,
+        },
+      };
+    if (cmd === 'move') {
+      moveDraft = null;
+      return { modal: 'hardware-move', extra: { id: t.dataset.id } };
+    }
+    return null;
+  }
+  function change(el) {
+    if (el.dataset.rackChange === 'room') {
+      const room = E.getFacilityLayout(state()).rooms.find((r) => r.id === el.value);
+      if (room) {
+        selectRoom(room.id);
+        return { render: true };
+      }
+    }
+    if (!el.dataset.rackChange || !moveDraft) return null;
+    const kind = el.dataset.rackChange;
+    if (kind === 'move-rack') {
+      moveDraft.rackId = el.value;
+      const r = model().racks.find((x) => x.id === el.value);
+      moveDraft.port = r.ports.find((p) => !p.serverId || p.serverId === moveDraft.id)?.number || 1;
+      return { refreshModal: true };
+    }
+    if (kind === 'move-unit') moveDraft.unit = Number(el.value);
+    if (kind === 'move-port') moveDraft.port = Number(el.value);
+    document
+      .querySelectorAll('[data-hw-action="moveServer"]')
+      .forEach((b) => (b.dataset.hwPayload = JSON.stringify(moveDraft)));
+    ctx.updateLive();
+    return {};
+  }
+  function signature() {
+    const m = model();
+    return [
+      m.operation?.kind,
+      m.operation?.rackId,
+      ...m.racks.map((r) =>
+        [
+          r.id,
+          r.switchLevel,
+          r.powerLevel,
+          r.coolingLevel,
+          r.status === 'maintenance',
+          r.ports.map((p) => p.enabled),
+          r.servers.map((s) => [s.id, s.level, s.unit, s.port, s.status, s.powered]),
+        ].join(':'),
+      ),
+    ].join('|');
+  }
+
+  globalThis.addEventListener?.('resize', () => {
+    if (mode === 'wiring') requestAnimationFrame(() => ctx.drawCables(model()));
+  });
+  function serverStatus(id, fallback) {
+    return allServers(model()).find((s) => s.id === id)?.status || fallback;
+  }
+  function select(rackId, serverId) {
+    const layout = E.getFacilityLayout(state()),
+      room = layout.rooms.find((item) => item.rackIds.includes(rackId));
+    if (
+      !room ||
+      (serverId &&
+        !state().servers.some((server) => server.id === serverId && server.rackId === rackId))
+    )
+      return false;
+    selectedRoom = room.id;
+    selectedRack = rackId;
+    selected = { kind: serverId ? 'server' : 'rack', id: serverId || rackId };
+    identify = false;
+    return true;
+  }
+  function selectRoom(roomId) {
+    const room = E.getFacilityLayout(state()).rooms.find((item) => item.id === roomId);
+    if (!room) return false;
+    selectedRoom = room.id;
+    selectedRack = room.rackIds[0] || null;
+    selected = { kind: 'rack', id: selectedRack };
+    identify = false;
+    return true;
+  }
+  return {
+    view: ctx.view,
+    modal: ctx.modal,
+    shop: ctx.shop,
+    click,
+    change,
+    signature,
+    updateLive: ctx.updateLive,
+    serverStatus,
+    select,
+    selectRoom,
+    statusNames: names,
+  };
+}
+if (typeof window !== 'undefined') window.RootRacks = { create: createRacks };

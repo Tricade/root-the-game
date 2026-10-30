@@ -1,27 +1,65 @@
 <!doctype html>
 <html lang="de">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#101211">
-  <meta name="description" content="ROOT – dein autonomes Netzwerk. Deine eigene Leitstelle für ein autonom wachsendes Netzwerk.">
-  <title>ROOT — Network OS</title>
-  <link rel="icon" type="image/svg+xml" href="favicon.svg">
-  <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="racks.css">
-  <link rel="stylesheet" href="room.css">
-  <link rel="stylesheet" href="facility.css">
-</head>
-<body>
-  <a class="skip-link" href="#main">Zum Inhalt</a>
-  <div id="app"><div class="boot"><div class="boot-logo">r<span>oo</span>t<span class="brand-dot">.</span></div><p>Netzwerk wird verbunden …</p></div></div>
-  <div id="modal-root"></div>
-  <div id="toast-root" aria-live="polite" aria-atomic="true"></div>
-  <input id="import-file" type="file" accept="application/json,.json" hidden>
-  <noscript>ROOT benötigt JavaScript. Aktiviere es in deinem Browser und öffne ROOT erneut.</noscript>
-  <script src="i18n.js"></script>
-  <script src="engine.js"></script>
-  <script src="rack-ui.js"></script>
-  <script type="module" src="app.js"></script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#101211" />
+    <meta
+      name="description"
+      content="ROOT – dein autonomes Netzwerk. Deine eigene Leitstelle für ein autonom wachsendes Netzwerk."
+    />
+    <title>ROOT — Network OS</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="racks.css" />
+    <link rel="stylesheet" href="room.css" />
+    <link rel="stylesheet" href="facility.css" />
+    <link rel="stylesheet" href="building.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Zum Inhalt</a>
+    <div id="app">
+      <div class="boot">
+        <div class="boot-logo">r<span>oo</span>t<span class="brand-dot">.</span></div>
+        <p>Netzwerk wird verbunden …</p>
+      </div>
+    </div>
+    <div id="modal-root"></div>
+    <div id="toast-root" aria-live="polite" aria-atomic="true"></div>
+    <input id="import-file" type="file" accept="application/json,.json" hidden />
+    <noscript
+      >ROOT benötigt JavaScript. Aktiviere es in deinem Browser und öffne ROOT erneut.</noscript
+    >
+    <script src="locales/building-en.js"></script>
+    <script src="locales/en.js"></script>
+    <script src="i18n.js"></script>
+    <script src="engine/definitions.js"></script>
+    <script src="engine/state.js"></script>
+    <script src="engine/economy.js"></script>
+    <script src="engine/building.js"></script>
+    <script src="engine/central.js"></script>
+    <script src="engine/hardware.js"></script>
+    <script src="engine/gpu.js"></script>
+    <script src="engine/metrics.js"></script>
+    <script src="engine/hardware-quotes.js"></script>
+    <script src="engine/racks.js"></script>
+    <script src="engine/recovery-quotes.js"></script>
+    <script src="engine/resilience.js"></script>
+    <script src="engine/agents.js"></script>
+    <script src="engine/contracts.js"></script>
+    <script src="engine/incidents.js"></script>
+    <script src="engine/maintenance.js"></script>
+    <script src="engine/simulation.js"></script>
+    <script src="engine/actions-infrastructure.js"></script>
+    <script src="engine/actions-workforce.js"></script>
+    <script src="engine/actions-progression.js"></script>
+    <script src="engine/actions-recovery.js"></script>
+    <script src="engine/actions.js"></script>
+    <script src="engine/save-legacy.js"></script>
+    <script src="engine/save-v2.js"></script>
+    <script src="engine/save-v3.js"></script>
+    <script src="engine/saves.js"></script>
+    <script src="engine.js"></script>
+    <script type="module" src="app.js"></script>
+  </body>
 </html>

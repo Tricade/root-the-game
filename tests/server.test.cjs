@@ -5,7 +5,6 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs/promises');
 const os = require('node:os');
 const path = require('node:path');
-const http = require('node:http');
 const { createServer, maxBody } = require('../server.cjs');
 
 async function withServer(t, fn) {
@@ -42,10 +41,26 @@ test('health endpoint, loopback-only static allowlist, and API boundaries', asyn
     const health = await fetch(`${base}/api/health`);
     assert.equal(health.status, 200);
     assert.deepEqual(await health.json(), { app: 'ROOT', version: 3, release: '1.4.0' });
-    for (const file of ['/server.cjs', '/data/save.json', '/package.json', '/missing']) {
+    for (const file of [
+      '/server.cjs',
+      '/server/static-files.cjs',
+      '/data/save.json',
+      '/package.json',
+      '/missing',
+    ]) {
       assert.equal((await fetch(`${base}${file}`)).status, 404, `${file} is not publicly served`);
     }
-    for (const [url, mime] of [['/rack-ui.js', /^text\/javascript/], ['/racks.css', /^text\/css/], ['/room.js', /^text\/javascript/], ['/room.css', /^text\/css/], ['/vendor/three.module.js', /^text\/javascript/], ['/vendor/three.core.js', /^text\/javascript/], ['/vendor/RoomEnvironment.js', /^text\/javascript/], ['/vendor/RoundedBoxGeometry.js', /^text\/javascript/], ['/room-stations.js', /^text\/javascript/]]) {
+    for (const [url, mime] of [
+      ['/rack-ui.js', /^text\/javascript/],
+      ['/racks.css', /^text\/css/],
+      ['/room.js', /^text\/javascript/],
+      ['/room.css', /^text\/css/],
+      ['/vendor/three.module.js', /^text\/javascript/],
+      ['/vendor/three.core.js', /^text\/javascript/],
+      ['/vendor/RoomEnvironment.js', /^text\/javascript/],
+      ['/vendor/RoundedBoxGeometry.js', /^text\/javascript/],
+      ['/room-stations.js', /^text\/javascript/],
+    ]) {
       const asset = await fetch(`${base}${url}`);
       assert.equal(asset.status, 200, `${url} is available from the static allowlist`);
       assert.match(asset.headers.get('content-type'), mime);
@@ -56,7 +71,10 @@ test('health endpoint, loopback-only static allowlist, and API boundaries', asyn
       const favicon = await fetch(`${base}/favicon.svg`);
       assert.equal(favicon.status, 200);
       assert.match(favicon.headers.get('content-type'), /^image\/svg\+xml/);
-      assert.match(favicon.headers.get('content-security-policy'), /style-src 'self' 'unsafe-inline'/);
+      assert.match(
+        favicon.headers.get('content-security-policy'),
+        /style-src 'self' 'unsafe-inline'/,
+      );
       assert.match(favicon.headers.get('content-security-policy'), /script-src 'self'/);
     } catch (error) {
       if (error.code !== 'ENOENT') throw error;
@@ -71,6 +89,65 @@ test('health endpoint, loopback-only static allowlist, and API boundaries', asyn
   });
 });
 
+test('all split browser modules are served locally while build and server sources remain private', async (t) => {
+  await withServer(t, async ({ base }) => {
+    const project = path.join(__dirname, '..');
+    const folders = ['engine', 'ui', 'ui/racks', 'room', 'locales'];
+    for (const folder of folders) {
+      for (const entry of await fs.readdir(path.join(project, folder), { withFileTypes: true })) {
+        if (!entry.isFile() || !entry.name.endsWith('.js')) continue;
+        const url = `/${folder}/${entry.name}`,
+          response = await fetch(base + url);
+        assert.equal(response.status, 200, url);
+        assert.match(response.headers.get('content-type'), /^text\/javascript/);
+        assert.equal(
+          await response.text(),
+          await fs.readFile(path.join(project, folder, entry.name), 'utf8'),
+        );
+      }
+    }
+    for (const url of [
+      '/tests/construction.test.cjs',
+      '/tools/asset-generator/generate.mjs',
+      '/.local-data/save.json',
+    ]) {
+      assert.equal((await fetch(base + url)).status, 404, url);
+    }
+  });
+});
+
+test('paid construction survives HTTP save reload and stale pre-construction clients cannot erase it', async (t) => {
+  const E = require('../engine.js');
+  await withServer(t, async ({ base, dataDir }) => {
+    const state = E.createState(735);
+    state.credits = 1e9;
+    assert.ok(E.act(state, 'buildFloor').ok);
+    state.facility.building.project.remaining = 100;
+    const post = (save) =>
+      fetch(base + '/api/save', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json', origin: base },
+        body: JSON.stringify(save),
+      });
+    assert.equal((await post(state)).status, 200);
+    const bytes = await fs.readFile(path.join(dataDir, 'save.json'), 'utf8');
+    const reloaded = (await (await fetch(base + '/api/save')).json()).save;
+    assert.deepEqual(reloaded.facility.building.project, state.facility.building.project);
+    const stale = structuredClone(reloaded);
+    delete stale.facility.building;
+    const response = await post(stale);
+    assert.equal(response.status, 409);
+    assert.equal((await response.json()).updateRequired, true);
+    assert.equal(await fs.readFile(path.join(dataDir, 'save.json'), 'utf8'), bytes);
+    E.advance(reloaded, 100);
+    assert.equal((await post(reloaded)).status, 200);
+    const completed = (await (await fetch(base + '/api/save')).json()).save;
+    assert.equal(completed.facility.building.floors, 2);
+    assert.equal(completed.facility.building.rooms.length, 1);
+    assert.equal(completed.facility.building.project, null);
+  });
+});
+
 test('save round-trip persists data and preserves the previous save as backup', async (t) => {
   await withServer(t, async ({ base, dataDir }) => {
     assert.deepEqual(await (await fetch(`${base}/api/save`)).json(), { save: null });
@@ -79,7 +156,9 @@ test('save round-trip persists data and preserves the previous save as backup', 
     second.savedAt = (second.savedAt || 0) + 1;
     for (const save of [first, second]) {
       const response = await fetch(`${base}/api/save`, {
-        method: 'POST', headers: { 'content-type': 'application/json', origin: base }, body: JSON.stringify(save),
+        method: 'POST',
+        headers: { 'content-type': 'application/json', origin: base },
+        body: JSON.stringify(save),
       });
       assert.equal(response.status, 200);
       assert.deepEqual(await response.json(), { ok: true });
@@ -98,13 +177,16 @@ test('rejects stale v1 and v2 writes with updateRequired without creating or ove
   await withServer(t, async ({ base, dataDir }) => {
     for (const stale of staleStates) {
       const response = await fetch(`${base}/api/save`, {
-        method: 'POST', headers: { 'content-type': 'application/json', origin: base }, body: JSON.stringify(stale),
+        method: 'POST',
+        headers: { 'content-type': 'application/json', origin: base },
+        body: JSON.stringify(stale),
       });
       assert.equal(response.status, 409);
       assert.deepEqual(await response.json(), {
         ok: false,
         updateRequired: true,
-        error: 'Diese Oberfläche stammt aus einer älteren Version. Lade sie neu, bevor du fortfährst.',
+        error:
+          'Diese Oberfläche stammt aus einer älteren Version. Lade sie neu, bevor du fortfährst.',
       });
     }
     await assert.rejects(fs.access(path.join(dataDir, 'save.json')));
@@ -112,13 +194,17 @@ test('rejects stale v1 and v2 writes with updateRequired without creating or ove
 
     const current = require('../engine.js').createState(654);
     const currentResponse = await fetch(`${base}/api/save`, {
-      method: 'POST', headers: { 'content-type': 'application/json', origin: base }, body: JSON.stringify(current),
+      method: 'POST',
+      headers: { 'content-type': 'application/json', origin: base },
+      body: JSON.stringify(current),
     });
     assert.equal(currentResponse.status, 200);
     const currentBytes = await fs.readFile(path.join(dataDir, 'save.json'), 'utf8');
     for (const stale of staleStates) {
       const staleAgain = await fetch(`${base}/api/save`, {
-        method: 'POST', headers: { 'content-type': 'application/json', origin: base }, body: JSON.stringify(stale),
+        method: 'POST',
+        headers: { 'content-type': 'application/json', origin: base },
+        body: JSON.stringify(stale),
       });
       assert.equal(staleAgain.status, 409);
       assert.equal(await fs.readFile(path.join(dataDir, 'save.json'), 'utf8'), currentBytes);
@@ -146,10 +232,17 @@ test('GET migrates a v1 source in memory and retains its bytes until the explici
     assert.equal(migrated.research, legacy.research);
     assert.equal(migrated.servers[0].id, legacy.servers[0].id);
     assert.equal(migrated.servers[0].level, legacy.servers[0].level);
-    assert.deepEqual(migrated.agents.map(({ id, role, level }) => ({ id, role, level })), legacy.agents.map(({ id, role, level }) => ({ id, role, level })));
-    assert.deepEqual(migrated.jobs.map(({ id, title, work, totalWork }) => ({ id, title, work, totalWork })), legacy.jobs.map(({ id, title, work, totalWork }) => ({ id, title, work, totalWork })));
+    assert.deepEqual(
+      migrated.agents.map(({ id, role, level }) => ({ id, role, level })),
+      legacy.agents.map(({ id, role, level }) => ({ id, role, level })),
+    );
+    assert.deepEqual(
+      migrated.jobs.map(({ id, title, work, totalWork }) => ({ id, title, work, totalWork })),
+      legacy.jobs.map(({ id, title, work, totalWork }) => ({ id, title, work, totalWork })),
+    );
     assert.deepEqual(migrated.upgrades, legacy.upgrades);
-    for (const key of ['power', 'autocontract', 'autorepair', 'priority']) assert.equal(migrated.policies[key], legacy.policies[key]);
+    for (const key of ['power', 'autocontract', 'autorepair', 'priority'])
+      assert.equal(migrated.policies[key], legacy.policies[key]);
     assert.equal(migrated.resilience.parts, 3);
     assert.equal(migrated.resilience.graceUntil, legacy.time + 600);
     assert.equal(migrated.resilience.backup, null);
@@ -159,11 +252,16 @@ test('GET migrates a v1 source in memory and retains its bytes until the explici
     assert.equal(await fs.readFile(source, 'utf8'), originalBytes);
 
     const saved = await fetch(`${base}/api/save`, {
-      method: 'POST', headers: { 'content-type': 'application/json', origin: base }, body: JSON.stringify(migrated),
+      method: 'POST',
+      headers: { 'content-type': 'application/json', origin: base },
+      body: JSON.stringify(migrated),
     });
     assert.equal(saved.status, 200);
     assert.equal(JSON.parse(await fs.readFile(source, 'utf8')).version, 3);
-    assert.deepEqual(JSON.parse(await fs.readFile(path.join(dataDir, 'save.backup.json'), 'utf8')), legacy);
+    assert.deepEqual(
+      JSON.parse(await fs.readFile(path.join(dataDir, 'save.backup.json'), 'utf8')),
+      legacy,
+    );
     assert.equal((await (await fetch(`${base}/api/save`)).json()).save.version, 3);
     assert.equal(engine.normalizeState(migrated).version, 3);
   });
@@ -194,11 +292,16 @@ test('GET migrates a v2 source in memory and retains its bytes until the explici
     assert.equal(await fs.readFile(source, 'utf8'), originalBytes);
 
     const saved = await fetch(`${base}/api/save`, {
-      method: 'POST', headers: { 'content-type': 'application/json', origin: base }, body: JSON.stringify(migrated),
+      method: 'POST',
+      headers: { 'content-type': 'application/json', origin: base },
+      body: JSON.stringify(migrated),
     });
     assert.equal(saved.status, 200);
     assert.equal(JSON.parse(await fs.readFile(source, 'utf8')).version, 3);
-    assert.deepEqual(JSON.parse(await fs.readFile(path.join(dataDir, 'save.backup.json'), 'utf8')), legacy);
+    assert.deepEqual(
+      JSON.parse(await fs.readFile(path.join(dataDir, 'save.backup.json'), 'utf8')),
+      legacy,
+    );
     assert.equal((await (await fetch(`${base}/api/save`)).json()).save.version, 3);
     assert.equal(engine.normalizeState(migrated).version, 3);
   });
@@ -225,7 +328,9 @@ test('v3 save round-trip preserves resilience settings, condition and protected 
   const expected = engine.normalizeState(fixture);
   await withServer(t, async ({ base }) => {
     const saved = await fetch(`${base}/api/save`, {
-      method: 'POST', headers: { 'content-type': 'application/json', origin: base }, body: JSON.stringify(expected),
+      method: 'POST',
+      headers: { 'content-type': 'application/json', origin: base },
+      body: JSON.stringify(expected),
     });
     assert.equal(saved.status, 200);
     const loaded = await (await fetch(`${base}/api/save`)).json();
@@ -234,18 +339,25 @@ test('v3 save round-trip preserves resilience settings, condition and protected 
     assert.equal(loaded.save.policies.autobackup, false);
     assert.equal(loaded.save.resilience.parts, 9);
     assert.equal(loaded.save.resilience.integrity, 86);
-    assert.equal(loaded.save.resilience.backup.protectedResearch, expected.resilience.backup.protectedResearch);
+    assert.equal(
+      loaded.save.resilience.backup.protectedResearch,
+      expected.resilience.backup.protectedResearch,
+    );
   });
 });
 
 test('rejects non-JSON and bodies above the configured size limit without writing a save', async (t) => {
   await withServer(t, async ({ base, dataDir }) => {
     const wrongType = await fetch(`${base}/api/save`, {
-      method: 'POST', headers: { origin: base, 'content-type': 'text/plain' }, body: 'hello',
+      method: 'POST',
+      headers: { origin: base, 'content-type': 'text/plain' },
+      body: 'hello',
     });
     assert.equal(wrongType.status, 415);
     const tooLarge = await fetch(`${base}/api/save`, {
-      method: 'POST', headers: { origin: base, 'content-type': 'application/json' }, body: ' '.repeat(maxBody + 1),
+      method: 'POST',
+      headers: { origin: base, 'content-type': 'application/json' },
+      body: ' '.repeat(maxBody + 1),
     });
     assert.equal(tooLarge.status, 413);
     await assert.rejects(fs.access(path.join(dataDir, 'save.json')));
@@ -255,14 +367,16 @@ test('rejects non-JSON and bodies above the configured size limit without writin
 test('rejects a corrupt or unsupported save through the engine normalizer', async (t) => {
   const enginePath = path.join(__dirname, '..', 'engine.js');
   let engine;
-  try { engine = require(enginePath); }
-  catch (error) {
+  try {
+    engine = require(enginePath);
+  } catch (error) {
     if (error.code === 'MODULE_NOT_FOUND') return t.skip('engine.js is not present yet');
     throw error;
   }
   await withServer(t, async ({ base, dataDir }) => {
     const bad = await fetch(`${base}/api/save`, {
-      method: 'POST', headers: { 'content-type': 'application/json', origin: base },
+      method: 'POST',
+      headers: { 'content-type': 'application/json', origin: base },
       body: JSON.stringify({ ...engine.createState(2), version: 999 }),
     });
     assert.equal(bad.status, 400);
@@ -273,8 +387,9 @@ test('rejects a corrupt or unsupported save through the engine normalizer', asyn
 test('corrupt primary recovers from a valid backup and never clobbers it during recovery save', async (t) => {
   const enginePath = path.join(__dirname, '..', 'engine.js');
   let engine;
-  try { engine = require(enginePath); }
-  catch (error) {
+  try {
+    engine = require(enginePath);
+  } catch (error) {
     if (error.code === 'MODULE_NOT_FOUND') return t.skip('engine.js is not present yet');
     throw error;
   }
@@ -292,10 +407,15 @@ test('corrupt primary recovers from a valid backup and never clobbers it during 
     const replacement = engine.createState(503);
     replacement.networkName = 'Recovery check';
     const saved = await fetch(`${base}/api/save`, {
-      method: 'POST', headers: { 'content-type': 'application/json', origin: base }, body: JSON.stringify(replacement),
+      method: 'POST',
+      headers: { 'content-type': 'application/json', origin: base },
+      body: JSON.stringify(replacement),
     });
     assert.equal(saved.status, 200);
-    assert.deepEqual(JSON.parse(await fs.readFile(path.join(dataDir, 'save.backup.json'), 'utf8')), backup);
+    assert.deepEqual(
+      JSON.parse(await fs.readFile(path.join(dataDir, 'save.backup.json'), 'utf8')),
+      backup,
+    );
 
     await fs.writeFile(path.join(dataDir, 'save.json'), '{broken again', 'utf8');
     await fs.rm(path.join(dataDir, 'save.backup.json'));

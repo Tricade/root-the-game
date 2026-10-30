@@ -1,42 +1,12 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const fs = require('node:fs');
-const path = require('node:path');
-const vm = require('node:vm');
-
-const appPath = path.join(__dirname, '..', 'app.js');
-const appSource = fs.readFileSync(appPath, 'utf8')
-  .replace(/^import \{ createRoom \} from '\.\/room\.js';\s*/, '')
-  .replace(/  start\(\);/, `
-  window.__rootTest = {
-    save, replaceState, boot,
-    set(options = {}) {
-      if ('state' in options) state = options.state;
-      if ('importing' in options) importing = options.importing;
-      if ('initialized' in options) initialized = options.initialized;
-      if ('remoteRevision' in options) remoteRevision = options.remoteRevision;
-      if ('saveConflict' in options) saveConflict = options.saveConflict;
-      if ('lastTick' in options) lastTick = options.lastTick;
-      if ('exportSave' in options) exportSave = options.exportSave;
-      if ('render' in options) render = options.render;
-      if ('updateLive' in options) updateLive = options.updateLive;
-      if ('shell' in options) shell = options.shell;
-      if ('simulate' in options) simulate = options.simulate;
-      if ('announceAchievements' in options) announceAchievements = options.announceAchievements;
-      if ('toast' in options) toast = options.toast;
-      if ('closeModal' in options) closeModal = options.closeModal;
-    },
-    state: () => state,
-    conflict: () => saveConflict,
-    pending: () => savePending,
-    drain: () => saveDrainPromise,
-  };
-`);
-
 function deferred() {
   let resolve;
   let reject;
-  const promise = new Promise((res, rej) => { resolve = res; reject = rej; });
+  const promise = new Promise((res, rej) => {
+    resolve = res;
+    reject = rej;
+  });
   return { promise, resolve, reject };
 }
 
@@ -45,25 +15,44 @@ function response(status, body = {}, revision = 'rev-next') {
     status,
     ok: status >= 200 && status < 300,
     json: async () => body,
-    headers: { get: name => name.toLowerCase() === 'x-root-revision' ? revision : null },
+    headers: { get: (name) => (name.toLowerCase() === 'x-root-revision' ? revision : null) },
   };
 }
 
-function makeHarness({ fetch = async () => response(200, { ok: true }), initialStorage = {}, advance = () => null } = {}) {
+async function makeHarness(
+  t,
+  {
+    fetch = async () => response(200, { ok: true }),
+    initialStorage = {},
+    advance = () => null,
+  } = {},
+) {
   const values = new Map(Object.entries(initialStorage));
   const listeners = new Map();
   const localStorage = {
-    getItem(key) { return values.has(key) ? values.get(key) : null; },
-    setItem(key, value) { values.set(key, String(value)); },
-    removeItem(key) { values.delete(key); },
+    getItem(key) {
+      return values.has(key) ? values.get(key) : null;
+    },
+    setItem(key, value) {
+      values.set(key, String(value));
+    },
+    removeItem(key) {
+      values.delete(key);
+    },
   };
   const stateSeed = () => ({
-    version: 3, savedAt: Date.now(), networkName: 'Testnetz',
-    servers: [], agents: [], facility: { racks: [] }, achievements: {}, history: [],
+    version: 3,
+    savedAt: Date.now(),
+    networkName: 'Testnetz',
+    servers: [],
+    agents: [],
+    facility: { racks: [] },
+    achievements: {},
+    history: [],
   });
   const engine = {
     createState: stateSeed,
-    normalizeState: value => value,
+    normalizeState: (value) => value,
     advance,
     catalog: { achievements: [] },
   };
@@ -73,8 +62,15 @@ function makeHarness({ fetch = async () => response(200, { ok: true }), initialS
       if (!listeners.has(type)) listeners.set(type, []);
       listeners.get(type).push(callback);
     },
-    querySelector() { return element; },
-    querySelectorAll() { return []; },
+    querySelector() {
+      return element;
+    },
+    createElement() {
+      return { click() {} };
+    },
+    querySelectorAll() {
+      return [];
+    },
     hidden: false,
     body: { style: {} },
   };
@@ -85,10 +81,17 @@ function makeHarness({ fetch = async () => response(200, { ok: true }), initialS
     addEventListener() {},
   };
   const context = {
-    window, document, localStorage,
+    window,
+    document,
+    localStorage,
     location: { protocol: 'http:' },
     navigator: {},
-    createRoom: () => ({ isInRoom: () => false, isExploring: () => false, isArriving: () => false, hide() {} }),
+    createRoom: () => ({
+      isInRoom: () => false,
+      isExploring: () => false,
+      isArriving: () => false,
+      hide() {},
+    }),
     fetch,
     AbortSignal,
     Blob,
@@ -102,14 +105,90 @@ function makeHarness({ fetch = async () => response(200, { ok: true }), initialS
     requestAnimationFrame() {},
     console,
   };
-  vm.runInNewContext(appSource, context, { filename: appPath });
-  return { app: window.__rootTest, values, context, listeners };
+  const { createPersistenceUI } = await import('../ui/persistence.js');
+  const controller = {
+    E: engine,
+    STORAGE: 'root.network.save.v1',
+    state: undefined,
+    initialized: false,
+    saveBusy: false,
+    savePending: null,
+    saveDrainPromise: null,
+    saveMode: 'ready',
+    saveError: '',
+    diskAvailable: true,
+    remoteRevision: null,
+    saveConflict: false,
+    lastTick: Date.now(),
+    lastSave: 0,
+    seenAchievements: new Set(),
+    hideGuide: false,
+    importing: null,
+    modal: null,
+    Room: context.createRoom(),
+    R: window.RootRacks.create(),
+    $: (selector) => document.querySelector(selector),
+    shell() {},
+    render() {},
+    updateLive() {},
+    announceAchievements() {},
+    toast() {},
+    closeModal() {},
+    openModal() {},
+  };
+  Object.assign(controller, createPersistenceUI(controller, context));
+  const { createEventsUI } = await import('../ui/events.js');
+  Object.assign(controller, createEventsUI(controller, context));
+  controller.bindEvents();
+  const app = {
+    save: controller.save,
+    replaceState: controller.replaceState,
+    boot: controller.boot,
+    set(options = {}) {
+      Object.assign(controller, options);
+    },
+    state: () => controller.state,
+    conflict: () => controller.saveConflict,
+    pending: () => controller.savePending,
+    drain: () => controller.saveDrainPromise,
+  };
+  return { app, values, context, listeners, controller };
 }
 
-test('failed GET leaves revision unverified and boot never POSTs without a revision', async () => {
+test('construction completion is announced once, including an offline catch-up', async (t) => {
+  const E = require('../engine.js'),
+    notices = [];
+  const h = await makeHarness(t, { advance: E.advance });
+  const state = E.createState(734);
+  state.credits = 1e9;
+  state.resilience.graceUntil = 1e9;
+  assert.ok(E.act(state, 'buildRoom', { floor: 1 }).ok);
+  h.app.set({ state, lastTick: 1000, toast: (...args) => notices.push(args) });
+  h.controller.simulate(2000000);
+  assert.equal(state.facility.building.project, null);
+  assert.equal(E.getFacilityLayout(state).roomCount, 2);
+  assert.equal(notices.length, 1);
+  assert.equal(notices[0][2], 'facility');
+  assert.match(notices[0][0], /Raum 2.*fertiggestellt/);
+  h.controller.simulate(2001000);
+  assert.equal(notices.length, 1);
+});
+
+test('failed GET leaves revision unverified and boot never POSTs without a revision', async (t) => {
   const calls = [];
-  const h = makeHarness({ fetch: async (...args) => { calls.push(args); throw new Error('offline'); } });
-  h.app.set({ shell() {}, simulate: () => null, announceAchievements() {}, updateLive() {}, render() {} });
+  const h = await makeHarness(t, {
+    fetch: async (...args) => {
+      calls.push(args);
+      throw new Error('offline');
+    },
+  });
+  h.app.set({
+    shell() {},
+    simulate: () => null,
+    announceAchievements() {},
+    updateLive() {},
+    render() {},
+  });
   await h.app.boot();
 
   assert.equal(calls.length, 1);
@@ -121,13 +200,20 @@ test('failed GET leaves revision unverified and boot never POSTs without a revis
   assert.equal(h.values.get('root.network.save.v1'), JSON.stringify(h.app.state()));
 });
 
-test('conflicting local data does not replace an authoritative empty server', async () => {
+test('conflicting local data does not replace an authoritative empty server', async (t) => {
   const oldLocal = {
-    version: 3, savedAt: Date.now(), marker: 'old-browser-copy', networkName: 'Old local',
-    servers: [], agents: [], facility: { racks: [] }, achievements: {}, history: [],
+    version: 3,
+    savedAt: Date.now(),
+    marker: 'old-browser-copy',
+    networkName: 'Old local',
+    servers: [],
+    agents: [],
+    facility: { racks: [] },
+    achievements: {},
+    history: [],
   };
   const calls = [];
-  const h = makeHarness({
+  const h = await makeHarness(t, {
     initialStorage: {
       'root.network.save.v1': JSON.stringify(oldLocal),
       'root.server.revision': 'prior-nonempty-revision',
@@ -139,7 +225,13 @@ test('conflicting local data does not replace an authoritative empty server', as
         : response(200, { ok: true, revision: 'fresh-revision' }, 'fresh-revision');
     },
   });
-  h.app.set({ shell() {}, simulate: () => null, announceAchievements() {}, updateLive() {}, render() {} });
+  h.app.set({
+    shell() {},
+    simulate: () => null,
+    announceAchievements() {},
+    updateLive() {},
+    render() {},
+  });
   await h.app.boot();
   await h.app.drain();
 
@@ -150,21 +242,38 @@ test('conflicting local data does not replace an authoritative empty server', as
   assert.equal(calls[1].options.headers['X-Root-Revision'], 'empty');
 });
 
-test('unrevisioned newer v3 browser state is backed up; saved server fleet wins and advances', async () => {
+test('unrevisioned newer v3 browser state is backed up; saved server fleet wins and advances', async (t) => {
   const makeFleet = (rackCount, serverCount, name, savedAt) => ({
-    version: 3, savedAt, networkName: name, marker: name,
-    racks: Array.from({ length: rackCount }, (_, i) => ({ id: `rack-${name}-${i}`, name: `Rack ${i}` })),
-    servers: Array.from({ length: serverCount }, (_, i) => ({ id: `server-${name}-${i}`, name: `Server ${i}` })),
-    agents: Array.from({ length: 20 }, (_, i) => ({ id: `agent-${name}-${i}`, name: `Agent ${i}` })),
-    facility: { racks: [] }, achievements: {}, history: [],
+    version: 3,
+    savedAt,
+    networkName: name,
+    marker: name,
+    racks: Array.from({ length: rackCount }, (_, i) => ({
+      id: `rack-${name}-${i}`,
+      name: `Rack ${i}`,
+    })),
+    servers: Array.from({ length: serverCount }, (_, i) => ({
+      id: `server-${name}-${i}`,
+      name: `Server ${i}`,
+    })),
+    agents: Array.from({ length: 20 }, (_, i) => ({
+      id: `agent-${name}-${i}`,
+      name: `Agent ${i}`,
+    })),
+    facility: { racks: [] },
+    achievements: {},
+    history: [],
   });
   const localCopy = makeFleet(2, 16, 'newer-browser-copy', Date.now() + 60_000);
   const serverCopy = makeFleet(6, 20, 'server-save', Date.now() - 5_000);
   const calls = [];
   const advances = [];
-  const h = makeHarness({
+  const h = await makeHarness(t, {
     initialStorage: { 'root.network.save.v1': JSON.stringify(localCopy) },
-    advance: (state, seconds) => { advances.push({ state, seconds }); return null; },
+    advance: (state, seconds) => {
+      advances.push({ state, seconds });
+      return null;
+    },
     fetch: async (url, options) => {
       calls.push({ url, options });
       return calls.length === 1
@@ -194,17 +303,28 @@ test('unrevisioned newer v3 browser state is backed up; saved server fleet wins 
   assert.equal(calls[1].options.headers['X-Root-Revision'], 'server-revision');
 });
 
-test('409 after a queued replacement freezes and exports the newest state', async () => {
+test('409 after a queued replacement freezes and exports the newest state', async (t) => {
   const firstPost = deferred();
   const calls = [];
-  const h = makeHarness({ fetch: async (url, options) => {
-    calls.push({ url, options });
-    return firstPost.promise;
-  } });
+  const h = await makeHarness(t, {
+    fetch: async (url, options) => {
+      calls.push({ url, options });
+      return firstPost.promise;
+    },
+  });
   const oldState = { savedAt: Date.now(), marker: 'old' };
   const newState = { savedAt: Date.now(), marker: 'replacement' };
-  h.app.set({ state: oldState, initialized: true, remoteRevision: 'rev-0', lastTick: newState.savedAt,
-    exportSave() {}, render() {}, updateLive() {}, closeModal() {}, toast() {} });
+  h.app.set({
+    state: oldState,
+    initialized: true,
+    remoteRevision: 'rev-0',
+    lastTick: newState.savedAt,
+    exportSave() {},
+    render() {},
+    updateLive() {},
+    closeModal() {},
+    toast() {},
+  });
 
   const firstDrain = h.app.save();
   const replacement = h.app.replaceState(newState);
@@ -221,24 +341,34 @@ test('409 after a queued replacement freezes and exports the newest state', asyn
   assert.equal(calls.length, 1, '409 must not trigger another POST');
 });
 
-test('second save waits for its own deferred POST before the drain resolves', async () => {
+test('second save waits for its own deferred POST before the drain resolves', async (t) => {
   const first = deferred();
   const second = deferred();
   const calls = [];
-  const h = makeHarness({ fetch: async (url, options) => {
-    calls.push({ url, options });
-    return calls.length === 1 ? first.promise : second.promise;
-  } });
-  h.app.set({ state: { savedAt: Date.now(), marker: 'first' }, initialized: true, remoteRevision: 'rev-0',
-    render() {}, updateLive() {} });
+  const h = await makeHarness(t, {
+    fetch: async (url, options) => {
+      calls.push({ url, options });
+      return calls.length === 1 ? first.promise : second.promise;
+    },
+  });
+  h.app.set({
+    state: { savedAt: Date.now(), marker: 'first' },
+    initialized: true,
+    remoteRevision: 'rev-0',
+    render() {},
+    updateLive() {},
+  });
   let settled = false;
-  const p1 = h.app.save().then(value => { settled = true; return value; });
+  const p1 = h.app.save().then((value) => {
+    settled = true;
+    return value;
+  });
   h.app.set({ state: { savedAt: Date.now(), marker: 'second' } });
   const p2 = h.app.save();
   assert.equal(calls.length, 1);
 
   first.resolve(response(200, { ok: true, revision: 'rev-1' }, 'rev-1'));
-  await new Promise(resolve => setImmediate(resolve));
+  await new Promise((resolve) => setImmediate(resolve));
   assert.equal(calls.length, 2);
   assert.equal(settled, false, 'drain must still await the second POST');
   assert.equal(JSON.parse(calls[1].options.body).marker, 'second');
@@ -250,15 +380,24 @@ test('second save waits for its own deferred POST before the drain resolves', as
   assert.equal(h.values.get('root.server.revision'), 'rev-2');
 });
 
-test('failure of an older POST preserves a newer queued snapshot for one attempt', async () => {
+test('failure of an older POST preserves a newer queued snapshot for one attempt', async (t) => {
   const first = deferred();
   const calls = [];
-  const h = makeHarness({ fetch: async (url, options) => {
-    calls.push({ url, options });
-    return calls.length === 1 ? first.promise : response(200, { ok: true, revision: 'rev-1' }, 'rev-1');
-  } });
-  h.app.set({ state: { savedAt: Date.now(), marker: 'older' }, initialized: true, remoteRevision: 'rev-0',
-    render() {}, updateLive() {} });
+  const h = await makeHarness(t, {
+    fetch: async (url, options) => {
+      calls.push({ url, options });
+      return calls.length === 1
+        ? first.promise
+        : response(200, { ok: true, revision: 'rev-1' }, 'rev-1');
+    },
+  });
+  h.app.set({
+    state: { savedAt: Date.now(), marker: 'older' },
+    initialized: true,
+    remoteRevision: 'rev-0',
+    render() {},
+    updateLive() {},
+  });
   const drain = h.app.save();
   h.app.set({ state: { savedAt: Date.now(), marker: 'newer' } });
   h.app.save();
@@ -271,12 +410,20 @@ test('failure of an older POST preserves a newer queued snapshot for one attempt
   assert.equal(result.persisted, true);
 });
 
-test('replaceState does not mutate a session already paused by conflict', async () => {
+test('replaceState does not mutate a session already paused by conflict', async (t) => {
   const original = { savedAt: Date.now(), marker: 'original' };
   let exports = 0;
-  const h = makeHarness();
-  h.app.set({ state: original, initialized: true, remoteRevision: 'rev-0', saveConflict: true,
-    exportSave() { exports++; }, toast() {} });
+  const h = await makeHarness(t);
+  h.app.set({
+    state: original,
+    initialized: true,
+    remoteRevision: 'rev-0',
+    saveConflict: true,
+    exportSave() {
+      exports++;
+    },
+    toast() {},
+  });
 
   const result = await h.app.replaceState({ savedAt: Date.now(), marker: 'replacement' });
   assert.equal(result, false);
@@ -284,22 +431,33 @@ test('replaceState does not mutate a session already paused by conflict', async 
   assert.equal(exports, 0);
 });
 
-test('failed persistence after import reports failure, never persisted success', async () => {
+test('failed persistence after import reports failure, never persisted success', async (t) => {
   const notices = [];
-  const h = makeHarness({ fetch: async () => response(503, { ok: false }) });
-  h.app.set({ state: { savedAt: Date.now(), marker: 'before-import' }, initialized: true, remoteRevision: 'rev-0',
-    exportSave() {}, render() {}, updateLive() {}, closeModal() {}, toast(message) { notices.push(message); },
-    announceAchievements() {} });
+  const h = await makeHarness(t, { fetch: async () => response(503, { ok: false }) });
+  h.app.set({
+    state: { savedAt: Date.now(), marker: 'before-import' },
+    initialized: true,
+    remoteRevision: 'rev-0',
+    exportSave() {},
+    render() {},
+    updateLive() {},
+    closeModal() {},
+    toast(message) {
+      notices.push(message);
+    },
+    announceAchievements() {},
+  });
 
   const imported = { savedAt: Date.now(), marker: 'imported' };
   h.app.set({ importing: imported });
   const target = { dataset: { command: 'import-confirm' }, disabled: false };
   target.closest = () => target;
-  for (const listener of h.listeners.get('click')) listener({ target });
+  const actions = [...h.listeners.get('click')].map((listener) => listener({ target }));
   const outcome = await h.app.drain();
+  await Promise.all(actions);
 
   assert.equal(outcome.persisted, false);
   assert.equal(h.app.state().marker, 'imported');
-  assert.ok(notices.some(message => message.includes('nur im Browser')));
-  assert.ok(!notices.some(message => message.includes('ist bereit')));
+  assert.ok(notices.some((message) => message.includes('nur im Browser')));
+  assert.ok(!notices.some((message) => message.includes('ist bereit')));
 });

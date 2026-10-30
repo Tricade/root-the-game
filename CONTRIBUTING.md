@@ -4,13 +4,14 @@ Bug reports, balancing ideas, translations, accessibility improvements, original
 
 ## Start a development instance
 
-Use Node.js 24 (verified with 24.22.1). No `npm install` or compilation is required.
+Use Node.js 24 (verified with 24.22.1). Running ROOT and its Node tests needs no package installation or compilation. Install the pinned development tools to run formatting and lint checks.
 
 ```sh
 git switch main
 git pull --ff-only
 git switch -c fix/describe-the-change
-npm test
+npm ci --ignore-scripts
+npm run check
 ```
 
 Keep development saves separate from a real installation. In PowerShell:
@@ -33,7 +34,7 @@ Open `http://127.0.0.1:18490/`. Test servers use temporary data directories. Nev
 
 1. Keep one topic per branch: `feat/...`, `fix/...`, `docs/...` or `assets/...`.
 2. Explain the problem and resulting behavior. Record the checks you actually ran and any remaining limits.
-3. Run `npm test`. Add focused regression coverage for behavior changes; do not replace runtime checks with string matching alone.
+3. Run `npm run check` (ESLint, Prettier and Node tests). `npm run format` applies the agreed formatting. Add focused regression coverage for behavior changes; do not replace runtime checks with string matching alone.
 4. Exercise affected controls in both the web UI and 3D terminals. Check German and English, reload recovery and an older synthetic save when persistence changes.
 5. Update the relevant documentation. Use synthetic examples and screenshots, with no personal saves, machine paths or credentials.
 6. Open a pull request against `main`. Maintainers review before merging; a branch or suggested change is not a release.

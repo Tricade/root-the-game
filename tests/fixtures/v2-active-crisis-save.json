@@ -220,9 +220,7 @@
       "title": "Kühlkreislauf überhitzt",
       "description": "Die Temperaturgrenze wurde überschritten. Betroffene Knoten wurden zum Schutz vor Folgeschäden abgeschaltet.",
       "consequence": "Aufträge pausieren; ohne Reparatur bleibt die Kapazität reduziert.",
-      "affected": [
-        "server-1"
-      ],
+      "affected": ["server-1"],
       "resolution": null
     },
     "corrupted": false,

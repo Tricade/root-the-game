@@ -3,12 +3,12 @@ import * as THREE from './vendor/three.module.js';
 const QUADRANTS = {
   concrete: { x: 0.5, y: 0.5, width: 0.5, height: 0.5 }, // clean architecture-atlas lower-right
   floor: { x: 0, y: 0.5, width: 0.5, height: 0.5 }, // mat_arch_floor atlas region
-  steel: { x: 0.5, y: 0, width: 0.5, height: 0.5 } // mat_brushed_metal hardware-atlas region
+  steel: { x: 0.5, y: 0, width: 0.5, height: 0.5 }, // mat_brushed_metal hardware-atlas region
 };
 
 function materialIn(root, name) {
   let found = null;
-  root.traverse(node => {
+  root.traverse((node) => {
     if (!node.isMesh) return;
     const materials = Array.isArray(node.material) ? node.material : [node.material];
     for (const material of materials) if (material?.name === name) found ||= material;
@@ -67,7 +67,7 @@ function makeSurface(source, region, { color, metalness, roughness }, materials,
     roughnessMap: orm,
     metalnessMap: orm,
     metalness,
-    roughness
+    roughness,
   });
   materials.push(material);
   return material;
@@ -78,19 +78,35 @@ export function createBunkerSurfaces(bank) {
   const wall = materialIn(bank.make('airlock'), 'mat_arch_steel');
   const floorSource = materialIn(bank.make('floor'), 'mat_arch_floor');
   const steelSource = materialIn(bank.make('airlock'), 'mat_brushed_metal');
-  const ownedMaterials = [], ownedTextures = [];
+  const ownedMaterials = [],
+    ownedTextures = [];
 
   const surfaces = {
-    concrete: makeSurface(wall, QUADRANTS.concrete,
-      { color: 0xa9aaa4, metalness: 0, roughness: 0.96 }, ownedMaterials, ownedTextures),
-    floor: makeSurface(floorSource, QUADRANTS.floor,
-      { color: 0x737a7b, metalness: 0.12, roughness: 0.91 }, ownedMaterials, ownedTextures),
-    steel: makeSurface(steelSource, QUADRANTS.steel,
-      { color: 0x747b7e, metalness: 0.72, roughness: 0.86 }, ownedMaterials, ownedTextures),
+    concrete: makeSurface(
+      wall,
+      QUADRANTS.concrete,
+      { color: 0xa9aaa4, metalness: 0, roughness: 0.96 },
+      ownedMaterials,
+      ownedTextures,
+    ),
+    floor: makeSurface(
+      floorSource,
+      QUADRANTS.floor,
+      { color: 0x737a7b, metalness: 0.12, roughness: 0.91 },
+      ownedMaterials,
+      ownedTextures,
+    ),
+    steel: makeSurface(
+      steelSource,
+      QUADRANTS.steel,
+      { color: 0x747b7e, metalness: 0.72, roughness: 0.86 },
+      ownedMaterials,
+      ownedTextures,
+    ),
     dispose() {
-      ownedMaterials.forEach(material => material.dispose());
-      ownedTextures.forEach(texture => texture.dispose());
-    }
+      ownedMaterials.forEach((material) => material.dispose());
+      ownedTextures.forEach((texture) => texture.dispose());
+    },
   };
   // The source quadrant is architectural steel. Reuse its grain as concrete,
   // but do not multiply concrete roughness by the steel ORM channel.
@@ -106,14 +122,17 @@ export function metricBox(size, material) {
   const geometry = new THREE.BoxGeometry(width, height, depth);
   const uv = geometry.getAttribute('uv');
   const faceDimensions = [
-    [depth, height], [depth, height],
-    [width, depth], [width, depth],
-    [width, height], [width, height]
+    [depth, height],
+    [depth, height],
+    [width, depth],
+    [width, depth],
+    [width, height],
+    [width, height],
   ];
   for (let face = 0; face < 6; face++) {
     const [uLength, vLength] = faceDimensions[face];
     for (let vertex = face * 4; vertex < face * 4 + 4; vertex++) {
-      uv.setXY(vertex, uv.getX(vertex) * uLength / 2, uv.getY(vertex) * vLength / 2);
+      uv.setXY(vertex, (uv.getX(vertex) * uLength) / 2, (uv.getY(vertex) * vLength) / 2);
     }
   }
   uv.needsUpdate = true;

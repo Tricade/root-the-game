@@ -1,0 +1,225 @@
+.building-project {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 20px;
+  padding: 24px;
+  border-color: #6d8958;
+  background: linear-gradient(120deg, #222d1e, #171e17);
+}
+.building-project[hidden] {
+  display: none;
+}
+.building-project h2 {
+  margin: 8px 0;
+}
+.building-project p,
+.building-section-heading p {
+  color: #a0ae97;
+  line-height: 1.7;
+}
+.building-project > .progress-track {
+  grid-column: 1 / -1;
+}
+.building-project-time {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-end;
+}
+.building-project-time strong {
+  color: #c9e8aa;
+  font: 22px var(--mono);
+}
+.building-project-time span {
+  color: #96a38b;
+  font-size: 11px;
+}
+.building-section-heading {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  justify-content: space-between;
+}
+.building-section-heading h2 {
+  margin: 0;
+}
+.building-section-heading label {
+  color: #a0ae97;
+  font-size: 11px;
+  min-width: 180px;
+}
+.building-section-heading .select {
+  margin-top: 7px;
+  width: 100%;
+}
+.building-plots {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 24px;
+}
+.building-plot {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 220px;
+  padding: 20px;
+  border: 1px solid #36422e;
+  border-radius: 12px;
+}
+.building-plot h3,
+.building-service h3 {
+  margin: 0;
+}
+.building-plot p {
+  margin: 0;
+  color: #9da991;
+  font: 11px var(--mono);
+  line-height: 1.7;
+}
+.building-plot .tag {
+  align-self: flex-start;
+}
+.building-plot > .button {
+  margin-top: auto;
+}
+.building-plot.vacant {
+  border-style: dashed;
+  background: #131912;
+}
+.building-plot.vacant > .icon,
+.building-plot.under-construction > .icon {
+  width: 42px;
+  height: 42px;
+  margin: auto;
+  color: #6d805c;
+}
+.building-plot.under-construction {
+  border-color: #c2ab6f;
+  background: #29271b;
+}
+.building-rack-slots {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 5px;
+}
+.building-rack-slots i {
+  height: 30px;
+  border: 1px solid #36442f;
+  border-radius: 3px;
+  background: repeating-linear-gradient(0deg, #263122 0 3px, #192117 3px 6px);
+}
+.building-rack-slots i.filled {
+  border-color: #8baa6e;
+  background: repeating-linear-gradient(0deg, #91ad69 0 3px, #334529 3px 6px);
+}
+.building-quote {
+  margin-top: 24px;
+  padding-top: 22px;
+  border-top: 1px solid #33412b;
+}
+.building-quote > strong {
+  display: block;
+  color: #d8edbf;
+  font: 18px var(--mono);
+}
+.building-quote > strong > span {
+  color: #a7b498;
+  font-size: 13px;
+}
+.building-quote p {
+  max-width: 800px;
+  color: #a0ae97;
+  line-height: 1.7;
+  font-size: 12px;
+}
+.building-quote [data-hw-reason] {
+  display: block;
+  color: #d1b479;
+  margin-top: 10px;
+  min-height: 1.5em;
+}
+.building-capacity-note {
+  color: #c0d69d;
+  margin-top: 24px;
+}
+.building-service-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+  margin-top: 24px;
+}
+.building-service {
+  padding: 20px;
+  border: 1px solid #35412d;
+  border-radius: 12px;
+}
+.building-service h3 {
+  margin: 16px 0;
+}
+.building-service .building-quote {
+  border-top: 0;
+  padding-top: 0;
+  margin-top: 0;
+}
+.building-service .building-quote > strong {
+  font-size: 15px;
+}
+.building-service .building-quote > strong > span {
+  display: block;
+  margin-top: 8px;
+}
+.building-excavation {
+  background: linear-gradient(135deg, #24251c, #171e17);
+}
+.building-excavation h2 {
+  margin-top: 10px;
+}
+.hardware-empty-room {
+  padding: 48px 24px;
+  text-align: center;
+  min-height: 300px;
+}
+.hardware-empty-room p {
+  color: #a0ae97;
+  line-height: 1.7;
+}
+.hardware-empty-room > .icon {
+  width: 64px;
+  height: 64px;
+  color: #78965d;
+}
+.hardware-empty-room .button {
+  margin: 16px 6px;
+}
+.hardware-consequences {
+  color: #bac99f;
+  text-align: left;
+  padding-left: 20px;
+  line-height: 1.8;
+  font-size: 12px;
+}
+@media (max-width: 1250px) {
+  .building-plots,
+  .building-service-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .building-section-heading {
+    flex-wrap: wrap;
+  }
+}
+@media (max-width: 650px) {
+  .building-plots,
+  .building-service-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .building-project {
+    grid-template-columns: 1fr;
+  }
+  .building-project-time {
+    align-items: flex-start;
+  }
+  .building-section-heading {
+    align-items: flex-start;
+  }
+}

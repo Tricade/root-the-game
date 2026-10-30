@@ -2,13 +2,18 @@
 
 The application uses Node.js built-ins and vendored browser modules. No `npm install` is needed to run it or execute the Node tests.
 
-| Component | Checked version | Scope |
-| --- | --- | --- |
-| Node.js | 24.22.1 | Server, Node tests and furniture generator |
-| Three.js | 0.186.1 | Local browser rendering and geometry tools |
-| CPython | 3.12.14 | Optional base/facility generation |
-| NumPy | 2.5.4 | Optional procedural geometry/textures |
-| Pillow | 13.0.0 | Optional base texture generation |
+| Component           | Checked version  | Scope                                             |
+| ------------------- | ---------------- | ------------------------------------------------- |
+| Node.js             | 24.22.1          | Server, Node tests and furniture generator        |
+| Three.js            | 0.186.1          | Local browser rendering and geometry tools        |
+| CPython             | 3.12.14          | Optional base/facility generation                 |
+| NumPy               | 2.5.4            | Optional procedural geometry/textures             |
+| Pillow              | 13.0.0           | Optional base texture generation                  |
+| ESLint / @eslint/js | 10.14.0 / 10.0.1 | Development-only static checks                    |
+| globals             | 17.13.0          | Development-only browser/Node global declarations |
+| Prettier            | 3.9.10           | Development-only formatting                       |
+
+Development dependencies are pinned in `package-lock.json` and installed with `npm ci --ignore-scripts`. They are not loaded by the application. Node 24.22.1 meets ESLint 10.14.0's `^20.19.0 || ^22.13.0 || >=24` requirement. Flat configuration follows the [exact ESLint 10.14.0 documentation](https://github.com/eslint/eslint/blob/v10.14.0/docs/src/use/configure/configuration-files.md); formatting follows the [Prettier 3.9.10 configuration documentation](https://github.com/prettier/prettier/blob/3.9.10/docs/configuration.md). CommonJS/native-module compatibility is checked against [Node 24.22.1 modules](https://github.com/nodejs/node/blob/v24.22.1/doc/api/modules.md). Lint and parser success alone are not browser compatibility evidence.
 
 ## Three.js source
 

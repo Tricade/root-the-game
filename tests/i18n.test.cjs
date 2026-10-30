@@ -3,14 +3,22 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const I18N = require('../i18n.js');
 
-test('facility counts use correct singulars and section names without changing standalone names',()=>{
-  for(const [source,expected] of [
-    ['1 Racks · 1 Server','1 rack · 1 server'],['2 Racks · 0 Server','2 racks · 0 servers'],
-    ['Rackdetails · 1 Server','Rack details · 1 server'],['1 Server · 22.0 °C','1 server · 22.0 °C'],
-    ['Backups & Betrieb','Operations & Resilience'],['von','von'],
-    ['KI-Workload','AI workload'],['50 % erledigt','50% complete'],
-    ['Die laufende Infrastrukturmaßnahme muss zuerst abgeschlossen werden.','The current infrastructure operation must finish first.']
-  ])assert.equal(I18N.translate(source,'en'),expected);
+test('facility counts use correct singulars and section names without changing standalone names', () => {
+  for (const [source, expected] of [
+    ['1 Racks · 1 Server', '1 rack · 1 server'],
+    ['2 Racks · 0 Server', '2 racks · 0 servers'],
+    ['Rackdetails · 1 Server', 'Rack details · 1 server'],
+    ['1 Server · 22.0 °C', '1 server · 22.0 °C'],
+    ['Backups & Betrieb', 'Operations & Resilience'],
+    ['von', 'von'],
+    ['KI-Workload', 'AI workload'],
+    ['50 % erledigt', '50% complete'],
+    [
+      'Die laufende Infrastrukturmaßnahme muss zuerst abgeschlossen werden.',
+      'The current infrastructure operation must finish first.',
+    ],
+  ])
+    assert.equal(I18N.translate(source, 'en'), expected);
 });
 
 test('German remains the default and English translates known phrases while preserving unknown text', () => {
@@ -20,12 +28,42 @@ test('German remains the default and English translates known phrases while pres
   assert.equal(I18N.translate('Ari-1'), 'Ari-1');
   assert.equal(I18N.translate('42 % erledigt', 'en'), '42% complete');
   assert.equal(I18N.translate('Etage 3 · Raum 2', 'en'), 'Basement 3 · Room 2');
-  assert.equal(I18N.translate('While this server is fictional', 'en'), 'While this server is fictional');
-  assert.equal(I18N.translate('Die Temperaturgrenze wurde überschritten. Betroffene Knoten wurden zum Schutz vor Folgeschäden abgeschaltet.', 'en'), 'The temperature limit was exceeded. Affected nodes were shut down to prevent further damage.');
-  assert.equal(I18N.translate('17 Credits und 30 Sekunden mit halbiertem Auftragsdurchsatz; speichert 9.0 Forschung und 2 aktive Aufträge. Kein Datenverlust.', 'en'), '17 credits and 30 seconds at half job throughput; saves 9.0 research and 2 active jobs. No data is lost.');
-  assert.equal(I18N.translate('Rack A mit Switch, Stromversorgung und Kühlung installiert.', 'en'), 'Rack A installed with a switch, power supply, and cooling.');
-  assert.equal(I18N.translate('Während deiner Abwesenheit hat ROOT 2 Stunden weitergearbeitet. Berücksichtigt wurden maximal 12 Stunden.', 'en'), 'While you were away, ROOT continued working for 2 hours. A maximum of 12 hours was included.');
-  assert.equal(I18N.translate('Leitet die betroffenen Knoten zurück auf einen sicheren Betriebsmodus. 150 Credits, 0 Ersatzteile und 90 Sekunden Krisenbetrieb. Zustand der betroffenen Knoten danach 64%. Verlust: 1.5 Arbeitseinheiten.', 'en'), 'Returns the affected nodes to a safe operating mode. 150 credits, 0 spare parts, and 90 seconds of crisis response. Affected nodes will be at 64% condition afterward. Loss: 1.5 work units.');
+  assert.equal(
+    I18N.translate('While this server is fictional', 'en'),
+    'While this server is fictional',
+  );
+  assert.equal(
+    I18N.translate(
+      'Die Temperaturgrenze wurde überschritten. Betroffene Knoten wurden zum Schutz vor Folgeschäden abgeschaltet.',
+      'en',
+    ),
+    'The temperature limit was exceeded. Affected nodes were shut down to prevent further damage.',
+  );
+  assert.equal(
+    I18N.translate(
+      '17 Credits und 30 Sekunden mit halbiertem Auftragsdurchsatz; speichert 9.0 Forschung und 2 aktive Aufträge. Kein Datenverlust.',
+      'en',
+    ),
+    '17 credits and 30 seconds at half job throughput; saves 9.0 research and 2 active jobs. No data is lost.',
+  );
+  assert.equal(
+    I18N.translate('Rack A mit Switch, Stromversorgung und Kühlung installiert.', 'en'),
+    'Rack A installed with a switch, power supply, and cooling.',
+  );
+  assert.equal(
+    I18N.translate(
+      'Während deiner Abwesenheit hat ROOT 2 Stunden weitergearbeitet. Berücksichtigt wurden maximal 12 Stunden.',
+      'en',
+    ),
+    'While you were away, ROOT continued working for 2 hours. A maximum of 12 hours was included.',
+  );
+  assert.equal(
+    I18N.translate(
+      'Leitet die betroffenen Knoten zurück auf einen sicheren Betriebsmodus. 150 Credits, 0 Ersatzteile und 90 Sekunden Krisenbetrieb. Zustand der betroffenen Knoten danach 64%. Verlust: 1.5 Arbeitseinheiten.',
+      'en',
+    ),
+    'Returns the affected nodes to a safe operating mode. 150 credits, 0 spare parts, and 90 seconds of crisis response. Affected nodes will be at 64% condition afterward. Loss: 1.5 work units.',
+  );
   assert.equal(I18N.translate('Gebäudetechnik', 'en'), 'Building systems');
   assert.equal(I18N.translate('2 frei   /   1 im Einsatz', 'en'), '2 free / 1 on assignment');
   assert.equal(I18N.translate('3 Entscheidungen', 'en'), '3 decisions');
@@ -34,22 +72,51 @@ test('German remains the default and English translates known phrases while pres
   assert.equal(I18N.translate('Bunker betreten', 'en'), 'Enter bunker');
   assert.equal(I18N.translate('Etage 2 · Raum 3', 'en'), 'Basement 2 · Room 3');
   assert.equal(I18N.translate('Rack 01 · E: Tür öffnen', 'en'), 'Rack 01 · E: Open door');
-  for(const [source,expected] of [
-    ['9 Server · 16 / 16 RU','9 servers · 16 / 16 RU'],['1 Server · 1 / 16 RU','1 server · 1 / 16 RU'],
-    ['100% der Anforderung','100% of required capacity'],['der Anforderung','of required capacity'],
-    ['Kühlung von Keller-Rack A verwalten','Manage cooling for Keller-Rack A'],['Stromversorgung von Rack 01 verwalten','Manage power supply for Rack 01'],
-    ['Switch in Rack 01 verwalten','Manage switch in Rack 01'],['Port 10, frei','Port 10, free'],
-    ['Rack verwalten','Manage rack'],['Versorgung & Verbindung','Utilities & connectivity'],['Strombudget','Power budget'],
-    ['RECHENZENTRUM / RACK','DATA CENTER / RACK'],['19 Zoll','19 in'],
-    ['Mein Knoten, ROOT R120, 1 Höheneinheiten, Online','Mein Knoten, ROOT R120, 1 rack unit, Online']
-  ])assert.equal(I18N.translate(source,'en'),expected);
+  for (const [source, expected] of [
+    ['9 Server · 16 / 16 RU', '9 servers · 16 / 16 RU'],
+    ['1 Server · 1 / 16 RU', '1 server · 1 / 16 RU'],
+    ['100% der Anforderung', '100% of required capacity'],
+    ['der Anforderung', 'of required capacity'],
+    ['Kühlung von Keller-Rack A verwalten', 'Manage cooling for Keller-Rack A'],
+    ['Stromversorgung von Rack 01 verwalten', 'Manage power supply for Rack 01'],
+    ['Switch in Rack 01 verwalten', 'Manage switch in Rack 01'],
+    ['Port 10, frei', 'Port 10, free'],
+    ['Rack verwalten', 'Manage rack'],
+    ['Versorgung & Verbindung', 'Utilities & connectivity'],
+    ['Strombudget', 'Power budget'],
+    ['RECHENZENTRUM / RACK', 'DATA CENTER / RACK'],
+    ['19 Zoll', '19 in'],
+    [
+      'Mein Knoten, ROOT R120, 1 Höheneinheiten, Online',
+      'Mein Knoten, ROOT R120, 1 rack unit, Online',
+    ],
+  ])
+    assert.equal(I18N.translate(source, 'en'), expected);
   assert.equal(I18N.translate('Server 03', 'en'), 'Server 03');
-  assert.equal(I18N.translate('Rack 01 · Online · E / Klick: Server verwalten', 'en'), 'Rack 01 · Online · E / click: manage server');
-  assert.equal(I18N.translate('3450 Credits; 120 Sekunden Wartung. 3500 W zusätzliche Kühlleistung, auf aktive Racks verteilt.', 'en'), '3450 credits; 120 seconds of maintenance. 3500 W of additional cooling capacity, distributed across active racks.');
-  assert.equal(I18N.translate('Agenten: Mira: Netzdiagnose · 30 min · Tarek: Forschungsauftrag · 2 h · pausiert', 'en'), 'Agents: Mira: Network diagnostics · 30 min · Tarek: Research assignment · 2 h · paused');
+  assert.equal(
+    I18N.translate('Rack 01 · Online · E / Klick: Server verwalten', 'en'),
+    'Rack 01 · Online · E / click: manage server',
+  );
+  assert.equal(
+    I18N.translate(
+      '3450 Credits; 120 Sekunden Wartung. 3500 W zusätzliche Kühlleistung, auf aktive Racks verteilt.',
+      'en',
+    ),
+    '3450 credits; 120 seconds of maintenance. 3500 W of additional cooling capacity, distributed across active racks.',
+  );
+  assert.equal(
+    I18N.translate(
+      'Agenten: Mira: Netzdiagnose · 30 min · Tarek: Forschungsauftrag · 2 h · pausiert',
+      'en',
+    ),
+    'Agents: Mira: Network diagnostics · 30 min · Tarek: Research assignment · 2 h · paused',
+  );
   assert.equal(I18N.translate('Etage 2', 'en'), 'Basement 2');
   assert.equal(I18N.translate('Stufe 2 / 5', 'en'), 'Level 2 / 5');
-  assert.equal(I18N.translate('Rack 01 · 41,2 °C · E / Klick: Rack verwalten', 'en'), 'Rack 01 · 41.2 °C · E / click: manage rack');
+  assert.equal(
+    I18N.translate('Rack 01 · 41,2 °C · E / Klick: Rack verwalten', 'en'),
+    'Rack 01 · 41.2 °C · E / click: manage rack',
+  );
   for (const [source, expected] of [
     ['Sektor 30 · Lokales Netzwerk', 'Sector 30 · Local network'],
     ['Sektor 31 wartet.', 'Sector 31 is waiting.'],
@@ -67,8 +134,14 @@ test('German remains the default and English translates known phrases while pres
     ['höchste Racktemperatur', 'Highest rack temperature'],
     ['3 OFFEN', '3 OPEN'],
     ['Abweichende Browserkopie exportieren', 'Export alternate browser copy'],
-    ['Eine andere Browser-Sitzung hat einen neueren Stand gespeichert. Diese Sitzung pausiert. Lade die Seite neu; deine abweichende Kopie bleibt in den Einstellungen exportierbar.', 'Another browser session saved a newer version. This session is paused. Reload the page; your alternate copy remains available to export in Settings.'],
-    ['Der Netzwerkstand ist zu groß. Maximal 16 MiB.', 'The network save is too large. Maximum size: 16 MiB.'],
+    [
+      'Eine andere Browser-Sitzung hat einen neueren Stand gespeichert. Diese Sitzung pausiert. Lade die Seite neu; deine abweichende Kopie bleibt in den Einstellungen exportierbar.',
+      'Another browser session saved a newer version. This session is paused. Reload the page; your alternate copy remains available to export in Settings.',
+    ],
+    [
+      'Der Netzwerkstand ist zu groß. Maximal 16 MiB.',
+      'The network save is too large. Maximum size: 16 MiB.',
+    ],
     ['Einfahrt beim Start anzeigen', 'Show arrival sequence at startup'],
     ['Einfahrt ansehen', 'Replay arrival sequence'],
     ['Racks gesamt', 'Total racks'],
@@ -95,18 +168,40 @@ test('German remains the default and English translates known phrases while pres
     [' von ', ' von '],
     ['MASSNAHMEN', 'ACTIONS'],
     ['Überspringen · Esc', 'Skip · Esc'],
-    ['Die Leitstelle bündelt alle Systeme. Der Ausgang führt zurück in den Verbindungsflur.', 'The control room brings all systems together. The exit leads back to the connecting corridor.'],
-    ['Öffne eine Tür mit E oder einem Klick und gehe hindurch. Die Treppen verbinden vorhandene Untergeschosse.', 'Press E or click a door to open it and walk through. The stairs connect existing basements.'],
+    [
+      'Die Leitstelle bündelt alle Systeme. Der Ausgang führt zurück in den Verbindungsflur.',
+      'The control room brings all systems together. The exit leads back to the connecting corridor.',
+    ],
+    [
+      'Öffne eine Tür mit E oder einem Klick und gehe hindurch. Die Treppen verbinden vorhandene Untergeschosse.',
+      'Press E or click a door to open it and walk through. The stairs connect existing basements.',
+    ],
     ['Ungültiger Netzwerkstand: Unexpected token', 'Invalid network state: Unexpected token'],
     ['Untergeschoss 2 · Raum 5 · 1 Racks', 'Basement 2 · Room 5 · 1 rack'],
-    ['Kühlung ausbauen in Rack 03 completed. Power and connections are available again.', 'Upgrade cooling in Rack 03 completed. Power and connections are available again.'],
-    ['KI-Inferenz auswerten for Institut für angewandte KI completed: 11839 credits.', 'Evaluate AI inference for Institut für angewandte KI completed: 11839 credits.'],
+    [
+      'Kühlung ausbauen in Rack 03 completed. Power and connections are available again.',
+      'Upgrade cooling in Rack 03 completed. Power and connections are available again.',
+    ],
+    [
+      'KI-Inferenz auswerten for Institut für angewandte KI completed: 11839 credits.',
+      'Evaluate AI inference for Institut für angewandte KI completed: 11839 credits.',
+    ],
     ['Hanseatische Werkstätten', 'Hanseatische Werkstätten'],
-    ['Operator · Hält Aufträge am Laufen und steigert die Netzwerkerlöse.', 'Operator · Keeps jobs running and increases network revenue.'],
-    ['Kühlung ausbauen in Rack 03 abgeschlossen. Versorgung und Verbindungen sind wieder verfügbar.', 'Upgrade cooling in Rack 03 completed. Power and connections are available again.'],
-    ['Kühlung ausbauen begonnen: Rack 03; 4176 Credits und 90 Sekunden Wartung.', 'Upgrade cooling started: Rack 03; 4176 credits and 90 seconds of maintenance.'],
+    [
+      'Operator · Hält Aufträge am Laufen und steigert die Netzwerkerlöse.',
+      'Operator · Keeps jobs running and increases network revenue.',
+    ],
+    [
+      'Kühlung ausbauen in Rack 03 abgeschlossen. Versorgung und Verbindungen sind wieder verfügbar.',
+      'Upgrade cooling in Rack 03 completed. Power and connections are available again.',
+    ],
+    [
+      'Kühlung ausbauen begonnen: Rack 03; 4176 Credits und 90 Sekunden Wartung.',
+      'Upgrade cooling started: Rack 03; 4176 credits and 90 seconds of maintenance.',
+    ],
     ['KI-Beschleuniger 18 wurde ausgeschaltet.', 'KI-Beschleuniger 18 was powered off.'],
-  ]) assert.equal(I18N.translate(source, 'en'), expected, source);
+  ])
+    assert.equal(I18N.translate(source, 'en'), expected, source);
 });
 
 test('localization installation is safe without a browser DOM', () => {
@@ -118,47 +213,105 @@ test('localization installation is safe without a browser DOM', () => {
 });
 
 test('DOM localization restores German source text and attributes across language switches', () => {
-  const saved = Object.fromEntries(['document', 'MutationObserver', 'NodeFilter', 'requestAnimationFrame', 'cancelAnimationFrame', 'localStorage'].map(key => [key, Object.getOwnPropertyDescriptor(globalThis, key)]));
+  const saved = Object.fromEntries(
+    [
+      'document',
+      'MutationObserver',
+      'NodeFilter',
+      'requestAnimationFrame',
+      'cancelAnimationFrame',
+      'localStorage',
+    ].map((key) => [key, Object.getOwnPropertyDescriptor(globalThis, key)]),
+  );
   const frames = [];
   let observer;
   class TextNode {
-    constructor(data, parentElement) { this.nodeType = 3; this.data = data; this.parentElement = parentElement; }
+    constructor(data, parentElement) {
+      this.nodeType = 3;
+      this.data = data;
+      this.parentElement = parentElement;
+    }
   }
   class Element {
-    constructor(tagName, attrs = {}) { this.nodeType = 1; this.tagName = tagName.toUpperCase(); this.attrs = new Map(Object.entries(attrs)); this.children = []; this.parentElement = null; this.value = ''; }
-    append(child) { child.parentElement = this; this.children.push(child); }
-    hasAttribute(name) { return this.attrs.has(name); }
-    getAttribute(name) { return this.attrs.has(name) ? this.attrs.get(name) : null; }
-    setAttribute(name, value) { this.attrs.set(name, value); }
+    constructor(tagName, attrs = {}) {
+      this.nodeType = 1;
+      this.tagName = tagName.toUpperCase();
+      this.attrs = new Map(Object.entries(attrs));
+      this.children = [];
+      this.parentElement = null;
+      this.value = '';
+    }
+    append(child) {
+      child.parentElement = this;
+      this.children.push(child);
+    }
+    hasAttribute(name) {
+      return this.attrs.has(name);
+    }
+    getAttribute(name) {
+      return this.attrs.has(name) ? this.attrs.get(name) : null;
+    }
+    setAttribute(name, value) {
+      this.attrs.set(name, value);
+    }
   }
   const rootElement = new Element('html');
-  const button = new Element('button', { title: 'Einstellungen öffnen', 'aria-label': 'Navigation öffnen' });
+  const button = new Element('button', {
+    title: 'Einstellungen öffnen',
+    'aria-label': 'Navigation öffnen',
+  });
   const label = new TextNode('Einstellungen', button);
-  button.append(label); rootElement.append(button);
+  button.append(label);
+  rootElement.append(button);
   const input = new Element('input', { placeholder: 'Netzwerkname', 'aria-label': 'Netzwerkname' });
-  input.value = 'Mein Netzwerk'; rootElement.append(input);
-  const protectedName = new TextNode('Mira', rootElement); rootElement.append(protectedName);
-  globalThis.document = { documentElement: rootElement, createTreeWalker(rootNode) {
-    const all = [];
-    const walk = node => { for (const child of node.children || []) { all.push(child); walk(child); } };
-    walk(rootNode);
-    let index = 0;
-    return { nextNode: () => all[index++] || null };
-  } };
+  input.value = 'Mein Netzwerk';
+  rootElement.append(input);
+  const protectedName = new TextNode('Mira', rootElement);
+  rootElement.append(protectedName);
+  globalThis.document = {
+    documentElement: rootElement,
+    createTreeWalker(rootNode) {
+      const all = [];
+      const walk = (node) => {
+        for (const child of node.children || []) {
+          all.push(child);
+          walk(child);
+        }
+      };
+      walk(rootNode);
+      let index = 0;
+      return { nextNode: () => all[index++] || null };
+    },
+  };
   globalThis.NodeFilter = { SHOW_ELEMENT: 1, SHOW_TEXT: 4 };
-  globalThis.requestAnimationFrame = callback => { frames.push(callback); return frames.length; };
+  globalThis.requestAnimationFrame = (callback) => {
+    frames.push(callback);
+    return frames.length;
+  };
   globalThis.cancelAnimationFrame = () => {};
-  globalThis.MutationObserver = class { constructor(callback) { this.callback = callback; observer = this; } observe() {} disconnect() {} };
+  globalThis.MutationObserver = class {
+    constructor(callback) {
+      this.callback = callback;
+      observer = this;
+    }
+    observe() {}
+    disconnect() {}
+  };
   const savedLanguages = new Map();
-  globalThis.localStorage = { getItem: key => savedLanguages.get(key) ?? null, setItem: (key, value) => savedLanguages.set(key, value) };
-  const flush = () => { while (frames.length) frames.shift()(); };
+  globalThis.localStorage = {
+    getItem: (key) => savedLanguages.get(key) ?? null,
+    setItem: (key, value) => savedLanguages.set(key, value),
+  };
+  const flush = () => {
+    while (frames.length) frames.shift()();
+  };
   try {
     const localization = I18N.installLocalization({ getProtectedText: () => new Set(['Mira']) });
     flush();
     assert.equal(label.data, 'Einstellungen');
     I18N.setLanguage('en');
     I18N.localize(rootElement);
-    assert.equal(label.data,'Settings','a new view is localized before the next animation frame');
+    assert.equal(label.data, 'Settings', 'a new view is localized before the next animation frame');
     flush();
     assert.equal(label.data, 'Settings');
     assert.equal(button.getAttribute('title'), 'Open settings');
@@ -166,7 +319,8 @@ test('DOM localization restores German source text and attributes across languag
     assert.equal(input.getAttribute('placeholder'), 'Network name');
     assert.equal(input.value, 'Mein Netzwerk');
     assert.equal(protectedName.data, 'Mira');
-    I18N.setLanguage('de'); flush();
+    I18N.setLanguage('de');
+    flush();
     assert.equal(label.data, 'Einstellungen');
     assert.equal(button.getAttribute('title'), 'Einstellungen öffnen');
     assert.equal(input.getAttribute('placeholder'), 'Netzwerkname');
@@ -183,7 +337,10 @@ test('DOM localization restores German source text and attributes across languag
 test('language choice is stored separately under root.language and normalizes unsupported values', () => {
   const original = globalThis.localStorage;
   const values = new Map();
-  globalThis.localStorage = { getItem: key => values.get(key) ?? null, setItem: (key, value) => values.set(key, value) };
+  globalThis.localStorage = {
+    getItem: (key) => values.get(key) ?? null,
+    setItem: (key, value) => values.set(key, value),
+  };
   try {
     assert.equal(I18N.setLanguage('en'), 'en');
     assert.equal(values.get('root.language'), 'en');

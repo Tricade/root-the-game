@@ -11,50 +11,8 @@ const DATA_DIR = path.resolve(process.env.ROOT_DATA_DIR || path.join(ROOT, 'data
 const API_VERSION = 3;
 const RELEASE = '1.4.0';
 const MAX_BODY = 16 * 1024 * 1024;
-const FILES = new Map([
-  ['/', ['index.html', 'text/html; charset=utf-8']],
-  ['/index.html', ['index.html', 'text/html; charset=utf-8']],
-  ['/styles.css', ['styles.css', 'text/css; charset=utf-8']],
-  ['/racks.css', ['racks.css', 'text/css; charset=utf-8']],
-  ['/app.js', ['app.js', 'text/javascript; charset=utf-8']],
-  ['/i18n.js', ['i18n.js', 'text/javascript; charset=utf-8']],
-  ['/rack-ui.js', ['rack-ui.js', 'text/javascript; charset=utf-8']],
-  ['/room.js', ['room.js', 'text/javascript; charset=utf-8']],
-  ['/room-stations.js', ['room-stations.js', 'text/javascript; charset=utf-8']],
-  ['/room-lounge.js', ['room-lounge.js', 'text/javascript; charset=utf-8']],
-  ['/room-assets.js', ['room-assets.js', 'text/javascript; charset=utf-8']],
-  ['/room-facility.js', ['room-facility.js', 'text/javascript; charset=utf-8']],
-  ['/room-instruments.js', ['room-instruments.js', 'text/javascript; charset=utf-8']],
-  ['/room-arrival.js', ['room-arrival.js', 'text/javascript; charset=utf-8']],
-  ['/room-surfaces.js', ['room-surfaces.js', 'text/javascript; charset=utf-8']],
-  ['/room.css', ['room.css', 'text/css; charset=utf-8']],
-  ['/facility.css', ['facility.css', 'text/css; charset=utf-8']],
-  ['/vendor/three.module.js', ['vendor/three.module.js', 'text/javascript; charset=utf-8']],
-  ['/vendor/three.core.js', ['vendor/three.core.js', 'text/javascript; charset=utf-8']],
-  ['/vendor/RoomEnvironment.js', ['vendor/RoomEnvironment.js', 'text/javascript; charset=utf-8']],
-  ['/vendor/RoundedBoxGeometry.js', ['vendor/RoundedBoxGeometry.js', 'text/javascript; charset=utf-8']],
-  ['/vendor/GLTFLoader.js', ['vendor/GLTFLoader.js', 'text/javascript; charset=utf-8']],
-  ['/vendor/BufferGeometryUtils.js', ['vendor/BufferGeometryUtils.js', 'text/javascript; charset=utf-8']],
-  ['/vendor/SkeletonUtils.js', ['vendor/SkeletonUtils.js', 'text/javascript; charset=utf-8']],
-  ['/engine.js', ['engine.js', 'text/javascript; charset=utf-8']],
-  ['/favicon.svg', ['favicon.svg', 'image/svg+xml']],
-]);
-
-// Only bundled model/image files are public. Saves, source, scripts and licences stay private.
-function registerAssetFiles(relative) {
-  const folder=path.join(ROOT,relative);
-  if(!fs.existsSync(folder))return;
-  for(const entry of fs.readdirSync(folder,{withFileTypes:true})) {
-    const name=relative+'/'+entry.name;
-    if(entry.isDirectory())registerAssetFiles(name);
-    else if(entry.isFile() && /\.(glb|png|jpg)$/.test(entry.name)) {
-      const type=entry.name.endsWith('.glb')?'model/gltf-binary':entry.name.endsWith('.png')?'image/png':'image/jpeg';
-      FILES.set('/'+name,[name,type]);
-    }
-  }
-}
-registerAssetFiles('asset-pack/assets');
-registerAssetFiles('asset-pack/textures');
+const { createStaticFiles } = require('./server/static-files.cjs');
+const FILES = createStaticFiles(ROOT);
 
 let writeQueue = Promise.resolve();
 let cachedEngine;
@@ -73,7 +31,8 @@ function getEngine() {
 function send(res, status, value, headers = {}) {
   const body = Buffer.from(typeof value === 'string' ? value : JSON.stringify(value));
   res.writeHead(status, {
-    'Content-Type': typeof value === 'string' ? 'text/plain; charset=utf-8' : 'application/json; charset=utf-8',
+    'Content-Type':
+      typeof value === 'string' ? 'text/plain; charset=utf-8' : 'application/json; charset=utf-8',
     'Content-Length': body.length,
     'Cache-Control': 'no-store, no-cache, must-revalidate',
     'X-Content-Type-Options': 'nosniff',
@@ -153,7 +112,9 @@ function isValidStoredSave(text) {
     const engine = getEngine();
     if (!engine) return false;
     const save = engine.normalizeState(parsed);
-    return Boolean(save && save.version === API_VERSION && typeof save === 'object' && !Array.isArray(save));
+    return Boolean(
+      save && save.version === API_VERSION && typeof save === 'object' && !Array.isArray(save),
+    );
   } catch {
     return false;
   }
@@ -171,14 +132,18 @@ async function readSave(dataDir = DATA_DIR) {
       const engine = getEngine();
       if (!engine) throw new Error('Die Datenstruktur kann ohne engine.js nicht geprüft werden.');
       const save = engine.normalizeState(parsed);
-      if (!save || save.version !== API_VERSION) throw new Error('Nicht unterstützte Netzwerkstand-Version.');
+      if (!save || save.version !== API_VERSION)
+        throw new Error('Nicht unterstützte Netzwerkstand-Version.');
       return { save, revision: revisionForSave(save) };
     } catch (error) {
       if (error.code === 'ENOENT') continue;
       foundDamagedCopy = true;
     }
   }
-  if (foundDamagedCopy) throw new Error('Netzwerkstand und Sicherungskopie sind beschädigt. Bitte prüfe data/save.json und data/save.backup.json.');
+  if (foundDamagedCopy)
+    throw new Error(
+      'Netzwerkstand und Sicherungskopie sind beschädigt. Bitte prüfe data/save.json und data/save.backup.json.',
+    );
   return { save: null, revision: 'empty' };
 }
 
@@ -189,7 +154,8 @@ function sameOrigin(req) {
     try {
       const parsed = new URL(origin);
       if (parsed.hostname !== '127.0.0.1' && parsed.hostname !== 'localhost') return false;
-      if (Number(parsed.port || (parsed.protocol === 'https:' ? 443 : 80)) !== localPort) return false;
+      if (Number(parsed.port || (parsed.protocol === 'https:' ? 443 : 80)) !== localPort)
+        return false;
       if (parsed.protocol !== 'http:') return false;
     } catch {
       return false;
@@ -214,7 +180,12 @@ function createServer(options = {}) {
 
     if (pathname === '/api/health') {
       if (req.method !== 'GET') return jsonError(res, 405, 'Methode nicht erlaubt.');
-      return send(res, 200, { app: 'ROOT', version: API_VERSION, release: RELEASE }, { 'Cache-Control': 'no-store' });
+      return send(
+        res,
+        200,
+        { app: 'ROOT', version: API_VERSION, release: RELEASE },
+        { 'Cache-Control': 'no-store' },
+      );
     }
 
     if (pathname === '/api/save' && req.method === 'GET') {
@@ -238,38 +209,60 @@ function createServer(options = {}) {
       try {
         const text = await readBody(req);
         const parsed = JSON.parse(text);
-        if (parsed && typeof parsed === 'object' && !Array.isArray(parsed) && (parsed.version === 1 || parsed.version === 2)) {
+        if (
+          parsed &&
+          typeof parsed === 'object' &&
+          !Array.isArray(parsed) &&
+          (parsed.version === 1 || parsed.version === 2)
+        ) {
           return send(res, 409, {
             ok: false,
             updateRequired: true,
-            error: 'Diese Oberfläche stammt aus einer älteren Version. Lade sie neu, bevor du fortfährst.',
+            error:
+              'Diese Oberfläche stammt aus einer älteren Version. Lade sie neu, bevor du fortfährst.',
           });
         }
         // API v3 remains read-compatible: normalizeState can still migrate old v3
         // saves for GET/import. Writes require the 1.4 central-facility capability,
         // because normalization would otherwise default omitted systems to zero and
         // let an older cached client erase newer facility upgrades.
-        if (parsed && typeof parsed === 'object' && !Array.isArray(parsed) && parsed.version === 3) {
+        if (
+          parsed &&
+          typeof parsed === 'object' &&
+          !Array.isArray(parsed) &&
+          parsed.version === 3
+        ) {
           const facility = parsed.facility;
-          if (!facility || typeof facility !== 'object' || Array.isArray(facility) || !Object.hasOwn(facility, 'central') || !Object.hasOwn(facility, 'centralOperation')) {
+          if (
+            !facility ||
+            typeof facility !== 'object' ||
+            Array.isArray(facility) ||
+            !Object.hasOwn(facility, 'central') ||
+            !Object.hasOwn(facility, 'centralOperation') ||
+            !Object.hasOwn(facility, 'building')
+          ) {
             return send(res, 409, {
               ok: false,
               updateRequired: true,
-              error: 'Diese Oberfläche stammt aus einer älteren Version. Lade sie neu, bevor du fortfährst.',
+              error:
+                'Diese Oberfläche stammt aus einer älteren Version. Lade sie neu, bevor du fortfährst.',
             });
           }
         }
         const engine = getEngine();
         if (!engine) throw new Error('Die Datenstruktur kann ohne engine.js nicht geprüft werden.');
         const normalized = engine.normalizeState(parsed);
-        if (normalized.version !== API_VERSION) throw new Error('Nicht unterstützte Netzwerkstand-Version.');
+        if (normalized.version !== API_VERSION)
+          throw new Error('Nicht unterstützte Netzwerkstand-Version.');
         if (!normalized || typeof normalized !== 'object' || Array.isArray(normalized)) {
           throw new Error('Ungültiger Netzwerkstand.');
         }
         const expectedRevision = req.headers['x-root-revision'];
         const previousQueue = writeQueue;
         let release;
-        writeQueue = new Promise((resolve) => { release = resolve; });
+        writeQueue = new Promise((resolve) => {
+          release = resolve;
+        });
         await previousQueue;
         try {
           // Compare and write under the same queue lock. Checking before the lock
@@ -277,15 +270,30 @@ function createServer(options = {}) {
           if (expectedRevision !== undefined) {
             const current = await readSave(dataDir);
             if (current.revision !== expectedRevision) {
-              return send(res, 409, { conflict: true, message: 'Der Netzwerkstand wurde seit dem letzten Laden verändert. Lade ihn neu, bevor du erneut speicherst.' });
+              return send(res, 409, {
+                conflict: true,
+                message:
+                  'Der Netzwerkstand wurde seit dem letzten Laden verändert. Lade ihn neu, bevor du erneut speicherst.',
+              });
             }
           }
           await persist(normalized, dataDir);
           const revision = revisionForSave(normalized);
-          return send(res, 200, expectedRevision === undefined ? { ok: true } : { ok: true, revision }, { 'X-Root-Revision': revision });
-        } finally { release(); }
+          return send(
+            res,
+            200,
+            expectedRevision === undefined ? { ok: true } : { ok: true, revision },
+            { 'X-Root-Revision': revision },
+          );
+        } finally {
+          release();
+        }
       } catch (error) {
-        return jsonError(res, error.status || 400, error.message || 'Netzwerkstand konnte nicht gespeichert werden.');
+        return jsonError(
+          res,
+          error.status || 400,
+          error.message || 'Netzwerkstand konnte nicht gespeichert werden.',
+        );
       }
     }
 
@@ -301,7 +309,8 @@ function createServer(options = {}) {
         'Content-Length': content.length,
         'Cache-Control': 'no-store, no-cache, must-revalidate',
         'X-Content-Type-Options': 'nosniff',
-        'Content-Security-Policy': "default-src 'self'; connect-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self'; object-src 'none'; base-uri 'none'",
+        'Content-Security-Policy':
+          "default-src 'self'; connect-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self'; object-src 'none'; base-uri 'none'",
       });
       return res.end(content);
     } catch {
@@ -317,9 +326,11 @@ function createServer(options = {}) {
 function start() {
   const server = createServer();
   server.on('error', (error) => {
-    console.error(error.code === 'EADDRINUSE'
-      ? `ROOT: Port ${PORT} wird bereits verwendet. Prüfe, ob ROOT schon läuft oder eine andere Anwendung diesen Port belegt.`
-      : `ROOT Serverfehler: ${error.message}`);
+    console.error(
+      error.code === 'EADDRINUSE'
+        ? `ROOT: Port ${PORT} wird bereits verwendet. Prüfe, ob ROOT schon läuft oder eine andere Anwendung diesen Port belegt.`
+        : `ROOT Serverfehler: ${error.message}`,
+    );
     process.exitCode = 1;
   });
   server.listen(PORT, '127.0.0.1', () => {
@@ -329,4 +340,12 @@ function start() {
 }
 
 if (require.main === module) start();
-module.exports = { createServer, start, port: PORT, dataDir: DATA_DIR, maxBody: MAX_BODY, apiVersion: API_VERSION, release: RELEASE };
+module.exports = {
+  createServer,
+  start,
+  port: PORT,
+  dataDir: DATA_DIR,
+  maxBody: MAX_BODY,
+  apiVersion: API_VERSION,
+  release: RELEASE,
+};

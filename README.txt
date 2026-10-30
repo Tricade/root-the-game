@@ -13,7 +13,12 @@ F5 behaelt Raum und Etage, im Ego-Modus auch Position und Blickrichtung.
 Intro einmal pro Browser-Tab; Einstellungen -> Einfahrt ansehen zum Wiederholen.
 
 Sechs Racks pro Raum, vier Serverraeume pro Untergeschoss.
+Start mit einem Serverraum und Flur. Weitere Raeume und Etagen einzeln bauen.
+Naechster Serverraum ab 20 Mio. Credits / 30 Minuten, Untergeschoss ab 500 Mio. / 2 Stunden.
+Kosten und Bauzeit steigen. Racks und Anlagen danach separat installieren.
+Bestehende Staende behalten ihre bisher zugaenglichen Flaechen.
 Zentrale Kuehlung ab Sektor 4, USV ab 6, Stromverteilung ab 8.
+Technikraeume muessen vorher gebaut werden.
 Alle Anlagen haben endliche Kapazitaeten und Betriebskosten.
 
 Sicherungen: data/save.json und data/save.backup.json.

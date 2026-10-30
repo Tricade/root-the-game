@@ -5,7 +5,7 @@ The published repository is a clean snapshot with its own history. Personal save
 ## Before publishing
 
 1. Update the clean `main` branch and confirm `git status --short` is empty.
-2. Run `npm test`. Review new tracked files, commit metadata, asset notices and screenshots for private data or unrecorded third-party content.
+2. Run `npm ci --ignore-scripts` and `npm run check`. Review new tracked files, commit metadata, asset notices and screenshots for private data or unrecorded third-party content.
 3. Create an empty GitHub repository with the desired owner and visibility. Leave automatic README/license initialization off, because those files are already present.
 4. Authenticate using your Git client or credential manager. Do not put a token in a remote URL, committed file or command example.
 

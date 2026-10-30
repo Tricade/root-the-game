@@ -1,0 +1,53 @@
+{
+  "package": "Supplied ROOT 3D Asset Package 1.0",
+  "sourceDirectory": "source/generator",
+  "notice": "../UPSTREAM_LICENSE.md",
+  "files": [
+    {
+      "file": "build_all.py",
+      "suppliedSHA256": "143fb4c9d01dd5cb650c007f8ced447d145fb4c84b21ea2bb59fe1ca8d7e458a",
+      "sha256": "143fb4c9d01dd5cb650c007f8ced447d145fb4c84b21ea2bb59fe1ca8d7e458a"
+    },
+    {
+      "file": "build_architecture_and_stations.py",
+      "suppliedSHA256": "4fde96a0d93bc0b7ddd69ea93fd76c3418f52e6c28124d3a900839c07675a831",
+      "sha256": "4fde96a0d93bc0b7ddd69ea93fd76c3418f52e6c28124d3a900839c07675a831"
+    },
+    {
+      "file": "build_example_scene.py",
+      "suppliedSHA256": "0e1d7dc5e9fcf5478b20f12ef2c5bcc7368f8d35e0e3e938d0be017b99919fe0",
+      "sha256": "0e1d7dc5e9fcf5478b20f12ef2c5bcc7368f8d35e0e3e938d0be017b99919fe0"
+    },
+    {
+      "file": "build_network_and_power.py",
+      "suppliedSHA256": "427d410b598a7aaaafcbe1fabe94dfd9cfae7cbdd6a785dbed3fa1f2fa94fcdb",
+      "sha256": "427d410b598a7aaaafcbe1fabe94dfd9cfae7cbdd6a785dbed3fa1f2fa94fcdb"
+    },
+    {
+      "file": "build_racks_and_servers.py",
+      "suppliedSHA256": "ed257f3e050bb71785c17c44b8f8b015c354ce030975836031a914cb18e43363",
+      "sha256": "ed257f3e050bb71785c17c44b8f8b015c354ce030975836031a914cb18e43363"
+    },
+    {
+      "file": "generate_docs.py",
+      "suppliedSHA256": "552d2938722f6bb2f00cb665787a1db90be438c3193369f963d4dc78d8990101",
+      "sha256": "552d2938722f6bb2f00cb665787a1db90be438c3193369f963d4dc78d8990101"
+    },
+    {
+      "file": "generate_textures.py",
+      "suppliedSHA256": "57b7422bfa7633b81d49ce2ccc015c7aab82d4ff1ee3280d41d52ac0837aa806",
+      "sha256": "57b7422bfa7633b81d49ce2ccc015c7aab82d4ff1ee3280d41d52ac0837aa806"
+    },
+    {
+      "file": "gltf_builder.py",
+      "suppliedSHA256": "d49a710ff2805a0b975ccfb574ad99bbb0acfb29f33b970a66b73d0c1696aa38",
+      "sha256": "d49a710ff2805a0b975ccfb574ad99bbb0acfb29f33b970a66b73d0c1696aa38"
+    },
+    {
+      "file": "validate_package.py",
+      "suppliedSHA256": "9bdbea1e0209fe47244a0f2047673c09aa31f99a3b866f1a7d2bcbf6cd2759f1",
+      "sha256": "9bdbea1e0209fe47244a0f2047673c09aa31f99a3b866f1a7d2bcbf6cd2759f1"
+    }
+  ],
+  "transform": "Line endings normalized to LF; no source changes"
+}

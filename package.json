@@ -1,0 +1,17 @@
+{
+  "name": "root-network-os",
+  "version": "1.4.0",
+  "private": true,
+  "license": "MIT",
+  "engines": {
+    "node": ">=24 <25"
+  },
+  "description": "Local infrastructure simulation with a walkable underground data center",
+  "scripts": {
+    "start": "node server.cjs",
+    "test": "node --test tests/*.test.cjs",
+    "assets": "node tools/asset-generator/generate.mjs",
+    "assets:audit": "node tools/audit-assets.mjs",
+    "assets:inventory": "node tools/inventory-assets.mjs"
+  }
+}

@@ -1,0 +1,26 @@
+data/
+*.log
+*.tmp
+node_modules/
+__pycache__/
+*.py[cod]
+.venv/
+.env
+.env.*
+entwurf/
+_local/
+ROOT-Sektor-*.json
+ROOT-abweichende-Browserkopie.json
+*.zip
+.DS_Store
+Thumbs.db
+
+# Independent development data and generated asset builds
+.local-data/
+.asset-build/
+test-results/
+coverage/
+*.bundle
+*.bak
+*.blend
+*.blend1

@@ -1,0 +1,1366 @@
+{
+  "schemaVersion": 1,
+  "status": "current bundled files",
+  "units": "meters",
+  "coordinates": {
+    "up": "+Y",
+    "front": "+Z"
+  },
+  "assetCount": 36,
+  "textureCount": 30,
+  "counts": {
+    "supplied": 27,
+    "facility": 5,
+    "originalFurniture": 4
+  },
+  "historicalManifest": "asset-pack/docs/asset_manifest.json",
+  "notSupplied": [
+    {
+      "path": "scenes/root_datacenter_scene.glb",
+      "reason": "Listed in the supplied v1 manifest but absent from the supplied files. The application constructs rooms at runtime and does not request this file."
+    }
+  ],
+  "assets": [
+    {
+      "path": "asset-pack/assets/architecture/cable_tray_overhead.glb",
+      "sha256": "fe9678c0ef9c5dac4506851c5ab904574b834c6f03644ef2c514c25b3d526cc2",
+      "bytes": 68220,
+      "provenanceKind": "supplied-copy",
+      "licenseSPDX": "CC0-1.0",
+      "licenseEvidence": "CC0-1.0 according to the user-supplied Root_Assets 1.0 notices; authorship not independently verified",
+      "source": "User-supplied Root_Assets 1.0",
+      "generatorSHA256": null,
+      "activeRuntimeBoundsM": {
+        "min": [
+          -0.26,
+          -0.007,
+          -1.8
+        ],
+        "max": [
+          0.26,
+          0.34,
+          1.8
+        ]
+      },
+      "activeRuntimeTriangles": 1016,
+      "requiredExtensions": [],
+      "textures": [
+        "asset-pack/textures/root_architecture_atlas_basecolor_2k.png",
+        "asset-pack/textures/root_architecture_atlas_normal_2k.png",
+        "asset-pack/textures/root_architecture_atlas_orm_2k.png",
+        "asset-pack/textures/root_hardware_atlas_basecolor_2k.png",
+        "asset-pack/textures/root_hardware_atlas_normal_2k.png",
+        "asset-pack/textures/root_hardware_atlas_orm_2k.png"
+      ]
+    },
+    {
+      "path": "asset-pack/assets/architecture/ceiling_light_linear.glb",
+      "sha256": "adc503e01681bb5c81775327c13cb35264af6ad5fef0d9b849d35f1e3c79cad7",
+      "bytes": 16744,
+      "provenanceKind": "supplied-copy",
+      "licenseSPDX": "CC0-1.0",
+      "licenseEvidence": "CC0-1.0 according to the user-supplied Root_Assets 1.0 notices; authorship not independently verified",
+      "source": "User-supplied Root_Assets 1.0",
+      "generatorSHA256": null,
+      "activeRuntimeBoundsM": {
+        "min": [
+          -0.075,
+          -0.008,
+          -1.2
+        ],
+        "max": [
+          0.075,
+          0.318,
+          1.2
+        ]
+      },
+      "activeRuntimeTriangles": 136,
+      "requiredExtensions": [],
+      "textures": [
+        "asset-pack/textures/root_hardware_atlas_basecolor_2k.png",
+        "asset-pack/textures/root_hardware_atlas_normal_2k.png",
+        "asset-pack/textures/root_hardware_atlas_orm_2k.png"
+      ]
+    },
+    {
+      "path": "asset-pack/assets/architecture/ceiling_module.glb",
+      "sha256": "b5041131c43044a07983d8af7102291647dabfcc6ce5d9a03d580ad0bdd72b98",
+      "bytes": 19496,
+      "provenanceKind": "supplied-copy",
+      "licenseSPDX": "CC0-1.0",
+      "licenseEvidence": "CC0-1.0 according to the user-supplied Root_Assets 1.0 notices; authorship not independently verified",
+      "source": "User-supplied Root_Assets 1.0",
+      "generatorSHA256": null,
+      "activeRuntimeBoundsM": {
+        "min": [
+          -1.8,
+          0.06,
+          -1.8
+        ],
+        "max": [
+          1.8,
+          0.36,
+          1.8
+        ]
+      },
+      "activeRuntimeTriangles": 172,
+      "requiredExtensions": [],
+      "textures": [
+        "asset-pack/textures/root_architecture_atlas_basecolor_2k.png",
+        "asset-pack/textures/root_architecture_atlas_normal_2k.png",
+        "asset-pack/textures/root_architecture_atlas_orm_2k.png",
+        "asset-pack/textures/root_hardware_atlas_basecolor_2k.png",
+        "asset-pack/textures/root_hardware_atlas_normal_2k.png",
+        "asset-pack/textures/root_hardware_atlas_orm_2k.png"
+      ]
+    },
+    {
+      "path": "asset-pack/assets/architecture/crac_cooling_unit.glb",
+      "sha256": "e3b560eed19c37437efa8b22a3c016fad19d5c9faa22d5eb5edf0ac68f4b3358",
+      "bytes": 91464,
+      "provenanceKind": "supplied-copy",
+      "licenseSPDX": "CC0-1.0",
+      "licenseEvidence": "CC0-1.0 according to the user-supplied Root_Assets 1.0 notices; authorship not independently verified",
+      "source": "User-supplied Root_Assets 1.0",
+      "generatorSHA256": null,
+      "activeRuntimeBoundsM": {
+        "min": [
+          -0.45,
+          0,
+          -0.425
+        ],
+        "max": [
+          0.45,
+          2.1,
+          0.46485
+        ]
+      },
+      "activeRuntimeTriangles": 1510,
+      "requiredExtensions": [],
+      "textures": [
+        "asset-pack/textures/root_hardware_atlas_basecolor_2k.png",
+        "asset-pack/textures/root_hardware_atlas_normal_2k.png",
+        "asset-pack/textures/root_hardware_atlas_orm_2k.png",
+        "asset-pack/textures/root_screen_04_maintenance.png"
+      ]
+    },
+    {
+      "path": "asset-pack/assets/architecture/fire_door_module.glb",
+      "sha256": "b90de5922edf4c92d287e2bbb5fca508cf7f1179cd4488a0b495092ed8b8a9ad",
+      "bytes": 43332,
+      "provenanceKind": "supplied-copy",
+      "licenseSPDX": "CC0-1.0",
+      "licenseEvidence": "CC0-1.0 according to the user-supplied Root_Assets 1.0 notices; authorship not independently verified",
+      "source": "User-supplied Root_Assets 1.0",
+      "generatorSHA256": null,
+      "activeRuntimeBoundsM": {
+        "min": [
+          -0.695,
+          0,
+          -0.09
+        ],
+        "max": [
+          0.6,
+          2.4,
+          0.128
+        ]
+      },
+      "activeRuntimeTriangles": 468,
+      "requiredExtensions": [],
+      "textures": [
+        "asset-pack/textures/root_hardware_atlas_basecolor_2k.png",
+        "asset-pack/textures/root_hardware_atlas_normal_2k.png",
+        "asset-pack/textures/root_hardware_atlas_orm_2k.png",
+        "asset-pack/textures/root_labels_atlas_2k.png"
+      ]
+    },
+    {
+      "path": "asset-pack/assets/architecture/floor_tile_standard.glb",
+      "sha256": "aa4d28673b6f19262e5092d70367b8b1259ff666be20a585a9302ff352c97d54",
+      "bytes": 22452,
+      "provenanceKind": "supplied-copy",
+      "licenseSPDX": "CC0-1.0",
+      "licenseEvidence": "CC0-1.0 according to the user-supplied Root_Assets 1.0 notices; authorship not independently verified",
+      "source": "User-supplied Root_Assets 1.0",
+      "generatorSHA256": null,
+      "activeRuntimeBoundsM": {
+        "min": [
+          -0.3,
+          -0.22,
+          -0.3
+        ],
+        "max": [
+          0.3,
+          0,
+          0.3
+        ]
+      },
+      "activeRuntimeTriangles": 256,
+      "requiredExtensions": [],
+      "textures": [
+        "asset-pack/textures/root_architecture_atlas_basecolor_2k.png",
+        "asset-pack/textures/root_architecture_atlas_normal_2k.png",
+        "asset-pack/textures/root_architecture_atlas_orm_2k.png",
+        "asset-pack/textures/root_floor_concrete_basecolor_2k.png",
+        "asset-pack/textures/root_floor_concrete_normal_2k.png",
+        "asset-pack/textures/root_floor_concrete_orm_2k.png",
+        "asset-pack/textures/root_hardware_atlas_basecolor_2k.png",
+        "asset-pack/textures/root_hardware_atlas_normal_2k.png",
+        "asset-pack/textures/root_hardware_atlas_orm_2k.png"
+      ]
+    },
+    {
+      "path": "asset-pack/assets/architecture/floor_tile_vent.glb",
+      "sha256": "cfb81701ce3f0894339bfae2ac760036b23949e9961cca0f324b21ca71bd88ca",
+      "bytes": 60104,
+      "provenanceKind": "supplied-copy",
+      "licenseSPDX": "CC0-1.0",
+      "licenseEvidence": "CC0-1.0 according to the user-supplied Root_Assets 1.0 notices; authorship not independently verified",
+      "source": "User-supplied Root_Assets 1.0",
+      "generatorSHA256": null,
+      "activeRuntimeBoundsM": {
+        "min": [
+          -0.3,
+          -0.038,
+          -0.3
+        ],
+        "max": [
+          0.3875,
+          0.0025,
+          0.3
+        ]
+      },
+      "activeRuntimeTriangles": 708,
+      "requiredExtensions": [],
+      "textures": [
+        "asset-pack/textures/root_architecture_atlas_basecolor_2k.png",
+        "asset-pack/textures/root_architecture_atlas_normal_2k.png",
+        "asset-pack/textures/root_architecture_atlas_orm_2k.png",
+        "asset-pack/textures/root_hardware_atlas_basecolor_2k.png",
+        "asset-pack/textures/root_hardware_atlas_normal_2k.png",
+        "asset-pack/textures/root_hardware_atlas_orm_2k.png"
+      ]
+    },
+    {
+      "path": "asset-pack/assets/architecture/signage_set.glb",
+      "sha256": "1f42daf80b4085035dd887850696c97885f0aec08159cb89414190cf06f7f132",
+      "bytes": 24832,
+      "provenanceKind": "supplied-copy",
+      "licenseSPDX": "CC0-1.0",
+      "licenseEvidence": "CC0-1.0 according to the user-supplied Root_Assets 1.0 notices; authorship not independently verified",
+      "source": "User-supplied Root_Assets 1.0",
+      "generatorSHA256": null,
+      "activeRuntimeBoundsM": {
+        "min": [
+          -0.5680000000000001,
+          0.092,
+          -0.014
+        ],
+        "max": [
+          0.5680000000000001,
+          0.448,
+          0.001
+        ]
+      },
+      "activeRuntimeTriangles": 152,
+      "requiredExtensions": [],
+      "textures": [
+        "asset-pack/textures/root_hardware_atlas_basecolor_2k.png",
+        "asset-pack/textures/root_hardware_atlas_normal_2k.png",
+        "asset-pack/textures/root_hardware_atlas_orm_2k.png",
+        "asset-pack/textures/root_labels_atlas_2k.png"
+      ]
+    },
+    {
+      "path": "asset-pack/assets/architecture/wall_module_branded.glb",
+      "sha256": "85f08ca21e06a38da607f7138852d9adf12d3aa6d3d6c1d8103b3ede19e23424",
+      "bytes": 40436,
+      "provenanceKind": "supplied-copy",
+      "licenseSPDX": "CC0-1.0",
+      "licenseEvidence": "CC0-1.0 according to the user-supplied Root_Assets 1.0 notices; authorship not independently verified",
+      "source": "User-supplied Root_Assets 1.0",
+      "generatorSHA256": null,
+      "activeRuntimeBoundsM": {
+        "min": [
+          -1.8,
+          0,
+          -0.16
+        ],
+        "max": [
+          1.8,
+          4.2,
+          0.14
+        ]
+      },
+      "activeRuntimeTriangles": 412,
+      "requiredExtensions": [],
+      "textures": [
+        "asset-pack/textures/root_architecture_atlas_basecolor_2k.png",
+        "asset-pack/textures/root_architecture_atlas_normal_2k.png",
+        "asset-pack/textures/root_architecture_atlas_orm_2k.png",
+        "asset-pack/textures/root_hardware_atlas_basecolor_2k.png",
+        "asset-pack/textures/root_hardware_atlas_normal_2k.png",
+        "asset-pack/textures/root_hardware_atlas_orm_2k.png",
+        "asset-pack/textures/root_labels_atlas_2k.png"
+      ]
+    },
+    {
+      "path": "asset-pack/assets/architecture/wall_module_standard.glb",
+      "sha256": "5d6ec567ae703cbfb61acd20bd1d8e06c2bce9bfcbe762b2f00960fdfbd2177b",
+      "bytes": 34760,
+      "provenanceKind": "supplied-copy",
+      "licenseSPDX": "CC0-1.0",
+      "licenseEvidence": "CC0-1.0 according to the user-supplied Root_Assets 1.0 notices; authorship not independently verified",
+      "source": "User-supplied Root_Assets 1.0",
+      "generatorSHA256": null,
+      "activeRuntimeBoundsM": {
+        "min": [
+          -1.8,
+          0,
+          -0.16
+        ],
+        "max": [
+          1.8,
+          4.2,
+          0.06
+        ]
+      },
+      "activeRuntimeTriangles": 372,
+      "requiredExtensions": [],
+      "textures": [
+        "asset-pack/textures/root_architecture_atlas_basecolor_2k.png",
+        "asset-pack/textures/root_architecture_atlas_normal_2k.png",
+        "asset-pack/textures/root_architecture_atlas_orm_2k.png",
+        "asset-pack/textures/root_hardware_atlas_basecolor_2k.png",
+        "asset-pack/textures/root_hardware_atlas_normal_2k.png",
+        "asset-pack/textures/root_hardware_atlas_orm_2k.png"
+      ]
+    },
+    {
+      "path": "asset-pack/assets/facility/cyber_bunker_airlock.glb",
+      "sha256": "64c31b0ae5eb17a31ac9ec0befed44cdc743554f9414a5ef22e43cdc64ec5778",
+      "bytes": 185796,
+      "provenanceKind": "root-generated-facility",
+      "licenseSPDX": "CC0-1.0",
+      "licenseEvidence": "ROOT procedural model; helper copied from the supplied package, see tools/asset-generator/README.md",
+      "source": "tools/asset-generator/build_facility_assets.py",
+      "generatorSHA256": "f1ad5e17faabd619e9c7d6d8a5bd2ce35ffabf7e08862f66bbb2c2f979856e18",
+      "activeRuntimeBoundsM": {
+        "min": [
+          -0.7,
+          0,
+          -0.15
+        ],
+        "max": [
+          0.7,
+          2.4,
+          0.158
+        ]
+      },
+      "activeRuntimeTriangles": 3144,
+      "requiredExtensions": [],
+      "textures": [
+        "asset-pack/textures/root_architecture_atlas_basecolor_2k.png",
+        "asset-pack/textures/root_architecture_atlas_normal_2k.png",
+        "asset-pack/textures/root_architecture_atlas_orm_2k.png",
+        "asset-pack/textures/root_hardware_atlas_basecolor_2k.png",
+        "asset-pack/textures/root_hardware_atlas_normal_2k.png",
+        "asset-pack/textures/root_hardware_atlas_orm_2k.png"
+      ]
+    },
+    {
+      "path": "asset-pack/assets/facility/elevator_module.glb",
+      "sha256": "d0305b8c2315b99c2e2330c1bf868a7c940798b45aed00ed81d4d12f47e2b973",
+      "bytes": 58960,
+      "provenanceKind": "root-generated-facility",
+      "licenseSPDX": "CC0-1.0",
+      "licenseEvidence": "ROOT procedural model; helper copied from the supplied package, see tools/asset-generator/README.md",
+      "source": "tools/asset-generator/build_facility_assets.py",
+      "generatorSHA256": "f1ad5e17faabd619e9c7d6d8a5bd2ce35ffabf7e08862f66bbb2c2f979856e18",
+      "activeRuntimeBoundsM": {
+        "min": [
+          -0.73,
+          0,
+          -0.1
+        ],
+        "max": [
+          0.73,
+          2.46,
+          0.1
+        ]
+      },
+      "activeRuntimeTriangles": 536,
+      "requiredExtensions": [],
+      "textures": [
+        "asset-pack/textures/root_architecture_atlas_basecolor_2k.png",
+        "asset-pack/textures/root_architecture_atlas_normal_2k.png",
+        "asset-pack/textures/root_architecture_atlas_orm_2k.png",
+        "asset-pack/textures/root_hardware_atlas_basecolor_2k.png",
+        "asset-pack/textures/root_hardware_atlas_normal_2k.png",
+        "asset-pack/textures/root_hardware_atlas_orm_2k.png"
+      ]
+    },
+    {
+      "path": "asset-pack/assets/facility/power_distribution_ats.glb",
+      "sha256": "05a80efc00603381241cd7709047a7a02e7105828eb943032e901c567574c47c",
+      "bytes": 223852,
+      "provenanceKind": "root-generated-facility",
+      "licenseSPDX": "CC0-1.0",
+      "licenseEvidence": "ROOT procedural model; helper copied from the supplied package, see tools/asset-generator/README.md",
+      "source": "tools/asset-generator/build_facility_assets.py",
+      "generatorSHA256": "f1ad5e17faabd619e9c7d6d8a5bd2ce35ffabf7e08862f66bbb2c2f979856e18",
+      "activeRuntimeBoundsM": {
+        "min": [
+          -0.58,
+          0,
+          -0.355
+        ],
+        "max": [
+          0.58,
+          2.0625,
+          0.4335
+        ]
+      },
+      "activeRuntimeTriangles": 3106,
+      "requiredExtensions": [],
+      "textures": [
+        "asset-pack/textures/root_architecture_atlas_basecolor_2k.png",
+        "asset-pack/textures/root_architecture_atlas_normal_2k.png",
+        "asset-pack/textures/root_architecture_atlas_orm_2k.png",
+        "asset-pack/textures/root_hardware_atlas_basecolor_2k.png",
+        "asset-pack/textures/root_hardware_atlas_normal_2k.png",
+        "asset-pack/textures/root_hardware_atlas_orm_2k.png",
+        "asset-pack/textures/root_labels_atlas_2k.png"
+      ]
+    },
+    {
+      "path": "asset-pack/assets/facility/stairs_flight.glb",
+      "sha256": "b1bd0a956c9c67dda86921dcee78419115c9dc7c30662dbaab0c69c62df1887d",
+      "bytes": 200360,
+      "provenanceKind": "root-generated-facility",
+      "licenseSPDX": "CC0-1.0",
+      "licenseEvidence": "ROOT procedural model; helper copied from the supplied package, see tools/asset-generator/README.md",
+      "source": "tools/asset-generator/build_facility_assets.py",
+      "generatorSHA256": "f1ad5e17faabd619e9c7d6d8a5bd2ce35ffabf7e08862f66bbb2c2f979856e18",
+      "activeRuntimeBoundsM": {
+        "min": [
+          -0.699,
+          0,
+          -1.6
+        ],
+        "max": [
+          0.699,
+          3.519716,
+          1.6
+        ]
+      },
+      "activeRuntimeTriangles": 2964,
+      "requiredExtensions": [],
+      "textures": [
+        "asset-pack/textures/root_architecture_atlas_basecolor_2k.png",
+        "asset-pack/textures/root_architecture_atlas_normal_2k.png",
+        "asset-pack/textures/root_architecture_atlas_orm_2k.png",
+        "asset-pack/textures/root_hardware_atlas_basecolor_2k.png",
+        "asset-pack/textures/root_hardware_atlas_normal_2k.png",
+        "asset-pack/textures/root_hardware_atlas_orm_2k.png"
+      ]
+    },
+    {
+      "path": "asset-pack/assets/facility/ups_battery_cabinet.glb",
+      "sha256": "f026ea4e166b4ebb45f2a0faa0ec55dfaa55373236202e2c2f6d95cf33df9a78",
+      "bytes": 139132,
+      "provenanceKind": "root-generated-facility",
+      "licenseSPDX": "CC0-1.0",
+      "licenseEvidence": "ROOT procedural model; helper copied from the supplied package, see tools/asset-generator/README.md",
+      "source": "tools/asset-generator/build_facility_assets.py",
+      "generatorSHA256": "f1ad5e17faabd619e9c7d6d8a5bd2ce35ffabf7e08862f66bbb2c2f979856e18",
+      "activeRuntimeBoundsM": {
+        "min": [
+          -0.43,
+          0,
+          -0.4225
+        ],
+        "max": [
+          0.43,
+          2.0225,
+          0.42300000000000004
+        ]
+      },
+      "activeRuntimeTriangles": 1826,
+      "requiredExtensions": [],
+      "textures": [
+        "asset-pack/textures/root_hardware_atlas_basecolor_2k.png",
+        "asset-pack/textures/root_hardware_atlas_normal_2k.png",
+        "asset-pack/textures/root_hardware_atlas_orm_2k.png",
+        "asset-pack/textures/root_labels_atlas_2k.png"
+      ]
+    },
+    {
+      "path": "asset-pack/assets/interiors/chair.glb",
+      "sha256": "54eecaba5b2459fcddf4d178f31177b7dc1a3dbf57346ad59af1a9b299837ff3",
+      "bytes": 1373408,
+      "provenanceKind": "root-original",
+      "licenseSPDX": "CC0-1.0",
+      "licenseEvidence": "Original ROOT geometry and procedural material maps; see NOTICE.md",
+      "source": "tools/asset-generator/build_interiors.mjs",
+      "generatorSHA256": "9115835c8d53c298553c33798230c6d30a0889a872519af59bc9d542cb8a6f7f",
+      "activeRuntimeBoundsM": {
+        "min": [
+          -0.3738926577193017,
+          1.2814998645582776e-9,
+          -0.3736611604690552
+        ],
+        "max": [
+          0.3738926577193017,
+          1.3514999979138373,
+          0.37899999871850015
+        ]
+      },
+      "activeRuntimeTriangles": 15152,
+      "requiredExtensions": [],
+      "textures": [
+        "asset-pack/textures/interiors/root-weave-color.png",
+        "asset-pack/textures/interiors/root-weave-normal.png"
+      ]
+    },
+    {
+      "path": "asset-pack/assets/interiors/coffee.glb",
+      "sha256": "e0ec4483b5d9fc0f2d1b78eb0bd75a3a43ac8e42f47525bc9b8936f4def9982e",
+      "bytes": 1735440,
+      "provenanceKind": "root-original",
+      "licenseSPDX": "CC0-1.0",
+      "licenseEvidence": "Original ROOT geometry and procedural material maps; see NOTICE.md",
+      "source": "tools/asset-generator/build_interiors.mjs",
+      "generatorSHA256": "9115835c8d53c298553c33798230c6d30a0889a872519af59bc9d542cb8a6f7f",
+      "activeRuntimeBoundsM": {
+        "min": [
+          -1.0099999904632568,
+          -1.899898051382909e-10,
+          -0.3499999940395355
+        ],
+        "max": [
+          1.0099999904632568,
+          1.5225000005960463,
+          0.40223270654678345
+        ]
+      },
+      "activeRuntimeTriangles": 17436,
+      "requiredExtensions": [],
+      "textures": [
+        "asset-pack/textures/interiors/walnut-color.jpg",
+        "asset-pack/textures/interiors/walnut-normal.jpg"
+      ]
+    },
+    {
+      "path": "asset-pack/assets/interiors/plant.glb",
+      "sha256": "9450f4d6a6efc6a6d08930c2732c8aeddbfddd0f93ca79a5903837bb2d81a459",
+      "bytes": 722592,
+      "provenanceKind": "root-original",
+      "licenseSPDX": "CC0-1.0",
+      "licenseEvidence": "Original ROOT geometry and procedural material maps; see NOTICE.md",
+      "source": "tools/asset-generator/build_interiors.mjs",
+      "generatorSHA256": "9115835c8d53c298553c33798230c6d30a0889a872519af59bc9d542cb8a6f7f",
+      "activeRuntimeBoundsM": {
+        "min": [
+          -0.25945422053337097,
+          0,
+          -0.2542475461959839
+        ],
+        "max": [
+          0.26632627844810486,
+          1.5452393293380737,
+          0.2636464834213257
+        ]
+      },
+      "activeRuntimeTriangles": 19784,
+      "requiredExtensions": [],
+      "textures": [
+        "asset-pack/textures/interiors/root-leaf-color.png"
+      ]
+    },
+    {
+      "path": "asset-pack/assets/interiors/sofa.glb",
+      "sha256": "acf1d84b62a0f84feb62f298eeebe3827b1080cfd4d10aad812a6d68b41fa62b",
+      "bytes": 1542936,
+      "provenanceKind": "root-original",
+      "licenseSPDX": "CC0-1.0",
+      "licenseEvidence": "Original ROOT geometry and procedural material maps; see NOTICE.md",
+      "source": "tools/asset-generator/build_interiors.mjs",
+      "generatorSHA256": "9115835c8d53c298553c33798230c6d30a0889a872519af59bc9d542cb8a6f7f",
+      "activeRuntimeBoundsM": {
+        "min": [
+          -1.1300000008940696,
+          -1.899898051382909e-10,
+          -0.46184848437343595
+        ],
+        "max": [
+          1.1300000008940696,
+          0.950449049630191,
+          0.4300000071525574
+        ]
+      },
+      "activeRuntimeTriangles": 15536,
+      "requiredExtensions": [],
+      "textures": [
+        "asset-pack/textures/interiors/root-weave-color.png",
+        "asset-pack/textures/interiors/root-weave-normal.png"
+      ]
+    },
+    {
+      "path": "asset-pack/assets/network_power/cable_management_1u.glb",
+      "sha256": "3bd3672d43961e5437265d9282b0bf79276e2159c068ea94e2f2077e45698e4a",
+      "bytes": 76760,
+      "provenanceKind": "supplied-copy",
+      "licenseSPDX": "CC0-1.0",
+      "licenseEvidence": "CC0-1.0 according to the user-supplied Root_Assets 1.0 notices; authorship not independently verified",
+      "source": "User-supplied Root_Assets 1.0",
+      "generatorSHA256": null,
+      "activeRuntimeBoundsM": {
+        "min": [
+          -0.2413,
+          0,
+          0
+        ],
+        "max": [
+          0.2413,
+          0.04295,
+          0.08700000000000001
+        ]
+      },
+      "activeRuntimeTriangles": 948,
+      "requiredExtensions": [],
+      "textures": [
+        "asset-pack/textures/root_hardware_atlas_basecolor_2k.png",
+        "asset-pack/textures/root_hardware_atlas_normal_2k.png",
+        "asset-pack/textures/root_hardware_atlas_orm_2k.png"
+      ]
+    },
+    {
+      "path": "asset-pack/assets/network_power/connector_power_iec.glb",
+      "sha256": "b245c4646afdd8fb8447d21e6afeedd7f4a955c281fe1a159c1acb425606348f",
+      "bytes": 17412,
+      "provenanceKind": "supplied-copy",
+      "licenseSPDX": "CC0-1.0",
+      "licenseEvidence": "CC0-1.0 according to the user-supplied Root_Assets 1.0 notices; authorship not independently verified",
+      "source": "User-supplied Root_Assets 1.0",
+      "generatorSHA256": null,
+      "activeRuntimeBoundsM": {
+        "min": [
+          -0.0135,
+          -0.0095,
+          -0.058
+        ],
+        "max": [
+          0.0135,
+          0.0095,
+          0.001
+        ]
+      },
+      "activeRuntimeTriangles": 156,
+      "requiredExtensions": [],
+      "textures": [
+        "asset-pack/textures/root_hardware_atlas_basecolor_2k.png",
+        "asset-pack/textures/root_hardware_atlas_normal_2k.png",
+        "asset-pack/textures/root_hardware_atlas_orm_2k.png"
+      ]
+    },
+    {
+      "path": "asset-pack/assets/network_power/connector_rj45.glb",
+      "sha256": "aad93173298460afb11c7c7359d4b26ae414f99a7d3740ccdc673a85467d78b9",
+      "bytes": 17120,
+      "provenanceKind": "supplied-copy",
+      "licenseSPDX": "CC0-1.0",
+      "licenseEvidence": "CC0-1.0 according to the user-supplied Root_Assets 1.0 notices; authorship not independently verified",
+      "source": "User-supplied Root_Assets 1.0",
+      "generatorSHA256": null,
+      "activeRuntimeBoundsM": {
+        "min": [
+          -0.0066,
+          -0.0054,
+          -0.039
+        ],
+        "max": [
+          0.0066,
+          0.0071,
+          0
+        ]
+      },
+      "activeRuntimeTriangles": 136,
+      "requiredExtensions": [],
+      "textures": [
+        "asset-pack/textures/root_hardware_atlas_basecolor_2k.png",
+        "asset-pack/textures/root_hardware_atlas_normal_2k.png",
+        "asset-pack/textures/root_hardware_atlas_orm_2k.png"
+      ]
+    },
+    {
+      "path": "asset-pack/assets/network_power/patch_panel_24port.glb",
+      "sha256": "088b382755614f4d6acf654236b562b6c3484db0b838af326b5fe0e7f92c3664",
+      "bytes": 121848,
+      "provenanceKind": "supplied-copy",
+      "licenseSPDX": "CC0-1.0",
+      "licenseEvidence": "CC0-1.0 according to the user-supplied Root_Assets 1.0 notices; authorship not independently verified",
+      "source": "User-supplied Root_Assets 1.0",
+      "generatorSHA256": null,
+      "activeRuntimeBoundsM": {
+        "min": [
+          -0.2413,
+          0,
+          -0.095
+        ],
+        "max": [
+          0.2413,
+          0.04295,
+          0.014
+        ]
+      },
+      "activeRuntimeTriangles": 1538,
+      "requiredExtensions": [],
+      "textures": [
+        "asset-pack/textures/root_hardware_atlas_basecolor_2k.png",
+        "asset-pack/textures/root_hardware_atlas_normal_2k.png",
+        "asset-pack/textures/root_hardware_atlas_orm_2k.png",
+        "asset-pack/textures/root_labels_atlas_2k.png"
+      ]
+    },
+    {
+      "path": "asset-pack/assets/network_power/rack_pdu.glb",
+      "sha256": "713a9af127f3ad992e9d0779540378bea832b8d53ebfdafd3eb690c74578b7d0",
+      "bytes": 159236,
+      "provenanceKind": "supplied-copy",
+      "licenseSPDX": "CC0-1.0",
+      "licenseEvidence": "CC0-1.0 according to the user-supplied Root_Assets 1.0 notices; authorship not independently verified",
+      "source": "User-supplied Root_Assets 1.0",
+      "generatorSHA256": null,
+      "activeRuntimeBoundsM": {
+        "min": [
+          -0.2413,
+          0,
+          -0.141
+        ],
+        "max": [
+          0.2413,
+          0.04295,
+          0.017
+        ]
+      },
+      "activeRuntimeTriangles": 2050,
+      "requiredExtensions": [],
+      "textures": [
+        "asset-pack/textures/root_hardware_atlas_basecolor_2k.png",
+        "asset-pack/textures/root_hardware_atlas_normal_2k.png",
+        "asset-pack/textures/root_hardware_atlas_orm_2k.png"
+      ]
+    },
+    {
+      "path": "asset-pack/assets/network_power/switch_16port.glb",
+      "sha256": "6525a3a9b638de2277d58aaaf2e75cda7d5bdb7338a12408f9c57358f54433c3",
+      "bytes": 209460,
+      "provenanceKind": "supplied-copy",
+      "licenseSPDX": "CC0-1.0",
+      "licenseEvidence": "CC0-1.0 according to the user-supplied Root_Assets 1.0 notices; authorship not independently verified",
+      "source": "User-supplied Root_Assets 1.0",
+      "generatorSHA256": null,
+      "activeRuntimeBoundsM": {
+        "min": [
+          -0.2413,
+          0,
+          -0.344
+        ],
+        "max": [
+          0.2413,
+          0.04295,
+          0.0175
+        ]
+      },
+      "activeRuntimeTriangles": 2386,
+      "requiredExtensions": [],
+      "textures": [
+        "asset-pack/textures/root_hardware_atlas_basecolor_2k.png",
+        "asset-pack/textures/root_hardware_atlas_normal_2k.png",
+        "asset-pack/textures/root_hardware_atlas_orm_2k.png",
+        "asset-pack/textures/root_labels_atlas_2k.png"
+      ]
+    },
+    {
+      "path": "asset-pack/assets/network_power/switch_8port.glb",
+      "sha256": "d975a2f09854709dfc14d32653943595bd22f9388370d372e9988e1f3039abba",
+      "bytes": 139760,
+      "provenanceKind": "supplied-copy",
+      "licenseSPDX": "CC0-1.0",
+      "licenseEvidence": "CC0-1.0 according to the user-supplied Root_Assets 1.0 notices; authorship not independently verified",
+      "source": "User-supplied Root_Assets 1.0",
+      "generatorSHA256": null,
+      "activeRuntimeBoundsM": {
+        "min": [
+          -0.2413,
+          0,
+          -0.284
+        ],
+        "max": [
+          0.2413,
+          0.04295,
+          0.0175
+        ]
+      },
+      "activeRuntimeTriangles": 1654,
+      "requiredExtensions": [],
+      "textures": [
+        "asset-pack/textures/root_hardware_atlas_basecolor_2k.png",
+        "asset-pack/textures/root_hardware_atlas_normal_2k.png",
+        "asset-pack/textures/root_hardware_atlas_orm_2k.png",
+        "asset-pack/textures/root_labels_atlas_2k.png"
+      ]
+    },
+    {
+      "path": "asset-pack/assets/racks/rack_18u.glb",
+      "sha256": "d1d0e45312351043e51faf63575646a5d49b56c43a96858f9be7cfbbef458f64",
+      "bytes": 547136,
+      "provenanceKind": "supplied-copy",
+      "licenseSPDX": "CC0-1.0",
+      "licenseEvidence": "CC0-1.0 according to the user-supplied Root_Assets 1.0 notices; authorship not independently verified",
+      "source": "User-supplied Root_Assets 1.0",
+      "generatorSHA256": null,
+      "activeRuntimeBoundsM": {
+        "min": [
+          -0.308,
+          0,
+          -0.544
+        ],
+        "max": [
+          0.308,
+          1.0041,
+          0.544
+        ]
+      },
+      "activeRuntimeTriangles": 7262,
+      "requiredExtensions": [],
+      "textures": [
+        "asset-pack/textures/root_hardware_atlas_basecolor_2k.png",
+        "asset-pack/textures/root_hardware_atlas_normal_2k.png",
+        "asset-pack/textures/root_hardware_atlas_orm_2k.png",
+        "asset-pack/textures/root_labels_atlas_2k.png",
+        "asset-pack/textures/root_perforated_mesh_basecolor_2k.png",
+        "asset-pack/textures/root_perforated_mesh_normal_2k.png",
+        "asset-pack/textures/root_perforated_mesh_orm_2k.png"
+      ]
+    },
+    {
+      "path": "asset-pack/assets/racks/rack_42u.glb",
+      "sha256": "aa87228872859d4386ee4662258c9ecf5fad2fa956081654c1cfa4018995eba3",
+      "bytes": 948628,
+      "provenanceKind": "supplied-copy",
+      "licenseSPDX": "CC0-1.0",
+      "licenseEvidence": "CC0-1.0 according to the user-supplied Root_Assets 1.0 notices; authorship not independently verified",
+      "source": "User-supplied Root_Assets 1.0",
+      "generatorSHA256": null,
+      "activeRuntimeBoundsM": {
+        "min": [
+          -0.308,
+          0,
+          -0.5790000000000001
+        ],
+        "max": [
+          0.308,
+          2.0709,
+          0.5790000000000001
+        ]
+      },
+      "activeRuntimeTriangles": 12446,
+      "requiredExtensions": [],
+      "textures": [
+        "asset-pack/textures/root_hardware_atlas_basecolor_2k.png",
+        "asset-pack/textures/root_hardware_atlas_normal_2k.png",
+        "asset-pack/textures/root_hardware_atlas_orm_2k.png",
+        "asset-pack/textures/root_labels_atlas_2k.png",
+        "asset-pack/textures/root_perforated_mesh_basecolor_2k.png",
+        "asset-pack/textures/root_perforated_mesh_normal_2k.png",
+        "asset-pack/textures/root_perforated_mesh_orm_2k.png"
+      ]
+    },
+    {
+      "path": "asset-pack/assets/racks/rack_blank_panel_1u.glb",
+      "sha256": "7497f9c418c163d3f6744552c76b18fb65b80f7f165202c3fa1ef9a962b2a4af",
+      "bytes": 16276,
+      "provenanceKind": "supplied-copy",
+      "licenseSPDX": "CC0-1.0",
+      "licenseEvidence": "CC0-1.0 according to the user-supplied Root_Assets 1.0 notices; authorship not independently verified",
+      "source": "User-supplied Root_Assets 1.0",
+      "generatorSHA256": null,
+      "activeRuntimeBoundsM": {
+        "min": [
+          -0.2413,
+          0,
+          -0.002
+        ],
+        "max": [
+          0.2413,
+          0.04325,
+          0.012
+        ]
+      },
+      "activeRuntimeTriangles": 152,
+      "requiredExtensions": [],
+      "textures": [
+        "asset-pack/textures/root_hardware_atlas_basecolor_2k.png",
+        "asset-pack/textures/root_hardware_atlas_normal_2k.png",
+        "asset-pack/textures/root_hardware_atlas_orm_2k.png"
+      ]
+    },
+    {
+      "path": "asset-pack/assets/racks/rack_blank_panel_2u.glb",
+      "sha256": "cc2b8c2d0b144ce28ba20091499fbb6efa00455738d05c5fb9270cbf9f5a3a42",
+      "bytes": 19708,
+      "provenanceKind": "supplied-copy",
+      "licenseSPDX": "CC0-1.0",
+      "licenseEvidence": "CC0-1.0 according to the user-supplied Root_Assets 1.0 notices; authorship not independently verified",
+      "source": "User-supplied Root_Assets 1.0",
+      "generatorSHA256": null,
+      "activeRuntimeBoundsM": {
+        "min": [
+          -0.2413,
+          0,
+          -0.002
+        ],
+        "max": [
+          0.2413,
+          0.0877,
+          0.012
+        ]
+      },
+      "activeRuntimeTriangles": 232,
+      "requiredExtensions": [],
+      "textures": [
+        "asset-pack/textures/root_hardware_atlas_basecolor_2k.png",
+        "asset-pack/textures/root_hardware_atlas_normal_2k.png",
+        "asset-pack/textures/root_hardware_atlas_orm_2k.png"
+      ]
+    },
+    {
+      "path": "asset-pack/assets/servers/server_1u_edge.glb",
+      "sha256": "54f4994c067d66466506a7a0a2bdf807d580bc822134b1d0321bd17ef9ce13ac",
+      "bytes": 272808,
+      "provenanceKind": "supplied-copy",
+      "licenseSPDX": "CC0-1.0",
+      "licenseEvidence": "CC0-1.0 according to the user-supplied Root_Assets 1.0 notices; authorship not independently verified",
+      "source": "User-supplied Root_Assets 1.0",
+      "generatorSHA256": null,
+      "activeRuntimeBoundsM": {
+        "min": [
+          -0.2413,
+          0,
+          -0.667
+        ],
+        "max": [
+          0.2413,
+          0.04445,
+          0.044945
+        ]
+      },
+      "activeRuntimeTriangles": 3726,
+      "requiredExtensions": [],
+      "textures": [
+        "asset-pack/textures/root_hardware_atlas_basecolor_2k.png",
+        "asset-pack/textures/root_hardware_atlas_normal_2k.png",
+        "asset-pack/textures/root_hardware_atlas_orm_2k.png",
+        "asset-pack/textures/root_labels_atlas_2k.png"
+      ]
+    },
+    {
+      "path": "asset-pack/assets/servers/server_2u_compute.glb",
+      "sha256": "2e6e070a574d160b107264674984d3d382e7eacc53cbe95f474512f4cea8afae",
+      "bytes": 427708,
+      "provenanceKind": "supplied-copy",
+      "licenseSPDX": "CC0-1.0",
+      "licenseEvidence": "CC0-1.0 according to the user-supplied Root_Assets 1.0 notices; authorship not independently verified",
+      "source": "User-supplied Root_Assets 1.0",
+      "generatorSHA256": null,
+      "activeRuntimeBoundsM": {
+        "min": [
+          -0.2413,
+          0,
+          -0.737
+        ],
+        "max": [
+          0.2413,
+          0.0889,
+          0.044945
+        ]
+      },
+      "activeRuntimeTriangles": 5954,
+      "requiredExtensions": [],
+      "textures": [
+        "asset-pack/textures/root_hardware_atlas_basecolor_2k.png",
+        "asset-pack/textures/root_hardware_atlas_normal_2k.png",
+        "asset-pack/textures/root_hardware_atlas_orm_2k.png",
+        "asset-pack/textures/root_labels_atlas_2k.png"
+      ]
+    },
+    {
+      "path": "asset-pack/assets/servers/server_3u_storage.glb",
+      "sha256": "2bffe34e4fc9c13dde87d4ab5a9c23ba89c335950b54e63efa9b90d05c4ba614",
+      "bytes": 494564,
+      "provenanceKind": "supplied-copy",
+      "licenseSPDX": "CC0-1.0",
+      "licenseEvidence": "CC0-1.0 according to the user-supplied Root_Assets 1.0 notices; authorship not independently verified",
+      "source": "User-supplied Root_Assets 1.0",
+      "generatorSHA256": null,
+      "activeRuntimeBoundsM": {
+        "min": [
+          -0.2413,
+          0,
+          -0.777
+        ],
+        "max": [
+          0.2413,
+          0.13335,
+          0.044945
+        ]
+      },
+      "activeRuntimeTriangles": 6702,
+      "requiredExtensions": [],
+      "textures": [
+        "asset-pack/textures/root_hardware_atlas_basecolor_2k.png",
+        "asset-pack/textures/root_hardware_atlas_normal_2k.png",
+        "asset-pack/textures/root_hardware_atlas_orm_2k.png",
+        "asset-pack/textures/root_labels_atlas_2k.png"
+      ]
+    },
+    {
+      "path": "asset-pack/assets/servers/server_4u_ai.glb",
+      "sha256": "5c8c11b0462426824afd2925b9ffdc06c76f34f8dbf536404580adc2aec0fde2",
+      "bytes": 570016,
+      "provenanceKind": "supplied-copy",
+      "licenseSPDX": "CC0-1.0",
+      "licenseEvidence": "CC0-1.0 according to the user-supplied Root_Assets 1.0 notices; authorship not independently verified",
+      "source": "User-supplied Root_Assets 1.0",
+      "generatorSHA256": null,
+      "activeRuntimeBoundsM": {
+        "min": [
+          -0.2413,
+          0,
+          -0.8170000000000001
+        ],
+        "max": [
+          0.2413,
+          0.1778,
+          0.044945
+        ]
+      },
+      "activeRuntimeTriangles": 8782,
+      "requiredExtensions": [],
+      "textures": [
+        "asset-pack/textures/root_hardware_atlas_basecolor_2k.png",
+        "asset-pack/textures/root_hardware_atlas_normal_2k.png",
+        "asset-pack/textures/root_hardware_atlas_orm_2k.png",
+        "asset-pack/textures/root_labels_atlas_2k.png"
+      ]
+    },
+    {
+      "path": "asset-pack/assets/stations/operator_console_desk.glb",
+      "sha256": "ecab8ecd3f04c2772248e94ea3dd8a8328c8e656266084db9209be1f198c7253",
+      "bytes": 276056,
+      "provenanceKind": "supplied-copy",
+      "licenseSPDX": "CC0-1.0",
+      "licenseEvidence": "CC0-1.0 according to the user-supplied Root_Assets 1.0 notices; authorship not independently verified",
+      "source": "User-supplied Root_Assets 1.0",
+      "generatorSHA256": null,
+      "activeRuntimeBoundsM": {
+        "min": [
+          -1.106,
+          0,
+          -0.426
+        ],
+        "max": [
+          1.106,
+          1.3,
+          0.426
+        ]
+      },
+      "activeRuntimeTriangles": 3516,
+      "requiredExtensions": [],
+      "textures": [
+        "asset-pack/textures/root_hardware_atlas_basecolor_2k.png",
+        "asset-pack/textures/root_hardware_atlas_normal_2k.png",
+        "asset-pack/textures/root_hardware_atlas_orm_2k.png",
+        "asset-pack/textures/root_labels_atlas_2k.png",
+        "asset-pack/textures/root_screen_01_telemetry.png",
+        "asset-pack/textures/root_screen_02_workloads.png",
+        "asset-pack/textures/root_screen_03_network.png"
+      ]
+    },
+    {
+      "path": "asset-pack/assets/stations/wall_terminal_maintenance.glb",
+      "sha256": "8ed424c5c7413f2635da4b0750f62ab370b37cd6a227aff557102baabc4fdaf2",
+      "bytes": 31600,
+      "provenanceKind": "supplied-copy",
+      "licenseSPDX": "CC0-1.0",
+      "licenseEvidence": "CC0-1.0 according to the user-supplied Root_Assets 1.0 notices; authorship not independently verified",
+      "source": "User-supplied Root_Assets 1.0",
+      "generatorSHA256": null,
+      "activeRuntimeBoundsM": {
+        "min": [
+          -0.575,
+          -0.44,
+          0
+        ],
+        "max": [
+          0.575,
+          0.44,
+          0.33
+        ]
+      },
+      "activeRuntimeTriangles": 312,
+      "requiredExtensions": [],
+      "textures": [
+        "asset-pack/textures/root_hardware_atlas_basecolor_2k.png",
+        "asset-pack/textures/root_hardware_atlas_normal_2k.png",
+        "asset-pack/textures/root_hardware_atlas_orm_2k.png",
+        "asset-pack/textures/root_labels_atlas_2k.png",
+        "asset-pack/textures/root_screen_04_maintenance.png"
+      ]
+    }
+  ],
+  "textures": [
+    {
+      "path": "asset-pack/textures/interiors/root-leaf-color.png",
+      "sha256": "986c43d1ed0ea584da59d771d501258cc591bcb7d7ea6bca3b6bb41c3a0e817b",
+      "bytes": 34272,
+      "provenanceKind": "root-original",
+      "licenseSPDX": "CC0-1.0",
+      "source": "tools/asset-generator/build_interiors.mjs"
+    },
+    {
+      "path": "asset-pack/textures/interiors/root-weave-color.png",
+      "sha256": "e88a87cb15c85f588868c9a2d08fd1900f26c00df3e1aa8688133ce9eda94a80",
+      "bytes": 49617,
+      "provenanceKind": "root-original",
+      "licenseSPDX": "CC0-1.0",
+      "source": "tools/asset-generator/build_interiors.mjs"
+    },
+    {
+      "path": "asset-pack/textures/interiors/root-weave-normal.png",
+      "sha256": "a5a7b7ba124a3827e4a036b44bb30515aad776f3fc4310867926ee608fe8e80b",
+      "bytes": 1065,
+      "provenanceKind": "root-original",
+      "licenseSPDX": "CC0-1.0",
+      "source": "tools/asset-generator/build_interiors.mjs"
+    },
+    {
+      "path": "asset-pack/textures/interiors/walnut-color.jpg",
+      "sha256": "10d983003bb686db4af3d35d91197fdb6144dcd15d3dcea2ef315600f51b1af5",
+      "bytes": 579182,
+      "provenanceKind": "external-cc0-material-texture",
+      "licenseSPDX": "CC0-1.0",
+      "source": "https://polyhaven.com/a/american_walnut_veneer"
+    },
+    {
+      "path": "asset-pack/textures/interiors/walnut-normal.jpg",
+      "sha256": "f54890d8dd352c8668d643adaa0ad66bd5a3b62995198b7dfb518fa59efebca2",
+      "bytes": 414945,
+      "provenanceKind": "external-cc0-material-texture",
+      "licenseSPDX": "CC0-1.0",
+      "source": "https://polyhaven.com/a/american_walnut_veneer"
+    },
+    {
+      "path": "asset-pack/textures/interiors/walnut-roughness.jpg",
+      "sha256": "a13cd23228a4cb1bf0e342b4602d636123699cde61a2ff16bec1ce45a33ac62e",
+      "bytes": 691712,
+      "provenanceKind": "external-cc0-material-texture",
+      "licenseSPDX": "CC0-1.0",
+      "source": "https://polyhaven.com/a/american_walnut_veneer"
+    },
+    {
+      "path": "asset-pack/textures/root_architecture_atlas_ao_2k.png",
+      "sha256": "404c4ac2a1cd6004f80ad0005049bc3e7245473026cd1f87e4bccd70c0d70359",
+      "bytes": 9637,
+      "provenanceKind": "supplied-copy",
+      "licenseSPDX": "CC0-1.0",
+      "source": "User-supplied Root_Assets 1.0"
+    },
+    {
+      "path": "asset-pack/textures/root_architecture_atlas_basecolor_2k.png",
+      "sha256": "10ab79d6b768b20dd8b650adfe26d62a3a734501704908fa8957193d697e040b",
+      "bytes": 1938517,
+      "provenanceKind": "supplied-copy",
+      "licenseSPDX": "CC0-1.0",
+      "source": "User-supplied Root_Assets 1.0"
+    },
+    {
+      "path": "asset-pack/textures/root_architecture_atlas_metallic_2k.png",
+      "sha256": "a3c137c960c2766d926990f48e9d9f14729ce97b78e3d5ae24dd110f180828fd",
+      "bytes": 10035,
+      "provenanceKind": "supplied-copy",
+      "licenseSPDX": "CC0-1.0",
+      "source": "User-supplied Root_Assets 1.0"
+    },
+    {
+      "path": "asset-pack/textures/root_architecture_atlas_normal_2k.png",
+      "sha256": "27bd2b9680998e5b1afa4f16e59cecff4f20214bbca8c1326e7824bf13b6dd35",
+      "bytes": 2795319,
+      "provenanceKind": "supplied-copy",
+      "licenseSPDX": "CC0-1.0",
+      "source": "User-supplied Root_Assets 1.0"
+    },
+    {
+      "path": "asset-pack/textures/root_architecture_atlas_orm_2k.png",
+      "sha256": "8f5300668845d3d20f1943ece67ef4cedb7ca21c56e4403aa32639cc45310275",
+      "bytes": 698625,
+      "provenanceKind": "supplied-copy",
+      "licenseSPDX": "CC0-1.0",
+      "source": "User-supplied Root_Assets 1.0"
+    },
+    {
+      "path": "asset-pack/textures/root_architecture_atlas_roughness_2k.png",
+      "sha256": "b8d43f34fd0123dc4a17933a72a6cccbbf1478378a52b8f25febf2f446ad307d",
+      "bytes": 567969,
+      "provenanceKind": "supplied-copy",
+      "licenseSPDX": "CC0-1.0",
+      "source": "User-supplied Root_Assets 1.0"
+    },
+    {
+      "path": "asset-pack/textures/root_floor_concrete_basecolor_2k.png",
+      "sha256": "2d9d571cf8b0963b8737e74cad7a2c5bcec70b8e5ec44d2ec596685e0c72115c",
+      "bytes": 2507331,
+      "provenanceKind": "supplied-copy",
+      "licenseSPDX": "CC0-1.0",
+      "source": "User-supplied Root_Assets 1.0"
+    },
+    {
+      "path": "asset-pack/textures/root_floor_concrete_normal_2k.png",
+      "sha256": "2070f14d379688b2b72052b7532550921ff65d72f5381f000cf0d75c38672f6e",
+      "bytes": 861546,
+      "provenanceKind": "supplied-copy",
+      "licenseSPDX": "CC0-1.0",
+      "source": "User-supplied Root_Assets 1.0"
+    },
+    {
+      "path": "asset-pack/textures/root_floor_concrete_orm_2k.png",
+      "sha256": "5d523b76203abaa2f342cbfdca577f9b95c7bcdfdcd45121cbee124f2fa92edf",
+      "bytes": 1047489,
+      "provenanceKind": "supplied-copy",
+      "licenseSPDX": "CC0-1.0",
+      "source": "User-supplied Root_Assets 1.0"
+    },
+    {
+      "path": "asset-pack/textures/root_hardware_atlas_ao_2k.png",
+      "sha256": "9327e7d132f870119119ab0ee12a62c43c5264e9d5699e06c8ce15f3af62de3e",
+      "bytes": 708136,
+      "provenanceKind": "supplied-copy",
+      "licenseSPDX": "CC0-1.0",
+      "source": "User-supplied Root_Assets 1.0"
+    },
+    {
+      "path": "asset-pack/textures/root_hardware_atlas_basecolor_2k.png",
+      "sha256": "da88a279c1746c50e12941a6191341b70ab93eebc953f24f682ab5df1d83fe1b",
+      "bytes": 1472357,
+      "provenanceKind": "supplied-copy",
+      "licenseSPDX": "CC0-1.0",
+      "source": "User-supplied Root_Assets 1.0"
+    },
+    {
+      "path": "asset-pack/textures/root_hardware_atlas_metallic_2k.png",
+      "sha256": "acfe8e8a6a88fb7bbb3714d35154d9a7147b164cf85b765c9730b6763985d30c",
+      "bytes": 386306,
+      "provenanceKind": "supplied-copy",
+      "licenseSPDX": "CC0-1.0",
+      "source": "User-supplied Root_Assets 1.0"
+    },
+    {
+      "path": "asset-pack/textures/root_hardware_atlas_normal_2k.png",
+      "sha256": "e74ff827652e22ecc2257562851678d28e292efdb61a72422924dd9924a8e90e",
+      "bytes": 3871604,
+      "provenanceKind": "supplied-copy",
+      "licenseSPDX": "CC0-1.0",
+      "source": "User-supplied Root_Assets 1.0"
+    },
+    {
+      "path": "asset-pack/textures/root_hardware_atlas_orm_2k.png",
+      "sha256": "17ed7b74c6a2182da3694d8744ef445122ad36a29034a65930ac0341946c470f",
+      "bytes": 1945448,
+      "provenanceKind": "supplied-copy",
+      "licenseSPDX": "CC0-1.0",
+      "source": "User-supplied Root_Assets 1.0"
+    },
+    {
+      "path": "asset-pack/textures/root_hardware_atlas_roughness_2k.png",
+      "sha256": "d264a2a7a248c5906e91d235dff4902d535b613249016ae31891a6172bcd31dc",
+      "bytes": 912838,
+      "provenanceKind": "supplied-copy",
+      "licenseSPDX": "CC0-1.0",
+      "source": "User-supplied Root_Assets 1.0"
+    },
+    {
+      "path": "asset-pack/textures/root_labels_atlas_2k.png",
+      "sha256": "baaf3def9d50ab9ec1ebcdb4037597c3dd937686cfc81608580015f68509fdb4",
+      "bytes": 285743,
+      "provenanceKind": "supplied-copy",
+      "licenseSPDX": "CC0-1.0",
+      "source": "User-supplied Root_Assets 1.0"
+    },
+    {
+      "path": "asset-pack/textures/root_perforated_mesh_basecolor_2k.png",
+      "sha256": "5d0167eb26b4f2979a2c078e88f7105ec884aa70d7a18feae5be1e5711eb4add",
+      "bytes": 194416,
+      "provenanceKind": "supplied-copy",
+      "licenseSPDX": "CC0-1.0",
+      "source": "User-supplied Root_Assets 1.0"
+    },
+    {
+      "path": "asset-pack/textures/root_perforated_mesh_normal_2k.png",
+      "sha256": "438a8812c1a9f1590aedf016d15055d7a81c6c64139f48e99d5993968280052d",
+      "bytes": 178864,
+      "provenanceKind": "supplied-copy",
+      "licenseSPDX": "CC0-1.0",
+      "source": "User-supplied Root_Assets 1.0"
+    },
+    {
+      "path": "asset-pack/textures/root_perforated_mesh_orm_2k.png",
+      "sha256": "052693cc3d79bd2b2892bbac33970caf4900dc8bb997a230378175d0f29e223c",
+      "bytes": 126332,
+      "provenanceKind": "supplied-copy",
+      "licenseSPDX": "CC0-1.0",
+      "source": "User-supplied Root_Assets 1.0"
+    },
+    {
+      "path": "asset-pack/textures/root_screen_01_telemetry.png",
+      "sha256": "0b8d801758f0bf999fd83e05391572c656ecce7152cc0cdab37c5c2b2d887aa1",
+      "bytes": 45584,
+      "provenanceKind": "supplied-copy",
+      "licenseSPDX": "CC0-1.0",
+      "source": "User-supplied Root_Assets 1.0"
+    },
+    {
+      "path": "asset-pack/textures/root_screen_02_workloads.png",
+      "sha256": "5ab102bc77a5ee9670376f8ce3c3b2cbf2bcaf17ba34ef00ccb2b734cf51de99",
+      "bytes": 51254,
+      "provenanceKind": "supplied-copy",
+      "licenseSPDX": "CC0-1.0",
+      "source": "User-supplied Root_Assets 1.0"
+    },
+    {
+      "path": "asset-pack/textures/root_screen_03_network.png",
+      "sha256": "4e29bd64a07e206d0d94c1798dede7fcccebcdc7e56b7ead809940fc1254faa2",
+      "bytes": 98221,
+      "provenanceKind": "supplied-copy",
+      "licenseSPDX": "CC0-1.0",
+      "source": "User-supplied Root_Assets 1.0"
+    },
+    {
+      "path": "asset-pack/textures/root_screen_04_maintenance.png",
+      "sha256": "5a4f92af8b36d1aa5d68fe6d1945fb58fa18ad51fb008ae003843a6b41f82372",
+      "bytes": 61123,
+      "provenanceKind": "supplied-copy",
+      "licenseSPDX": "CC0-1.0",
+      "source": "User-supplied Root_Assets 1.0"
+    },
+    {
+      "path": "asset-pack/textures/root_screens_ui_2k.png",
+      "sha256": "7e9da1c8d5ffadeaf5980e69bc9124131b46f25594bbf39fa7ed690b2dabd9ca",
+      "bytes": 253665,
+      "provenanceKind": "supplied-copy",
+      "licenseSPDX": "CC0-1.0",
+      "source": "User-supplied Root_Assets 1.0"
+    }
+  ]
+}

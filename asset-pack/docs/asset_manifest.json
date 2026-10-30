@@ -1,0 +1,5021 @@
+{
+  "package": "ROOT 3D Asset Package",
+  "version": "1.0.0",
+  "units": "meters",
+  "coordinateSystem": {
+    "up": "+Y",
+    "front": "+Z",
+    "right": "+X"
+  },
+  "assetCount": 28,
+  "assets": [
+    {
+      "name": "rack_18u",
+      "glbPath": "assets/racks/rack_18u.glb",
+      "sizeKB": 534.3,
+      "dimensionsM": [
+        0.6,
+        1.0001,
+        1.0
+      ],
+      "unitsU": 18,
+      "triangles": {
+        "LOD0": 7710,
+        "LOD1": 52,
+        "collider": 12,
+        "total": 7774
+      },
+      "verticesTotal": 14092,
+      "materials": [
+        "mat_brushed_metal",
+        "mat_collider",
+        "mat_copper_heatpipe",
+        "mat_led_rack_frame",
+        "mat_perforated_door",
+        "mat_plastic_abs",
+        "mat_powder_coat_dark",
+        "mat_powder_coat_medium",
+        "mat_rack_nameplate",
+        "mat_rubber_epdm",
+        "mat_vent_grille"
+      ],
+      "movableParts": [
+        {
+          "name": "rack_side_panel_l",
+          "pivotPosition": [
+            -0.294,
+            0.49255,
+            0.0
+          ],
+          "pivotType": "removable",
+          "spinAxis": null
+        },
+        {
+          "name": "rack_side_panel_r",
+          "pivotPosition": [
+            0.294,
+            0.49255,
+            0.0
+          ],
+          "pivotType": "removable",
+          "spinAxis": null
+        },
+        {
+          "name": "rack_fan_01",
+          "pivotPosition": [
+            -0.14,
+            0.9781,
+            0.0
+          ],
+          "pivotType": "translate",
+          "spinAxis": "z"
+        },
+        {
+          "name": "rack_fan_02",
+          "pivotPosition": [
+            0.14,
+            0.9781,
+            0.0
+          ],
+          "pivotType": "translate",
+          "spinAxis": "z"
+        },
+        {
+          "name": "rack_door_front",
+          "pivotPosition": [
+            -0.282,
+            0.51055,
+            0.512
+          ],
+          "pivotType": "hinge_y",
+          "spinAxis": null
+        },
+        {
+          "name": "rack_door_front_handle",
+          "pivotPosition": [
+            0.541,
+            0.04,
+            0.0
+          ],
+          "pivotType": "latch_z",
+          "spinAxis": null
+        },
+        {
+          "name": "rack_door_rear",
+          "pivotPosition": [
+            0.282,
+            0.51055,
+            -0.512
+          ],
+          "pivotType": "hinge_y",
+          "spinAxis": null
+        },
+        {
+          "name": "rack_door_rear_handle",
+          "pivotPosition": [
+            -0.541,
+            0.04,
+            0.0
+          ],
+          "pivotType": "latch_z",
+          "spinAxis": null
+        },
+        {
+          "name": "rack_blank_panel_u01",
+          "pivotPosition": [
+            0.0,
+            0.1,
+            0.438
+          ],
+          "pivotType": "removable",
+          "spinAxis": null
+        },
+        {
+          "name": "rack_blank_panel_u07",
+          "pivotPosition": [
+            0.0,
+            0.3667,
+            0.438
+          ],
+          "pivotType": "removable",
+          "spinAxis": null
+        },
+        {
+          "name": "rack_blank_panel_u11",
+          "pivotPosition": [
+            0.0,
+            0.5445,
+            0.438
+          ],
+          "pivotType": "removable",
+          "spinAxis": null
+        },
+        {
+          "name": "rack_blank_panel_u16",
+          "pivotPosition": [
+            0.0,
+            0.76675,
+            0.438
+          ],
+          "pivotType": "removable",
+          "spinAxis": null
+        }
+      ],
+      "attachmentPoints": [
+        {
+          "name": "slot_u01",
+          "position": [
+            0.0,
+            0.1,
+            0.435
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "eia_19in_slot"
+        },
+        {
+          "name": "slot_u02",
+          "position": [
+            0.0,
+            0.14445,
+            0.435
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "eia_19in_slot"
+        },
+        {
+          "name": "slot_u03",
+          "position": [
+            0.0,
+            0.1889,
+            0.435
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "eia_19in_slot"
+        },
+        {
+          "name": "slot_u04",
+          "position": [
+            0.0,
+            0.23335,
+            0.435
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "eia_19in_slot"
+        },
+        {
+          "name": "slot_u05",
+          "position": [
+            0.0,
+            0.2778,
+            0.435
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "eia_19in_slot"
+        },
+        {
+          "name": "slot_u06",
+          "position": [
+            0.0,
+            0.32225,
+            0.435
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "eia_19in_slot"
+        },
+        {
+          "name": "slot_u07",
+          "position": [
+            0.0,
+            0.3667,
+            0.435
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "eia_19in_slot"
+        },
+        {
+          "name": "slot_u08",
+          "position": [
+            0.0,
+            0.41115,
+            0.435
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "eia_19in_slot"
+        },
+        {
+          "name": "slot_u09",
+          "position": [
+            0.0,
+            0.4556,
+            0.435
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "eia_19in_slot"
+        },
+        {
+          "name": "slot_u10",
+          "position": [
+            0.0,
+            0.50005,
+            0.435
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "eia_19in_slot"
+        },
+        {
+          "name": "slot_u11",
+          "position": [
+            0.0,
+            0.5445,
+            0.435
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "eia_19in_slot"
+        },
+        {
+          "name": "slot_u12",
+          "position": [
+            0.0,
+            0.58895,
+            0.435
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "eia_19in_slot"
+        },
+        {
+          "name": "slot_u13",
+          "position": [
+            0.0,
+            0.6334,
+            0.435
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "eia_19in_slot"
+        },
+        {
+          "name": "slot_u14",
+          "position": [
+            0.0,
+            0.67785,
+            0.435
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "eia_19in_slot"
+        },
+        {
+          "name": "slot_u15",
+          "position": [
+            0.0,
+            0.7223,
+            0.435
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "eia_19in_slot"
+        },
+        {
+          "name": "slot_u16",
+          "position": [
+            0.0,
+            0.76675,
+            0.435
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "eia_19in_slot"
+        },
+        {
+          "name": "slot_u17",
+          "position": [
+            0.0,
+            0.8112,
+            0.435
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "eia_19in_slot"
+        },
+        {
+          "name": "slot_u18",
+          "position": [
+            0.0,
+            0.85565,
+            0.435
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "eia_19in_slot"
+        }
+      ],
+      "dynamicSurfaces": [
+        {
+          "name": "rack_nameplate",
+          "surfaceId": "rack_nameplate",
+          "uvSpace": "atlas"
+        }
+      ],
+      "controllableLeds": [
+        "led_rack_status_frame"
+      ]
+    },
+    {
+      "name": "rack_42u",
+      "glbPath": "assets/racks/rack_42u.glb",
+      "sizeKB": 926.4,
+      "dimensionsM": [
+        0.6,
+        2.0669,
+        1.07
+      ],
+      "unitsU": 42,
+      "triangles": {
+        "LOD0": 13342,
+        "LOD1": 52,
+        "collider": 12,
+        "total": 13406
+      },
+      "verticesTotal": 25148,
+      "materials": [
+        "mat_brushed_metal",
+        "mat_collider",
+        "mat_copper_heatpipe",
+        "mat_led_rack_frame",
+        "mat_perforated_door",
+        "mat_plastic_abs",
+        "mat_powder_coat_dark",
+        "mat_powder_coat_medium",
+        "mat_rack_nameplate",
+        "mat_rubber_epdm",
+        "mat_vent_grille"
+      ],
+      "movableParts": [
+        {
+          "name": "rack_side_panel_l",
+          "pivotPosition": [
+            -0.294,
+            1.02595,
+            0.0
+          ],
+          "pivotType": "removable",
+          "spinAxis": null
+        },
+        {
+          "name": "rack_side_panel_r",
+          "pivotPosition": [
+            0.294,
+            1.02595,
+            0.0
+          ],
+          "pivotType": "removable",
+          "spinAxis": null
+        },
+        {
+          "name": "rack_fan_01",
+          "pivotPosition": [
+            -0.14,
+            2.0449,
+            0.0
+          ],
+          "pivotType": "translate",
+          "spinAxis": "z"
+        },
+        {
+          "name": "rack_fan_02",
+          "pivotPosition": [
+            0.14,
+            2.0449,
+            0.0
+          ],
+          "pivotType": "translate",
+          "spinAxis": "z"
+        },
+        {
+          "name": "rack_door_front",
+          "pivotPosition": [
+            -0.282,
+            1.04395,
+            0.547
+          ],
+          "pivotType": "hinge_y",
+          "spinAxis": null
+        },
+        {
+          "name": "rack_door_front_handle",
+          "pivotPosition": [
+            0.541,
+            0.04,
+            0.0
+          ],
+          "pivotType": "latch_z",
+          "spinAxis": null
+        },
+        {
+          "name": "rack_door_rear",
+          "pivotPosition": [
+            0.282,
+            1.04395,
+            -0.547
+          ],
+          "pivotType": "hinge_y",
+          "spinAxis": null
+        },
+        {
+          "name": "rack_door_rear_handle",
+          "pivotPosition": [
+            -0.541,
+            0.04,
+            0.0
+          ],
+          "pivotType": "latch_z",
+          "spinAxis": null
+        },
+        {
+          "name": "rack_blank_panel_u01",
+          "pivotPosition": [
+            0.0,
+            0.1,
+            0.473
+          ],
+          "pivotType": "removable",
+          "spinAxis": null
+        },
+        {
+          "name": "rack_blank_panel_u07",
+          "pivotPosition": [
+            0.0,
+            0.3667,
+            0.473
+          ],
+          "pivotType": "removable",
+          "spinAxis": null
+        },
+        {
+          "name": "rack_blank_panel_u11",
+          "pivotPosition": [
+            0.0,
+            0.5445,
+            0.473
+          ],
+          "pivotType": "removable",
+          "spinAxis": null
+        },
+        {
+          "name": "rack_blank_panel_u16",
+          "pivotPosition": [
+            0.0,
+            0.76675,
+            0.473
+          ],
+          "pivotType": "removable",
+          "spinAxis": null
+        },
+        {
+          "name": "rack_blank_panel_u22",
+          "pivotPosition": [
+            0.0,
+            1.03345,
+            0.473
+          ],
+          "pivotType": "removable",
+          "spinAxis": null
+        },
+        {
+          "name": "rack_blank_panel_u28",
+          "pivotPosition": [
+            0.0,
+            1.30015,
+            0.473
+          ],
+          "pivotType": "removable",
+          "spinAxis": null
+        },
+        {
+          "name": "rack_blank_panel_u34",
+          "pivotPosition": [
+            0.0,
+            1.56685,
+            0.473
+          ],
+          "pivotType": "removable",
+          "spinAxis": null
+        },
+        {
+          "name": "rack_blank_panel_u40",
+          "pivotPosition": [
+            0.0,
+            1.83355,
+            0.473
+          ],
+          "pivotType": "removable",
+          "spinAxis": null
+        }
+      ],
+      "attachmentPoints": [
+        {
+          "name": "slot_u01",
+          "position": [
+            0.0,
+            0.1,
+            0.47
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "eia_19in_slot"
+        },
+        {
+          "name": "slot_u02",
+          "position": [
+            0.0,
+            0.14445,
+            0.47
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "eia_19in_slot"
+        },
+        {
+          "name": "slot_u03",
+          "position": [
+            0.0,
+            0.1889,
+            0.47
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "eia_19in_slot"
+        },
+        {
+          "name": "slot_u04",
+          "position": [
+            0.0,
+            0.23335,
+            0.47
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "eia_19in_slot"
+        },
+        {
+          "name": "slot_u05",
+          "position": [
+            0.0,
+            0.2778,
+            0.47
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "eia_19in_slot"
+        },
+        {
+          "name": "slot_u06",
+          "position": [
+            0.0,
+            0.32225,
+            0.47
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "eia_19in_slot"
+        },
+        {
+          "name": "slot_u07",
+          "position": [
+            0.0,
+            0.3667,
+            0.47
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "eia_19in_slot"
+        },
+        {
+          "name": "slot_u08",
+          "position": [
+            0.0,
+            0.41115,
+            0.47
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "eia_19in_slot"
+        },
+        {
+          "name": "slot_u09",
+          "position": [
+            0.0,
+            0.4556,
+            0.47
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "eia_19in_slot"
+        },
+        {
+          "name": "slot_u10",
+          "position": [
+            0.0,
+            0.50005,
+            0.47
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "eia_19in_slot"
+        },
+        {
+          "name": "slot_u11",
+          "position": [
+            0.0,
+            0.5445,
+            0.47
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "eia_19in_slot"
+        },
+        {
+          "name": "slot_u12",
+          "position": [
+            0.0,
+            0.58895,
+            0.47
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "eia_19in_slot"
+        },
+        {
+          "name": "slot_u13",
+          "position": [
+            0.0,
+            0.6334,
+            0.47
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "eia_19in_slot"
+        },
+        {
+          "name": "slot_u14",
+          "position": [
+            0.0,
+            0.67785,
+            0.47
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "eia_19in_slot"
+        },
+        {
+          "name": "slot_u15",
+          "position": [
+            0.0,
+            0.7223,
+            0.47
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "eia_19in_slot"
+        },
+        {
+          "name": "slot_u16",
+          "position": [
+            0.0,
+            0.76675,
+            0.47
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "eia_19in_slot"
+        },
+        {
+          "name": "slot_u17",
+          "position": [
+            0.0,
+            0.8112,
+            0.47
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "eia_19in_slot"
+        },
+        {
+          "name": "slot_u18",
+          "position": [
+            0.0,
+            0.85565,
+            0.47
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "eia_19in_slot"
+        },
+        {
+          "name": "slot_u19",
+          "position": [
+            0.0,
+            0.9001,
+            0.47
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "eia_19in_slot"
+        },
+        {
+          "name": "slot_u20",
+          "position": [
+            0.0,
+            0.94455,
+            0.47
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "eia_19in_slot"
+        },
+        {
+          "name": "slot_u21",
+          "position": [
+            0.0,
+            0.989,
+            0.47
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "eia_19in_slot"
+        },
+        {
+          "name": "slot_u22",
+          "position": [
+            0.0,
+            1.03345,
+            0.47
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "eia_19in_slot"
+        },
+        {
+          "name": "slot_u23",
+          "position": [
+            0.0,
+            1.0779,
+            0.47
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "eia_19in_slot"
+        },
+        {
+          "name": "slot_u24",
+          "position": [
+            0.0,
+            1.12235,
+            0.47
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "eia_19in_slot"
+        },
+        {
+          "name": "slot_u25",
+          "position": [
+            0.0,
+            1.1668,
+            0.47
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "eia_19in_slot"
+        },
+        {
+          "name": "slot_u26",
+          "position": [
+            0.0,
+            1.21125,
+            0.47
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "eia_19in_slot"
+        },
+        {
+          "name": "slot_u27",
+          "position": [
+            0.0,
+            1.2557,
+            0.47
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "eia_19in_slot"
+        },
+        {
+          "name": "slot_u28",
+          "position": [
+            0.0,
+            1.30015,
+            0.47
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "eia_19in_slot"
+        },
+        {
+          "name": "slot_u29",
+          "position": [
+            0.0,
+            1.3446,
+            0.47
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "eia_19in_slot"
+        },
+        {
+          "name": "slot_u30",
+          "position": [
+            0.0,
+            1.38905,
+            0.47
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "eia_19in_slot"
+        },
+        {
+          "name": "slot_u31",
+          "position": [
+            0.0,
+            1.4335,
+            0.47
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "eia_19in_slot"
+        },
+        {
+          "name": "slot_u32",
+          "position": [
+            0.0,
+            1.47795,
+            0.47
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "eia_19in_slot"
+        },
+        {
+          "name": "slot_u33",
+          "position": [
+            0.0,
+            1.5224,
+            0.47
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "eia_19in_slot"
+        },
+        {
+          "name": "slot_u34",
+          "position": [
+            0.0,
+            1.56685,
+            0.47
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "eia_19in_slot"
+        },
+        {
+          "name": "slot_u35",
+          "position": [
+            0.0,
+            1.6113,
+            0.47
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "eia_19in_slot"
+        },
+        {
+          "name": "slot_u36",
+          "position": [
+            0.0,
+            1.65575,
+            0.47
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "eia_19in_slot"
+        },
+        {
+          "name": "slot_u37",
+          "position": [
+            0.0,
+            1.7002,
+            0.47
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "eia_19in_slot"
+        },
+        {
+          "name": "slot_u38",
+          "position": [
+            0.0,
+            1.74465,
+            0.47
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "eia_19in_slot"
+        },
+        {
+          "name": "slot_u39",
+          "position": [
+            0.0,
+            1.7891,
+            0.47
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "eia_19in_slot"
+        },
+        {
+          "name": "slot_u40",
+          "position": [
+            0.0,
+            1.83355,
+            0.47
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "eia_19in_slot"
+        },
+        {
+          "name": "slot_u41",
+          "position": [
+            0.0,
+            1.878,
+            0.47
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "eia_19in_slot"
+        },
+        {
+          "name": "slot_u42",
+          "position": [
+            0.0,
+            1.92245,
+            0.47
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "eia_19in_slot"
+        }
+      ],
+      "dynamicSurfaces": [
+        {
+          "name": "rack_nameplate",
+          "surfaceId": "rack_nameplate",
+          "uvSpace": "atlas"
+        }
+      ],
+      "controllableLeds": [
+        "led_rack_status_frame"
+      ]
+    },
+    {
+      "name": "rack_blank_panel_1u",
+      "glbPath": "assets/racks/rack_blank_panel_1u.glb",
+      "sizeKB": 15.9,
+      "dimensionsM": [
+        0.4826,
+        0.0433,
+        0.018
+      ],
+      "unitsU": 1,
+      "triangles": {
+        "LOD0": 152,
+        "LOD1": 12,
+        "collider": 12,
+        "total": 176
+      },
+      "verticesTotal": 284,
+      "materials": [
+        "mat_brushed_metal",
+        "mat_collider",
+        "mat_powder_coat_dark",
+        "mat_powder_coat_medium"
+      ],
+      "movableParts": [],
+      "attachmentPoints": [],
+      "dynamicSurfaces": [],
+      "controllableLeds": []
+    },
+    {
+      "name": "rack_blank_panel_2u",
+      "glbPath": "assets/racks/rack_blank_panel_2u.glb",
+      "sizeKB": 19.2,
+      "dimensionsM": [
+        0.4826,
+        0.0877,
+        0.018
+      ],
+      "unitsU": 2,
+      "triangles": {
+        "LOD0": 232,
+        "LOD1": 12,
+        "collider": 12,
+        "total": 256
+      },
+      "verticesTotal": 376,
+      "materials": [
+        "mat_brushed_metal",
+        "mat_collider",
+        "mat_powder_coat_dark",
+        "mat_powder_coat_medium"
+      ],
+      "movableParts": [],
+      "attachmentPoints": [],
+      "dynamicSurfaces": [],
+      "controllableLeds": []
+    },
+    {
+      "name": "server_1u_edge",
+      "glbPath": "assets/servers/server_1u_edge.glb",
+      "sizeKB": 266.4,
+      "dimensionsM": [
+        0.4826,
+        0.043,
+        0.65
+      ],
+      "unitsU": 1,
+      "triangles": {
+        "LOD0": 3726,
+        "LOD1": 36,
+        "collider": 12,
+        "total": 3774
+      },
+      "verticesTotal": 5756,
+      "materials": [
+        "mat_brushed_metal",
+        "mat_collider",
+        "mat_gold_contacts",
+        "mat_label_hostname",
+        "mat_label_inventory",
+        "mat_label_model",
+        "mat_led_activity",
+        "mat_led_boot",
+        "mat_led_drive",
+        "mat_led_fault",
+        "mat_led_port_act",
+        "mat_led_port_link",
+        "mat_led_power",
+        "mat_pcb_dark",
+        "mat_plastic_abs",
+        "mat_plastic_latch",
+        "mat_plastic_usb_blue",
+        "mat_powder_coat_dark",
+        "mat_powder_coat_medium",
+        "mat_rubber_epdm",
+        "mat_vent_grille"
+      ],
+      "movableParts": [
+        {
+          "name": "drive_bay_01",
+          "pivotPosition": [
+            -0.172,
+            0.015,
+            0.016
+          ],
+          "pivotType": "slide_z",
+          "spinAxis": null
+        },
+        {
+          "name": "drive_bay_02",
+          "pivotPosition": [
+            -0.116,
+            0.015,
+            0.016
+          ],
+          "pivotType": "slide_z",
+          "spinAxis": null
+        },
+        {
+          "name": "drive_bay_03",
+          "pivotPosition": [
+            -0.06,
+            0.015,
+            0.016
+          ],
+          "pivotType": "slide_z",
+          "spinAxis": null
+        },
+        {
+          "name": "drive_bay_04",
+          "pivotPosition": [
+            -0.004,
+            0.015,
+            0.016
+          ],
+          "pivotType": "slide_z",
+          "spinAxis": null
+        },
+        {
+          "name": "server_fan_01",
+          "pivotPosition": [
+            -0.097005,
+            0.021475,
+            -0.622
+          ],
+          "pivotType": "translate",
+          "spinAxis": "z"
+        },
+        {
+          "name": "server_fan_02",
+          "pivotPosition": [
+            -0.032335,
+            0.021475,
+            -0.622
+          ],
+          "pivotType": "translate",
+          "spinAxis": "z"
+        },
+        {
+          "name": "server_fan_03",
+          "pivotPosition": [
+            0.032335,
+            0.021475,
+            -0.622
+          ],
+          "pivotType": "translate",
+          "spinAxis": "z"
+        },
+        {
+          "name": "server_fan_04",
+          "pivotPosition": [
+            0.097005,
+            0.021475,
+            -0.622
+          ],
+          "pivotType": "translate",
+          "spinAxis": "z"
+        },
+        {
+          "name": "psu_01",
+          "pivotPosition": [
+            0.175,
+            0.021475,
+            -0.65
+          ],
+          "pivotType": "slide_z_rear",
+          "spinAxis": null
+        },
+        {
+          "name": "psu_02",
+          "pivotPosition": [
+            0.095,
+            0.021475,
+            -0.65
+          ],
+          "pivotType": "slide_z_rear",
+          "spinAxis": null
+        }
+      ],
+      "attachmentPoints": [
+        {
+          "name": "port_power_01",
+          "position": [
+            0.163,
+            0.021475,
+            -0.652
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            -1.0
+          ],
+          "connectorType": "iec_c14_power"
+        },
+        {
+          "name": "port_power_02",
+          "position": [
+            0.083,
+            0.021475,
+            -0.652
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            -1.0
+          ],
+          "connectorType": "iec_c14_power"
+        },
+        {
+          "name": "port_network_01",
+          "position": [
+            -0.178,
+            0.018,
+            -0.652
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            -1.0
+          ],
+          "connectorType": "rj45_or_sfp"
+        },
+        {
+          "name": "port_network_02",
+          "position": [
+            -0.156,
+            0.018,
+            -0.652
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            -1.0
+          ],
+          "connectorType": "rj45_or_sfp"
+        },
+        {
+          "name": "port_network_03",
+          "position": [
+            -0.134,
+            0.018,
+            -0.652
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            -1.0
+          ],
+          "connectorType": "rj45_or_sfp"
+        },
+        {
+          "name": "port_network_04",
+          "position": [
+            -0.112,
+            0.018,
+            -0.652
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            -1.0
+          ],
+          "connectorType": "rj45_or_sfp"
+        }
+      ],
+      "dynamicSurfaces": [
+        {
+          "name": "label_model",
+          "surfaceId": "label_model",
+          "uvSpace": "atlas"
+        },
+        {
+          "name": "label_hostname",
+          "surfaceId": "label_hostname",
+          "uvSpace": "atlas"
+        },
+        {
+          "name": "label_inventory",
+          "surfaceId": "label_inventory",
+          "uvSpace": "atlas"
+        }
+      ],
+      "controllableLeds": [
+        "led_power",
+        "led_activity",
+        "led_fault",
+        "led_boot",
+        "led_drive_01",
+        "led_drive_02",
+        "led_drive_03",
+        "led_drive_04"
+      ]
+    },
+    {
+      "name": "server_2u_compute",
+      "glbPath": "assets/servers/server_2u_compute.glb",
+      "sizeKB": 417.7,
+      "dimensionsM": [
+        0.4826,
+        0.0874,
+        0.72
+      ],
+      "unitsU": 2,
+      "triangles": {
+        "LOD0": 5954,
+        "LOD1": 36,
+        "collider": 12,
+        "total": 6002
+      },
+      "verticesTotal": 9312,
+      "materials": [
+        "mat_brushed_metal",
+        "mat_collider",
+        "mat_gold_contacts",
+        "mat_label_hostname",
+        "mat_label_inventory",
+        "mat_label_model",
+        "mat_led_activity",
+        "mat_led_boot",
+        "mat_led_drive",
+        "mat_led_fault",
+        "mat_led_port_act",
+        "mat_led_port_link",
+        "mat_led_power",
+        "mat_pcb_dark",
+        "mat_plastic_abs",
+        "mat_plastic_latch",
+        "mat_plastic_usb_blue",
+        "mat_powder_coat_dark",
+        "mat_powder_coat_medium",
+        "mat_rubber_epdm",
+        "mat_vent_grille"
+      ],
+      "movableParts": [
+        {
+          "name": "drive_bay_01",
+          "pivotPosition": [
+            -0.17,
+            0.019,
+            0.016
+          ],
+          "pivotType": "slide_z",
+          "spinAxis": null
+        },
+        {
+          "name": "drive_bay_02",
+          "pivotPosition": [
+            -0.111,
+            0.019,
+            0.016
+          ],
+          "pivotType": "slide_z",
+          "spinAxis": null
+        },
+        {
+          "name": "drive_bay_03",
+          "pivotPosition": [
+            -0.052,
+            0.019,
+            0.016
+          ],
+          "pivotType": "slide_z",
+          "spinAxis": null
+        },
+        {
+          "name": "drive_bay_04",
+          "pivotPosition": [
+            0.007,
+            0.019,
+            0.016
+          ],
+          "pivotType": "slide_z",
+          "spinAxis": null
+        },
+        {
+          "name": "drive_bay_05",
+          "pivotPosition": [
+            -0.17,
+            0.045,
+            0.016
+          ],
+          "pivotType": "slide_z",
+          "spinAxis": null
+        },
+        {
+          "name": "drive_bay_06",
+          "pivotPosition": [
+            -0.111,
+            0.045,
+            0.016
+          ],
+          "pivotType": "slide_z",
+          "spinAxis": null
+        },
+        {
+          "name": "drive_bay_07",
+          "pivotPosition": [
+            -0.052,
+            0.045,
+            0.016
+          ],
+          "pivotType": "slide_z",
+          "spinAxis": null
+        },
+        {
+          "name": "drive_bay_08",
+          "pivotPosition": [
+            0.007,
+            0.045,
+            0.016
+          ],
+          "pivotType": "slide_z",
+          "spinAxis": null
+        },
+        {
+          "name": "server_fan_01",
+          "pivotPosition": [
+            -0.107783,
+            0.0437,
+            -0.692
+          ],
+          "pivotType": "translate",
+          "spinAxis": "z"
+        },
+        {
+          "name": "server_fan_02",
+          "pivotPosition": [
+            -0.06467,
+            0.0437,
+            -0.692
+          ],
+          "pivotType": "translate",
+          "spinAxis": "z"
+        },
+        {
+          "name": "server_fan_03",
+          "pivotPosition": [
+            -0.021557,
+            0.0437,
+            -0.692
+          ],
+          "pivotType": "translate",
+          "spinAxis": "z"
+        },
+        {
+          "name": "server_fan_04",
+          "pivotPosition": [
+            0.021557,
+            0.0437,
+            -0.692
+          ],
+          "pivotType": "translate",
+          "spinAxis": "z"
+        },
+        {
+          "name": "server_fan_05",
+          "pivotPosition": [
+            0.06467,
+            0.0437,
+            -0.692
+          ],
+          "pivotType": "translate",
+          "spinAxis": "z"
+        },
+        {
+          "name": "server_fan_06",
+          "pivotPosition": [
+            0.107783,
+            0.0437,
+            -0.692
+          ],
+          "pivotType": "translate",
+          "spinAxis": "z"
+        },
+        {
+          "name": "psu_01",
+          "pivotPosition": [
+            0.175,
+            0.0437,
+            -0.72
+          ],
+          "pivotType": "slide_z_rear",
+          "spinAxis": null
+        },
+        {
+          "name": "psu_02",
+          "pivotPosition": [
+            0.095,
+            0.0437,
+            -0.72
+          ],
+          "pivotType": "slide_z_rear",
+          "spinAxis": null
+        }
+      ],
+      "attachmentPoints": [
+        {
+          "name": "port_power_01",
+          "position": [
+            0.163,
+            0.0437,
+            -0.722
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            -1.0
+          ],
+          "connectorType": "iec_c14_power"
+        },
+        {
+          "name": "port_power_02",
+          "position": [
+            0.083,
+            0.0437,
+            -0.722
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            -1.0
+          ],
+          "connectorType": "iec_c14_power"
+        },
+        {
+          "name": "port_network_01",
+          "position": [
+            -0.178,
+            0.018,
+            -0.722
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            -1.0
+          ],
+          "connectorType": "rj45_or_sfp"
+        },
+        {
+          "name": "port_network_02",
+          "position": [
+            -0.156,
+            0.018,
+            -0.722
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            -1.0
+          ],
+          "connectorType": "rj45_or_sfp"
+        },
+        {
+          "name": "port_network_03",
+          "position": [
+            -0.134,
+            0.018,
+            -0.722
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            -1.0
+          ],
+          "connectorType": "rj45_or_sfp"
+        },
+        {
+          "name": "port_network_04",
+          "position": [
+            -0.112,
+            0.018,
+            -0.722
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            -1.0
+          ],
+          "connectorType": "rj45_or_sfp"
+        },
+        {
+          "name": "port_network_05",
+          "position": [
+            -0.09,
+            0.018,
+            -0.722
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            -1.0
+          ],
+          "connectorType": "rj45_or_sfp"
+        },
+        {
+          "name": "port_network_06",
+          "position": [
+            -0.068,
+            0.018,
+            -0.722
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            -1.0
+          ],
+          "connectorType": "rj45_or_sfp"
+        }
+      ],
+      "dynamicSurfaces": [
+        {
+          "name": "label_model",
+          "surfaceId": "label_model",
+          "uvSpace": "atlas"
+        },
+        {
+          "name": "label_hostname",
+          "surfaceId": "label_hostname",
+          "uvSpace": "atlas"
+        },
+        {
+          "name": "label_inventory",
+          "surfaceId": "label_inventory",
+          "uvSpace": "atlas"
+        }
+      ],
+      "controllableLeds": [
+        "led_power",
+        "led_activity",
+        "led_fault",
+        "led_boot",
+        "led_drive_01",
+        "led_drive_02",
+        "led_drive_03",
+        "led_drive_04",
+        "led_drive_05",
+        "led_drive_06",
+        "led_drive_07",
+        "led_drive_08"
+      ]
+    },
+    {
+      "name": "server_3u_storage",
+      "glbPath": "assets/servers/server_3u_storage.glb",
+      "sizeKB": 483.0,
+      "dimensionsM": [
+        0.4826,
+        0.1319,
+        0.76
+      ],
+      "unitsU": 3,
+      "triangles": {
+        "LOD0": 6702,
+        "LOD1": 36,
+        "collider": 12,
+        "total": 6750
+      },
+      "verticesTotal": 10724,
+      "materials": [
+        "mat_brushed_metal",
+        "mat_collider",
+        "mat_gold_contacts",
+        "mat_label_hostname",
+        "mat_label_inventory",
+        "mat_label_model",
+        "mat_led_activity",
+        "mat_led_boot",
+        "mat_led_drive",
+        "mat_led_fault",
+        "mat_led_port_act",
+        "mat_led_port_link",
+        "mat_led_power",
+        "mat_pcb_dark",
+        "mat_plastic_abs",
+        "mat_plastic_latch",
+        "mat_plastic_usb_blue",
+        "mat_powder_coat_dark",
+        "mat_powder_coat_medium",
+        "mat_rubber_epdm",
+        "mat_vent_grille"
+      ],
+      "movableParts": [
+        {
+          "name": "drive_bay_01",
+          "pivotPosition": [
+            -0.162,
+            0.022,
+            0.016
+          ],
+          "pivotType": "slide_z",
+          "spinAxis": null
+        },
+        {
+          "name": "drive_bay_02",
+          "pivotPosition": [
+            -0.084,
+            0.022,
+            0.016
+          ],
+          "pivotType": "slide_z",
+          "spinAxis": null
+        },
+        {
+          "name": "drive_bay_03",
+          "pivotPosition": [
+            -0.006,
+            0.022,
+            0.016
+          ],
+          "pivotType": "slide_z",
+          "spinAxis": null
+        },
+        {
+          "name": "drive_bay_04",
+          "pivotPosition": [
+            0.072,
+            0.022,
+            0.016
+          ],
+          "pivotType": "slide_z",
+          "spinAxis": null
+        },
+        {
+          "name": "drive_bay_05",
+          "pivotPosition": [
+            -0.162,
+            0.054,
+            0.016
+          ],
+          "pivotType": "slide_z",
+          "spinAxis": null
+        },
+        {
+          "name": "drive_bay_06",
+          "pivotPosition": [
+            -0.084,
+            0.054,
+            0.016
+          ],
+          "pivotType": "slide_z",
+          "spinAxis": null
+        },
+        {
+          "name": "drive_bay_07",
+          "pivotPosition": [
+            -0.006,
+            0.054,
+            0.016
+          ],
+          "pivotType": "slide_z",
+          "spinAxis": null
+        },
+        {
+          "name": "drive_bay_08",
+          "pivotPosition": [
+            0.072,
+            0.054,
+            0.016
+          ],
+          "pivotType": "slide_z",
+          "spinAxis": null
+        },
+        {
+          "name": "drive_bay_09",
+          "pivotPosition": [
+            -0.162,
+            0.086,
+            0.016
+          ],
+          "pivotType": "slide_z",
+          "spinAxis": null
+        },
+        {
+          "name": "drive_bay_10",
+          "pivotPosition": [
+            -0.084,
+            0.086,
+            0.016
+          ],
+          "pivotType": "slide_z",
+          "spinAxis": null
+        },
+        {
+          "name": "drive_bay_11",
+          "pivotPosition": [
+            -0.006,
+            0.086,
+            0.016
+          ],
+          "pivotType": "slide_z",
+          "spinAxis": null
+        },
+        {
+          "name": "drive_bay_12",
+          "pivotPosition": [
+            0.072,
+            0.086,
+            0.016
+          ],
+          "pivotType": "slide_z",
+          "spinAxis": null
+        },
+        {
+          "name": "server_fan_01",
+          "pivotPosition": [
+            -0.097005,
+            0.065925,
+            -0.732
+          ],
+          "pivotType": "translate",
+          "spinAxis": "z"
+        },
+        {
+          "name": "server_fan_02",
+          "pivotPosition": [
+            -0.032335,
+            0.065925,
+            -0.732
+          ],
+          "pivotType": "translate",
+          "spinAxis": "z"
+        },
+        {
+          "name": "server_fan_03",
+          "pivotPosition": [
+            0.032335,
+            0.065925,
+            -0.732
+          ],
+          "pivotType": "translate",
+          "spinAxis": "z"
+        },
+        {
+          "name": "server_fan_04",
+          "pivotPosition": [
+            0.097005,
+            0.065925,
+            -0.732
+          ],
+          "pivotType": "translate",
+          "spinAxis": "z"
+        },
+        {
+          "name": "psu_01",
+          "pivotPosition": [
+            0.175,
+            0.024,
+            -0.76
+          ],
+          "pivotType": "slide_z_rear",
+          "spinAxis": null
+        },
+        {
+          "name": "psu_02",
+          "pivotPosition": [
+            0.095,
+            0.024,
+            -0.76
+          ],
+          "pivotType": "slide_z_rear",
+          "spinAxis": null
+        }
+      ],
+      "attachmentPoints": [
+        {
+          "name": "port_power_01",
+          "position": [
+            0.163,
+            0.024,
+            -0.762
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            -1.0
+          ],
+          "connectorType": "iec_c14_power"
+        },
+        {
+          "name": "port_power_02",
+          "position": [
+            0.083,
+            0.024,
+            -0.762
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            -1.0
+          ],
+          "connectorType": "iec_c14_power"
+        },
+        {
+          "name": "port_network_01",
+          "position": [
+            -0.178,
+            0.018,
+            -0.762
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            -1.0
+          ],
+          "connectorType": "rj45_or_sfp"
+        },
+        {
+          "name": "port_network_02",
+          "position": [
+            -0.156,
+            0.018,
+            -0.762
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            -1.0
+          ],
+          "connectorType": "rj45_or_sfp"
+        },
+        {
+          "name": "port_network_03",
+          "position": [
+            -0.134,
+            0.018,
+            -0.762
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            -1.0
+          ],
+          "connectorType": "rj45_or_sfp"
+        },
+        {
+          "name": "port_network_04",
+          "position": [
+            -0.112,
+            0.018,
+            -0.762
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            -1.0
+          ],
+          "connectorType": "rj45_or_sfp"
+        }
+      ],
+      "dynamicSurfaces": [
+        {
+          "name": "label_model",
+          "surfaceId": "label_model",
+          "uvSpace": "atlas"
+        },
+        {
+          "name": "label_hostname",
+          "surfaceId": "label_hostname",
+          "uvSpace": "atlas"
+        },
+        {
+          "name": "label_inventory",
+          "surfaceId": "label_inventory",
+          "uvSpace": "atlas"
+        }
+      ],
+      "controllableLeds": [
+        "led_power",
+        "led_activity",
+        "led_fault",
+        "led_boot",
+        "led_drive_01",
+        "led_drive_02",
+        "led_drive_03",
+        "led_drive_04",
+        "led_drive_05",
+        "led_drive_06",
+        "led_drive_07",
+        "led_drive_08",
+        "led_drive_09",
+        "led_drive_10",
+        "led_drive_11",
+        "led_drive_12"
+      ]
+    },
+    {
+      "name": "server_4u_ai",
+      "glbPath": "assets/servers/server_4u_ai.glb",
+      "sizeKB": 556.7,
+      "dimensionsM": [
+        0.4826,
+        0.1763,
+        0.8
+      ],
+      "unitsU": 4,
+      "triangles": {
+        "LOD0": 8782,
+        "LOD1": 36,
+        "collider": 12,
+        "total": 8830
+      },
+      "verticesTotal": 12940,
+      "materials": [
+        "mat_brushed_metal",
+        "mat_collider",
+        "mat_copper_heatpipe",
+        "mat_gold_contacts",
+        "mat_heatsink_metal",
+        "mat_label_hostname",
+        "mat_label_inventory",
+        "mat_label_model",
+        "mat_led_activity",
+        "mat_led_boot",
+        "mat_led_drive",
+        "mat_led_fault",
+        "mat_led_gpu_load",
+        "mat_led_port_act",
+        "mat_led_port_link",
+        "mat_led_power",
+        "mat_pcb_dark",
+        "mat_plastic_abs",
+        "mat_plastic_latch",
+        "mat_plastic_usb_blue",
+        "mat_powder_coat_dark",
+        "mat_powder_coat_medium",
+        "mat_rubber_epdm",
+        "mat_vent_grille"
+      ],
+      "movableParts": [
+        {
+          "name": "drive_bay_01",
+          "pivotPosition": [
+            0.114,
+            0.031,
+            0.016
+          ],
+          "pivotType": "slide_z",
+          "spinAxis": null
+        },
+        {
+          "name": "drive_bay_02",
+          "pivotPosition": [
+            0.17,
+            0.031,
+            0.016
+          ],
+          "pivotType": "slide_z",
+          "spinAxis": null
+        },
+        {
+          "name": "drive_bay_03",
+          "pivotPosition": [
+            0.114,
+            0.063,
+            0.016
+          ],
+          "pivotType": "slide_z",
+          "spinAxis": null
+        },
+        {
+          "name": "drive_bay_04",
+          "pivotPosition": [
+            0.17,
+            0.063,
+            0.016
+          ],
+          "pivotType": "slide_z",
+          "spinAxis": null
+        },
+        {
+          "name": "gpu_module_01",
+          "pivotPosition": [
+            -0.167,
+            0.078,
+            0.016
+          ],
+          "pivotType": "slide_z",
+          "spinAxis": null
+        },
+        {
+          "name": "gpu_module_02",
+          "pivotPosition": [
+            -0.097,
+            0.078,
+            0.016
+          ],
+          "pivotType": "slide_z",
+          "spinAxis": null
+        },
+        {
+          "name": "gpu_module_03",
+          "pivotPosition": [
+            -0.027,
+            0.078,
+            0.016
+          ],
+          "pivotType": "slide_z",
+          "spinAxis": null
+        },
+        {
+          "name": "gpu_module_04",
+          "pivotPosition": [
+            0.043,
+            0.078,
+            0.016
+          ],
+          "pivotType": "slide_z",
+          "spinAxis": null
+        },
+        {
+          "name": "server_fan_01",
+          "pivotPosition": [
+            -0.113172,
+            0.08815,
+            -0.772
+          ],
+          "pivotType": "translate",
+          "spinAxis": "z"
+        },
+        {
+          "name": "server_fan_02",
+          "pivotPosition": [
+            -0.080837,
+            0.08815,
+            -0.772
+          ],
+          "pivotType": "translate",
+          "spinAxis": "z"
+        },
+        {
+          "name": "server_fan_03",
+          "pivotPosition": [
+            -0.048502,
+            0.08815,
+            -0.772
+          ],
+          "pivotType": "translate",
+          "spinAxis": "z"
+        },
+        {
+          "name": "server_fan_04",
+          "pivotPosition": [
+            -0.016168,
+            0.08815,
+            -0.772
+          ],
+          "pivotType": "translate",
+          "spinAxis": "z"
+        },
+        {
+          "name": "server_fan_05",
+          "pivotPosition": [
+            0.016168,
+            0.08815,
+            -0.772
+          ],
+          "pivotType": "translate",
+          "spinAxis": "z"
+        },
+        {
+          "name": "server_fan_06",
+          "pivotPosition": [
+            0.048503,
+            0.08815,
+            -0.772
+          ],
+          "pivotType": "translate",
+          "spinAxis": "z"
+        },
+        {
+          "name": "server_fan_07",
+          "pivotPosition": [
+            0.080837,
+            0.08815,
+            -0.772
+          ],
+          "pivotType": "translate",
+          "spinAxis": "z"
+        },
+        {
+          "name": "server_fan_08",
+          "pivotPosition": [
+            0.113172,
+            0.08815,
+            -0.772
+          ],
+          "pivotType": "translate",
+          "spinAxis": "z"
+        },
+        {
+          "name": "psu_01",
+          "pivotPosition": [
+            0.175,
+            0.024,
+            -0.8
+          ],
+          "pivotType": "slide_z_rear",
+          "spinAxis": null
+        },
+        {
+          "name": "psu_02",
+          "pivotPosition": [
+            0.095,
+            0.024,
+            -0.8
+          ],
+          "pivotType": "slide_z_rear",
+          "spinAxis": null
+        },
+        {
+          "name": "psu_03",
+          "pivotPosition": [
+            0.175,
+            0.068,
+            -0.8
+          ],
+          "pivotType": "slide_z_rear",
+          "spinAxis": null
+        },
+        {
+          "name": "psu_04",
+          "pivotPosition": [
+            0.095,
+            0.068,
+            -0.8
+          ],
+          "pivotType": "slide_z_rear",
+          "spinAxis": null
+        }
+      ],
+      "attachmentPoints": [
+        {
+          "name": "port_power_01",
+          "position": [
+            0.163,
+            0.024,
+            -0.802
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            -1.0
+          ],
+          "connectorType": "iec_c14_power"
+        },
+        {
+          "name": "port_power_02",
+          "position": [
+            0.083,
+            0.024,
+            -0.802
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            -1.0
+          ],
+          "connectorType": "iec_c14_power"
+        },
+        {
+          "name": "port_power_03",
+          "position": [
+            0.163,
+            0.068,
+            -0.802
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            -1.0
+          ],
+          "connectorType": "iec_c14_power"
+        },
+        {
+          "name": "port_power_04",
+          "position": [
+            0.083,
+            0.068,
+            -0.802
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            -1.0
+          ],
+          "connectorType": "iec_c14_power"
+        },
+        {
+          "name": "port_network_01",
+          "position": [
+            -0.178,
+            0.018,
+            -0.802
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            -1.0
+          ],
+          "connectorType": "rj45_or_sfp"
+        },
+        {
+          "name": "port_network_02",
+          "position": [
+            -0.156,
+            0.018,
+            -0.802
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            -1.0
+          ],
+          "connectorType": "rj45_or_sfp"
+        },
+        {
+          "name": "port_network_03",
+          "position": [
+            -0.134,
+            0.018,
+            -0.802
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            -1.0
+          ],
+          "connectorType": "rj45_or_sfp"
+        },
+        {
+          "name": "port_network_04",
+          "position": [
+            -0.112,
+            0.018,
+            -0.802
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            -1.0
+          ],
+          "connectorType": "rj45_or_sfp"
+        },
+        {
+          "name": "port_network_05",
+          "position": [
+            -0.09,
+            0.018,
+            -0.802
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            -1.0
+          ],
+          "connectorType": "rj45_or_sfp"
+        },
+        {
+          "name": "port_network_06",
+          "position": [
+            -0.068,
+            0.018,
+            -0.802
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            -1.0
+          ],
+          "connectorType": "rj45_or_sfp"
+        }
+      ],
+      "dynamicSurfaces": [
+        {
+          "name": "label_model",
+          "surfaceId": "label_model",
+          "uvSpace": "atlas"
+        },
+        {
+          "name": "label_hostname",
+          "surfaceId": "label_hostname",
+          "uvSpace": "atlas"
+        },
+        {
+          "name": "label_inventory",
+          "surfaceId": "label_inventory",
+          "uvSpace": "atlas"
+        }
+      ],
+      "controllableLeds": [
+        "led_power",
+        "led_activity",
+        "led_fault",
+        "led_boot",
+        "led_drive_01",
+        "led_drive_02",
+        "led_drive_03",
+        "led_drive_04",
+        "led_gpu_load_01",
+        "led_gpu_load_02",
+        "led_gpu_load_03",
+        "led_gpu_load_04"
+      ]
+    },
+    {
+      "name": "switch_8port",
+      "glbPath": "assets/network_power/switch_8port.glb",
+      "sizeKB": 136.5,
+      "dimensionsM": [
+        0.4826,
+        0.043,
+        0.28
+      ],
+      "unitsU": 1,
+      "triangles": {
+        "LOD0": 1654,
+        "LOD1": 24,
+        "collider": 12,
+        "total": 1690
+      },
+      "verticesTotal": 2852,
+      "materials": [
+        "mat_brushed_metal",
+        "mat_collider",
+        "mat_gold_contacts",
+        "mat_label_model",
+        "mat_led_activity",
+        "mat_led_fault",
+        "mat_led_port_act",
+        "mat_led_port_link",
+        "mat_led_power",
+        "mat_plastic_abs",
+        "mat_powder_coat_dark",
+        "mat_powder_coat_medium",
+        "mat_rubber_epdm",
+        "mat_vent_grille"
+      ],
+      "movableParts": [
+        {
+          "name": "server_fan_01",
+          "pivotPosition": [
+            -0.12,
+            0.021475,
+            -0.265
+          ],
+          "pivotType": "translate",
+          "spinAxis": "z"
+        },
+        {
+          "name": "server_fan_02",
+          "pivotPosition": [
+            -0.045,
+            0.021475,
+            -0.265
+          ],
+          "pivotType": "translate",
+          "spinAxis": "z"
+        }
+      ],
+      "attachmentPoints": [
+        {
+          "name": "port_console_01",
+          "position": [
+            -0.162,
+            0.015462,
+            0.016
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "rj45_console"
+        },
+        {
+          "name": "port_network_01",
+          "position": [
+            -0.118,
+            0.01718,
+            0.016
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "rj45"
+        },
+        {
+          "name": "port_network_02",
+          "position": [
+            -0.0985,
+            0.01718,
+            0.016
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "rj45"
+        },
+        {
+          "name": "port_network_03",
+          "position": [
+            -0.079,
+            0.01718,
+            0.016
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "rj45"
+        },
+        {
+          "name": "port_network_04",
+          "position": [
+            -0.0595,
+            0.01718,
+            0.016
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "rj45"
+        },
+        {
+          "name": "port_network_05",
+          "position": [
+            -0.035,
+            0.01718,
+            0.016
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "rj45"
+        },
+        {
+          "name": "port_network_06",
+          "position": [
+            -0.0155,
+            0.01718,
+            0.016
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "rj45"
+        },
+        {
+          "name": "port_network_07",
+          "position": [
+            0.004,
+            0.01718,
+            0.016
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "rj45"
+        },
+        {
+          "name": "port_network_08",
+          "position": [
+            0.0235,
+            0.01718,
+            0.016
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "rj45"
+        },
+        {
+          "name": "port_uplink_01",
+          "position": [
+            0.144,
+            0.01718,
+            0.016
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "sfp_plus_uplink"
+        },
+        {
+          "name": "port_uplink_02",
+          "position": [
+            0.161,
+            0.01718,
+            0.016
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "sfp_plus_uplink"
+        },
+        {
+          "name": "port_power_01",
+          "position": [
+            0.145,
+            0.021475,
+            -0.282
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            -1.0
+          ],
+          "connectorType": "iec_c14_power"
+        }
+      ],
+      "dynamicSurfaces": [
+        {
+          "name": "label_model",
+          "surfaceId": "label_model",
+          "uvSpace": "atlas"
+        }
+      ],
+      "controllableLeds": [
+        "led_link_01",
+        "led_act_01",
+        "led_link_02",
+        "led_act_02",
+        "led_link_03",
+        "led_act_03",
+        "led_link_04",
+        "led_act_04",
+        "led_link_05",
+        "led_act_05",
+        "led_link_06",
+        "led_act_06",
+        "led_link_07",
+        "led_act_07",
+        "led_link_08",
+        "led_act_08",
+        "led_uplink_01",
+        "led_uplink_02",
+        "led_power",
+        "led_fault"
+      ]
+    },
+    {
+      "name": "switch_16port",
+      "glbPath": "assets/network_power/switch_16port.glb",
+      "sizeKB": 204.6,
+      "dimensionsM": [
+        0.4826,
+        0.043,
+        0.34
+      ],
+      "unitsU": 1,
+      "triangles": {
+        "LOD0": 2386,
+        "LOD1": 24,
+        "collider": 12,
+        "total": 2422
+      },
+      "verticesTotal": 4316,
+      "materials": [
+        "mat_brushed_metal",
+        "mat_collider",
+        "mat_gold_contacts",
+        "mat_label_model",
+        "mat_led_activity",
+        "mat_led_fault",
+        "mat_led_port_act",
+        "mat_led_port_link",
+        "mat_led_power",
+        "mat_plastic_abs",
+        "mat_powder_coat_dark",
+        "mat_powder_coat_medium",
+        "mat_rubber_epdm",
+        "mat_vent_grille"
+      ],
+      "movableParts": [
+        {
+          "name": "server_fan_01",
+          "pivotPosition": [
+            -0.12,
+            0.021475,
+            -0.325
+          ],
+          "pivotType": "translate",
+          "spinAxis": "z"
+        },
+        {
+          "name": "server_fan_02",
+          "pivotPosition": [
+            -0.045,
+            0.021475,
+            -0.325
+          ],
+          "pivotType": "translate",
+          "spinAxis": "z"
+        }
+      ],
+      "attachmentPoints": [
+        {
+          "name": "port_console_01",
+          "position": [
+            -0.162,
+            0.015462,
+            0.016
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "rj45_console"
+        },
+        {
+          "name": "port_network_01",
+          "position": [
+            -0.124,
+            0.01718,
+            0.016
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "rj45"
+        },
+        {
+          "name": "port_network_02",
+          "position": [
+            -0.109,
+            0.01718,
+            0.016
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "rj45"
+        },
+        {
+          "name": "port_network_03",
+          "position": [
+            -0.094,
+            0.01718,
+            0.016
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "rj45"
+        },
+        {
+          "name": "port_network_04",
+          "position": [
+            -0.079,
+            0.01718,
+            0.016
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "rj45"
+        },
+        {
+          "name": "port_network_05",
+          "position": [
+            -0.059,
+            0.01718,
+            0.016
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "rj45"
+        },
+        {
+          "name": "port_network_06",
+          "position": [
+            -0.044,
+            0.01718,
+            0.016
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "rj45"
+        },
+        {
+          "name": "port_network_07",
+          "position": [
+            -0.029,
+            0.01718,
+            0.016
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "rj45"
+        },
+        {
+          "name": "port_network_08",
+          "position": [
+            -0.014,
+            0.01718,
+            0.016
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "rj45"
+        },
+        {
+          "name": "port_network_09",
+          "position": [
+            0.006,
+            0.01718,
+            0.016
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "rj45"
+        },
+        {
+          "name": "port_network_10",
+          "position": [
+            0.021,
+            0.01718,
+            0.016
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "rj45"
+        },
+        {
+          "name": "port_network_11",
+          "position": [
+            0.036,
+            0.01718,
+            0.016
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "rj45"
+        },
+        {
+          "name": "port_network_12",
+          "position": [
+            0.051,
+            0.01718,
+            0.016
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "rj45"
+        },
+        {
+          "name": "port_network_13",
+          "position": [
+            0.071,
+            0.01718,
+            0.016
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "rj45"
+        },
+        {
+          "name": "port_network_14",
+          "position": [
+            0.086,
+            0.01718,
+            0.016
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "rj45"
+        },
+        {
+          "name": "port_network_15",
+          "position": [
+            0.101,
+            0.01718,
+            0.016
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "rj45"
+        },
+        {
+          "name": "port_network_16",
+          "position": [
+            0.116,
+            0.01718,
+            0.016
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "rj45"
+        },
+        {
+          "name": "port_uplink_01",
+          "position": [
+            0.144,
+            0.01718,
+            0.016
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "sfp_plus_uplink"
+        },
+        {
+          "name": "port_uplink_02",
+          "position": [
+            0.161,
+            0.01718,
+            0.016
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "sfp_plus_uplink"
+        },
+        {
+          "name": "port_uplink_03",
+          "position": [
+            0.178,
+            0.01718,
+            0.016
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "sfp_plus_uplink"
+        },
+        {
+          "name": "port_uplink_04",
+          "position": [
+            0.195,
+            0.01718,
+            0.016
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "sfp_plus_uplink"
+        },
+        {
+          "name": "port_power_01",
+          "position": [
+            0.145,
+            0.021475,
+            -0.342
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            -1.0
+          ],
+          "connectorType": "iec_c14_power"
+        },
+        {
+          "name": "port_power_02",
+          "position": [
+            0.08,
+            0.021475,
+            -0.342
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            -1.0
+          ],
+          "connectorType": "iec_c14_power"
+        }
+      ],
+      "dynamicSurfaces": [
+        {
+          "name": "label_model",
+          "surfaceId": "label_model",
+          "uvSpace": "atlas"
+        }
+      ],
+      "controllableLeds": [
+        "led_link_01",
+        "led_act_01",
+        "led_link_02",
+        "led_act_02",
+        "led_link_03",
+        "led_act_03",
+        "led_link_04",
+        "led_act_04",
+        "led_link_05",
+        "led_act_05",
+        "led_link_06",
+        "led_act_06",
+        "led_link_07",
+        "led_act_07",
+        "led_link_08",
+        "led_act_08",
+        "led_link_09",
+        "led_act_09",
+        "led_link_10",
+        "led_act_10",
+        "led_link_11",
+        "led_act_11",
+        "led_link_12",
+        "led_act_12",
+        "led_link_13",
+        "led_act_13",
+        "led_link_14",
+        "led_act_14",
+        "led_link_15",
+        "led_act_15",
+        "led_link_16",
+        "led_act_16",
+        "led_uplink_01",
+        "led_uplink_02",
+        "led_uplink_03",
+        "led_uplink_04",
+        "led_power",
+        "led_fault"
+      ]
+    },
+    {
+      "name": "patch_panel_24port",
+      "glbPath": "assets/network_power/patch_panel_24port.glb",
+      "sizeKB": 119.0,
+      "dimensionsM": [
+        0.4826,
+        0.043,
+        0.095
+      ],
+      "unitsU": 1,
+      "triangles": {
+        "LOD0": 1538,
+        "LOD1": 12,
+        "collider": 12,
+        "total": 1562
+      },
+      "verticesTotal": 3124,
+      "materials": [
+        "mat_brushed_metal",
+        "mat_collider",
+        "mat_gold_contacts",
+        "mat_label_model",
+        "mat_plastic_abs",
+        "mat_powder_coat_dark"
+      ],
+      "movableParts": [],
+      "attachmentPoints": [
+        {
+          "name": "port_patch_01",
+          "position": [
+            -0.198,
+            0.018039,
+            0.013
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "rj45_patch"
+        },
+        {
+          "name": "port_patch_02",
+          "position": [
+            -0.1825,
+            0.018039,
+            0.013
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "rj45_patch"
+        },
+        {
+          "name": "port_patch_03",
+          "position": [
+            -0.167,
+            0.018039,
+            0.013
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "rj45_patch"
+        },
+        {
+          "name": "port_patch_04",
+          "position": [
+            -0.1515,
+            0.018039,
+            0.013
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "rj45_patch"
+        },
+        {
+          "name": "port_patch_05",
+          "position": [
+            -0.136,
+            0.018039,
+            0.013
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "rj45_patch"
+        },
+        {
+          "name": "port_patch_06",
+          "position": [
+            -0.1205,
+            0.018039,
+            0.013
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "rj45_patch"
+        },
+        {
+          "name": "port_patch_07",
+          "position": [
+            -0.094,
+            0.018039,
+            0.013
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "rj45_patch"
+        },
+        {
+          "name": "port_patch_08",
+          "position": [
+            -0.0785,
+            0.018039,
+            0.013
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "rj45_patch"
+        },
+        {
+          "name": "port_patch_09",
+          "position": [
+            -0.063,
+            0.018039,
+            0.013
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "rj45_patch"
+        },
+        {
+          "name": "port_patch_10",
+          "position": [
+            -0.0475,
+            0.018039,
+            0.013
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "rj45_patch"
+        },
+        {
+          "name": "port_patch_11",
+          "position": [
+            -0.032,
+            0.018039,
+            0.013
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "rj45_patch"
+        },
+        {
+          "name": "port_patch_12",
+          "position": [
+            -0.0165,
+            0.018039,
+            0.013
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "rj45_patch"
+        },
+        {
+          "name": "port_patch_13",
+          "position": [
+            0.01,
+            0.018039,
+            0.013
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "rj45_patch"
+        },
+        {
+          "name": "port_patch_14",
+          "position": [
+            0.0255,
+            0.018039,
+            0.013
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "rj45_patch"
+        },
+        {
+          "name": "port_patch_15",
+          "position": [
+            0.041,
+            0.018039,
+            0.013
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "rj45_patch"
+        },
+        {
+          "name": "port_patch_16",
+          "position": [
+            0.0565,
+            0.018039,
+            0.013
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "rj45_patch"
+        },
+        {
+          "name": "port_patch_17",
+          "position": [
+            0.072,
+            0.018039,
+            0.013
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "rj45_patch"
+        },
+        {
+          "name": "port_patch_18",
+          "position": [
+            0.0875,
+            0.018039,
+            0.013
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "rj45_patch"
+        },
+        {
+          "name": "port_patch_19",
+          "position": [
+            0.114,
+            0.018039,
+            0.013
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "rj45_patch"
+        },
+        {
+          "name": "port_patch_20",
+          "position": [
+            0.1295,
+            0.018039,
+            0.013
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "rj45_patch"
+        },
+        {
+          "name": "port_patch_21",
+          "position": [
+            0.145,
+            0.018039,
+            0.013
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "rj45_patch"
+        },
+        {
+          "name": "port_patch_22",
+          "position": [
+            0.1605,
+            0.018039,
+            0.013
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "rj45_patch"
+        },
+        {
+          "name": "port_patch_23",
+          "position": [
+            0.176,
+            0.018039,
+            0.013
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "rj45_patch"
+        },
+        {
+          "name": "port_patch_24",
+          "position": [
+            0.1915,
+            0.018039,
+            0.013
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "rj45_patch"
+        }
+      ],
+      "dynamicSurfaces": [
+        {
+          "name": "label_model",
+          "surfaceId": "label_model",
+          "uvSpace": "atlas"
+        }
+      ],
+      "controllableLeds": []
+    },
+    {
+      "name": "cable_management_1u",
+      "glbPath": "assets/network_power/cable_management_1u.glb",
+      "sizeKB": 75.0,
+      "dimensionsM": [
+        0.4826,
+        0.043,
+        0.072
+      ],
+      "unitsU": 1,
+      "triangles": {
+        "LOD0": 948,
+        "LOD1": 12,
+        "collider": 12,
+        "total": 972
+      },
+      "verticesTotal": 1944,
+      "materials": [
+        "mat_brushed_metal",
+        "mat_collider",
+        "mat_plastic_abs",
+        "mat_powder_coat_dark",
+        "mat_powder_coat_medium"
+      ],
+      "movableParts": [
+        {
+          "name": "cable_cover",
+          "pivotPosition": [
+            0.0,
+            0.021475,
+            0.08
+          ],
+          "pivotType": "slide_z",
+          "spinAxis": null
+        }
+      ],
+      "attachmentPoints": [
+        {
+          "name": "port_guide_01",
+          "position": [
+            -0.18,
+            0.021475,
+            0.042
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "cable_waypoint"
+        },
+        {
+          "name": "port_guide_02",
+          "position": [
+            -0.128571,
+            0.021475,
+            0.042
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "cable_waypoint"
+        },
+        {
+          "name": "port_guide_03",
+          "position": [
+            -0.077143,
+            0.021475,
+            0.042
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "cable_waypoint"
+        },
+        {
+          "name": "port_guide_04",
+          "position": [
+            -0.025714,
+            0.021475,
+            0.042
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "cable_waypoint"
+        },
+        {
+          "name": "port_guide_05",
+          "position": [
+            0.025714,
+            0.021475,
+            0.042
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "cable_waypoint"
+        },
+        {
+          "name": "port_guide_06",
+          "position": [
+            0.077143,
+            0.021475,
+            0.042
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "cable_waypoint"
+        },
+        {
+          "name": "port_guide_07",
+          "position": [
+            0.128571,
+            0.021475,
+            0.042
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "cable_waypoint"
+        },
+        {
+          "name": "port_guide_08",
+          "position": [
+            0.18,
+            0.021475,
+            0.042
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "cable_waypoint"
+        }
+      ],
+      "dynamicSurfaces": [],
+      "controllableLeds": []
+    },
+    {
+      "name": "rack_pdu",
+      "glbPath": "assets/network_power/rack_pdu.glb",
+      "sizeKB": 155.5,
+      "dimensionsM": [
+        0.4826,
+        0.043,
+        0.115
+      ],
+      "unitsU": 1,
+      "triangles": {
+        "LOD0": 2050,
+        "LOD1": 12,
+        "collider": 12,
+        "total": 2074
+      },
+      "verticesTotal": 3690,
+      "materials": [
+        "mat_collider",
+        "mat_gold_contacts",
+        "mat_led_pdu",
+        "mat_led_power",
+        "mat_plastic_abs",
+        "mat_plastic_latch",
+        "mat_powder_coat_dark",
+        "mat_powder_coat_medium",
+        "mat_rubber_epdm"
+      ],
+      "movableParts": [
+        {
+          "name": "pdu_breaker",
+          "pivotPosition": [
+            -0.138,
+            0.021475,
+            0.012
+          ],
+          "pivotType": "rocker_x",
+          "spinAxis": null
+        }
+      ],
+      "attachmentPoints": [
+        {
+          "name": "port_power_out_01",
+          "position": [
+            -0.105,
+            0.018898,
+            0.016
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "iec_c13_outlet"
+        },
+        {
+          "name": "port_power_out_02",
+          "position": [
+            -0.0855,
+            0.018898,
+            0.016
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "iec_c13_outlet"
+        },
+        {
+          "name": "port_power_out_03",
+          "position": [
+            -0.066,
+            0.018898,
+            0.016
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "iec_c13_outlet"
+        },
+        {
+          "name": "port_power_out_04",
+          "position": [
+            -0.0465,
+            0.018898,
+            0.016
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "iec_c13_outlet"
+        },
+        {
+          "name": "port_power_out_05",
+          "position": [
+            -0.027,
+            0.018898,
+            0.016
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "iec_c13_outlet"
+        },
+        {
+          "name": "port_power_out_06",
+          "position": [
+            -0.0075,
+            0.018898,
+            0.016
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "iec_c13_outlet"
+        },
+        {
+          "name": "port_power_out_07",
+          "position": [
+            0.012,
+            0.018898,
+            0.016
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "iec_c13_outlet"
+        },
+        {
+          "name": "port_power_out_08",
+          "position": [
+            0.0315,
+            0.018898,
+            0.016
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "iec_c13_outlet"
+        },
+        {
+          "name": "port_power_out_09",
+          "position": [
+            0.051,
+            0.018898,
+            0.016
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "iec_c13_outlet"
+        },
+        {
+          "name": "port_power_out_10",
+          "position": [
+            0.0705,
+            0.018898,
+            0.016
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "iec_c13_outlet"
+        },
+        {
+          "name": "port_power_out_11",
+          "position": [
+            0.09,
+            0.018898,
+            0.016
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "iec_c13_outlet"
+        },
+        {
+          "name": "port_power_out_12",
+          "position": [
+            0.1095,
+            0.018898,
+            0.016
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "iec_c13_outlet"
+        },
+        {
+          "name": "port_power_out_13",
+          "position": [
+            0.129,
+            0.018898,
+            0.016
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "iec_c13_outlet"
+        },
+        {
+          "name": "port_power_out_14",
+          "position": [
+            0.1485,
+            0.018898,
+            0.016
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "iec_c13_outlet"
+        },
+        {
+          "name": "port_power_out_15",
+          "position": [
+            0.168,
+            0.018898,
+            0.016
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "iec_c13_outlet"
+        },
+        {
+          "name": "port_power_out_16",
+          "position": [
+            0.1875,
+            0.018898,
+            0.016
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "connectorType": "iec_c13_outlet"
+        },
+        {
+          "name": "port_power_in_01",
+          "position": [
+            -0.16,
+            0.021475,
+            -0.141
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            -1.0
+          ],
+          "connectorType": "iec_60309_feed"
+        }
+      ],
+      "dynamicSurfaces": [],
+      "controllableLeds": [
+        "pdu_display",
+        "led_pdu_01",
+        "led_pdu_02",
+        "led_pdu_03",
+        "led_pdu_04",
+        "led_pdu_05",
+        "led_pdu_06",
+        "led_pdu_07",
+        "led_pdu_08",
+        "led_pdu_09",
+        "led_pdu_10",
+        "led_pdu_11",
+        "led_pdu_12",
+        "led_pdu_13",
+        "led_pdu_14",
+        "led_pdu_15",
+        "led_pdu_16"
+      ]
+    },
+    {
+      "name": "connector_rj45",
+      "glbPath": "assets/network_power/connector_rj45.glb",
+      "sizeKB": 16.7,
+      "dimensionsM": [
+        0.014,
+        0.014,
+        0.038
+      ],
+      "unitsU": null,
+      "triangles": {
+        "LOD0": 136,
+        "LOD1": 12,
+        "collider": 12,
+        "total": 160
+      },
+      "verticesTotal": 286,
+      "materials": [
+        "mat_brushed_metal",
+        "mat_cable_green",
+        "mat_collider",
+        "mat_gold_contacts",
+        "mat_plastic_abs"
+      ],
+      "movableParts": [],
+      "attachmentPoints": [
+        {
+          "name": "attach_cable_end",
+          "position": [
+            0.0,
+            0.0,
+            -0.038
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            -1.0
+          ],
+          "connectorType": "cable_tail"
+        }
+      ],
+      "dynamicSurfaces": [],
+      "controllableLeds": []
+    },
+    {
+      "name": "connector_power_iec",
+      "glbPath": "assets/network_power/connector_power_iec.glb",
+      "sizeKB": 17.0,
+      "dimensionsM": [
+        0.028,
+        0.02,
+        0.058
+      ],
+      "unitsU": null,
+      "triangles": {
+        "LOD0": 156,
+        "LOD1": 12,
+        "collider": 12,
+        "total": 180
+      },
+      "verticesTotal": 318,
+      "materials": [
+        "mat_collider",
+        "mat_gold_contacts",
+        "mat_plastic_abs",
+        "mat_rubber_epdm"
+      ],
+      "movableParts": [],
+      "attachmentPoints": [
+        {
+          "name": "attach_cable_end",
+          "position": [
+            0.0,
+            0.0,
+            -0.058
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            -1.0
+          ],
+          "connectorType": "cable_tail"
+        }
+      ],
+      "dynamicSurfaces": [],
+      "controllableLeds": []
+    },
+    {
+      "name": "floor_tile_standard",
+      "glbPath": "assets/architecture/floor_tile_standard.glb",
+      "sizeKB": 21.9,
+      "dimensionsM": [
+        0.6,
+        0.22,
+        0.6
+      ],
+      "unitsU": null,
+      "triangles": {
+        "LOD0": 256,
+        "LOD1": 12,
+        "collider": 12,
+        "total": 280
+      },
+      "verticesTotal": 424,
+      "materials": [
+        "mat_arch_floor",
+        "mat_arch_steel",
+        "mat_collider",
+        "mat_rubber_epdm"
+      ],
+      "movableParts": [],
+      "attachmentPoints": [],
+      "dynamicSurfaces": [],
+      "controllableLeds": []
+    },
+    {
+      "name": "floor_tile_vent",
+      "glbPath": "assets/architecture/floor_tile_vent.glb",
+      "sizeKB": 58.7,
+      "dimensionsM": [
+        0.6,
+        0.22,
+        0.6
+      ],
+      "unitsU": null,
+      "triangles": {
+        "LOD0": 708,
+        "LOD1": 12,
+        "collider": 12,
+        "total": 732
+      },
+      "verticesTotal": 1464,
+      "materials": [
+        "mat_arch_floor_vent",
+        "mat_arch_stripe_green",
+        "mat_brushed_metal",
+        "mat_collider",
+        "mat_plastic_abs",
+        "mat_powder_coat_dark"
+      ],
+      "movableParts": [],
+      "attachmentPoints": [],
+      "dynamicSurfaces": [],
+      "controllableLeds": []
+    },
+    {
+      "name": "wall_module_standard",
+      "glbPath": "assets/architecture/wall_module_standard.glb",
+      "sizeKB": 33.9,
+      "dimensionsM": [
+        3.6,
+        4.2,
+        0.16
+      ],
+      "unitsU": null,
+      "triangles": {
+        "LOD0": 372,
+        "LOD1": 12,
+        "collider": 12,
+        "total": 396
+      },
+      "verticesTotal": 708,
+      "materials": [
+        "mat_arch_steel",
+        "mat_arch_stripe_green",
+        "mat_arch_wall",
+        "mat_brushed_metal",
+        "mat_collider",
+        "mat_powder_coat_dark",
+        "mat_powder_coat_medium"
+      ],
+      "movableParts": [],
+      "attachmentPoints": [],
+      "dynamicSurfaces": [],
+      "controllableLeds": []
+    },
+    {
+      "name": "wall_module_branded",
+      "glbPath": "assets/architecture/wall_module_branded.glb",
+      "sizeKB": 39.5,
+      "dimensionsM": [
+        3.6,
+        4.2,
+        0.16
+      ],
+      "unitsU": null,
+      "triangles": {
+        "LOD0": 412,
+        "LOD1": 12,
+        "collider": 12,
+        "total": 436
+      },
+      "verticesTotal": 788,
+      "materials": [
+        "mat_arch_steel",
+        "mat_arch_stripe_green",
+        "mat_arch_wall",
+        "mat_brushed_metal",
+        "mat_collider",
+        "mat_light_cool_white",
+        "mat_powder_coat_dark",
+        "mat_powder_coat_medium",
+        "mat_wall_branding"
+      ],
+      "movableParts": [],
+      "attachmentPoints": [],
+      "dynamicSurfaces": [
+        {
+          "name": "wall_branding_panel",
+          "surfaceId": "wall_branding",
+          "uvSpace": "atlas"
+        }
+      ],
+      "controllableLeds": []
+    },
+    {
+      "name": "ceiling_module",
+      "glbPath": "assets/architecture/ceiling_module.glb",
+      "sizeKB": 19.0,
+      "dimensionsM": [
+        3.6,
+        0.36,
+        3.6
+      ],
+      "unitsU": null,
+      "triangles": {
+        "LOD0": 172,
+        "LOD1": 12,
+        "collider": 12,
+        "total": 196
+      },
+      "verticesTotal": 334,
+      "materials": [
+        "mat_arch_steel",
+        "mat_arch_wall",
+        "mat_collider",
+        "mat_powder_coat_dark",
+        "mat_powder_coat_medium"
+      ],
+      "movableParts": [],
+      "attachmentPoints": [],
+      "dynamicSurfaces": [],
+      "controllableLeds": []
+    },
+    {
+      "name": "ceiling_light_linear",
+      "glbPath": "assets/architecture/ceiling_light_linear.glb",
+      "sizeKB": 16.4,
+      "dimensionsM": [
+        0.15,
+        0.32,
+        2.4
+      ],
+      "unitsU": null,
+      "triangles": {
+        "LOD0": 136,
+        "LOD1": 12,
+        "collider": 12,
+        "total": 160
+      },
+      "verticesTotal": 268,
+      "materials": [
+        "mat_brushed_metal",
+        "mat_collider",
+        "mat_light_cool_white",
+        "mat_powder_coat_dark",
+        "mat_powder_coat_medium"
+      ],
+      "movableParts": [],
+      "attachmentPoints": [],
+      "dynamicSurfaces": [],
+      "controllableLeds": [
+        "light_diffuser"
+      ]
+    },
+    {
+      "name": "cable_tray_overhead",
+      "glbPath": "assets/architecture/cable_tray_overhead.glb",
+      "sizeKB": 66.6,
+      "dimensionsM": [
+        0.46,
+        0.34,
+        3.6
+      ],
+      "unitsU": null,
+      "triangles": {
+        "LOD0": 1016,
+        "LOD1": 24,
+        "collider": 12,
+        "total": 1052
+      },
+      "verticesTotal": 1676,
+      "materials": [
+        "mat_arch_steel",
+        "mat_cable_green",
+        "mat_cable_power",
+        "mat_collider",
+        "mat_powder_coat_medium"
+      ],
+      "movableParts": [],
+      "attachmentPoints": [],
+      "dynamicSurfaces": [],
+      "controllableLeds": []
+    },
+    {
+      "name": "crac_cooling_unit",
+      "glbPath": "assets/architecture/crac_cooling_unit.glb",
+      "sizeKB": 89.3,
+      "dimensionsM": [
+        0.9,
+        2.1,
+        0.85
+      ],
+      "unitsU": null,
+      "triangles": {
+        "LOD0": 1510,
+        "LOD1": 24,
+        "collider": 12,
+        "total": 1546
+      },
+      "verticesTotal": 1968,
+      "materials": [
+        "mat_brushed_metal",
+        "mat_collider",
+        "mat_led_activity",
+        "mat_led_power",
+        "mat_plastic_abs",
+        "mat_powder_coat_dark",
+        "mat_powder_coat_medium",
+        "mat_terminal_screen",
+        "mat_vent_grille"
+      ],
+      "movableParts": [
+        {
+          "name": "cooling_fan_01",
+          "pivotPosition": [
+            0.0,
+            0.52,
+            0.447
+          ],
+          "pivotType": "translate",
+          "spinAxis": "z"
+        },
+        {
+          "name": "cooling_fan_02",
+          "pivotPosition": [
+            0.0,
+            0.95,
+            0.447
+          ],
+          "pivotType": "translate",
+          "spinAxis": "z"
+        },
+        {
+          "name": "cooling_fan_03",
+          "pivotPosition": [
+            0.0,
+            1.38,
+            0.447
+          ],
+          "pivotType": "translate",
+          "spinAxis": "z"
+        }
+      ],
+      "attachmentPoints": [],
+      "dynamicSurfaces": [],
+      "controllableLeds": []
+    },
+    {
+      "name": "fire_door_module",
+      "glbPath": "assets/architecture/fire_door_module.glb",
+      "sizeKB": 42.3,
+      "dimensionsM": [
+        1.4,
+        2.4,
+        0.18
+      ],
+      "unitsU": null,
+      "triangles": {
+        "LOD0": 472,
+        "LOD1": 12,
+        "collider": 12,
+        "total": 496
+      },
+      "verticesTotal": 890,
+      "materials": [
+        "mat_brushed_metal",
+        "mat_collider",
+        "mat_glass_tinted",
+        "mat_led_power",
+        "mat_plastic_abs",
+        "mat_powder_coat_dark",
+        "mat_powder_coat_medium",
+        "mat_signage"
+      ],
+      "movableParts": [
+        {
+          "name": "fire_door_leaf",
+          "pivotPosition": [
+            0.51,
+            0.0,
+            0.045
+          ],
+          "pivotType": "hinge_y",
+          "spinAxis": null
+        },
+        {
+          "name": "fire_door_handle",
+          "pivotPosition": [
+            -0.935,
+            1.05,
+            0.0
+          ],
+          "pivotType": "latch_z",
+          "spinAxis": null
+        }
+      ],
+      "attachmentPoints": [],
+      "dynamicSurfaces": [],
+      "controllableLeds": []
+    },
+    {
+      "name": "signage_set",
+      "glbPath": "assets/architecture/signage_set.glb",
+      "sizeKB": 24.2,
+      "dimensionsM": [
+        1.2,
+        0.6,
+        0.04
+      ],
+      "unitsU": null,
+      "triangles": {
+        "LOD0": 152,
+        "LOD1": 48,
+        "collider": 12,
+        "total": 212
+      },
+      "verticesTotal": 424,
+      "materials": [
+        "mat_collider",
+        "mat_powder_coat_dark",
+        "mat_signage"
+      ],
+      "movableParts": [],
+      "attachmentPoints": [],
+      "dynamicSurfaces": [
+        {
+          "name": "sign_cold_aisle",
+          "surfaceId": "sign_cold_aisle",
+          "uvSpace": "atlas"
+        },
+        {
+          "name": "sign_esd_zone",
+          "surfaceId": "sign_esd_zone",
+          "uvSpace": "atlas"
+        },
+        {
+          "name": "sign_fire_door",
+          "surfaceId": "sign_fire_door",
+          "uvSpace": "atlas"
+        },
+        {
+          "name": "sign_high_voltage",
+          "surfaceId": "sign_high_voltage",
+          "uvSpace": "atlas"
+        }
+      ],
+      "controllableLeds": []
+    },
+    {
+      "name": "operator_console_desk",
+      "glbPath": "assets/stations/operator_console_desk.glb",
+      "sizeKB": 269.6,
+      "dimensionsM": [
+        2.2,
+        1.42,
+        0.84
+      ],
+      "unitsU": null,
+      "triangles": {
+        "LOD0": 3516,
+        "LOD1": 60,
+        "collider": 12,
+        "total": 3588
+      },
+      "verticesTotal": 6938,
+      "materials": [
+        "mat_brushed_metal",
+        "mat_collider",
+        "mat_label_hostname",
+        "mat_led_power",
+        "mat_monitor_screen_01",
+        "mat_monitor_screen_02",
+        "mat_monitor_screen_03",
+        "mat_plastic_abs",
+        "mat_plastic_latch",
+        "mat_powder_coat_dark",
+        "mat_powder_coat_medium",
+        "mat_rubber_epdm"
+      ],
+      "movableParts": [
+        {
+          "name": "monitor_01",
+          "pivotPosition": [
+            -0.66,
+            1.12,
+            -0.04
+          ],
+          "pivotType": "vesa_swivel_tilt",
+          "spinAxis": null
+        },
+        {
+          "name": "monitor_02",
+          "pivotPosition": [
+            0.0,
+            1.12,
+            -0.08
+          ],
+          "pivotType": "vesa_swivel_tilt",
+          "spinAxis": null
+        },
+        {
+          "name": "monitor_03",
+          "pivotPosition": [
+            0.66,
+            1.12,
+            -0.04
+          ],
+          "pivotType": "vesa_swivel_tilt",
+          "spinAxis": null
+        },
+        {
+          "name": "console_keyboard",
+          "pivotPosition": [
+            -0.06,
+            0.776,
+            0.18
+          ],
+          "pivotType": "translate",
+          "spinAxis": null
+        },
+        {
+          "name": "console_mouse",
+          "pivotPosition": [
+            0.34,
+            0.776,
+            0.19
+          ],
+          "pivotType": "translate",
+          "spinAxis": null
+        }
+      ],
+      "attachmentPoints": [
+        {
+          "name": "port_network_01",
+          "position": [
+            -0.35,
+            0.58,
+            -0.32
+          ],
+          "normal": [
+            0.0,
+            -1.0,
+            0.0
+          ],
+          "connectorType": "rj45"
+        },
+        {
+          "name": "port_power_01",
+          "position": [
+            0.35,
+            0.58,
+            -0.32
+          ],
+          "normal": [
+            0.0,
+            -1.0,
+            0.0
+          ],
+          "connectorType": "iec_c14_power"
+        }
+      ],
+      "dynamicSurfaces": [
+        {
+          "name": "label_hostname",
+          "surfaceId": "label_hostname",
+          "uvSpace": "atlas"
+        },
+        {
+          "name": "monitor_screen_01",
+          "surfaceId": "monitor_screen_01",
+          "uvSpace": "0..1"
+        },
+        {
+          "name": "monitor_screen",
+          "surfaceId": "monitor_screen_02",
+          "uvSpace": "0..1"
+        },
+        {
+          "name": "monitor_screen_03",
+          "surfaceId": "monitor_screen_03",
+          "uvSpace": "0..1"
+        }
+      ],
+      "controllableLeds": []
+    },
+    {
+      "name": "wall_terminal_maintenance",
+      "glbPath": "assets/stations/wall_terminal_maintenance.glb",
+      "sizeKB": 30.9,
+      "dimensionsM": [
+        1.15,
+        0.88,
+        0.16
+      ],
+      "unitsU": null,
+      "triangles": {
+        "LOD0": 312,
+        "LOD1": 14,
+        "collider": 12,
+        "total": 338
+      },
+      "verticesTotal": 506,
+      "materials": [
+        "mat_brushed_metal",
+        "mat_collider",
+        "mat_label_hostname",
+        "mat_led_activity",
+        "mat_led_fault",
+        "mat_led_power",
+        "mat_powder_coat_dark",
+        "mat_powder_coat_medium",
+        "mat_terminal_screen"
+      ],
+      "movableParts": [],
+      "attachmentPoints": [
+        {
+          "name": "port_network_01",
+          "position": [
+            -0.25,
+            -0.44,
+            0.08
+          ],
+          "normal": [
+            0.0,
+            -1.0,
+            0.0
+          ],
+          "connectorType": "rj45"
+        },
+        {
+          "name": "port_power_01",
+          "position": [
+            0.25,
+            -0.44,
+            0.08
+          ],
+          "normal": [
+            0.0,
+            -1.0,
+            0.0
+          ],
+          "connectorType": "iec_c14_power"
+        }
+      ],
+      "dynamicSurfaces": [
+        {
+          "name": "monitor_screen",
+          "surfaceId": "monitor_screen",
+          "uvSpace": "0..1"
+        },
+        {
+          "name": "label_hostname",
+          "surfaceId": "label_hostname",
+          "uvSpace": "atlas"
+        }
+      ],
+      "controllableLeds": [
+        "led_power",
+        "led_activity",
+        "led_fault"
+      ]
+    },
+    {
+      "name": "root_datacenter_scene",
+      "glbPath": "scenes/root_datacenter_scene.glb",
+      "sizeKB": 8490.5,
+      "dimensionsM": [],
+      "unitsU": null,
+      "triangles": {
+        "LOD0": 142526,
+        "LOD1": 0,
+        "collider": 0,
+        "total": 142526
+      },
+      "verticesTotal": 233260,
+      "materials": [
+        "mat_arch_floor",
+        "mat_arch_floor_vent",
+        "mat_arch_steel",
+        "mat_arch_stripe_green",
+        "mat_arch_wall",
+        "mat_brushed_metal",
+        "mat_cable_green",
+        "mat_glass_tinted",
+        "mat_heatsink_metal",
+        "mat_led_activity",
+        "mat_led_boot",
+        "mat_led_drive",
+        "mat_led_fault",
+        "mat_led_gpu_load",
+        "mat_led_pdu",
+        "mat_led_port_act",
+        "mat_led_port_link",
+        "mat_led_power",
+        "mat_led_rack_frame",
+        "mat_light_cool_white",
+        "mat_monitor_screen_01",
+        "mat_monitor_screen_02",
+        "mat_monitor_screen_03",
+        "mat_perforated_door",
+        "mat_plastic_abs",
+        "mat_powder_coat_dark",
+        "mat_powder_coat_medium",
+        "mat_rack_nameplate",
+        "mat_rubber_epdm",
+        "mat_terminal_screen",
+        "mat_vent_grille",
+        "mat_wall_branding"
+      ],
+      "movableParts": [
+        {
+          "name": "fire_door_leaf",
+          "pivotPosition": [
+            0.49,
+            0.0,
+            0.04
+          ],
+          "pivotType": "hinge_y",
+          "spinAxis": null
+        },
+        {
+          "name": "rack_01_door_front",
+          "pivotPosition": [
+            -0.282,
+            1.044,
+            0.547
+          ],
+          "pivotType": "hinge_y",
+          "spinAxis": null
+        },
+        {
+          "name": "rack_02_door_front",
+          "pivotPosition": [
+            -0.282,
+            1.044,
+            0.547
+          ],
+          "pivotType": "hinge_y",
+          "spinAxis": null
+        },
+        {
+          "name": "rack_03_door_front",
+          "pivotPosition": [
+            -0.282,
+            1.044,
+            0.547
+          ],
+          "pivotType": "hinge_y",
+          "spinAxis": null
+        },
+        {
+          "name": "rack_04_door_front",
+          "pivotPosition": [
+            -0.282,
+            1.044,
+            0.547
+          ],
+          "pivotType": "hinge_y",
+          "spinAxis": null
+        },
+        {
+          "name": "rack_05_door_front",
+          "pivotPosition": [
+            -0.282,
+            1.044,
+            0.547
+          ],
+          "pivotType": "hinge_y",
+          "spinAxis": null
+        },
+        {
+          "name": "rack_06_door_front",
+          "pivotPosition": [
+            -0.282,
+            1.044,
+            0.547
+          ],
+          "pivotType": "hinge_y",
+          "spinAxis": null
+        },
+        {
+          "name": "crac_01_fan_01",
+          "pivotPosition": [
+            0.0,
+            0.52,
+            0.44
+          ],
+          "pivotType": "translate",
+          "spinAxis": "z"
+        },
+        {
+          "name": "crac_01_fan_02",
+          "pivotPosition": [
+            0.0,
+            0.95,
+            0.44
+          ],
+          "pivotType": "translate",
+          "spinAxis": "z"
+        },
+        {
+          "name": "crac_01_fan_03",
+          "pivotPosition": [
+            0.0,
+            1.38,
+            0.44
+          ],
+          "pivotType": "translate",
+          "spinAxis": "z"
+        },
+        {
+          "name": "crac_02_fan_01",
+          "pivotPosition": [
+            0.0,
+            0.52,
+            0.44
+          ],
+          "pivotType": "translate",
+          "spinAxis": "z"
+        },
+        {
+          "name": "crac_02_fan_02",
+          "pivotPosition": [
+            0.0,
+            0.95,
+            0.44
+          ],
+          "pivotType": "translate",
+          "spinAxis": "z"
+        },
+        {
+          "name": "crac_02_fan_03",
+          "pivotPosition": [
+            0.0,
+            1.38,
+            0.44
+          ],
+          "pivotType": "translate",
+          "spinAxis": "z"
+        }
+      ],
+      "attachmentPoints": [],
+      "dynamicSurfaces": [],
+      "controllableLeds": []
+    }
+  ]
+}

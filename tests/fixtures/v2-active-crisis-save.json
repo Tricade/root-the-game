@@ -1,0 +1,618 @@
+{
+  "version": 2,
+  "seed": 7936,
+  "rng": 2002840901,
+  "networkName": "Mein Netzwerk",
+  "savedAt": 1793251320751,
+  "time": 2100,
+  "credits": 1985.5602599999097,
+  "research": 107.71200000000552,
+  "reputation": 15,
+  "lifetimeCredits": 1185.5602599999413,
+  "sector": 1,
+  "servers": [
+    {
+      "id": "server-1",
+      "type": "edge",
+      "name": "Randknoten 01",
+      "level": 1,
+      "mode": "performance",
+      "condition": 9.969872222223557,
+      "status": "failed",
+      "fault": "Kühlungsstörung"
+    }
+  ],
+  "agents": [
+    {
+      "id": "agent-1",
+      "name": "Mira",
+      "role": "operator",
+      "level": 1,
+      "focus": "income",
+      "trait": "zuverlässig",
+      "assignment": null,
+      "cooldownUntil": 0
+    },
+    {
+      "id": "agent-2",
+      "name": "Tarek",
+      "role": "analyst",
+      "level": 1,
+      "focus": "research",
+      "trait": "neugierig",
+      "assignment": null,
+      "cooldownUntil": 0
+    }
+  ],
+  "jobs": [],
+  "offers": [
+    {
+      "id": "job-3",
+      "title": "Zugriffsrechte auditieren",
+      "client": "Hanseatische Werkstätten",
+      "kind": "audit",
+      "totalWork": 137,
+      "work": 0,
+      "reward": 377,
+      "science": 14,
+      "rep": 5,
+      "load": 6
+    },
+    {
+      "id": "job-4",
+      "title": "Archiv wiederherstellen",
+      "client": "Stadtarchiv West",
+      "kind": "recovery",
+      "totalWork": 270,
+      "work": 0,
+      "reward": 759,
+      "science": 12,
+      "rep": 10,
+      "load": 15
+    },
+    {
+      "id": "job-6",
+      "title": "Lastspitzen glätten",
+      "client": "Morgenrot Energie",
+      "kind": "optimization",
+      "totalWork": 168,
+      "work": 0,
+      "reward": 461,
+      "science": 7,
+      "rep": 6,
+      "load": 12
+    },
+    {
+      "id": "job-8",
+      "title": "Archiv wiederherstellen",
+      "client": "Stadtarchiv West",
+      "kind": "recovery",
+      "totalWork": 264,
+      "work": 0,
+      "reward": 743,
+      "science": 12,
+      "rep": 10,
+      "load": 15
+    },
+    {
+      "id": "job-10",
+      "title": "Verfügbarkeitsprüfung",
+      "client": "Nordlicht Mobilität",
+      "kind": "monitoring",
+      "totalWork": 60,
+      "work": 0,
+      "reward": 138,
+      "science": 4,
+      "rep": 2,
+      "load": 3
+    },
+    {
+      "id": "job-11",
+      "title": "Zugriffsrechte auditieren",
+      "client": "Hanseatische Werkstätten",
+      "kind": "audit",
+      "totalWork": 111,
+      "work": 0,
+      "reward": 305,
+      "science": 11,
+      "rep": 4,
+      "load": 6
+    }
+  ],
+  "events": [
+    {
+      "id": "event-9",
+      "title": "Förderfenster geöffnet",
+      "description": "Ein regionales Programm unterstützt offene Infrastruktur oder gemeinsame Forschung.",
+      "kind": "grant",
+      "choices": [
+        {
+          "label": "Infrastruktur fördern",
+          "description": "+85 Credits.",
+          "key": "grant_funds"
+        },
+        {
+          "label": "Forschung teilen",
+          "description": "+12 Forschung und +2 Ansehen.",
+          "key": "grant_research"
+        }
+      ]
+    },
+    {
+      "id": "event-12",
+      "title": "Ungewöhnliche Messreihe",
+      "description": "Ein Sensorverbund meldet ein neues Muster. Beide Wege bringen sicheren Nutzen.",
+      "kind": "signal",
+      "choices": [
+        {
+          "label": "Muster analysieren",
+          "description": "+8 Forschung und +1 Ansehen.",
+          "key": "signal_analyze"
+        },
+        {
+          "label": "Datensatz lizenzieren",
+          "description": "+48 Credits.",
+          "key": "signal_license"
+        }
+      ]
+    },
+    {
+      "id": "event-13",
+      "title": "Förderfenster geöffnet",
+      "description": "Ein regionales Programm unterstützt offene Infrastruktur oder gemeinsame Forschung.",
+      "kind": "grant",
+      "choices": [
+        {
+          "label": "Infrastruktur fördern",
+          "description": "+85 Credits.",
+          "key": "grant_funds"
+        },
+        {
+          "label": "Forschung teilen",
+          "description": "+12 Forschung und +2 Ansehen.",
+          "key": "grant_research"
+        }
+      ]
+    }
+  ],
+  "log": [
+    {
+      "id": "log-15",
+      "time": 1972,
+      "type": "critical",
+      "message": "Kühlkreislauf überhitzt: betroffene Knoten Randknoten 01. Die Maßnahme wartet auf deine Entscheidung."
+    },
+    {
+      "id": "log-7",
+      "time": 63,
+      "type": "success",
+      "message": "Telemetrie prüfen für Nordlicht Mobilität abgeschlossen: 210 Credits."
+    },
+    {
+      "id": "log-5",
+      "time": 0,
+      "type": "system",
+      "message": "ROOT ist bereit. Dein erster Überwachungsauftrag läuft."
+    }
+  ],
+  "upgrades": {},
+  "policies": {
+    "power": "performance",
+    "autocontract": false,
+    "autorepair": false,
+    "priority": "balanced",
+    "autobackup": false,
+    "repairBudget": 300,
+    "reserve": 0
+  },
+  "resilience": {
+    "graceUntil": 0,
+    "budgetWindowStart": 0,
+    "budgetSpent": 0,
+    "parts": 3,
+    "backupCooldownUntil": 0,
+    "autoBackupNextAt": 900,
+    "backup": null,
+    "operation": null,
+    "incident": {
+      "id": "incident-14",
+      "kind": "cooling",
+      "title": "Kühlkreislauf überhitzt",
+      "description": "Die Temperaturgrenze wurde überschritten. Betroffene Knoten wurden zum Schutz vor Folgeschäden abgeschaltet.",
+      "consequence": "Aufträge pausieren; ohne Reparatur bleibt die Kapazität reduziert.",
+      "affected": [
+        "server-1"
+      ],
+      "resolution": null
+    },
+    "corrupted": false,
+    "integrity": 100,
+    "agentEffects": {
+      "diagnoseRemaining": 0,
+      "optimizeRemaining": 0
+    }
+  },
+  "history": [
+    {
+      "time": 330,
+      "credits": 1171.2246499999878,
+      "income": 0.48970500000000017,
+      "load": 0
+    },
+    {
+      "time": 360,
+      "credits": 1185.9157999999866,
+      "income": 0.48970500000000017,
+      "load": 0
+    },
+    {
+      "time": 390,
+      "credits": 1200.6069499999853,
+      "income": 0.48970500000000017,
+      "load": 0
+    },
+    {
+      "time": 420,
+      "credits": 1215.298099999984,
+      "income": 0.48970500000000017,
+      "load": 0
+    },
+    {
+      "time": 450,
+      "credits": 1229.9892499999828,
+      "income": 0.48970500000000017,
+      "load": 0
+    },
+    {
+      "time": 480,
+      "credits": 1244.6803999999815,
+      "income": 0.48970500000000017,
+      "load": 0
+    },
+    {
+      "time": 510,
+      "credits": 1259.3715499999803,
+      "income": 0.48970500000000017,
+      "load": 0
+    },
+    {
+      "time": 540,
+      "credits": 1274.062699999979,
+      "income": 0.48970500000000017,
+      "load": 0
+    },
+    {
+      "time": 570,
+      "credits": 1288.7538499999778,
+      "income": 0.48970500000000017,
+      "load": 0
+    },
+    {
+      "time": 600,
+      "credits": 1303.4449999999765,
+      "income": 0.48970500000000017,
+      "load": 0
+    },
+    {
+      "time": 630,
+      "credits": 1318.1361499999753,
+      "income": 0.48970500000000017,
+      "load": 0
+    },
+    {
+      "time": 660,
+      "credits": 1332.827299999974,
+      "income": 0.48970500000000017,
+      "load": 0
+    },
+    {
+      "time": 690,
+      "credits": 1347.5184499999727,
+      "income": 0.48970500000000017,
+      "load": 0
+    },
+    {
+      "time": 720,
+      "credits": 1362.2095999999715,
+      "income": 0.48970500000000017,
+      "load": 0
+    },
+    {
+      "time": 750,
+      "credits": 1376.9007499999702,
+      "income": 0.48970500000000017,
+      "load": 0
+    },
+    {
+      "time": 780,
+      "credits": 1391.591899999969,
+      "income": 0.48970500000000017,
+      "load": 0
+    },
+    {
+      "time": 810,
+      "credits": 1406.2830499999677,
+      "income": 0.48970500000000017,
+      "load": 0
+    },
+    {
+      "time": 840,
+      "credits": 1420.9741999999665,
+      "income": 0.48970500000000017,
+      "load": 0
+    },
+    {
+      "time": 870,
+      "credits": 1435.6653499999652,
+      "income": 0.48970500000000017,
+      "load": 0
+    },
+    {
+      "time": 900,
+      "credits": 1450.356499999964,
+      "income": 0.48970500000000017,
+      "load": 0
+    },
+    {
+      "time": 930,
+      "credits": 1465.0476499999627,
+      "income": 0.48970500000000017,
+      "load": 0
+    },
+    {
+      "time": 960,
+      "credits": 1479.7387999999614,
+      "income": 0.48970500000000017,
+      "load": 0
+    },
+    {
+      "time": 990,
+      "credits": 1494.4299499999602,
+      "income": 0.48970500000000017,
+      "load": 0
+    },
+    {
+      "time": 1020,
+      "credits": 1509.121099999959,
+      "income": 0.48970500000000017,
+      "load": 0
+    },
+    {
+      "time": 1050,
+      "credits": 1523.8122499999577,
+      "income": 0.48970500000000017,
+      "load": 0
+    },
+    {
+      "time": 1080,
+      "credits": 1538.5033999999564,
+      "income": 0.48970500000000017,
+      "load": 0
+    },
+    {
+      "time": 1110,
+      "credits": 1553.1945499999551,
+      "income": 0.48970500000000017,
+      "load": 0
+    },
+    {
+      "time": 1140,
+      "credits": 1567.8856999999539,
+      "income": 0.48970500000000017,
+      "load": 0
+    },
+    {
+      "time": 1170,
+      "credits": 1582.5768499999526,
+      "income": 0.48970500000000017,
+      "load": 0
+    },
+    {
+      "time": 1200,
+      "credits": 1597.2679999999514,
+      "income": 0.48970500000000017,
+      "load": 0
+    },
+    {
+      "time": 1230,
+      "credits": 1611.9591499999501,
+      "income": 0.48970500000000017,
+      "load": 0
+    },
+    {
+      "time": 1260,
+      "credits": 1626.6502999999489,
+      "income": 0.48970500000000017,
+      "load": 0
+    },
+    {
+      "time": 1290,
+      "credits": 1641.3414499999476,
+      "income": 0.48970500000000017,
+      "load": 0
+    },
+    {
+      "time": 1320,
+      "credits": 1656.0325999999463,
+      "income": 0.48970500000000017,
+      "load": 0
+    },
+    {
+      "time": 1350,
+      "credits": 1670.723749999945,
+      "income": 0.48970500000000017,
+      "load": 0
+    },
+    {
+      "time": 1380,
+      "credits": 1685.4148999999438,
+      "income": 0.48970500000000017,
+      "load": 0
+    },
+    {
+      "time": 1410,
+      "credits": 1700.1060499999426,
+      "income": 0.48970500000000017,
+      "load": 0
+    },
+    {
+      "time": 1440,
+      "credits": 1714.7971999999413,
+      "income": 0.48970500000000017,
+      "load": 0
+    },
+    {
+      "time": 1470,
+      "credits": 1729.48834999994,
+      "income": 0.48970500000000017,
+      "load": 0
+    },
+    {
+      "time": 1500,
+      "credits": 1744.1794999999388,
+      "income": 0.48970500000000017,
+      "load": 0
+    },
+    {
+      "time": 1530,
+      "credits": 1758.8706499999375,
+      "income": 0.48970500000000017,
+      "load": 0
+    },
+    {
+      "time": 1560,
+      "credits": 1773.5617999999363,
+      "income": 0.48970500000000017,
+      "load": 0
+    },
+    {
+      "time": 1590,
+      "credits": 1788.252949999935,
+      "income": 0.48970500000000017,
+      "load": 0
+    },
+    {
+      "time": 1620,
+      "credits": 1802.9440999999338,
+      "income": 0.48970500000000017,
+      "load": 0
+    },
+    {
+      "time": 1650,
+      "credits": 1817.6352499999325,
+      "income": 0.48970500000000017,
+      "load": 0
+    },
+    {
+      "time": 1680,
+      "credits": 1832.3263999999313,
+      "income": 0.48970500000000017,
+      "load": 0
+    },
+    {
+      "time": 1710,
+      "credits": 1847.01754999993,
+      "income": 0.48970500000000017,
+      "load": 0
+    },
+    {
+      "time": 1740,
+      "credits": 1861.7086999999287,
+      "income": 0.48970500000000017,
+      "load": 0
+    },
+    {
+      "time": 1770,
+      "credits": 1876.3998499999275,
+      "income": 0.48970500000000017,
+      "load": 0
+    },
+    {
+      "time": 1800,
+      "credits": 1891.0909999999262,
+      "income": 0.48970500000000017,
+      "load": 0
+    },
+    {
+      "time": 1830,
+      "credits": 1905.782149999925,
+      "income": 0.48970500000000017,
+      "load": 0
+    },
+    {
+      "time": 1860,
+      "credits": 1920.4732999999237,
+      "income": 0.48970500000000017,
+      "load": 0
+    },
+    {
+      "time": 1890,
+      "credits": 1935.1644499999225,
+      "income": 0.48970500000000017,
+      "load": 0
+    },
+    {
+      "time": 1920,
+      "credits": 1949.8555999999212,
+      "income": 0.48970500000000017,
+      "load": 0
+    },
+    {
+      "time": 1950,
+      "credits": 1964.54674999992,
+      "income": 0.48970500000000017,
+      "load": 0
+    },
+    {
+      "time": 1980,
+      "credits": 1975.9602599999184,
+      "income": 0.08,
+      "load": 1
+    },
+    {
+      "time": 2010,
+      "credits": 1978.3602599999163,
+      "income": 0.08,
+      "load": 1
+    },
+    {
+      "time": 2040,
+      "credits": 1980.760259999914,
+      "income": 0.08,
+      "load": 1
+    },
+    {
+      "time": 2070,
+      "credits": 1983.160259999912,
+      "income": 0.08,
+      "load": 1
+    },
+    {
+      "time": 2100,
+      "credits": 1985.5602599999097,
+      "income": 0.08,
+      "load": 1
+    }
+  ],
+  "achievements": {},
+  "achievementUnlocks": {
+    "first_job": true,
+    "steady_network": true,
+    "three_servers": false,
+    "sector_two": false,
+    "million": false
+  },
+  "counters": {
+    "jobs": 1,
+    "events": 0,
+    "serversBought": 0,
+    "agentsHired": 0,
+    "sectors": 1
+  },
+  "timers": {
+    "offer": 27.85497302794829,
+    "event": 154.08714895695448,
+    "history": 30
+  },
+  "nextId": 16
+}

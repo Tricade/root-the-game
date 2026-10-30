@@ -1,0 +1,253 @@
+{
+  "package": "ROOT facility assets",
+  "format": "glTF 2.0",
+  "units": "m",
+  "axis": {
+    "up": "+Y",
+    "front": "+Z"
+  },
+  "assets": [
+    {
+      "key": "ups_battery_cabinet",
+      "category": "facility_power",
+      "dimensionsM": [
+        0.86,
+        2.04,
+        0.82
+      ],
+      "batteryStringCount": 8,
+      "path": "asset-pack/assets/facility/ups_battery_cabinet.glb",
+      "size_kb": 135.9,
+      "nodes": 21,
+      "meshes": 16,
+      "glb": "assets/facility/ups_battery_cabinet.glb",
+      "source": "source/facility/ups_battery_cabinet.gltf",
+      "boundsMinM": [
+        -0.43,
+        0.0,
+        -0.4225
+      ],
+      "boundsMaxM": [
+        0.43,
+        2.04,
+        0.423
+      ],
+      "measuredDimensionsM": [
+        0.86,
+        2.04,
+        0.8455
+      ],
+      "trianglesLOD0": 1826,
+      "materials": [
+        "mat_brushed_metal",
+        "mat_collider",
+        "mat_led_activity",
+        "mat_led_fault",
+        "mat_led_power",
+        "mat_plastic_abs",
+        "mat_powder_coat_dark",
+        "mat_powder_coat_medium",
+        "mat_rack_nameplate",
+        "mat_rubber_epdm",
+        "mat_vent_grille"
+      ]
+    },
+    {
+      "key": "power_distribution_ats",
+      "category": "facility_power",
+      "dimensionsM": [
+        1.16,
+        2.08,
+        0.7
+      ],
+      "phases": 3,
+      "transferSwitch": "dual_source",
+      "path": "asset-pack/assets/facility/power_distribution_ats.glb",
+      "size_kb": 218.6,
+      "nodes": 18,
+      "meshes": 13,
+      "glb": "assets/facility/power_distribution_ats.glb",
+      "source": "source/facility/power_distribution_ats.gltf",
+      "boundsMinM": [
+        -0.58,
+        0.0,
+        -0.355
+      ],
+      "boundsMaxM": [
+        0.58,
+        2.08,
+        0.4335
+      ],
+      "measuredDimensionsM": [
+        1.16,
+        2.08,
+        0.7885
+      ],
+      "trianglesLOD0": 3106,
+      "materials": [
+        "mat_arch_steel",
+        "mat_brushed_metal",
+        "mat_collider",
+        "mat_led_activity",
+        "mat_led_boot",
+        "mat_led_fault",
+        "mat_led_power",
+        "mat_plastic_abs",
+        "mat_plastic_latch",
+        "mat_powder_coat_dark",
+        "mat_powder_coat_medium",
+        "mat_rack_nameplate",
+        "mat_rubber_epdm",
+        "mat_vent_grille"
+      ]
+    },
+    {
+      "key": "elevator_module",
+      "category": "facility_access",
+      "dimensionsM": [
+        1.46,
+        2.46,
+        0.2
+      ],
+      "openingWidthM": 1.18,
+      "path": "asset-pack/assets/facility/elevator_module.glb",
+      "size_kb": 57.6,
+      "nodes": 13,
+      "meshes": 10,
+      "glb": "assets/facility/elevator_module.glb",
+      "source": "source/facility/elevator_module.gltf",
+      "boundsMinM": [
+        -0.73,
+        0.0,
+        -0.1
+      ],
+      "boundsMaxM": [
+        0.73,
+        2.46,
+        0.1
+      ],
+      "measuredDimensionsM": [
+        1.46,
+        2.46,
+        0.2
+      ],
+      "trianglesLOD0": 536,
+      "materials": [
+        "mat_arch_wall",
+        "mat_brushed_metal",
+        "mat_collider",
+        "mat_led_activity",
+        "mat_plastic_abs",
+        "mat_powder_coat_dark",
+        "mat_powder_coat_medium",
+        "mat_rubber_epdm"
+      ]
+    },
+    {
+      "key": "cyber_bunker_airlock",
+      "category": "facility_security",
+      "dimensionsM": [
+        1.4,
+        2.4,
+        0.3
+      ],
+      "securityRating": "blast_seal",
+      "doorMassVisualClass": "heavy",
+      "pivotM": [
+        0,
+        0,
+        0
+      ],
+      "boundsMethod": "GLB accessor positions transformed through node hierarchy; closed door pose",
+      "supportFrame": true,
+      "clearOpeningM": [
+        1.06,
+        2.16
+      ],
+      "sillHeightM": 0.045,
+      "path": "asset-pack/assets/facility/cyber_bunker_airlock.glb",
+      "size_kb": 181.4,
+      "nodes": 14,
+      "meshes": 10,
+      "glb": "assets/facility/cyber_bunker_airlock.glb",
+      "source": "source/facility/cyber_bunker_airlock.gltf",
+      "boundsMinM": [
+        -0.7,
+        0.0,
+        -0.15
+      ],
+      "boundsMaxM": [
+        0.7,
+        2.4,
+        0.158
+      ],
+      "measuredDimensionsM": [
+        1.4,
+        2.4,
+        0.308
+      ],
+      "trianglesLOD0": 3144,
+      "materials": [
+        "mat_arch_steel",
+        "mat_brushed_metal",
+        "mat_collider",
+        "mat_glass_tinted",
+        "mat_led_activity",
+        "mat_led_power",
+        "mat_powder_coat_dark",
+        "mat_powder_coat_medium",
+        "mat_rubber_epdm"
+      ]
+    },
+    {
+      "key": "stairs_flight",
+      "category": "facility_access",
+      "dimensionsM": [
+        1.4,
+        3.524,
+        3.2
+      ],
+      "floorToFloorRiseM": 2.6,
+      "horizontalRunM": 3.2,
+      "flightWidthM": 1.4,
+      "treadCount": 14,
+      "treadRiseM": 0.185714,
+      "treadGoingM": 0.228571,
+      "handrailHeightAboveTreadsM": 0.9,
+      "pivotM": [
+        0,
+        0,
+        0
+      ],
+      "boundsMethod": "GLB accessor positions transformed through node hierarchy",
+      "path": "asset-pack/assets/facility/stairs_flight.glb",
+      "size_kb": 195.7,
+      "nodes": 38,
+      "meshes": 35,
+      "glb": "assets/facility/stairs_flight.glb",
+      "source": "source/facility/stairs_flight.gltf",
+      "boundsMinM": [
+        -0.699,
+        0.0,
+        -1.6
+      ],
+      "boundsMaxM": [
+        0.699,
+        3.519716,
+        1.6
+      ],
+      "measuredDimensionsM": [
+        1.398,
+        3.519716,
+        3.2
+      ],
+      "trianglesLOD0": 2964,
+      "materials": [
+        "mat_arch_steel",
+        "mat_brushed_metal",
+        "mat_collider",
+        "mat_powder_coat_dark"
+      ]
+    }
+  ]
+}

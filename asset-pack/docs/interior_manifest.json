@@ -1,0 +1,161 @@
+[
+  {
+    "key": "chair",
+    "provenance": "original ROOT procedural geometry",
+    "source": "tools/asset-generator/build_interiors.mjs",
+    "license": "CC0-1.0",
+    "sha256": "54eecaba5b2459fcddf4d178f31177b7dc1a3dbf57346ad59af1a9b299837ff3",
+    "bytes": 1373408,
+    "trianglesLOD0": 15152,
+    "dimensionsM": [
+      0.74779,
+      1.3515,
+      0.75266
+    ],
+    "boundsMinM": [
+      -0.37389,
+      0,
+      -0.37366
+    ],
+    "boundsMaxM": [
+      0.37389,
+      1.3515,
+      0.379
+    ],
+    "textures": [
+      "root-weave-color.png",
+      "root-weave-normal.png"
+    ]
+  },
+  {
+    "key": "sofa",
+    "provenance": "original ROOT procedural geometry",
+    "source": "tools/asset-generator/build_interiors.mjs",
+    "license": "CC0-1.0",
+    "sha256": "acf1d84b62a0f84feb62f298eeebe3827b1080cfd4d10aad812a6d68b41fa62b",
+    "bytes": 1542936,
+    "trianglesLOD0": 15536,
+    "dimensionsM": [
+      2.26,
+      0.95045,
+      0.89185
+    ],
+    "boundsMinM": [
+      -1.13,
+      0,
+      -0.46185
+    ],
+    "boundsMaxM": [
+      1.13,
+      0.95045,
+      0.43
+    ],
+    "textures": [
+      "root-weave-color.png",
+      "root-weave-normal.png"
+    ]
+  },
+  {
+    "key": "coffee",
+    "provenance": "original ROOT procedural geometry",
+    "source": "tools/asset-generator/build_interiors.mjs",
+    "license": "CC0-1.0",
+    "sha256": "e0ec4483b5d9fc0f2d1b78eb0bd75a3a43ac8e42f47525bc9b8936f4def9982e",
+    "bytes": 1735440,
+    "trianglesLOD0": 17436,
+    "dimensionsM": [
+      2.02,
+      1.5225,
+      0.75223
+    ],
+    "boundsMinM": [
+      -1.01,
+      0,
+      -0.35
+    ],
+    "boundsMaxM": [
+      1.01,
+      1.5225,
+      0.40223
+    ],
+    "textures": [
+      "walnut-color.jpg",
+      "walnut-normal.jpg"
+    ]
+  },
+  {
+    "key": "plant",
+    "provenance": "original ROOT procedural geometry",
+    "source": "tools/asset-generator/build_interiors.mjs",
+    "license": "CC0-1.0",
+    "sha256": "9450f4d6a6efc6a6d08930c2732c8aeddbfddd0f93ca79a5903837bb2d81a459",
+    "bytes": 722592,
+    "trianglesLOD0": 19784,
+    "dimensionsM": [
+      0.52578,
+      1.54524,
+      0.51789
+    ],
+    "boundsMinM": [
+      -0.25945,
+      0,
+      -0.25425
+    ],
+    "boundsMaxM": [
+      0.26633,
+      1.54524,
+      0.26365
+    ],
+    "textures": [
+      "root-leaf-color.png"
+    ]
+  },
+  {
+    "file": "root-weave-color.png",
+    "sha256": "e88a87cb15c85f588868c9a2d08fd1900f26c00df3e1aa8688133ce9eda94a80",
+    "bytes": 49617,
+    "source": "tools/asset-generator/build_interiors.mjs",
+    "provenance": "original procedural texture"
+  },
+  {
+    "file": "root-weave-normal.png",
+    "sha256": "a5a7b7ba124a3827e4a036b44bb30515aad776f3fc4310867926ee608fe8e80b",
+    "bytes": 1065,
+    "source": "tools/asset-generator/build_interiors.mjs",
+    "provenance": "original procedural texture"
+  },
+  {
+    "file": "root-leaf-color.png",
+    "sha256": "986c43d1ed0ea584da59d771d501258cc591bcb7d7ea6bca3b6bb41c3a0e817b",
+    "bytes": 34272,
+    "source": "tools/asset-generator/build_interiors.mjs",
+    "provenance": "original procedural texture"
+  },
+  {
+    "key": "walnut-color",
+    "license": "CC0-1.0",
+    "source": "https://polyhaven.com/a/american_walnut_veneer",
+    "download": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/american_walnut_veneer/american_walnut_veneer_diff_1k.jpg",
+    "sourceMD5": "748b39ed2ba9dce314104055f18837f0",
+    "sha256": "10d983003bb686db4af3d35d91197fdb6144dcd15d3dcea2ef315600f51b1af5",
+    "bytes": 579182
+  },
+  {
+    "key": "walnut-normal",
+    "license": "CC0-1.0",
+    "source": "https://polyhaven.com/a/american_walnut_veneer",
+    "download": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/american_walnut_veneer/american_walnut_veneer_nor_gl_1k.jpg",
+    "sourceMD5": "4bd673f87d8aef1fcce85625d748fa0e",
+    "sha256": "f54890d8dd352c8668d643adaa0ad66bd5a3b62995198b7dfb518fa59efebca2",
+    "bytes": 414945
+  },
+  {
+    "key": "walnut-roughness",
+    "license": "CC0-1.0",
+    "source": "https://polyhaven.com/a/american_walnut_veneer",
+    "download": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/american_walnut_veneer/american_walnut_veneer_rough_1k.jpg",
+    "sourceMD5": "d9fa24afc4790122e9ba3c535af8b615",
+    "sha256": "a13cd23228a4cb1bf0e342b4602d636123699cde61a2ff16bec1ce45a33ac62e",
+    "bytes": 691712
+  }
+]

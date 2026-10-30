@@ -1,0 +1,145 @@
+{
+  "version": 2,
+  "seed": 2202,
+  "rng": 1686081821,
+  "networkName": "Mein Netzwerk",
+  "savedAt": 1793251310651,
+  "time": 0,
+  "credits": 800,
+  "research": 12,
+  "reputation": 12,
+  "lifetimeCredits": 0,
+  "sector": 1,
+  "servers": [
+    {
+      "id": "server-1",
+      "type": "edge",
+      "name": "Randknoten 01",
+      "level": 1,
+      "mode": "balanced",
+      "condition": 100,
+      "status": "online",
+      "fault": null
+    }
+  ],
+  "agents": [
+    {
+      "id": "agent-1",
+      "name": "Mira",
+      "role": "operator",
+      "level": 1,
+      "focus": "income",
+      "trait": "zuverlässig",
+      "assignment": null,
+      "cooldownUntil": 0
+    },
+    {
+      "id": "agent-2",
+      "name": "Tarek",
+      "role": "analyst",
+      "level": 1,
+      "focus": "research",
+      "trait": "neugierig",
+      "assignment": null,
+      "cooldownUntil": 0
+    }
+  ],
+  "jobs": [
+    {
+      "id": "job-1",
+      "title": "Telemetrie prüfen",
+      "client": "Nordlicht Mobilität",
+      "kind": "monitoring",
+      "totalWork": 84,
+      "work": 0,
+      "reward": 210,
+      "science": 5,
+      "rep": 3,
+      "load": 3.5
+    }
+  ],
+  "offers": [
+    {
+      "id": "job-3",
+      "title": "Verfügbarkeitsprüfung",
+      "client": "Nordlicht Mobilität",
+      "kind": "monitoring",
+      "totalWork": 59,
+      "work": 0,
+      "reward": 135,
+      "science": 4,
+      "rep": 2,
+      "load": 3
+    },
+    {
+      "id": "job-4",
+      "title": "Lastspitzen glätten",
+      "client": "Morgenrot Energie",
+      "kind": "optimization",
+      "totalWork": 184,
+      "work": 0,
+      "reward": 503,
+      "science": 8,
+      "rep": 7,
+      "load": 12
+    }
+  ],
+  "events": [],
+  "log": [
+    {
+      "id": "log-5",
+      "time": 0,
+      "type": "system",
+      "message": "ROOT ist bereit. Dein erster Überwachungsauftrag läuft."
+    }
+  ],
+  "upgrades": {},
+  "policies": {
+    "power": "balanced",
+    "autocontract": false,
+    "autorepair": true,
+    "priority": "balanced",
+    "autobackup": true,
+    "repairBudget": 300,
+    "reserve": 250
+  },
+  "resilience": {
+    "graceUntil": 600,
+    "budgetWindowStart": 0,
+    "budgetSpent": 0,
+    "parts": 3,
+    "backupCooldownUntil": 0,
+    "autoBackupNextAt": 900,
+    "backup": null,
+    "operation": null,
+    "incident": null,
+    "corrupted": false,
+    "integrity": 100,
+    "agentEffects": {
+      "diagnoseRemaining": 0,
+      "optimizeRemaining": 0
+    }
+  },
+  "history": [],
+  "achievements": {},
+  "achievementUnlocks": {
+    "first_job": false,
+    "steady_network": true,
+    "three_servers": false,
+    "sector_two": false,
+    "million": false
+  },
+  "counters": {
+    "jobs": 0,
+    "events": 0,
+    "serversBought": 0,
+    "agentsHired": 0,
+    "sectors": 1
+  },
+  "timers": {
+    "offer": 22,
+    "event": 95,
+    "history": 30
+  },
+  "nextId": 6
+}

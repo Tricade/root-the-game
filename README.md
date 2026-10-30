@@ -67,6 +67,8 @@ npm test
 
 Runtime source is plain JavaScript, HTML and CSS, with vendored **Three.js 0.186.1**. There is no application build step. Start with the [contributor guide](CONTRIBUTING.md), [architecture](docs/development.md) and [runtime notes](docs/runtime-1.4.md).
 
+The clean repository can move between Gitea and GitHub without changing application code; see the [GitHub handoff guide](docs/publishing.md).
+
 Useful contributions include balancing, incident and agent behavior, readable 3D instruments, accessibility, translations and original procedural assets. Create a focused `feat/...`, `fix/...`, `docs/...` or `assets/...` branch and open a pull request against `main`. Record actual checks and use synthetic data.
 
 ### Asset tool included

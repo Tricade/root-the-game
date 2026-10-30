@@ -67,9 +67,12 @@ test('construction confirmations expose full payment and delayed ownership befor
   assert.equal(state.facility.building.project, null);
 });
 
-test('construction and achievement feedback has English copy without changing names or numbers', () => {
+test('construction, recovery and achievement feedback has English copy without changing names or numbers', () => {
   for (const [de, en] of [
     ['Hardware verwalten', 'Manage hardware'],
+    ['Erneut verbinden', 'Reconnect'],
+    ['Aktuellen Stand laden', 'Load current save'],
+    ['Speichern fehlgeschlagen', 'Save failed'],
     ['Server in CUSTOM-RACK ab U12 einbauen', 'Install a server in CUSTOM-RACK from U12'],
     ['Betriebsmodus CUSTOM-SERVER', 'Operating mode CUSTOM-SERVER'],
     ['24 Kerne', '24 cores'],

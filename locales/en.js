@@ -1973,6 +1973,9 @@
     ['Untergeschoss 01 / Kontrollraum', 'Basement 01 / Control Room'],
   ]);
   add([
+    ['Erneut verbinden', 'Reconnect'],
+    ['Aktuellen Stand laden', 'Load current save'],
+    ['Speichern fehlgeschlagen', 'Save failed'],
     ['Nächster Schritt', 'Next step'],
     ['Dein nächster Horizont', 'Your next horizon'],
     ['Ausbau planen', 'Plan expansion'],

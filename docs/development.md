@@ -9,6 +9,7 @@ ROOT runs directly from source with Node.js 24. The server has no third-party np
 | Local service          | `server.cjs`, `server/static-files.cjs`                              | Loopback HTTP API, closed static allowlist, atomic persistence, backup and optimistic revisions      |
 | Web composition        | `app.js`, `rack-ui.js`                                               | State ownership, navigation and composition of interface factories                                   |
 | Web features           | `ui/`, `ui/racks/`, CSS                                              | Facility plan, hardware selection, confirmations, live updates, persistence and feedback             |
+| Desktop                | `desktop/`, `ui/desktop.js`, `tools/desktop/`, package config        | Isolated Electron shell, profiles, confirmed save handoff, updater and native release verification   |
 | Localization           | `i18n.js`, `locales/`                                                | DOM localization lifecycle and separate English catalogs, preserving custom names                    |
 | 3D composition         | `room.js`                                                            | Per-view resources, shared context and public controls                                               |
 | 3D features            | `room/`, `room-navigation.js`, `room-facility.js`, `room-arrival.js` | Input, rendering, rack/server geometry, owned-space navigation, sessions, room interiors and arrival |

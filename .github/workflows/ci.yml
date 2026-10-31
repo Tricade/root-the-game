@@ -9,6 +9,8 @@ permissions:
   contents: read
 
 jobs:
+  desktop:
+    uses: ./.github/workflows/desktop-build.yml
   tests:
     strategy:
       fail-fast: false

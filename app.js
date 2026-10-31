@@ -11,6 +11,7 @@ import { createPersistenceUI } from './ui/persistence.js';
 import { createNotificationsUI } from './ui/notifications.js';
 import { createFacilityUI } from './ui/facility.js';
 import { createEventsUI } from './ui/events.js';
+import { createDesktopUI } from './ui/desktop.js';
 import { createRoom } from './room.js';
 /* ROOT · Local network simulation · no external services */
 (() => {
@@ -344,6 +345,7 @@ import { createRoom } from './room.js';
   Object.assign(ctx, createNotificationsUI(ctx));
   Object.assign(ctx, createFacilityUI(ctx));
   Object.assign(ctx, createEventsUI(ctx));
+  Object.assign(ctx, createDesktopUI(ctx));
   const viewFunctions = {
     overview: ctx.overviewView,
     network: ctx.networkView,
@@ -427,6 +429,7 @@ import { createRoom } from './room.js';
   }
 
   function execute(action, payload) {
+    if (ctx.desktopClosing()) return;
     if (saveConflict) {
       ctx.toast('Diese Sitzung pausiert. Bitte Seite neu laden.', true);
       return;

@@ -54,6 +54,8 @@ function createStaticFiles(root) {
     ['/room.css', ['room.css', 'text/css; charset=utf-8']],
     ['/facility.css', ['facility.css', 'text/css; charset=utf-8']],
     ['/building.css', ['building.css', 'text/css; charset=utf-8']],
+    ['/desktop.css', ['desktop.css', 'text/css; charset=utf-8']],
+    ['/ui/desktop.js', ['ui/desktop.js', 'text/javascript; charset=utf-8']],
     ['/vendor/three.module.js', ['vendor/three.module.js', 'text/javascript; charset=utf-8']],
     ['/vendor/three.core.js', ['vendor/three.core.js', 'text/javascript; charset=utf-8']],
     ['/vendor/RoomEnvironment.js', ['vendor/RoomEnvironment.js', 'text/javascript; charset=utf-8']],

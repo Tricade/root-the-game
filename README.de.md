@@ -1,5 +1,5 @@
 [![Checks](https://github.com/Tricade/root-the-game/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/Tricade/root-the-game/actions/workflows/ci.yml)
-[![Vorschau 1.4.0](https://img.shields.io/badge/Preview-1.4.0-8ab4f8)](package.json)
+[![Vorschau 1.5.0](https://img.shields.io/badge/Preview-1.5.0-8ab4f8)](package.json)
 [![Lizenz: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![KI-Transparenz](https://img.shields.io/badge/AI-transparency_notice-6f42c1)](AI-DISCLOSURE.md)
 [![Auf Ko-fi unterstützen](https://img.shields.io/badge/Ko--fi-Support-ff5e5b?logo=kofi&logoColor=white)](https://ko-fi.com/tricade)
@@ -32,7 +32,7 @@ Dir gefällt ROOT? **Gib dem Repository einen ⭐ [Stern auf GitHub](https://git
 </p>
 
 <p align="center">
-  <a href="AI-DISCLOSURE.md"><img src="screenshots/readme/facts.svg" alt="Lokal im Browser · Weboberfläche und Ego-Ansicht · Deutsch und Englisch · Vorschau 1.4 · Entwicklung mit KI-Unterstützung" width="1200"></a>
+  <a href="AI-DISCLOSURE.md"><img src="screenshots/readme/facts.svg" alt="Lokal im Browser · Weboberfläche und Ego-Ansicht · Deutsch und Englisch · Vorschau 1.5 · Entwicklung mit KI-Unterstützung" width="1200"></a>
 </p>
 
 ## Vom ersten Rack zum Cyberbunker
@@ -144,6 +144,19 @@ Raumtüren sind von beiden Seiten bedienbar und schließen nach dem Durchgehen. 
 
 ## Schnellstart
 
+### Desktop herunterladen
+
+[**ROOT für Windows oder Linux herunterladen →**](https://github.com/Tricade/root-the-game/releases/latest)
+
+| Windows x64                            | Linux x64                               |
+| -------------------------------------- | --------------------------------------- |
+| NSIS-Installer mit eingebautem Updater | DEB-Paket mit eingebautem Updater       |
+| Portable EXE mit manuellen Updates     | Portable AppImage mit manuellen Updates |
+
+Node.js muss dafür nicht separat installiert werden. Portable speichert im benachbarten `ROOT-data`-Ordner; behalte ihn beim Austausch der Anwendung. Installierte Ausgaben bieten **Einstellungen → Desktop & Updates** zum Prüfen, Herunterladen und Installieren nach bestätigtem Speichern. Die Vorschaupakete sind unsigniert. AppImage benötigt FUSE und erlaubte Chromium-Sandbox/Benutzernamensräume. [Einrichtung, Fortschritt übernehmen und Update-Details →](docs/desktop.md)
+
+### Lokal im Browser
+
 Benötigt wird **Node.js 24**, geprüft mit **24.22.1**. Repository klonen oder herunterladen und im Ordner starten:
 
 ```sh
@@ -164,18 +177,18 @@ Danach **[127.0.0.1:18473](http://127.0.0.1:18473/)** öffnen. Unter Windows kan
 
 ## Lokal speichern und gelegentlich zurückkommen
 
-- Automatisches Speichern alle 15 Sekunden und nach Entscheidungen. `data/save.json` enthält den aktuellen Stand; `data/save.backup.json` die vorherige gültige Speicherung.
+- Automatisches Speichern alle 15 Sekunden und nach Entscheidungen. Im Browser-Modus enthält `data/save.json` den aktuellen Stand und `data/save.backup.json` die vorherige gültige Speicherung. Desktop nutzt den oben beschriebenen eigenen Speicherordner.
 - JSON-Export und -Import umfassen das komplette Netzwerk. Unterstützte Speicherstände der Versionen 1 bis 3 lassen sich importieren. Vor dem Wechsel auf ältere Versionen exportieren.
 - Beim Zurückkehren werden bis zu **zwölf Stunden** nachgerechnet, einschließlich Arbeit, Einnahmen, Wartung und Baufortschritt. Längere Abwesenheit wird begrenzt. Die Berechnung erfolgt im Client; auf dem Server läuft keine dauerhafte Wirtschaftssimulation.
 - Widersprüchliche Sitzungen überschreiben neueren Fortschritt nicht stillschweigend. Eine veraltete Sitzung pausiert; ihre abweichende Browserkopie bleibt exportierbar.
-- Der Dienst bindet nur an Loopback. Es gibt **keine Telemetrie, Analyse-Dienste, Online-KI-Aufrufe oder Laufzeit-Downloads**. Hardware, Agenten und KI-Aufträge werden simuliert; ROOT trainiert keine Modelle auf deinem Rechner. Optionale Unterstützungslinks führen zu externen Webseiten. [Sicherheits- und Bereitstellungsgrenzen →](SECURITY.md)
+- Der Dienst bindet nur an Loopback. Es gibt **keine Telemetrie, Analyse-Dienste oder Online-KI-Aufrufe**. Installierte Ausgaben können optional GitHub auf Updates prüfen; Simulation, Browser-Modus und Portable funktionieren offline. Hardware, Agenten und KI-Aufträge werden simuliert; ROOT trainiert keine Modelle auf deinem Rechner. Optionale Unterstützungslinks führen zu externen Webseiten. [Sicherheits- und Bereitstellungsgrenzen →](SECURITY.md)
 
 <details>
 <summary><strong>Vorschaustatus, technische Grenzen und Prüfungen</strong></summary>
 
-ROOT ist eine laufend entwickelte **Vorschau 1.4**. Balancing, Übersetzung, Barrierefreiheit und 3D-Darstellung freuen sich über Beiträge. Der Ausbau endet nicht nach sechs Racks. Die Datenprüfung akzeptiert derzeit bis zu 10.000 Racks, 10.000 Server und 1.000.000 Sektoren sowie fünf Stufen zentraler Anlagen. Nur der ausgewählte Raum wird gerendert. Eine erfolgreiche Datenprüfung am Maximum belegt keine gute Echtzeit-Performance bei dieser Größe.
+ROOT ist eine laufend entwickelte **Vorschau 1.5**. Balancing, Übersetzung, Barrierefreiheit und 3D-Darstellung freuen sich über Beiträge. Der Ausbau endet nicht nach sechs Racks. Die Datenprüfung akzeptiert derzeit bis zu 10.000 Racks, 10.000 Server und 1.000.000 Sektoren sowie fünf Stufen zentraler Anlagen. Nur der ausgewählte Raum wird gerendert. Eine erfolgreiche Datenprüfung am Maximum belegt keine gute Echtzeit-Performance bei dieser Größe.
 
-[Integrationsprüfung](docs/verification-construction.md), [Laufzeit-Hinweise](docs/runtime-1.4.md) und [Asset-Prüfungen](docs/asset-audit.md) dokumentieren Nachweise und Grenzen. Ein vorbereiteter GitHub-Workflow ist noch kein erfolgreicher Lauf auf einem gehosteten Runner.
+[Integrationsprüfung](docs/verification-construction.md), [Laufzeit-Hinweise](docs/runtime-1.4.md) und [Asset-Prüfungen](docs/asset-audit.md) dokumentieren Nachweise und Grenzen. Die Desktop-Paketprüfungen ergänzen die früheren Nachweise der Version 1.4; siehe [Prüfumfang und Grenzen](docs/desktop.md).
 
 </details>
 

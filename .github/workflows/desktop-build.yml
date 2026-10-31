@@ -1,0 +1,98 @@
+name: Desktop packages
+
+on:
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  packages:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, ubuntu-24.04]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '24.22.1'
+          package-manager-cache: false
+      - name: Read release version
+        id: version
+        run: node -e "const v=require('./package.json').version;if(!/^\d+\.\d+\.\d+$/.test(v))process.exit(1);require('fs').appendFileSync(process.env.GITHUB_OUTPUT,'value='+v+'\n')"
+      - run: npm ci --ignore-scripts
+      - run: node node_modules/electron/install.js
+      - name: Prepare disposable Linux display and sandbox environment
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y xvfb libfuse2 libnss3 libatk-bridge2.0-0 libgtk-3-0t64 libgbm1
+          # AppImage paths cannot use the installed DEB's AppArmor profile.
+          # This is only the ephemeral CI VM; renderer sandboxing remains on.
+          if test -f /proc/sys/kernel/apparmor_restrict_unprivileged_userns; then
+            sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
+          fi
+          uname -a
+      - name: Build native packages
+        run: npm run desktop:build
+        env:
+          CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+      - name: Verify Windows runtime and portable launcher
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          node tools/desktop/verify-package.cjs dist/win-unpacked/resources
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+          $env:ROOT_EXPECT_INSTALLATION = 'nsis'
+          node tools/desktop/launch.cjs --smoke --executable=dist/win-unpacked/root-cyberbunker.exe --output=.desktop-build/unpacked
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+          $env:ROOT_EXPECT_INSTALLATION = 'portable'
+          node tools/desktop/launch.cjs --smoke --executable=dist/ROOT-${{ steps.version.outputs.value }}-windows-x64-portable.exe --output=.desktop-build/portable
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+      - name: Install and launch Windows installer in the disposable runner
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $installDir = Join-Path $env:RUNNER_TEMP 'ROOT-desktop-test'
+          $installer = (Resolve-Path 'dist/ROOT-${{ steps.version.outputs.value }}-windows-x64-setup.exe').Path
+          $installed = Start-Process -FilePath $installer -ArgumentList '/S', "/D=$installDir" -Wait -PassThru -WindowStyle Hidden
+          if ($installed.ExitCode -ne 0) { throw 'NSIS installation failed' }
+          $env:ROOT_EXPECT_INSTALLATION = 'nsis'
+          node tools/desktop/launch.cjs --smoke "--executable=$installDir/root-cyberbunker.exe" --output=.desktop-build/installed
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+      - name: Verify Linux AppImage and installed DEB
+        if: runner.os == 'Linux'
+        env:
+          ROOT_DESKTOP_SOFTWARE_RENDERING: '1'
+        run: |
+          node tools/desktop/verify-package.cjs dist/linux-unpacked/resources
+          chmod +x dist/ROOT-${{ steps.version.outputs.value }}-linux-x86_64-portable.AppImage
+          ROOT_EXPECT_INSTALLATION=portable xvfb-run -a node tools/desktop/launch.cjs --smoke --executable=dist/ROOT-${{ steps.version.outputs.value }}-linux-x86_64-portable.AppImage --output=.desktop-build/appimage
+          sudo apt-get install -y ./dist/ROOT-${{ steps.version.outputs.value }}-linux-amd64.deb
+          ROOT_EXPECT_INSTALLATION=deb xvfb-run -a node tools/desktop/launch.cjs --smoke --executable=/opt/ROOT\ Cyberbunker/root-cyberbunker --output=.desktop-build/installed
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: desktop-${{ runner.os }}
+          path: |
+            dist/ROOT-*.exe
+            dist/ROOT-*.exe.blockmap
+            dist/ROOT-*.AppImage
+            dist/ROOT-*.deb
+            dist/latest*.yml
+          if-no-files-found: error
+          retention-days: 1
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: always()
+        with:
+          name: desktop-diagnostics-${{ runner.os }}
+          include-hidden-files: true
+          path: |
+            .desktop-build/**/result.json
+            .desktop-build/**/desktop.png
+          if-no-files-found: warn
+          retention-days: 7

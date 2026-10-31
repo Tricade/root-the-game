@@ -30,7 +30,7 @@ export function createPersistenceUI(ctx, platform = globalThis) {
   }
 
   function tick() {
-    if (!ctx.initialized || platform.document.hidden) return;
+    if (!ctx.initialized || platform.document.hidden || ctx.desktopClosing?.()) return;
     const report = simulate();
     if (ctx.stateSignature() !== ctx.signature || ctx.renderPending) ctx.render();
     else ctx.updateLive();
@@ -281,6 +281,7 @@ export function createPersistenceUI(ctx, platform = globalThis) {
     if (report && report.seconds >= 60) ctx.openModal('offline', report);
     ctx.announceAchievements();
     platform.setInterval(tick, 1000);
+    ctx.desktopReady?.().catch(() => {});
   }
   return { storageGet, storageSet, simulate, tick, save, exportSave, replaceState, boot };
 }

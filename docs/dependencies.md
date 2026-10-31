@@ -1,6 +1,6 @@
 # Runtime and tooling versions
 
-The application uses Node.js built-ins and vendored browser modules. No `npm install` is needed to run it or execute the Node tests.
+The application uses Node.js built-ins and vendored browser modules. Browser mode needs no package installation. Tests and desktop development require the pinned npm dependencies; packaged desktop users do not need npm or a separate Node.js.
 
 | Component           | Checked version  | Scope                                             |
 | ------------------- | ---------------- | ------------------------------------------------- |
@@ -13,7 +13,7 @@ The application uses Node.js built-ins and vendored browser modules. No `npm ins
 | globals             | 17.13.0          | Development-only browser/Node global declarations |
 | Prettier            | 3.9.10           | Development-only formatting                       |
 
-Development dependencies are pinned in `package-lock.json` and installed with `npm ci --ignore-scripts`. They are not loaded by the application. Node 24.22.1 meets ESLint 10.14.0's `^20.19.0 || ^22.13.0 || >=24` requirement. Flat configuration follows the [exact ESLint 10.14.0 documentation](https://github.com/eslint/eslint/blob/v10.14.0/docs/src/use/configure/configuration-files.md); formatting follows the [Prettier 3.9.10 configuration documentation](https://github.com/prettier/prettier/blob/3.9.10/docs/configuration.md). CommonJS/native-module compatibility is checked against [Node 24.22.1 modules](https://github.com/nodejs/node/blob/v24.22.1/doc/api/modules.md). Lint and parser success alone are not browser compatibility evidence.
+Development dependencies are pinned in `package-lock.json` and installed with `npm ci --ignore-scripts`. Build/lint tools are not loaded by browser mode. Packaged desktop mode loads the separately declared updater runtime dependencies. Node 24.22.1 meets ESLint 10.14.0's `^20.19.0 || ^22.13.0 || >=24` requirement. Flat configuration follows the [exact ESLint 10.14.0 documentation](https://github.com/eslint/eslint/blob/v10.14.0/docs/src/use/configure/configuration-files.md); formatting follows the [Prettier 3.9.10 configuration documentation](https://github.com/prettier/prettier/blob/3.9.10/docs/configuration.md). CommonJS/native-module compatibility is checked against [Node 24.22.1 modules](https://github.com/nodejs/node/blob/v24.22.1/doc/api/modules.md). Lint and parser success alone are not browser compatibility evidence.
 
 ## Three.js source
 
@@ -40,3 +40,11 @@ The optional GitHub workflow pins `actions/checkout` 7.0.1, `actions/setup-node`
 The version 2 configuration in `.github/dependabot.yml` checks npm development dependencies, the optional Python asset requirements and GitHub Actions every Monday at 08:00 Europe/Berlin. Each ecosystem permits up to five open version-update pull requests. Updates are proposed for review; automatic merging is not configured. Dependency alerts and automated security fixes are separate GitHub repository settings. The supported fields and ecosystems follow the [official Dependabot options reference](https://docs.github.com/en/code-security/reference/supply-chain-security/dependabot-options-reference).
 
 The vendored Three.js files and interpreter versions embedded in scripts or workflows still need deliberate maintenance. An npm update does not replace vendored renderer bytes, and a successful dependency pull request does not replace the browser and asset compatibility checks described above.
+
+## Desktop versions and audit scope
+
+The lockfile pins Electron **45.2.1**, electron-builder **26.18.0**, electron-updater **6.8.11** and semver **7.8.5**. Electron 45.2.1 actually reports Node 24.22.1 / Chromium 156.0.8078.75 in the desktop smoke test. Packaging inspection uses the builder dependency `@electron/asar` **3.4.1**. See [desktop architecture, exact-version sources and build commands](desktop.md).
+
+The release/build workflows additionally pin official upload-artifact **7.0.2** and download-artifact **8.0.2** to full commits, both using Node 24 action runtimes. Repository checks remain read-only; only the final tag-triggered release job has `contents: write`. Dependabot covers runtime and development npm dependencies.
+
+The checked lockfile has **zero production audit findings**. A full audit reports **19 moderate findings** propagated through build/lint tools from [minimatch GHSA-g3hv-75wg-m249](https://github.com/advisories/GHSA-g3hv-75wg-m249). Attacker-controlled patterns with optimizationLevel >= 2 can exhaust resources. minimatch 11.0.1 fixes it, while the pinned consumers declare incompatible older major ranges. No unverified major override or forced downgrade is applied. These tools process repository-controlled build/lint patterns, not player data; untrusted PR builds still run only in disposable runners without release credentials. Track upstream compatibility before updating. A passing runtime audit is not a claim that the entire toolchain is vulnerability-free.

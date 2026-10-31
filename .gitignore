@@ -24,3 +24,9 @@ coverage/
 *.bak
 *.blend
 *.blend1
+
+# Desktop packages and synthetic smoke profiles
+dist/
+.desktop-build/
+artifacts/
+ROOT-data/

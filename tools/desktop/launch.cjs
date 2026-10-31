@@ -16,6 +16,16 @@ const output = outputFlag
   ? path.resolve(outputFlag.slice('--output='.length))
   : path.join(root, '.desktop-build', 'smoke-' + Date.now());
 const args = executableFlag ? [] : [root];
+if (
+  smoke &&
+  process.platform === 'linux' &&
+  process.env.CI === 'true' &&
+  process.env.ROOT_DESKTOP_SOFTWARE_RENDERING === '1'
+) {
+  // Chromium 156's documented opt-in for trusted software-WebGL tests.
+  // This launcher-only CI path never changes normal application defaults.
+  args.push('--use-gl=angle', '--use-angle=swiftshader-webgl', '--enable-unsafe-swiftshader');
+}
 if (smoke) {
   fs.mkdirSync(output, { recursive: true });
   args.push('--self-test', '--test-output=' + output);

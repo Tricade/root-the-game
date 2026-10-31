@@ -85,9 +85,12 @@ async function runSelfTest({ app, output, startDesktop }) {
       document.querySelector('[data-room-slot]').scrollIntoView();
       const inspect = () => {
         const canvas = document.querySelector('.root-room-canvas');
-        return canvas && Number(canvas.dataset.drawCalls) > 0
-          ? { drawCalls: Number(canvas.dataset.drawCalls), triangles: Number(canvas.dataset.triangles),
-              models: document.querySelector('.root-room-badge')?.textContent } : null;
+        if (!canvas || Number(canvas.dataset.drawCalls) <= 0) return null;
+        const gl = canvas.getContext('webgl2');
+        const debug = gl.getExtension('WEBGL_debug_renderer_info');
+        return { drawCalls: Number(canvas.dataset.drawCalls), triangles: Number(canvas.dataset.triangles),
+          models: document.querySelector('.root-room-badge')?.textContent,
+          renderer: gl.getParameter(debug ? debug.UNMASKED_RENDERER_WEBGL : gl.RENDERER) };
       };
       const initial = inspect();
       if (initial) return resolve(initial);
@@ -100,6 +103,12 @@ async function runSelfTest({ app, output, startDesktop }) {
     })`);
     assert.ok(result.graphics.triangles > 0);
     assert.equal(result.graphics.models, 'LIVE / 3D');
+    if (
+      process.platform === 'linux' &&
+      process.env.CI === 'true' &&
+      process.env.ROOT_DESKTOP_SOFTWARE_RENDERING === '1'
+    )
+      assert.match(result.graphics.renderer, /SwiftShader/i);
     await contents.executeJavaScript(`document.querySelector('[data-modal="settings"]').click()`);
     await contents.executeJavaScript(
       `const language = document.querySelector('[data-change="language"]'); language.value = 'en'; language.dispatchEvent(new Event('change', { bubbles: true }));`,
@@ -122,6 +131,20 @@ async function runSelfTest({ app, output, startDesktop }) {
     assert.match(english, /Automatically saves every 15 seconds/);
     assert.doesNotMatch(english, /Automatisches Speichern/);
     result.language = 'en';
+    await contents.executeJavaScript(`Promise.all(
+      document.querySelector('.modal-backdrop').getAnimations({ subtree: true })
+        .filter(animation => Number.isFinite(animation.effect.getTiming().iterations))
+        .map(animation => animation.finished.catch(() => {}))
+    )`);
+    const modalVisible = await contents.executeJavaScript(`(() => {
+      const button = document.querySelector('[data-desktop-command="releases"]');
+      button.scrollIntoView({ block: 'center' });
+      const box = button.getBoundingClientRect();
+      const top = document.elementFromPoint(box.x + box.width / 2, box.y + box.height / 2);
+      return box.width > 0 && box.height > 0 && button.contains(top);
+    })()`);
+    assert.equal(modalVisible, true, 'Desktop settings must be visible above the 3D view');
+    result.settings.modalVisible = modalVisible;
     await contents.executeJavaScript(
       'new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)))',
     );

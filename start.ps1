@@ -20,7 +20,7 @@ function Test-RootHealth {
         }
         $response = Invoke-RestMethod @request
         $script:RootHealthResponse = $response
-        return ($response.app -eq 'ROOT' -and [int]$response.version -eq 3 -and $response.release -eq '1.5.0')
+        return ($response.app -eq 'ROOT' -and [int]$response.version -eq 3 -and $response.release -eq '1.5.1')
     } catch {
         return $false
     }

@@ -244,7 +244,7 @@ export function createRoomLocation(sceneContext, platform = globalThis) {
     }
   }
 
-  function finishArrival(enterHall = true) {
+  function finishArrival(showDashboard = true) {
     if (!sceneContext.arrival) return;
     sceneContext.arrival.dispose();
     sceneContext.arrival = null;
@@ -252,9 +252,12 @@ export function createRoomLocation(sceneContext, platform = globalThis) {
     sceneContext.shell.classList.remove('arriving');
     if (!sceneContext.exploring) platform.document.body.classList.remove('root-room-open');
     sceneContext.sizeRenderer();
-    if (enterHall) {
-      changeLocation('hall', 1);
-      sceneContext.startExploration(false);
+    if (showDashboard) {
+      // A fly-in introduces the facility; first person starts deliberately
+      // from the dashboard. Restoring a reload remains a separate operation.
+      saveRoomSession();
+      sceneContext.onArrivalComplete?.();
+      sceneContext.syncAnimation();
     }
   }
 

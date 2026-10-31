@@ -74,6 +74,8 @@ jobs:
           chmod +x dist/ROOT-${{ steps.version.outputs.value }}-linux-x86_64-portable.AppImage
           ROOT_EXPECT_INSTALLATION=portable xvfb-run -a node tools/desktop/launch.cjs --smoke --executable=dist/ROOT-${{ steps.version.outputs.value }}-linux-x86_64-portable.AppImage --output=.desktop-build/appimage
           sudo apt-get install -y ./dist/ROOT-${{ steps.version.outputs.value }}-linux-amd64.deb
+          test -x '/opt/ROOT Cyberbunker/root-cyberbunker'
+          grep -Fx 'Name=ROOT · Network OS' /usr/share/applications/io.github.tricade.root.desktop
           ROOT_EXPECT_INSTALLATION=deb xvfb-run -a node tools/desktop/launch.cjs --smoke --executable=/opt/ROOT\ Cyberbunker/root-cyberbunker --output=.desktop-build/installed
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:

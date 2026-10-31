@@ -1,6 +1,7 @@
 'use strict';
 
 const path = require('node:path');
+const BRAND = require('../brand.js');
 const {
   app,
   BrowserWindow,
@@ -16,6 +17,7 @@ const { startLocalService } = require('./service.cjs');
 const {
   detectInstallation,
   profilePath,
+  installedProfilePath,
   prepareProfile,
   createPreferences,
 } = require('./profile.cjs');
@@ -38,7 +40,7 @@ protocol.registerSchemesAsPrivileged([
 ]);
 
 async function startDesktop(options = {}) {
-  app.setName('ROOT Cyberbunker');
+  app.setName(BRAND.title);
   app.setAppUserModelId('io.github.tricade.root');
   const installation = detectInstallation({
     packaged: app.isPackaged,
@@ -46,7 +48,8 @@ async function startDesktop(options = {}) {
     env: process.env,
     resourcesPath: process.resourcesPath,
   });
-  const profile = options.profile || profilePath(installation, app.getPath('userData'));
+  const profile =
+    options.profile || profilePath(installation, installedProfilePath(app.getPath('appData')));
   prepareProfile(app, profile);
   if (!app.requestSingleInstanceLock()) {
     app.quit();
@@ -80,7 +83,7 @@ async function startDesktop(options = {}) {
       const updater = new Constructor({
         provider: 'github',
         owner: 'Tricade',
-        repo: 'root-the-game',
+        repo: BRAND.repository,
         channel: 'latest',
       });
       updater.logger = { info() {}, warn() {}, error() {} };
@@ -265,6 +268,6 @@ const start =
       })
     : startDesktop();
 start.catch((error) => {
-  dialog.showErrorBox('ROOT Cyberbunker', error.message);
+  dialog.showErrorBox(BRAND.title, error.message);
   app.exit(1);
 });

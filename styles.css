@@ -16,9 +16,43 @@
   --radius: 13px;
   --font: 'Segoe UI Variable', 'Segoe UI', system-ui, sans-serif;
   --mono: 'Cascadia Code', 'Consolas', monospace;
+  --scrollbar-thumb: #5b7054;
+  --scrollbar-track: #111713;
 }
 * {
   box-sizing: border-box;
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+}
+/* Native scrolling stays intact, including keyboard/wheel and OS overrides. */
+@supports not (scrollbar-width: thin) {
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track,
+  ::-webkit-scrollbar-corner {
+    background: var(--scrollbar-track);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thumb);
+    border: 2px solid var(--scrollbar-track);
+    border-radius: 8px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #8ba975;
+  }
+}
+@media (forced-colors: active) {
+  * {
+    scrollbar-color: auto;
+    scrollbar-width: auto;
+  }
+}
+@media (pointer: coarse) {
+  * {
+    scrollbar-width: auto;
+  }
 }
 body {
   margin: 0;

@@ -44,10 +44,21 @@
   color: #a0b9a1;
 }
 .room-arrival-overlay h2 {
-  font-size: clamp(26px, 4.5vw, 66px);
-  font-weight: 450;
-  letter-spacing: 0.18em;
-  margin: 12px 0;
+  font-size: clamp(72px, 10vw, 146px);
+  font-weight: 750;
+  line-height: 0.95;
+  letter-spacing: -0.065em;
+  margin: 22px 0 12px;
+}
+.room-arrival-overlay h2 b {
+  color: var(--accent);
+  font-weight: inherit;
+}
+.room-arrival-overlay .arrival-brand-label {
+  margin: 0 0 28px;
+  color: #deebd4;
+  font: 13px var(--mono);
+  letter-spacing: 0.36em;
 }
 .room-arrival-overlay p {
   font: 12px var(--mono);

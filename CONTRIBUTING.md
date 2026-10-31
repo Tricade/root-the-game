@@ -4,8 +4,8 @@ Bug reports, balancing ideas, translations, accessibility improvements, original
 
 ## Ways to help
 
-- [Report a bug](https://github.com/Tricade/root-the-game/issues/new?template=bug_report.yml): include the ROOT version or commit, browser/OS, affected interface, steps, expected result and actual result. A small synthetic example is more useful than your personal save.
-- [Suggest a feature](https://github.com/Tricade/root-the-game/issues/new?template=feature_request.yml): describe the problem, proposed behavior and tradeoffs. For balancing, include fleet size, elapsed simulation time, income and upkeep.
+- [Report a bug](https://github.com/Tricade/root-network-os/issues/new?template=bug_report.yml): include the ROOT version or commit, browser/OS, affected interface, steps, expected result and actual result. A small synthetic example is more useful than your personal save.
+- [Suggest a feature](https://github.com/Tricade/root-network-os/issues/new?template=feature_request.yml): describe the problem, proposed behavior and tradeoffs. For balancing, include fleet size, elapsed simulation time, income and upkeep.
 - Improve German/English translations, documentation, keyboard access or readability. Explain the affected view and include synthetic before/after screenshots for visible changes.
 - Build original models or improve the local generators, retaining editable sources and component licenses. See the [asset-tool guide](tools/asset-generator/README.md).
 - Fix a focused issue or help test a proposed change. Describe what you actually checked; no programming is required to report a useful reproduction.
@@ -16,12 +16,12 @@ For a substantial mechanic, migration or architecture change, discuss the intend
 
 Use Node.js 24 (verified with 24.22.1). Browser mode needs no package installation or compilation. Install the pinned dependencies for tests, formatting, lint and desktop development.
 
-Fork `Tricade/root-the-game` on GitHub, then clone your fork. Replace `YOUR_ACCOUNT` below with your public GitHub handle. Existing contributors can use their current checkout after updating it without discarding local work.
+Fork `Tricade/root-network-os` on GitHub, then clone your fork. Replace `YOUR_ACCOUNT` below with your public GitHub handle. Existing contributors can use their current checkout after updating it without discarding local work.
 
 ```sh
-git clone https://github.com/YOUR_ACCOUNT/root-the-game.git
-cd root-the-game
-git remote add upstream https://github.com/Tricade/root-the-game.git
+git clone https://github.com/YOUR_ACCOUNT/root-network-os.git
+cd root-network-os
+git remote add upstream https://github.com/Tricade/root-network-os.git
 git switch -c fix/describe-the-change
 npm ci --ignore-scripts
 npm run check
@@ -54,7 +54,7 @@ The Electron wrapper, package configuration and updater are included. Use `node 
 3. Run `npm run check` (ESLint, Prettier and Node tests). `npm run format` applies the agreed formatting. Add focused regression coverage for behavior changes; do not replace runtime checks with string matching alone.
 4. Exercise affected controls in both the web UI and 3D terminals. Check German and English, reload recovery and an older synthetic save when persistence changes.
 5. Update the relevant documentation. Use synthetic examples and screenshots, with no personal saves, machine paths or credentials.
-6. Commit with your chosen public identity and GitHub noreply address, push your branch to your fork, and open a pull request against `Tricade/root-the-game:main`. Link the related issue, explain the resulting behavior and fill in the PR template. Maintainers review before merging; a branch or suggested change is not a release. All required CI checks must pass before a protected-branch merge.
+6. Commit with your chosen public identity and GitHub noreply address, push your branch to your fork, and open a pull request against `Tricade/root-network-os:main`. Link the related issue, explain the resulting behavior and fill in the PR template. Maintainers review before merging; a branch or suggested change is not a release. All required CI checks must pass before a protected-branch merge.
 
 Offline progression, crisis decisions, save conflict handling, repair availability and the original mouse-drag movement path must remain usable. Preserve old save compatibility explicitly; do not discard unknown or invalid data silently to make a test pass. Avoid rebuilding the scene or replacing DOM sections on every simulation tick.
 

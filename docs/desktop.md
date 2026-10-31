@@ -1,6 +1,6 @@
-# ROOT desktop
+# ROOT · Network OS desktop
 
-The desktop application runs the same simulation and both interfaces as the browser edition. Download packages from [GitHub Releases](https://github.com/Tricade/root-the-game/releases). No separately installed Node.js or account is required.
+The desktop application runs the same simulation and both interfaces as the browser edition. Download packages from [GitHub Releases](https://github.com/Tricade/root-network-os/releases). No separately installed Node.js or account is required.
 
 | Package                        | Installation                                 | Updates                                         | Progress                                 |
 | ------------------------------ | -------------------------------------------- | ----------------------------------------------- | ---------------------------------------- |
@@ -13,9 +13,11 @@ The desktop application runs the same simulation and both interfaces as the brow
 
 ## Saves and migration
 
-**Settings → Desktop & updates → Open data folder** locates `network/save.json` and the previous valid `network/save.backup.json`. Installed Windows profiles normally live under `%APPDATA%/ROOT Cyberbunker`; Linux uses `$XDG_CONFIG_HOME/ROOT Cyberbunker` or `~/.config/ROOT Cyberbunker`. The folder button is authoritative. Desktop preferences sit alongside `network/`; Chromium UI storage is isolated in `chromium/`, selected synchronously before Electron is ready.
+**Settings → Desktop & updates → Open data folder** locates `network/save.json` and the previous valid `network/save.backup.json`. Installed Windows profiles normally live under `%APPDATA%/ROOT Cyberbunker`; Linux uses `$XDG_CONFIG_HOME/ROOT Cyberbunker` or `~/.config/ROOT Cyberbunker`. These are the original 1.5.0 profile locations, deliberately retained after the Network OS rename. The folder button is authoritative. Desktop preferences sit alongside `network/`; Chromium UI storage is isolated in `chromium/`, selected synchronously before Electron is ready.
 
 Browser installations retain their existing `data/` files and browser storage. Desktop uses its own profile. Transfer progress by exporting a JSON backup in the browser and importing it in desktop Settings. Import exports the previous desktop state first. Keep a backup when trying older versions: file retention does not establish backwards compatibility with older code.
+
+A fresh session introduces ROOT · Network OS with the skippable fly-in, then opens the web dashboard. “Enter room” deliberately starts first person. Reloading a walkthrough keeps its saved location and orientation.
 
 Closing, F5/Ctrl+R and installing an update first pause decisions and drain the revision-safe save queue. Installation is cancelled without confirmed disk persistence. An ordinary close offers a return path to export a backup and an explicit quit-anyway choice. Only one instance uses a desktop profile at a time.
 
@@ -23,7 +25,7 @@ Closing, F5/Ctrl+R and installing an update first pause decisions and drain the 
 
 Installed editions check GitHub's stable feed after startup and on focus, at most once per day automatically. Automatic checks can be disabled. A check does not download an installer. **Download update** validates the download against release SHA-512 metadata; **Install & restart** saves progress before handing control to NSIS/the DEB installer. The OS may refuse or cancel installation; successful downloading does not prove installation succeeded.
 
-The first preview packages are **unsigned**. SHA-512 establishes integrity relative to published metadata, not an independently verified publisher identity. Windows may display an unknown-publisher/SmartScreen prompt. Signed Windows releases need a maintainer-supplied certificate and CI signing secrets. Signature verification has not been disabled. An upgrade between two publicly released desktop versions can only be verified once a second version exists.
+The first preview packages are **unsigned**. SHA-512 establishes integrity relative to published metadata, not an independently verified publisher identity. Windows may display an unknown-publisher/SmartScreen prompt. Signed Windows releases need a maintainer-supplied certificate and CI signing secrets. Signature verification has not been disabled. Native installers and profile compatibility are checked separately from updater discovery/download. Download and checksum verification alone are not an operating-system upgrade test.
 
 Update requests contact GitHub and its asset hosts. Simulation, browser mode and portable mode need no network. Support/release links open in the system browser. There is no telemetry or online AI inference.
 

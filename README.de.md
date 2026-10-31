@@ -1,12 +1,12 @@
-[![Checks](https://github.com/Tricade/root-the-game/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/Tricade/root-the-game/actions/workflows/ci.yml)
-[![Vorschau 1.5.0](https://img.shields.io/badge/Preview-1.5.0-8ab4f8)](package.json)
+[![Checks](https://github.com/Tricade/root-network-os/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/Tricade/root-network-os/actions/workflows/ci.yml)
+[![Vorschau 1.5.1](https://img.shields.io/badge/Preview-1.5.1-8ab4f8)](package.json)
 [![Lizenz: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![KI-Transparenz](https://img.shields.io/badge/AI-transparency_notice-6f42c1)](AI-DISCLOSURE.md)
 [![Auf Ko-fi unterstützen](https://img.shields.io/badge/Ko--fi-Support-ff5e5b?logo=kofi&logoColor=white)](https://ko-fi.com/tricade)
-[![GitHub-Sterne](https://img.shields.io/github/stars/Tricade/root-the-game?style=flat)](https://github.com/Tricade/root-the-game/stargazers)
+[![GitHub-Sterne](https://img.shields.io/github/stars/Tricade/root-network-os?style=flat)](https://github.com/Tricade/root-network-os/stargazers)
 
 <p align="center">
-  <img src="screenshots/readme/wordmark.svg" alt="ROOT / Cyberbunker — unterirdisch ausbauen und den Betrieb am Laufen halten" width="1200">
+  <img src="screenshots/readme/wordmark.svg" alt="ROOT · Network OS — unterirdisch ausbauen und den Betrieb am Laufen halten" width="1200">
 </p>
 
 <p align="center">
@@ -17,7 +17,7 @@
 > [!IMPORTANT]
 > **KI-Transparenz:** Generative KI hat Code, Tests, Dokumentation, Übersetzungen und prozedurale Assets von ROOT wesentlich unterstützt. Änderungen benötigen weiterhin Prüfung, passende Tests und nachvollziehbare Asset-Herkunft. Anwendung und lokale Assetgeneratoren kontaktieren keinen KI-Anbieter. [AI-DISCLOSURE.md](AI-DISCLOSURE.md) beschreibt Umfang und Prüfgrenzen, [NOTICE.md](NOTICE.md) die komponentenbezogenen Lizenzen.
 
-Dir gefällt ROOT? **Gib dem Repository einen ⭐ [Stern auf GitHub](https://github.com/Tricade/root-the-game)**, damit andere es leichter entdecken.
+Dir gefällt ROOT? **Gib dem Repository einen ⭐ [Stern auf GitHub](https://github.com/Tricade/root-network-os)**, damit andere es leichter entdecken.
 
 <p align="center">
   <a href="README.md">English</a> · <a href="#start">Schnellstart</a> · <a href="#console">Screenshots</a> · <a href="#features">Features</a> · <a href="CONTRIBUTING.md">Mitbauen</a> · <a href="https://ko-fi.com/tricade">Ko-fi</a>
@@ -26,13 +26,13 @@ Dir gefällt ROOT? **Gib dem Repository einen ⭐ [Stern auf GitHub](https://git
 <p align="center">
   <picture>
     <source media="(prefers-reduced-motion: reduce)" srcset="screenshots/readme/arrival-poster.jpg">
-    <img src="screenshots/readme/arrival.webp" alt="Die echte Einfahrt: von außen durch die Sicherheitsschleusen in den ROOT-Cyberbunker" width="1200">
+    <img src="screenshots/readme/arrival.webp" alt="ROOT · Network OS: die echte Einfahrt durch die Sicherheitsschleusen des unterirdischen Rechenzentrums" width="1200">
   </picture>
   <br><sub>Aus der laufenden Anwendung aufgenommen. <a href="screenshots/readme/arrival-poster.jpg">Standbild öffnen</a> · <a href="screenshots/readme/README.md">Hinweise zu den Aufnahmen</a></sub>
 </p>
 
 <p align="center">
-  <a href="AI-DISCLOSURE.md"><img src="screenshots/readme/facts.svg" alt="Lokal im Browser · Weboberfläche und Ego-Ansicht · Deutsch und Englisch · Vorschau 1.5 · Entwicklung mit KI-Unterstützung" width="1200"></a>
+  <a href="AI-DISCLOSURE.md"><img src="screenshots/readme/facts.svg" alt="Lokal im Browser · Weboberfläche und Ego-Ansicht · Deutsch und Englisch · Vorschau 1.5.1 · Entwicklung mit KI-Unterstützung" width="1200"></a>
 </p>
 
 ## Vom ersten Rack zum Cyberbunker
@@ -146,7 +146,7 @@ Raumtüren sind von beiden Seiten bedienbar und schließen nach dem Durchgehen. 
 
 ### Desktop herunterladen
 
-[**ROOT für Windows oder Linux herunterladen →**](https://github.com/Tricade/root-the-game/releases/latest)
+[**ROOT für Windows oder Linux herunterladen →**](https://github.com/Tricade/root-network-os/releases/latest)
 
 | Windows x64                            | Linux x64                               |
 | -------------------------------------- | --------------------------------------- |
@@ -186,7 +186,7 @@ Danach **[127.0.0.1:18473](http://127.0.0.1:18473/)** öffnen. Unter Windows kan
 <details>
 <summary><strong>Vorschaustatus, technische Grenzen und Prüfungen</strong></summary>
 
-ROOT ist eine laufend entwickelte **Vorschau 1.5**. Balancing, Übersetzung, Barrierefreiheit und 3D-Darstellung freuen sich über Beiträge. Der Ausbau endet nicht nach sechs Racks. Die Datenprüfung akzeptiert derzeit bis zu 10.000 Racks, 10.000 Server und 1.000.000 Sektoren sowie fünf Stufen zentraler Anlagen. Nur der ausgewählte Raum wird gerendert. Eine erfolgreiche Datenprüfung am Maximum belegt keine gute Echtzeit-Performance bei dieser Größe.
+ROOT ist eine laufend entwickelte **Vorschau 1.5.1**. Balancing, Übersetzung, Barrierefreiheit und 3D-Darstellung freuen sich über Beiträge. Der Ausbau endet nicht nach sechs Racks. Die Datenprüfung akzeptiert derzeit bis zu 10.000 Racks, 10.000 Server und 1.000.000 Sektoren sowie fünf Stufen zentraler Anlagen. Nur der ausgewählte Raum wird gerendert. Eine erfolgreiche Datenprüfung am Maximum belegt keine gute Echtzeit-Performance bei dieser Größe.
 
 [Integrationsprüfung](docs/verification-construction.md), [Laufzeit-Hinweise](docs/runtime-1.4.md) und [Asset-Prüfungen](docs/asset-audit.md) dokumentieren Nachweise und Grenzen. Die Desktop-Paketprüfungen ergänzen die früheren Nachweise der Version 1.4; siehe [Prüfumfang und Grenzen](docs/desktop.md).
 
@@ -196,8 +196,8 @@ ROOT ist eine laufend entwickelte **Vorschau 1.5**. Balancing, Übersetzung, Bar
 
 Du kannst mit Fehlerberichten, Balancing-Versuchen, Übersetzungen, Barrierefreiheit, eigenen 3D-Assets oder Code helfen. Programmieren ist keine Voraussetzung für einen Beitrag.
 
-- **Ein Problem gefunden?** [Fehler melden](https://github.com/Tricade/root-the-game/issues/new?template=bug_report.yml), mit Version, Reproduktionsschritten und einem synthetischen Beispiel.
-- **Eine Idee?** [Feature vorschlagen](https://github.com/Tricade/root-the-game/issues/new?template=feature_request.yml) und erklären, welches Problem es lösen und wie es sich verhalten soll.
+- **Ein Problem gefunden?** [Fehler melden](https://github.com/Tricade/root-network-os/issues/new?template=bug_report.yml), mit Version, Reproduktionsschritten und einem synthetischen Beispiel.
+- **Eine Idee?** [Feature vorschlagen](https://github.com/Tricade/root-network-os/issues/new?template=feature_request.yml) und erklären, welches Problem es lösen und wie es sich verhalten soll.
 - **Selbst mitbauen?** [CONTRIBUTING.md](CONTRIBUTING.md) erklärt Fork, getrennte Entwicklungsinstanz und einen gezielten Pull Request gegen `main`. Größere Änderungen lassen sich vorher gut in einem Issue besprechen.
 
 ```sh

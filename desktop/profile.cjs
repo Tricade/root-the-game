@@ -3,6 +3,7 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const { randomUUID } = require('node:crypto');
+const BRAND = require('../brand.js');
 
 function detectInstallation({
   packaged,
@@ -39,6 +40,10 @@ function normalizePreferences(raw = {}) {
     language: raw.language === 'en' ? 'en' : 'de',
     lastCheck: Number.isFinite(raw.lastCheck) && raw.lastCheck >= 0 ? raw.lastCheck : 0,
   };
+}
+
+function installedProfilePath(appData) {
+  return path.join(appData, BRAND.legacyProfileName);
 }
 
 function createPreferences(directory) {
@@ -85,6 +90,7 @@ function prepareProfile(app, directory) {
 module.exports = {
   detectInstallation,
   profilePath,
+  installedProfilePath,
   prepareProfile,
   normalizePreferences,
   createPreferences,

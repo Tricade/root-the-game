@@ -40,7 +40,11 @@ test('health endpoint, loopback-only static allowlist, and API boundaries', asyn
   await withServer(t, async ({ base }) => {
     const health = await fetch(`${base}/api/health`);
     assert.equal(health.status, 200);
-    assert.deepEqual(await health.json(), { app: 'ROOT', version: 3, release: '1.5.0' });
+    assert.deepEqual(await health.json(), {
+      app: 'ROOT',
+      version: 3,
+      release: require('../package.json').version,
+    });
     for (const file of [
       '/server.cjs',
       '/server/static-files.cjs',

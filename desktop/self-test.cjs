@@ -47,7 +47,6 @@ async function runSelfTest({ app, output, startDesktop }) {
       const stored = await (await fetch('/api/save')).json();
       const info = await window.rootDesktop.info();
       localStorage.setItem('root.desktop.smoke', 'retained');
-      localStorage.setItem('root.arrival.enabled', '0');
       return { origin: location.origin, node: typeof process, require: typeof require,
         health, network: stored.save.networkName, servers: stored.save.servers.length,
         racks: stored.save.facility.racks.length, canUpdate: info.canUpdate,
@@ -62,6 +61,7 @@ async function runSelfTest({ app, output, startDesktop }) {
     assert.equal(initial.settingsButton, true);
     assert.equal(initial.canUpdate, ['nsis', 'deb'].includes(installation.kind));
     result.initial = initial;
+    result.arrival = await require('./arrival-smoke.cjs').checkArrival({ window, output });
     // Reload the same origin while the loopback service keeps its ephemeral port.
     assert.equal(await reload(), true);
     const reloaded = await contents.executeJavaScript(`(async () => {
@@ -104,6 +104,20 @@ async function runSelfTest({ app, output, startDesktop }) {
       observer.observe(document.body, { childList: true, subtree: true, attributes: true });
     })`);
     assert.ok(result.graphics.triangles > 0);
+    if (result.arrival.deliberateWalkthrough) {
+      const restoredWalk = await contents.executeJavaScript(
+        `Boolean(document.querySelector('.root-room.exploring'))`,
+      );
+      assert.equal(restoredWalk, true, 'Reload must retain an explicitly started walkthrough');
+      result.arrival.reloadRestoresWalkthrough = restoredWalk;
+    }
+    const scrollbars = await contents.executeJavaScript(`({
+      width: getComputedStyle(document.documentElement).scrollbarWidth,
+      color: getComputedStyle(document.documentElement).scrollbarColor,
+    })`);
+    assert.equal(scrollbars.width, 'thin');
+    assert.match(scrollbars.color, /rgb\(91, 112, 84\)/);
+    result.scrollbars = scrollbars;
     assert.equal(result.graphics.models, 'LIVE / 3D');
     if (
       process.platform === 'linux' &&

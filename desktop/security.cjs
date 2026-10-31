@@ -1,7 +1,7 @@
 'use strict';
 
 const APP_URL = 'root://app/';
-const RELEASES_URL = 'https://github.com/Tricade/root-the-game/releases/latest';
+const RELEASES_URL = `https://github.com/Tricade/${require('../brand.js').repository}/releases/latest`;
 
 function isAppUrl(value) {
   try {

@@ -1,5 +1,7 @@
 import * as THREE from './vendor/three.module.js';
 import { createBunkerSurfaces, metricBox } from './room-surfaces.js';
+import './brand.js';
+const BRAND = globalThis.ROOTBrand;
 
 const ARRIVAL_DURATION = 11000;
 const DOOR_WIDTH = 1.4;
@@ -155,10 +157,10 @@ export function createArrival({ bank, environment }) {
   signContext.fillRect(0, 0, 1024, 192);
   signContext.fillStyle = '#d0d6ca';
   signContext.font = '600 72px Segoe UI';
-  signContext.fillText('ROOT / 01', 36, 92);
+  signContext.fillText(BRAND.wordmark + '.', 36, 92);
   signContext.fillStyle = '#a3b68b';
   signContext.font = '25px Consolas';
-  signContext.fillText('UNDERGROUND OPERATIONS · AUTHORIZED ACCESS', 39, 150);
+  signContext.fillText(BRAND.label + ' · AUTHORIZED ACCESS', 39, 150);
   const signTexture = new THREE.CanvasTexture(signCanvas);
   signTexture.colorSpace = THREE.SRGBColorSpace;
   const signMaterial = new THREE.MeshBasicMaterial({ map: signTexture, toneMapped: false });
@@ -259,7 +261,7 @@ export function createArrival({ bank, environment }) {
             ? 'ÄUSSERE SCHLEUSE'
             : t < 0.82
               ? 'DRUCKSCHLEUSE'
-              : 'ZUGANG ZUM FLUR';
+              : 'LEITSTELLE BEREIT';
       return { done: t >= 1, progress: t, caption };
     },
     dispose() {

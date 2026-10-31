@@ -86,6 +86,14 @@ import { createRoom } from './room.js';
       view = 'overview';
       requestAnimationFrame(() => render());
     },
+    onArrivalComplete: () => {
+      view = 'overview';
+      requestAnimationFrame(() => {
+        render();
+        window.scrollTo(0, 0);
+        $('#main').focus({ preventScroll: true });
+      });
+    },
   });
   let seenAchievements = new Set();
 

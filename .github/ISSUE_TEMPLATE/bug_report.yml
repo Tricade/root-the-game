@@ -7,7 +7,7 @@ body:
     attributes:
       value: |
         Tell us how to reproduce the problem. Use synthetic or redacted examples; do not attach personal saves, credentials, private names or machine paths.
-        For vulnerabilities, read the [security policy](https://github.com/Tricade/root-the-game/security/policy) before posting details.
+        For vulnerabilities, read the [security policy](https://github.com/Tricade/root-network-os/security/policy) before posting details.
   - type: input
     id: environment
     attributes:

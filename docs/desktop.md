@@ -9,11 +9,11 @@ The desktop application runs the same simulation and both interfaces as the brow
 | Linux x64 `.deb`               | System package manager                       | Built-in DEB updater; may need OS authorization | Electron user-data folder, `network/`    |
 | Linux x64 `-portable.AppImage` | Make executable; run from a writable folder  | Manual replacement                              | `ROOT-data/network/` beside the AppImage |
 
-**Portable editions never instantiate the updater.** Close ROOT, replace the application with a new download and keep `ROOT-data`. The folder must remain writable; keep removable drives connected until ROOT closes. AppImage requires FUSE and permitted Chromium sandbox/user namespaces. Some distributions restrict these for portable apps. The DEB integrates the builder's system sandbox/AppArmor support. Do not work around restrictions with `--no-sandbox`.
+**Portable editions never instantiate the updater during ordinary use.** Close ROOT, replace the application with a new download and keep `ROOT-data`. The folder must remain writable; keep removable drives connected until ROOT closes. AppImage requires FUSE and permitted Chromium sandbox/user namespaces. Some distributions restrict these for portable apps. The DEB integrates the builder's system sandbox/AppArmor support. Do not work around restrictions with `--no-sandbox`.
 
 ## Saves and migration
 
-**Settings → Desktop & updates → Open data folder** locates `network/save.json` and the previous valid `network/save.backup.json`. Installed Windows profiles normally live under `%APPDATA%/ROOT Cyberbunker`; Linux uses `$XDG_CONFIG_HOME/ROOT Cyberbunker` or `~/.config/ROOT Cyberbunker`. The folder button is authoritative. Desktop preferences and Chromium's UI storage sit alongside `network/`.
+**Settings → Desktop & updates → Open data folder** locates `network/save.json` and the previous valid `network/save.backup.json`. Installed Windows profiles normally live under `%APPDATA%/ROOT Cyberbunker`; Linux uses `$XDG_CONFIG_HOME/ROOT Cyberbunker` or `~/.config/ROOT Cyberbunker`. The folder button is authoritative. Desktop preferences sit alongside `network/`; Chromium UI storage is isolated in `chromium/`, selected synchronously before Electron is ready.
 
 Browser installations retain their existing `data/` files and browser storage. Desktop uses its own profile. Transfer progress by exporting a JSON backup in the browser and importing it in desktop Settings. Import exports the previous desktop state first. Keep a backup when trying older versions: file retention does not establish backwards compatibility with older code.
 
@@ -48,7 +48,7 @@ Main-process modules separate the local service/protocol, profile, window policy
 
 ## Release workflow
 
-Pull requests build and launch native packages in disposable Windows/Linux runners alongside existing checks. The Linux runner relaxes its own user-namespace restriction for portable AppImages; renderer sandboxing stays enabled. This does not prove compatibility with every distribution's default policy.
+Pull requests build and launch native packages in disposable Windows/Linux runners alongside existing checks. The Linux runner relaxes its own user-namespace restriction for portable AppImages; renderer sandboxing stays enabled. CI additionally opts into Chromium's documented SwiftShader WebGL mode for trusted synthetic tests on GPU-less Linux runners. This changes no production flags. These checks do not prove hardware performance or compatibility with every distribution's default policy.
 
 After a reviewed merge, push a matching `v<package.json version>` tag already contained in `main`. The release workflow checks version/main ancestry, runs checks, builds/tests both platforms and then publishes installers, portable files, updater metadata and `SHA256SUMS.txt`. Uploads are staged in a draft after both builds succeed. A failed draft needs review and is not overwritten automatically. Never publish `builder-debug.yml`, profiles or entire local output directories.
 
@@ -58,3 +58,5 @@ After a reviewed merge, push a matching `v<package.json version>` tag already co
 - electron-builder **26.18.0**: [auto-update support](https://github.com/electron-userland/electron-builder/blob/electron-builder%4026.18.0/website/docs/features/auto-update.md), [configuration schema](https://github.com/electron-userland/electron-builder/blob/electron-builder%4026.18.0/packages/app-builder-lib/scheme.json).
 - electron-updater **6.8.11**: [NSIS](https://github.com/electron-userland/electron-builder/blob/electron-updater%406.8.11/packages/electron-updater/src/NsisUpdater.ts), [DEB](https://github.com/electron-userland/electron-builder/blob/electron-updater%406.8.11/packages/electron-updater/src/DebUpdater.ts), [quit/install semantics](https://github.com/electron-userland/electron-builder/blob/electron-updater%406.8.11/packages/electron-updater/src/BaseUpdater.ts).
 - [upload-artifact 7.0.2](https://github.com/actions/upload-artifact/blob/v7.0.2/action.yml), [download-artifact 8.0.2](https://github.com/actions/download-artifact/blob/v8.0.2/action.yml): Node 24 runtimes, full commit pins in workflows. [GitHub CLI release creation](https://cli.github.com/manual/gh_release_create) documents draft/upload/publication behavior.
+
+The Linux CI renderer follows the [SwiftShader documentation for Chromium 156.0.8078.75](https://chromium.googlesource.com/chromium/src/+/156.0.8078.75/docs/gpu/swiftshader.md), including its explicit trusted-test opt-in. The smoke checks real draw calls and the reported renderer; it also confirms that desktop settings are visible above the 3D view. The real updater download smoke uses inert loopback fixtures and an isolated cache; it never installs them.

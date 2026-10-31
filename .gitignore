@@ -29,3 +29,4 @@ coverage/
 dist/
 .desktop-build/
 artifacts/
+ROOT-data/

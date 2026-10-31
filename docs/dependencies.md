@@ -33,7 +33,7 @@ The asset wrapper uses the argument-array subprocess API documented in the [exac
 
 ## GitHub checks
 
-The optional GitHub workflow pins `actions/checkout`, `actions/setup-node` and `actions/setup-python` to complete v6 commit IDs. Their `action.yml` files declare Node 24 action runtimes. The workflow requests read-only repository access and checks application tests on Windows/Linux plus Python generation on Linux. A compatible hosted runner is required; adding the workflow does not assert that a remote CI run has completed. No Gitea runner is configured by this repository.
+The optional GitHub workflow pins `actions/checkout` 7.0.1, `actions/setup-node` 7.1.0 and `actions/setup-python` 7.1.0 to complete commit IDs. Their versioned `action.yml` files still declare Node 24 action runtimes, independently of the project interpreter versions installed by those actions. The workflow requests read-only repository access and checks application tests on Windows/Linux plus Python generation on Linux. It uses `push` and `pull_request`, with persisted checkout credentials and automatic package-manager caching disabled. No Gitea runner is configured by this repository.
 
 ## Dependabot
 

@@ -1,3 +1,10 @@
+[![Checks](https://github.com/Tricade/root-the-game/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/Tricade/root-the-game/actions/workflows/ci.yml)
+[![Vorschau 1.4.0](https://img.shields.io/badge/Preview-1.4.0-8ab4f8)](package.json)
+[![Lizenz: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![KI-Transparenz](https://img.shields.io/badge/AI-transparency_notice-6f42c1)](AI-DISCLOSURE.md)
+[![Auf Ko-fi unterstützen](https://img.shields.io/badge/Ko--fi-Support-ff5e5b?logo=kofi&logoColor=white)](https://ko-fi.com/tricade)
+[![GitHub-Sterne](https://img.shields.io/github/stars/Tricade/root-the-game?style=flat)](https://github.com/Tricade/root-the-game/stargazers)
+
 <p align="center">
   <img src="screenshots/readme/wordmark.svg" alt="ROOT / Cyberbunker — unterirdisch ausbauen und den Betrieb am Laufen halten" width="1200">
 </p>
@@ -6,6 +13,11 @@
   <strong>Ein Infrastruktur-Management-Simulator in einem wachsenden unterirdischen Rechenzentrum.</strong><br>
   Baue die Hardware aus. Gib deinen Agenten einen Plan. Triff die Entscheidungen, die deine Automatik nicht übernehmen kann.
 </p>
+
+> [!IMPORTANT]
+> **KI-Transparenz:** Generative KI hat Code, Tests, Dokumentation, Übersetzungen und prozedurale Assets von ROOT wesentlich unterstützt. Änderungen benötigen weiterhin Prüfung, passende Tests und nachvollziehbare Asset-Herkunft. Anwendung und lokale Assetgeneratoren kontaktieren keinen KI-Anbieter. [AI-DISCLOSURE.md](AI-DISCLOSURE.md) beschreibt Umfang und Prüfgrenzen, [NOTICE.md](NOTICE.md) die komponentenbezogenen Lizenzen.
+
+Dir gefällt ROOT? **Gib dem Repository einen ⭐ [Stern auf GitHub](https://github.com/Tricade/root-the-game)**, damit andere es leichter entdecken.
 
 <p align="center">
   <a href="README.md">English</a> · <a href="#start">Schnellstart</a> · <a href="#console">Screenshots</a> · <a href="#features">Features</a> · <a href="CONTRIBUTING.md">Mitbauen</a> · <a href="https://ko-fi.com/tricade">Ko-fi</a>
@@ -169,7 +181,11 @@ ROOT ist eine laufend entwickelte **Vorschau 1.4**. Balancing, Übersetzung, Bar
 
 ## Mitbauen
 
-Fehlerberichte, Balancing-Versuche, Übersetzungen, Verbesserungen der Bedienbarkeit und eigene Assets sind willkommen. Erstelle einen Themenbranch und einen Pull Request gegen `main` auf dem aktuellen Repository-Host.
+Du kannst mit Fehlerberichten, Balancing-Versuchen, Übersetzungen, Barrierefreiheit, eigenen 3D-Assets oder Code helfen. Programmieren ist keine Voraussetzung für einen Beitrag.
+
+- **Ein Problem gefunden?** [Fehler melden](https://github.com/Tricade/root-the-game/issues/new?template=bug_report.yml), mit Version, Reproduktionsschritten und einem synthetischen Beispiel.
+- **Eine Idee?** [Feature vorschlagen](https://github.com/Tricade/root-the-game/issues/new?template=feature_request.yml) und erklären, welches Problem es lösen und wie es sich verhalten soll.
+- **Selbst mitbauen?** [CONTRIBUTING.md](CONTRIBUTING.md) erklärt Fork, getrennte Entwicklungsinstanz und einen gezielten Pull Request gegen `main`. Größere Änderungen lassen sich vorher gut in einem Issue besprechen.
 
 ```sh
 npm ci --ignore-scripts

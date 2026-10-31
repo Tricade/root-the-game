@@ -2,6 +2,10 @@
 
 Describe the problem and resulting behavior.
 
+## Related issue
+
+Link the issue, or explain why this small change does not need one. Use `Closes #123` when the PR resolves an issue.
+
 ## Verification
 
 List the checks actually completed and any remaining limits. Include synthetic screenshots for visible changes.

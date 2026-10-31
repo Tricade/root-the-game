@@ -34,3 +34,9 @@ The asset wrapper uses the argument-array subprocess API documented in the [exac
 ## GitHub checks
 
 The optional GitHub workflow pins `actions/checkout`, `actions/setup-node` and `actions/setup-python` to complete v6 commit IDs. Their `action.yml` files declare Node 24 action runtimes. The workflow requests read-only repository access and checks application tests on Windows/Linux plus Python generation on Linux. A compatible hosted runner is required; adding the workflow does not assert that a remote CI run has completed. No Gitea runner is configured by this repository.
+
+## Dependabot
+
+The version 2 configuration in `.github/dependabot.yml` checks npm development dependencies, the optional Python asset requirements and GitHub Actions every Monday at 08:00 Europe/Berlin. Each ecosystem permits up to five open version-update pull requests. Updates are proposed for review; automatic merging is not configured. Dependency alerts and automated security fixes are separate GitHub repository settings. The supported fields and ecosystems follow the [official Dependabot options reference](https://docs.github.com/en/code-security/reference/supply-chain-security/dependabot-options-reference).
+
+The vendored Three.js files and interpreter versions embedded in scripts or workflows still need deliberate maintenance. An npm update does not replace vendored renderer bytes, and a successful dependency pull request does not replace the browser and asset compatibility checks described above.

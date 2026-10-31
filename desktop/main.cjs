@@ -1,7 +1,6 @@
 'use strict';
 
 const path = require('node:path');
-const fs = require('node:fs');
 const {
   app,
   BrowserWindow,
@@ -14,7 +13,12 @@ const {
   shell,
 } = require('electron');
 const { startLocalService } = require('./service.cjs');
-const { detectInstallation, profilePath, createPreferences } = require('./profile.cjs');
+const {
+  detectInstallation,
+  profilePath,
+  prepareProfile,
+  createPreferences,
+} = require('./profile.cjs');
 const { createCloseSession } = require('./close-session.cjs');
 const { createUpdateController } = require('./updater.cjs');
 const { createWindow } = require('./window.cjs');
@@ -43,8 +47,7 @@ async function startDesktop(options = {}) {
     resourcesPath: process.resourcesPath,
   });
   const profile = options.profile || profilePath(installation, app.getPath('userData'));
-  await fs.promises.mkdir(profile, { recursive: true });
-  app.setPath('userData', profile);
+  prepareProfile(app, profile);
   if (!app.requestSingleInstanceLock()) {
     app.quit();
     return null;

@@ -6,9 +6,30 @@ const fs = require('node:fs/promises');
 const os = require('node:os');
 const path = require('node:path');
 const { isAppUrl, isAppPage, trustedSender, externalUrl } = require('../desktop/security.cjs');
-const { detectInstallation, profilePath, createPreferences } = require('../desktop/profile.cjs');
+const {
+  detectInstallation,
+  profilePath,
+  prepareProfile,
+  createPreferences,
+} = require('../desktop/profile.cjs');
 const { createCloseSession } = require('../desktop/close-session.cjs');
 const { installBridge } = require('../desktop/ipc.cjs');
+
+test('profile redirects Chromium storage synchronously before the ready boundary', async (t) => {
+  const dir = await fs.mkdtemp(path.join(os.tmpdir(), 'root-profile-start-'));
+  t.after(() => fs.rm(dir, { recursive: true, force: true }));
+  const paths = new Map();
+  const app = {
+    setPath(name, value) {
+      assert.equal(require('node:fs').existsSync(value), true);
+      paths.set(name, value);
+    },
+  };
+  const result = prepareProfile(app, dir);
+  assert.equal(result, undefined);
+  assert.equal(paths.get('userData'), dir);
+  assert.equal(paths.get('sessionData'), path.join(dir, 'chromium'));
+});
 
 test('desktop bridge accepts only its own main document and exact safe origins', () => {
   for (const value of ['root://app/', 'root://app/index.html', 'root://app/ui/desktop.js'])

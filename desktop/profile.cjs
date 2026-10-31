@@ -73,4 +73,19 @@ function createPreferences(directory) {
   };
 }
 
-module.exports = { detectInstallation, profilePath, normalizePreferences, createPreferences };
+function prepareProfile(app, directory) {
+  // Electron 45 requires sessionData synchronously before ready. Awaiting mkdir
+  // could yield to ready and select a different Chromium storage directory.
+  const sessionData = path.join(directory, 'chromium');
+  fs.mkdirSync(sessionData, { recursive: true });
+  app.setPath('userData', directory);
+  app.setPath('sessionData', sessionData);
+}
+
+module.exports = {
+  detectInstallation,
+  profilePath,
+  prepareProfile,
+  normalizePreferences,
+  createPreferences,
+};

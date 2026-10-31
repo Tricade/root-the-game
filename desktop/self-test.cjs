@@ -6,7 +6,7 @@ const path = require('node:path');
 const assert = require('node:assert/strict');
 
 async function runSelfTest({ app, output, startDesktop }) {
-  await fs.mkdir(output, { recursive: true });
+  require('node:fs').mkdirSync(output, { recursive: true });
   const result = { ok: false, version: app.getVersion(), runtime: { ...process.versions } };
   const write = () =>
     fs.writeFile(path.join(output, 'result.json'), JSON.stringify(result, null, 2) + '\n');
@@ -36,7 +36,8 @@ async function runSelfTest({ app, output, startDesktop }) {
     },
   }).catch(fail);
 
-  async function inspect({ window, installation, close, reload, dataDir }) {
+  async function inspect({ window, installation, close, reload, dataDir, profile }) {
+    assert.equal(app.getPath('sessionData'), path.join(profile, 'chromium'));
     const contents = window.webContents;
     result.installation = installation.kind;
     if (process.env.ROOT_EXPECT_INSTALLATION)

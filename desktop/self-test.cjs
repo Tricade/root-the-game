@@ -85,7 +85,9 @@ async function runSelfTest({ app, output, startDesktop }) {
       document.querySelector('[data-room-slot]').scrollIntoView();
       const inspect = () => {
         const canvas = document.querySelector('.root-room-canvas');
-        if (!canvas || Number(canvas.dataset.drawCalls) <= 0) return null;
+        // The canvas is attached before its first frame. Number(undefined) is
+        // NaN, so a <= 0 guard alone would incorrectly accept that early state.
+        if (!canvas || !(Number(canvas.dataset.drawCalls) > 0) || !(Number(canvas.dataset.triangles) > 0)) return null;
         const gl = canvas.getContext('webgl2');
         const debug = gl.getExtension('WEBGL_debug_renderer_info');
         return { drawCalls: Number(canvas.dataset.drawCalls), triangles: Number(canvas.dataset.triangles),

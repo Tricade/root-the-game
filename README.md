@@ -1,3 +1,10 @@
+[![Checks](https://github.com/Tricade/root-the-game/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/Tricade/root-the-game/actions/workflows/ci.yml)
+[![Preview 1.4.0](https://img.shields.io/badge/Preview-1.4.0-8ab4f8)](package.json)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![AI transparency](https://img.shields.io/badge/AI-transparency_notice-6f42c1)](AI-DISCLOSURE.md)
+[![Support on Ko-fi](https://img.shields.io/badge/Ko--fi-Support-ff5e5b?logo=kofi&logoColor=white)](https://ko-fi.com/tricade)
+[![GitHub stars](https://img.shields.io/github/stars/Tricade/root-the-game?style=flat)](https://github.com/Tricade/root-the-game/stargazers)
+
 <p align="center">
   <img src="screenshots/readme/wordmark.svg" alt="ROOT / Cyberbunker — build below the surface, keep your network running" width="1200">
 </p>
@@ -6,6 +13,11 @@
   <strong>A persistent infrastructure management simulation inside an expanding underground data center.</strong><br>
   Build the hardware. Give your agents a plan. Make the decisions your automation cannot.
 </p>
+
+> [!IMPORTANT]
+> **AI transparency:** Generative AI substantially assisted ROOT's code, tests, documentation, translations and procedural assets. Changes still require review, appropriate tests and clear asset provenance. The application and its local asset generators do not call an AI provider. See [AI-DISCLOSURE.md](AI-DISCLOSURE.md) for the scope and verification limits, and [NOTICE.md](NOTICE.md) for component licenses.
+
+Enjoying ROOT? **Give the repository a ⭐ [star on GitHub](https://github.com/Tricade/root-the-game)** to help other people discover it.
 
 <p align="center">
   <a href="README.de.md">Deutsch</a> · <a href="#start">Quick start</a> · <a href="#console">Screenshots</a> · <a href="#features">Features</a> · <a href="CONTRIBUTING.md">Contribute</a> · <a href="https://ko-fi.com/tricade">Ko-fi</a>
@@ -169,7 +181,11 @@ See the [integration verification](docs/verification-construction.md), [runtime 
 
 ## Build with us
 
-Bug reports, balance experiments, translations, accessibility work and original assets are welcome. Create a focused branch and open a pull request against `main` on the repository's current host.
+You can help with bug reports, balance experiments, translations, accessibility, original 3D assets or code. You do not need to write code to contribute.
+
+- **Found a problem?** [Report a bug](https://github.com/Tricade/root-the-game/issues/new?template=bug_report.yml) with the version, reproduction steps and a synthetic example.
+- **Have an idea?** [Suggest a feature](https://github.com/Tricade/root-the-game/issues/new?template=feature_request.yml), explain the problem it solves and describe the expected behavior.
+- **Want to build something?** Follow [CONTRIBUTING.md](CONTRIBUTING.md) to fork the repository, start an isolated development instance and open a focused pull request against `main`. Larger changes are easier to discuss in an issue first.
 
 ```sh
 npm ci --ignore-scripts

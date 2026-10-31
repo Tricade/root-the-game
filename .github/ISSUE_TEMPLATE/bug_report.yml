@@ -1,0 +1,63 @@
+name: Bug report
+description: Report a reproducible problem in ROOT.
+title: '[Bug]: '
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Tell us how to reproduce the problem. Use synthetic or redacted examples; do not attach personal saves, credentials, private names or machine paths.
+        For vulnerabilities, read the [security policy](https://github.com/Tricade/root-the-game/security/policy) before posting details.
+  - type: input
+    id: environment
+    attributes:
+      label: Version and environment
+      description: ROOT version or commit, operating system, and browser name/version.
+      placeholder: ROOT 1.4.0, Windows 11, Edge 142
+    validations:
+      required: true
+  - type: dropdown
+    id: interface
+    attributes:
+      label: Affected interface
+      options:
+        - Web console
+        - 3D view
+        - Both
+        - Not sure
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: What happened?
+      description: Describe the actual behavior and any visible error.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Open ...
+        2. Select ...
+        3. Observe ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: What should have happened instead?
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Relevant network or room context
+      description: If useful, include room/floor, rack/server count, upgrades, locale, elapsed simulation time or economy figures. For 3D problems, describe the viewing direction and movement mode.
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Synthetic screenshots, logs or reproduction
+      description: Optional. Share only the smallest synthetic or redacted example needed to reproduce the issue.

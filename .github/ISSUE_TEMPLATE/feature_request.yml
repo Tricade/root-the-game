@@ -1,0 +1,48 @@
+name: Feature request
+description: Suggest an improvement to ROOT and explain the problem it solves.
+title: '[Feature]: '
+labels: [enhancement]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Explain the need and intended behavior. Suggestions about balancing, accessibility, translations, original assets and code are welcome.
+        Keep personal saves and credentials out of examples.
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem would this solve?
+      description: Describe the situation and who would benefit.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behavior
+      description: What should the user be able to do, and what result should they see?
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Main area
+      options:
+        - Web interface
+        - 3D facility and assets
+        - Hardware and networking
+        - Agents and workloads
+        - Economy and progression
+        - Reliability and recovery
+        - Localization and accessibility
+        - Developer tools and documentation
+        - Other
+  - type: textarea
+    id: tradeoffs
+    attributes:
+      label: Alternatives and consequences
+      description: Optional. Describe alternatives, costs, capacity or progression effects. For balancing, include relevant fleet size and elapsed time.
+  - type: textarea
+    id: contribution
+    attributes:
+      label: Examples or ways you could help
+      description: Optional. Mockups, synthetic scenarios, testing, translations or original assets are useful. You do not need to implement the suggestion yourself.

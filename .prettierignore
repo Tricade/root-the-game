@@ -11,6 +11,9 @@ data/
 test-results/
 coverage/
 package-lock.json
+dist/
+.desktop-build/
+artifacts/
 *.cmd
 *.ps1
 *.svg

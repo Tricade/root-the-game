@@ -3,7 +3,16 @@ import globals from 'globals';
 
 export default [
   {
-    ignores: ['vendor/**', 'asset-pack/**', 'node_modules/**', '.asset-build/**', '.local-data/**'],
+    ignores: [
+      'vendor/**',
+      'asset-pack/**',
+      'node_modules/**',
+      '.asset-build/**',
+      '.local-data/**',
+      'dist/**',
+      '.desktop-build/**',
+      'artifacts/**',
+    ],
   },
   js.configs.recommended,
   {

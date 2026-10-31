@@ -10,6 +10,7 @@ export function createEventsUI(ctx, platform = globalThis) {
         return;
       }
       if (target.disabled) return;
+      if (ctx.handleDesktopCommand?.(target.dataset.desktopCommand)) return;
       const hardware = ctx.R.click(target);
       if (hardware) {
         if (hardware.modal) ctx.openModal(hardware.modal, hardware.extra);
@@ -126,8 +127,10 @@ export function createEventsUI(ctx, platform = globalThis) {
       }
       if (event.target.dataset.change === 'language') {
         ctx.I18N.setLanguage(event.target.value);
+        ctx.syncDesktopLanguage?.();
         ctx.Room.update();
         ctx.render();
+        if (ctx.modal?.type === 'settings') ctx.openModal('settings');
         return;
       }
       const el = event.target,
@@ -231,7 +234,7 @@ export function createEventsUI(ctx, platform = globalThis) {
       }
     });
     platform.document.addEventListener('visibilitychange', () => {
-      if (!ctx.initialized) return;
+      if (!ctx.initialized || ctx.desktopClosing?.()) return;
       const report = ctx.simulate();
       if (platform.document.hidden) ctx.save(true);
       else {
@@ -241,7 +244,7 @@ export function createEventsUI(ctx, platform = globalThis) {
       }
     });
     platform.window.addEventListener('pagehide', () => {
-      if (ctx.initialized) {
+      if (ctx.initialized && !ctx.desktopClosing?.()) {
         ctx.simulate();
         ctx.save(true);
       }

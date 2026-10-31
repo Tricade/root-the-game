@@ -1,0 +1,73 @@
+'use strict';
+
+// Keep publication/build sources and personal saves out of installed apps.
+module.exports = {
+  appId: 'io.github.tricade.root',
+  productName: 'ROOT Cyberbunker',
+  executableName: 'root-cyberbunker',
+  copyright: 'Copyright © Tricade and ROOT contributors',
+  directories: { output: 'dist', buildResources: 'desktop/assets' },
+  asar: true,
+  npmRebuild: false,
+  electronLanguages: ['de', 'en-US'],
+  files: [
+    'index.html',
+    '*.css',
+    '*.js',
+    'favicon.svg',
+    'server.cjs',
+    'server/**',
+    'ui/**',
+    'engine/**',
+    'room/**',
+    'locales/**',
+    'vendor/**',
+    'desktop/**',
+    'asset-pack/assets/**',
+    'asset-pack/textures/**',
+    'asset-pack/LICENSE.md',
+    'asset-pack/docs/NUTZUNGSRECHTE.md',
+    'NOTICE.md',
+    'LICENSE',
+    'AI-DISCLOSURE.md',
+    'package.json',
+  ],
+  publish: [
+    {
+      provider: 'github',
+      owner: 'Tricade',
+      repo: 'root-the-game',
+      channel: 'latest',
+      releaseType: 'release',
+    },
+  ],
+  win: {
+    target: [
+      { target: 'nsis', arch: ['x64'] },
+      { target: 'portable', arch: ['x64'] },
+    ],
+    icon: 'desktop/assets/icon.ico',
+  },
+  nsis: {
+    artifactName: 'ROOT-${version}-windows-${arch}-setup.${ext}',
+    oneClick: false,
+    perMachine: false,
+    allowElevation: true,
+    allowToChangeInstallationDirectory: true,
+    deleteAppDataOnUninstall: false,
+    shortcutName: 'ROOT Cyberbunker',
+  },
+  portable: { artifactName: 'ROOT-${version}-windows-${arch}-portable.${ext}' },
+  linux: {
+    target: [
+      { target: 'AppImage', arch: ['x64'] },
+      { target: 'deb', arch: ['x64'] },
+    ],
+    icon: 'desktop/assets/icon.png',
+    category: 'Game',
+    maintainer: 'Tricade <6281655+Tricade@users.noreply.github.com>',
+    synopsis: 'Build and operate an underground data center',
+  },
+  appImage: { artifactName: 'ROOT-${version}-linux-${arch}-portable.${ext}' },
+  deb: { artifactName: 'ROOT-${version}-linux-${arch}.${ext}' },
+};

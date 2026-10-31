@@ -14,7 +14,7 @@ For a substantial mechanic, migration or architecture change, discuss the intend
 
 ## Start a development instance
 
-Use Node.js 24 (verified with 24.22.1). Running ROOT and its Node tests needs no package installation or compilation. Install the pinned development tools to run formatting and lint checks.
+Use Node.js 24 (verified with 24.22.1). Browser mode needs no package installation or compilation. Install the pinned dependencies for tests, formatting, lint and desktop development.
 
 Fork `Tricade/root-the-game` on GitHub, then clone your fork. Replace `YOUR_ACCOUNT` below with your public GitHub handle. Existing contributors can use their current checkout after updating it without discarding local work.
 
@@ -42,6 +42,10 @@ ROOT_PORT=18490 ROOT_DATA_DIR="$PWD/.local-data/dev" node server.cjs
 ```
 
 Open `http://127.0.0.1:18490/`. Test servers use temporary data directories. Never point a test at your normal save or share a writable data directory between servers.
+
+## Desktop development
+
+The Electron wrapper, package configuration and updater are included. Use `node node_modules/electron/install.js` after `npm ci --ignore-scripts`, then `npm run desktop`, `npm run desktop:smoke` or `npm run desktop:build`. [Desktop architecture, synthetic tests, storage and release workflow →](docs/desktop.md). Portable editions always use manual updates; do not introduce a portable replacement service. Check both native platforms for changes to packaging, IPC or persistence.
 
 ## Before a pull request
 

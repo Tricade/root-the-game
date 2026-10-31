@@ -9,7 +9,7 @@ export function createEventsUI(ctx, platform = globalThis) {
         if (event.target.dataset.backdrop) ctx.closeModal();
         return;
       }
-      if (target.disabled) return;
+      if (target.disabled || ctx.desktopClosing?.()) return;
       if (ctx.handleDesktopCommand?.(target.dataset.desktopCommand)) return;
       const hardware = ctx.R.click(target);
       if (hardware) {
@@ -117,6 +117,7 @@ export function createEventsUI(ctx, platform = globalThis) {
       }
     });
     platform.document.addEventListener('change', (event) => {
+      if (ctx.desktopClosing?.()) return;
       if (event.target.hasAttribute('data-building-floor')) {
         if (ctx.selectFacilityFloor(event.target.value)) ctx.render();
         return;

@@ -14,8 +14,8 @@ async function main() {
     `ROOT-${version}-windows-x64-setup.exe`,
     `ROOT-${version}-windows-x64-setup.exe.blockmap`,
     `ROOT-${version}-windows-x64-portable.exe`,
-    `ROOT-${version}-linux-x64.deb`,
-    `ROOT-${version}-linux-x64-portable.AppImage`,
+    `ROOT-${version}-linux-amd64.deb`,
+    `ROOT-${version}-linux-x86_64-portable.AppImage`,
     'latest.yml',
     'latest-linux.yml',
   ];

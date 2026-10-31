@@ -157,12 +157,17 @@ export function createDesktopUI(ctx, platform = globalThis) {
   });
   const desktopSaveNote = () =>
     text(
-      'Die lokale Datei liegt im Desktop-Speicherordner unter network/save.json.',
-      'The local file is stored in the desktop data folder under network/save.json.',
+      'Automatisches Speichern alle 15 Sekunden und nach jeder Entscheidung. Die lokale Datei liegt im Desktop-Speicherordner unter network/save.json. Ein JSON-Export enthält den vollständigen Fortschritt. Das Betriebsbackup unter „Betrieb & Schutz“ schützt vor Datenkorruption im Netzwerk.',
+      'Automatically saves every 15 seconds and after each decision. The local file is stored in the desktop data folder under network/save.json. A JSON export contains all progress. The operations backup under “Operations & Resilience” protects against network data corruption.',
     );
   return {
     desktopSettings,
     desktopSaveNote,
+    desktopAppNote: () =>
+      text(
+        'Deine lokale Netzwerk-Leitstelle. Server und Agenten sind Teil der Simulation. Fortschritt während der Abwesenheit: maximal 12 Stunden.',
+        'Your local network control room. Servers and agents are part of the simulation. Offline progress is capped at 12 hours.',
+      ),
     handleDesktopCommand,
     desktopReady,
     syncDesktopLanguage,

@@ -63,6 +63,7 @@ module.exports = {
       { target: 'AppImage', arch: ['x64'] },
       { target: 'deb', arch: ['x64'] },
     ],
+    syncDesktopName: true,
     icon: 'desktop/assets/icon.png',
     category: 'Game',
     maintainer: 'Tricade <6281655+Tricade@users.noreply.github.com>',

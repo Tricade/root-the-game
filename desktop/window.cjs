@@ -21,6 +21,9 @@ function createWindow({ BrowserWindow, session, shell, hidden = false }) {
       nodeIntegration: false,
       webSecurity: true,
       webviewTag: false,
+      // Hidden diagnostics must exercise rendering; ordinary minimized windows
+      // retain Electron's normal throttling and offline catch-up behavior.
+      backgroundThrottling: !hidden,
     },
   });
   // First-person controls may lock the mouse and enter fullscreen. Other

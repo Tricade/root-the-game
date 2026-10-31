@@ -24,6 +24,12 @@ if (smoke) {
 // Child applications must run as Electron, without changing the parent's env.
 const env = { ...process.env };
 delete env.ELECTRON_RUN_AS_NODE;
+if (smoke) {
+  const cache = path.join(output, 'os-cache');
+  fs.mkdirSync(cache, { recursive: true });
+  env.LOCALAPPDATA = cache;
+  env.XDG_CACHE_HOME = cache;
+}
 const child = spawn(executable, args, { cwd: root, env, stdio: 'inherit', windowsHide: true });
 let timeout;
 if (smoke)

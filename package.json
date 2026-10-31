@@ -40,5 +40,6 @@
   "dependencies": {
     "electron-updater": "6.8.11",
     "semver": "7.8.5"
-  }
+  },
+  "desktopName": "io.github.tricade.root.desktop"
 }

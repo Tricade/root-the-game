@@ -46,6 +46,7 @@ async function runSelfTest({ app, output, startDesktop }) {
       const stored = await (await fetch('/api/save')).json();
       const info = await window.rootDesktop.info();
       localStorage.setItem('root.desktop.smoke', 'retained');
+      localStorage.setItem('root.arrival.enabled', '0');
       return { origin: location.origin, node: typeof process, require: typeof require,
         health, network: stored.save.networkName, servers: stored.save.servers.length,
         racks: stored.save.facility.racks.length, canUpdate: info.canUpdate,
@@ -79,7 +80,29 @@ async function runSelfTest({ app, output, startDesktop }) {
       });
       observer.observe(document.body, { childList: true, subtree: true });
     })`);
+    result.graphics = await contents.executeJavaScript(`new Promise((resolve, reject) => {
+      document.querySelector('[data-room-slot]').scrollIntoView();
+      const inspect = () => {
+        const canvas = document.querySelector('.root-room-canvas');
+        return canvas && Number(canvas.dataset.drawCalls) > 0
+          ? { drawCalls: Number(canvas.dataset.drawCalls), triangles: Number(canvas.dataset.triangles),
+              models: document.querySelector('.root-room-badge')?.textContent } : null;
+      };
+      const initial = inspect();
+      if (initial) return resolve(initial);
+      const deadline = setTimeout(() => { observer.disconnect(); reject(new Error('3D renderer did not produce a frame')); }, 25000);
+      const observer = new MutationObserver(() => {
+        const value = inspect(); if (!value) return;
+        clearTimeout(deadline); observer.disconnect(); resolve(value);
+      });
+      observer.observe(document.body, { childList: true, subtree: true, attributes: true });
+    })`);
+    assert.ok(result.graphics.triangles > 0);
+    assert.equal(result.graphics.models, 'LIVE / 3D');
     await contents.executeJavaScript(`document.querySelector('[data-modal="settings"]').click()`);
+    await contents.executeJavaScript(
+      `const language = document.querySelector('[data-change="language"]'); language.value = 'en'; language.dispatchEvent(new Event('change', { bubbles: true }));`,
+    );
     const settings = await contents.executeJavaScript(`({
       visible: Boolean(document.querySelector('[data-desktop-section]')),
       checkVisible: !document.querySelector('[data-desktop-command="check"]').hidden,
@@ -91,6 +114,13 @@ async function runSelfTest({ app, output, startDesktop }) {
     assert.equal(settings.installHidden, true);
     assert.equal(settings.downloadHidden, true);
     result.settings = settings;
+    const english = await contents.executeJavaScript(
+      `document.querySelector('#modal-root').innerText`,
+    );
+    assert.match(english, /Desktop & updates/);
+    assert.match(english, /Automatically saves every 15 seconds/);
+    assert.doesNotMatch(english, /Automatisches Speichern/);
+    result.language = 'en';
     await contents.executeJavaScript(
       'new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)))',
     );
@@ -101,6 +131,10 @@ async function runSelfTest({ app, output, startDesktop }) {
     assert.equal(save.servers.length, 1);
     result.saved = true;
     result.reloaded = reloaded;
+    result.updateTransport = await require('./update-smoke.cjs').checkUpdateTransport({
+      directory: output,
+      version: app.getVersion(),
+    });
     // Completion is written only after the renderer confirms the final disk save.
     const accepted = await close();
     assert.equal(accepted, true);

@@ -1,5 +1,6 @@
 import * as THREE from '../vendor/three.module.js';
 import { metricBox } from '../room-surfaces.js';
+import { RoundedBoxGeometry } from '../vendor/RoundedBoxGeometry.js';
 
 /** Original metric service fittings. Ownership stays with the room that creates
  * the kit; shared hall materials are never disposed by a room transition. */
@@ -29,7 +30,12 @@ export function createUtilityKit(materials) {
     return result;
   }
   function box(parent, size, position, name, mat = paint) {
-    const result = metricBox(size, mat);
+    const result = /^(room-bus-isolator|bus-tap|room-fan-coil)$/.test(name)
+      ? new THREE.Mesh(
+          new RoundedBoxGeometry(...size, 2, Math.min(0.012, Math.min(...size) / 5)),
+          mat,
+        )
+      : metricBox(size, mat);
     geometries.add(result.geometry);
     result.position.set(...position);
     result.name = name;
@@ -72,7 +78,13 @@ export function createUtilityKit(materials) {
     path.add(new THREE.LineCurve3(cursor, vertices.at(-1)));
     const result = mesh(
       parent,
-      new THREE.TubeGeometry(path, Math.max(12, points.length * 12), radius, 12, false),
+      new THREE.TubeGeometry(
+        path,
+        Math.max(24, Math.ceil(path.getLength() * 32)),
+        radius,
+        12,
+        false,
+      ),
       insulation,
       [0, 0, 0],
       name,
@@ -101,6 +113,7 @@ export function createUtilityKit(materials) {
   }
   // Every service passes through a sealed sleeve; neither ends in free air.
   function wallPort(parent, x, y, z, electrical = false) {
+    z -= Math.sign(z) * 0.032;
     box(parent, [0.22, 0.22, 0.06], [x, y, z], 'sealed-wall-penetration', paint);
     if (electrical) box(parent, [0.2, 0.2, 0.1], [x, y, z], 'bus-firestop', gasket);
     else rod(parent, [x, y, z - 0.06], [x, y, z + 0.06], 0.095, gasket, 'pipe-firestop');

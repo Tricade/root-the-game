@@ -824,8 +824,6 @@ export function buildAssetHall({ bank, scene, materials }) {
   tiles('floor', vents, closedFloor);
   for (const x of [-1.04, 1.04])
     block([0.035, 0.002, 4.8], [x, 0.003, -0.6], materials.green, serverFixtures);
-  for (const x of [-3.8, 3.8])
-    for (let z = -4.8; z <= 4.8; z += 1.2) block([0.015, 2.9, 0.025], [x, 1.5, z], materials.trim);
   for (const z of [-3.6, 0, 3.6]) {
     const lamp = bank.make('light');
     lamp.position.set(0, 2.72, z);

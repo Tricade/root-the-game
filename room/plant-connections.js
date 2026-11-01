@@ -50,10 +50,10 @@ export function buildPlantConnections(materials, systemId, units, hasUPS = false
           'plant-power-header',
           0.12,
         );
-      kit.wallPort(group, x, y, -5.35, !cooling);
+      kit.wallPort(group, x, y, -5.29, !cooling);
       for (const z of [-4.2, -1.7, 0.8]) kit.support(group, side, y, z, Math.abs(x));
       // The identification plate is mounted on the room-facing duct/header.
-      kit.label(group, circuit, [x, y - 0.24, -5.298], 0.24, 0.07);
+      kit.label(group, circuit, [x, y - 0.24, -5.267], 0.24, 0.07);
       for (const unit of row) {
         const connectionX = unit.x + side * 0.25,
           z = unit.z + (index - (circuits.length - 1) / 2) * 0.25,

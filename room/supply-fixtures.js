@@ -13,23 +13,24 @@ export function buildSupplyFixtures(materials) {
   group.add(cooling, power);
   const kit = createUtilityKit(materials),
     feeds = [];
-  // Two different elevations keep the return bend clear of the supply branch.
+  // Separate depth planes keep the return riser clear of the supply cross-run.
   for (const [i, x, y, end] of [
     [0, 3.58, 2.42, -0.32],
     [1, 3.83, 2.65, 0.32],
   ]) {
+    const endZ = i ? -5.12 : -4.93;
     kit.pipe(
       cooling,
       [
         [x, y, 5.43],
-        [x, y, -5.02],
-        [end, y, -5.02],
-        [end, 1.48, -5.02],
+        [x, y, endZ],
+        [end, y, endZ],
+        [end, 1.48, endZ],
       ],
       'room-water-circuit',
     );
-    kit.wallPort(cooling, x, y, 5.35);
-    kit.valve(cooling, end, 1.89, -5.02, i ? kit.returning : kit.supply);
+    kit.wallPort(cooling, x, y, 5.29);
+    kit.valve(cooling, end, 1.89, endZ, i ? kit.returning : kit.supply);
     for (const z of [-3.1, 0.2, 3.2]) {
       kit.rod(
         cooling,
@@ -68,16 +69,16 @@ export function buildSupplyFixtures(materials) {
     ],
     'room-distribution-bus',
   );
-  kit.wallPort(power, -wallX, busY, 5.35, true);
+  kit.wallPort(power, -wallX, busY, 5.29, true);
   kit.box(power, [0.24, 0.36, 0.48], [-wallX, busY - 0.04, 3.8], 'room-bus-isolator');
   kit.box(
     power,
     [0.05, 0.18, 0.09],
-    [-wallX + 0.15, busY - 0.04, 3.8],
+    [-wallX + 0.15, busY - 0.09, 3.8],
     'isolator-handle',
     kit.gasket,
   );
-  kit.label(power, 'ATS / ROOM FEED', [-wallX + 0.126, busY + 0.05, 3.8], 0.4, 0.075, Math.PI / 2);
+  kit.label(power, 'ATS / ROOM FEED', [-wallX + 0.126, busY + 0.09, 3.8], 0.34, 0.075, Math.PI / 2);
   for (const side of [-1, 1])
     for (const z of [-2.6, 0.4, 3.7]) {
       if (side > 0 && z > 0.65) continue;

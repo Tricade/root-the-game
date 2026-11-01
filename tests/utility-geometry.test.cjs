@@ -54,6 +54,23 @@ test('connected room feeds meet the actual rack roofs and never populate empty s
     assert.ok(end[2] > bounds.min.z && end[2] < bounds.max.z, 'feed follows the real row spacing');
     assert.ok(Math.abs(end[1] - bounds.max.y) < 0.025, 'feed meets the roof, not free air');
   }
+  const circuits = named(fixtures.cooling, 'room-water-circuit').map((mesh) =>
+    mesh.geometry.parameters.path.getSpacedPoints(256),
+  );
+  let clearance = Infinity;
+  for (const a of circuits[0])
+    for (const b of circuits[1]) clearance = Math.min(clearance, a.distanceTo(b));
+  assert.ok(
+    clearance > 0.125,
+    'supply and return remain separate through bends and vertical drops',
+  );
+  for (const port of named(fixtures.group, 'sealed-wall-penetration')) {
+    const bounds = new THREE.Box3().setFromObject(port);
+    assert.ok(
+      bounds.max.z < 5.29 && bounds.min.z < 5.25,
+      'flange stands proud of the inner wall face without z-fighting',
+    );
+  }
   fixtures.set({ cooling: 'hybrid', power: 'ups' }, 6);
   assert.equal(named(fixtures.group, 'rack-feed-branch').length, 6);
   assert.equal(geometryCount(), initialCount, 'mode/count changes reuse geometry');

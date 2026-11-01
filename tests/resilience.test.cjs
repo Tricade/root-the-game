@@ -625,13 +625,16 @@ test('parts bundle cost, actual quantity, and storage cap agree without duplicat
   const beforeCredits = state.credits;
   assert.equal(act(state, 'buyParts', {}).ok, true);
   assert.equal(state.credits, beforeCredits - option.cost);
-  assert.equal(state.resilience.parts, 20);
+  assert.equal(state.resilience.parts, 17, 'a paid delivery does not arrive immediately');
   const full = getResilience(state).partsPurchase;
   assert.equal(full.enabled, false);
   assert.ok(full.reason.length > 5);
   const before = structuredClone(state);
   assert.equal(act(state, 'buyParts', {}).ok, false);
   assert.deepEqual(state, before, 'a full parts store cannot charge again');
+  state.resilience.graceUntil = 1e9;
+  advance(state, 1800);
+  assert.equal(state.resilience.parts, 20);
 });
 
 test('poor condition and performance raise transparent per-hour risk; equal seeds replay long runs identically', () => {
@@ -1130,7 +1133,9 @@ test('research mission pays its finite advertised reward once and respects coold
   const quote = getAgentOperations(state)
     .agents.find((row) => row.id === analyst.id)
     .options.find((row) => row.key === 'research');
-  const reward = 8 + 4 * analyst.level;
+  const reward = Math.ceil(
+    8 + 18 * analyst.level + (analyst.focus === 'research' ? 6 * analyst.level : 0),
+  );
   assert.ok(quote.description.includes(`${reward} Forschungspunkte bei Abschluss.`));
   const startingResearch = state.research;
   assert.equal(act(state, 'dispatchAgent', { id: analyst.id, mission: 'research' }).ok, true);

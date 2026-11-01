@@ -21,6 +21,8 @@
 
     function hasId(s, id) {
       return (
+        s.operations?.queue.some((x) => x.id === id) ||
+        false ||
         s.servers.some((x) => x.id === id) ||
         s.agents.some((x) => x.id === id) ||
         s.jobs.some((x) => x.id === id) ||
@@ -176,6 +178,7 @@
       };
       s.nextId = 3;
       s.business = context.businessDefaults(s);
+      s.operations = context.operationsDefaults();
       s.offers.push(makeJob(s), makeJob(s));
       addLog(s, 'system', 'ROOT ist bereit. Dein erster Überwachungsauftrag läuft.');
       updateAchievementUnlocks(s);

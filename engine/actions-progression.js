@@ -24,7 +24,10 @@
         if (
           s.business &&
           j.kind === 'ai' &&
-          (j.gpuDemand || 1) > m.freeResources.gpu - m.gpuUsed + 1e-9
+          (j.gpuDemand || 1) >
+            m.admissionResources.gpu -
+              s.jobs.reduce((n, x) => n + (x.kind === 'ai' ? x.gpuDemand || 1 : 0), 0) +
+              1e-9
         )
           return fail(
             m.freeResources.gpu <= 0
@@ -33,7 +36,7 @@
           );
         if (
           s.business
-            ? !context.jobsFit(s, j, m.freeResources)
+            ? !context.jobsFit(s, j, m.admissionResources)
             : m.usedCapacity + j.load > m.capacity * 1.08
         )
           return fail('Dafür fehlt derzeit Serverkapazität.');
@@ -93,6 +96,8 @@
                     : false;
         if (!valid) return fail('Diese Richtlinieneinstellung ist ungültig.');
         s.policies[key] = value;
+        if (key === 'repairBudget') s.operations.limits.repair = null;
+        if (key === 'reserve') s.operations.limits.reserve = null;
         addLog(s, 'system', 'Netzwerkrichtlinie aktualisiert.');
         if (key === 'autocontract' && value) autoContract(s);
         return { ok: true, message: 'Richtlinie aktualisiert.' };

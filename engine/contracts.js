@@ -172,7 +172,7 @@
         metrics = getMetrics(s);
         const candidates = s.offers.filter((j) =>
           s.business
-            ? context.jobsFit(s, j, metrics.freeResources)
+            ? context.jobsFit(s, j, metrics.admissionResources)
             : metrics.usedCapacity + j.load <= metrics.capacity * 0.98 &&
               (j.kind !== 'ai' ||
                 (j.gpuDemand || 1) <= metrics.gpuCapacity - metrics.gpuUsed + 1e-9),

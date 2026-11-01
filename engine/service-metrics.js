@@ -139,6 +139,18 @@
           (base.capacity * (services.committedCPU + projectDemand.cpu)) / Math.max(1, available),
         load: Math.min(2, (services.committedCPU + projectDemand.cpu) / Math.max(1, available)),
         freeResources: services.free,
+        admissionResources: services.committedFree,
+        gpuUsed: Math.min(
+          base.gpuCapacity,
+          Math.max(0, base.gpuCapacity - services.free.gpu) + projectDemand.gpu,
+        ),
+        gpuLoad: base.gpuCapacity
+          ? Math.min(
+              1,
+              (Math.max(0, base.gpuCapacity - services.free.gpu) + projectDemand.gpu) /
+                base.gpuCapacity,
+            )
+          : 0,
         resourceFulfillment: jobFactor,
         jobBlockedReasons: Object.fromEntries(
           s.jobs

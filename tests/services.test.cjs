@@ -4,6 +4,28 @@ const assert = require('node:assert/strict');
 const E = require('../engine.js');
 const { grantSpace } = require('./helpers/facility.cjs');
 
+test('loss of GPU supply does not stop unrelated hosting customers in the same room', () => {
+  const s = E.createState(730);
+  s.business.rooms[0].groups.find((g) => g.kind === 'inference').units = 1;
+  const model = E.getBusinessModel(s),
+    groups = model.rooms[0].groups;
+  assert.equal(groups.find((g) => g.kind === 'inference').supplied, 0);
+  assert.ok(groups.find((g) => g.kind === 'hosting').supplied > 0.5);
+  assert.ok(E.getMetrics(s).serviceIncome > 0);
+});
+test('premium obligations cannot be toggled off during an outage', () => {
+  const s = E.createState(731),
+    g = s.business.rooms[0].groups[0];
+  g.premium = true;
+  g.nextPremium = true;
+  assert.ok(E.act(s, 'setServicePremium', { roomId: 'room-1', kind: 'hosting', value: false }).ok);
+  assert.equal(g.premium, true);
+  assert.equal(g.nextPremium, false);
+  g.remaining = 1;
+  E.advance(s, 1);
+  assert.equal(g.premium, false);
+});
+
 test('customers use real resources, new idle servers do not mint unearned revenue', () => {
   const s = E.createState(701),
     base = E.getMetrics(s);

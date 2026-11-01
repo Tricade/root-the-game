@@ -116,9 +116,11 @@ export function createDialogsUI(ctx) {
       'hardware-move': 'Umsetzen / Umpatchen',
       'hardware-confirm': 'Infrastruktur ändern',
       'business-confirm': 'Betriebsauftrag prüfen',
+      'operations-confirm': 'Betriebsauftrag prüfen',
     };
     let content = '';
     if (type === 'business-confirm') content = ctx.businessConfirm(extra);
+    else if (type === 'operations-confirm') content = ctx.operationsConfirm(extra);
     else if (type === 'servers' || type === 'agents') content = shop(type);
     else if (type.startsWith('hardware-')) content = ctx.R.modal(type, extra);
     else if (type === 'sector') content = sectorModal();

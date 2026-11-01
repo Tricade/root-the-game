@@ -60,6 +60,7 @@
       remaining: 259200,
       renew: true,
       premium: false,
+      nextPremium: false,
     });
     const roomDefaults = (roomId) => ({
       roomId,

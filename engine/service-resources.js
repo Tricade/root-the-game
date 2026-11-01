@@ -70,9 +70,13 @@
     function serviceSnapshot(s, hardware) {
       const physical = roomResources(s, hardware),
         rows = [],
-        free = zeroResources();
+        free = zeroResources(),
+        committedFree = zeroResources();
       const byRoom = new Map(s.business.rooms.map((r) => [r.roomId, r]));
-      const agents = new Map(s.agents.filter((a) => !a.assignment).map((a) => [a.id, a]));
+      const busy = new Set((s.operations?.projects || []).map((p) => p.agentId));
+      const agents = new Map(
+        s.agents.filter((a) => !a.assignment && !busy.has(a.id)).map((a) => [a.id, a]),
+      );
       let gross = 0,
         crewCost = 0,
         totalUnits = 0,
@@ -103,13 +107,28 @@
             )
           : 1;
         const crewCapacity = room.crew * 24 * management;
-        const supplied =
-          fraction(demand, raw.available) *
-          Math.min(1, crewCapacity / Math.max(1, units)) *
-          (room.changeRemaining > 0 ? 0.5 : 1);
+        const crewFactor =
+          Math.min(1, crewCapacity / Math.max(1, units)) * (room.changeRemaining > 0 ? 0.5 : 1);
         const trust = 1 + (0.15 * s.reputation) / (s.reputation + 1000);
-        let revenue = 0;
+        let revenue = 0,
+          roomDelivered = 0;
+        const consumed = zeroResources(),
+          groups = [];
         for (const group of room.groups) {
+          const needs = groupDemand(room, group);
+          // Only resources needed by this service can block it. A missing GPU
+          // must not stop hosting or archives sharing the same room.
+          const supplied =
+            crewFactor *
+            Math.min(
+              1,
+              ...RESOURCES.filter((k) => needs[k] > 0).map(
+                (k) => raw.available[k] / Math.max(0.001, demand[k]),
+              ),
+            );
+          for (const key of RESOURCES) consumed[key] += needs[key] * supplied;
+          roomDelivered += group.units * supplied;
+          groups.push({ ...group, supplied });
           const premium = group.premium ? 1.15 : 1;
           const compensation =
             group.premium && s.time >= s.business.transitionUntil ? 0.2 * (1 - supplied) : 0;
@@ -120,26 +139,38 @@
             Math.max(0, supplied * premium - compensation);
         }
         const wages = raw.racks === 0 && units === 0 ? 0 : room.crew * 0.035 + units * 0.008;
-        for (const key of RESOURCES)
-          free[key] += Math.max(0, raw.available[key] - demand[key] * supplied);
+        for (const key of RESOURCES) {
+          free[key] += Math.max(0, raw.available[key] - consumed[key]);
+          committedFree[key] += Math.max(0, raw.available[key] - reserved[key]);
+        }
         gross += revenue;
         crewCost += wages;
         totalUnits += units;
-        delivered += units * supplied;
-        committedCPU += demand.cpu * supplied;
+        delivered += roomDelivered;
+        committedCPU += consumed.cpu;
         rows.push({
           ...room,
           ...raw,
           demand,
           reserved,
           units,
-          supplied,
+          supplied: units ? roomDelivered / units : 1,
+          groups,
           revenue,
           wages,
           crewCapacity,
         });
       }
-      return { rooms: rows, free, gross, crewCost, totalUnits, delivered, committedCPU };
+      return {
+        rooms: rows,
+        free,
+        committedFree,
+        gross,
+        crewCost,
+        totalUnits,
+        delivered,
+        committedCPU,
+      };
     }
     function jobResources(job) {
       const needs = ctx.JOB_PROFILES[job.kind]?.needs || SERVICES.hosting.needs;
@@ -155,7 +186,7 @@
     }
     function jobsFit(s, job, free) {
       if (!s.business) return true;
-      const available = free || serviceSnapshot(s).free,
+      const available = free || serviceSnapshot(s).committedFree,
         demand = jobResources(job);
       for (const current of s.jobs) {
         const needs = jobResources(current);

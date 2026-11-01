@@ -6,7 +6,6 @@
 })(typeof globalThis !== 'undefined' ? globalThis : this, function () {
   'use strict';
   return function createDomain(context) {
-    const { RESILIENCE_MAX } = context;
     // Late domain calls avoid circular module imports; no simulation state is stored here.
     const addLog = (...args) => context.addLog(...args);
     const applyWorkLosses = (...args) => context.applyWorkLosses(...args);
@@ -76,14 +75,15 @@
         return { ok: true, message: 'Betriebssicherung wird erstellt.' };
       }
       if (action === 'buyParts') {
-        const option = getResilience(s).partsPurchase;
-        if (!option.enabled)
-          return fail(option.reason || 'Ersatzteile sind derzeit nicht verfügbar.');
-        const gain = Math.min(3, RESILIENCE_MAX.parts - s.resilience.parts);
-        s.credits -= option.cost;
-        s.resilience.parts += gain;
-        addLog(s, 'system', `${gain} Ersatzteil${gain === 1 ? '' : 'e'} eingelagert.`);
-        return { ok: true, message: 'Ersatzteile eingelagert.' };
+        return context.orderParts(s, {
+          quantity: Math.min(
+            3,
+            context.partsCapacity(s) -
+              s.resilience.parts -
+              s.operations.orders.reduce((n, o) => n + o.quantity, 0),
+          ),
+          method: 'standard',
+        });
       }
       if (action === 'resolveIncident') {
         const incident = s.resilience.incident;

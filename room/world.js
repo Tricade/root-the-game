@@ -607,6 +607,7 @@ export function createRoomWorld(sceneContext) {
         ['log', 'Protokoll'],
         ['facility', 'Gebäudetechnik'],
         ['business', 'Kunden & Betrieb'],
+        ['operations', 'Betriebspläne'],
       ]
         .map(([id, label]) => '<button type="button" data-nav="' + id + '">' + label + '</button>')
         .join('') +

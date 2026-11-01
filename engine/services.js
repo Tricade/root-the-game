@@ -16,7 +16,8 @@
     function serviceQuote(s, action, p = {}) {
       const room = s.business?.rooms.find((r) => r.roomId === p.roomId);
       if (!room) return { enabled: false, reason: 'Raum nicht gefunden.', cost: 0 };
-      const model = ctx.serviceSnapshot(s).rooms.find((r) => r.roomId === p.roomId);
+      const snapshot = ctx.serviceSnapshot(s);
+      const model = snapshot.rooms.find((r) => r.roomId === p.roomId);
       let cost = 0,
         duration = 0,
         reason = '',
@@ -31,6 +32,10 @@
         else {
           const reserve = 1 - room.reserve,
             efficiency = room.profile === def.profile ? 0.9 : 1;
+          const projects = ctx.zeroResources();
+          for (const job of s.jobs)
+            for (const [key, value] of Object.entries(ctx.jobResources(job)))
+              projects[key] += value;
           capacity = Math.max(
             0,
             Math.floor(
@@ -38,7 +43,10 @@
                 model.crewCapacity - model.groups.reduce((n, g) => n + g.units + g.pending, 0),
                 ...RESOURCES.filter((k) => def.needs[k]).map(
                   (k) =>
-                    (model.available[k] * reserve - model.reserved[k]) /
+                    Math.min(
+                      model.available[k] * reserve - model.reserved[k],
+                      snapshot.committedFree[k] - projects[k],
+                    ) /
                     (def.needs[k] * efficiency),
                 ),
               ),
@@ -49,7 +57,8 @@
           label = 'Kundenvertrag abschließen';
           if (s.sector < def.sector) reason = 'Diese Kundengruppe ist noch nicht freigeschaltet.';
           else if (group.pending) reason = 'Die Aufnahme dieser Kundengruppe läuft bereits.';
-          else if (units > capacity) reason = 'Kapazität oder Team fehlen für diese Zusage.';
+          else if (units > capacity || units + group.units > 1e6)
+            reason = 'Kapazität oder Team fehlen für diese Zusage.';
         }
       } else if (action === 'configureServiceRoom') {
         if (!Object.hasOwn(PROFILES, p.profile) || ![0, 0.2, 0.35].includes(Number(p.reserve)))
@@ -115,7 +124,10 @@
       if (action === 'hireCrew') room.crew++;
       if (action === 'assignManager') room.managerId = p.id;
       if (action === 'setServiceRenewal') group.renew = p.value;
-      if (action === 'setServicePremium') group.premium = p.value;
+      if (action === 'setServicePremium') {
+        group.nextPremium = p.value;
+        if (!group.units && !group.pending) group.premium = p.value;
+      }
       ctx.addLog(s, 'system', q.label);
       return {
         ok: true,
@@ -138,9 +150,12 @@
           if (!group.units) continue;
           group.remaining -= dt;
           if (group.remaining <= 0) {
-            if (group.renew) group.remaining += 259200;
-            else {
+            if (group.renew) {
+              group.remaining += 259200;
+              group.premium = group.nextPremium;
+            } else {
               group.units = 0;
+              group.premium = group.nextPremium;
               group.remaining = 259200;
               ctx.addLog(s, 'system', 'Kundenvertrag ausgelaufen.');
             }

@@ -12,6 +12,7 @@ export function createTelemetryUI(ctx) {
       ctx.state.facility.centralOperation?.system,
       ctx.facilitySignature(),
       ctx.businessSignature?.(),
+      ctx.operationsSignature?.(),
     ].join('|');
     if (ctx.view === 'overview')
       return [
@@ -35,6 +36,7 @@ export function createTelemetryUI(ctx) {
   function updateLive() {
     if (!ctx.state) return;
     ctx.updateBusiness?.();
+    ctx.updateOperations?.();
     if (ctx.view === 'facility') ctx.updateCentralTelemetry();
     const m = ctx.E.getMetrics(ctx.state),
       facility = ctx.E.getRackModel(ctx.state, m),
@@ -270,7 +272,7 @@ export function createTelemetryUI(ctx) {
       b.disabled =
         !j ||
         ctx.state.jobs.length >= m.jobLimit ||
-        Boolean(j && !ctx.E.jobsFit(ctx.state, j, m.freeResources));
+        Boolean(j && !ctx.E.jobsFit(ctx.state, j, m.admissionResources));
       b.title = b.disabled
         ? j?.kind === 'ai' && (j.gpuDemand || 1) > (m.gpuCapacity || 0) - (m.gpuUsed || 0) + 1e-9
           ? 'Nicht genügend freie GPU-Kapazität. Prüfe KI-Server, Uplink, Strom und Kühlung.'

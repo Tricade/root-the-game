@@ -107,6 +107,7 @@
             remaining: checkedNumber(g.remaining, 0, 259200),
             renew: checkedBoolean(g.renew),
             premium: checkedBoolean(g.premium),
+            nextPremium: checkedBoolean(g.nextPremium),
           };
         });
         return {

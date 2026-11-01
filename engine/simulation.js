@@ -44,6 +44,11 @@
         if (budgetWindow > r.budgetWindowStart) {
           r.budgetWindowStart = budgetWindow;
           r.budgetSpent = 0;
+          if (s.operations) {
+            s.operations.backupSpent = 0;
+            s.operations.partsSpent = 0;
+            s.operations.planSpent = 0;
+          }
         }
         const m = getMetrics(s);
         const earned = m.incomePerSecond * dt;
@@ -92,7 +97,7 @@
           if (s.policies.autocontract && !s.jobs.length && s.offers.length === MAX.offers) {
             const fit = s.offers.some((job) =>
               s.business
-                ? context.jobsFit(s, job, m.freeResources)
+                ? context.jobsFit(s, job, m.admissionResources)
                 : job.load <= m.capacity * 0.98 &&
                   (job.kind !== 'ai' || job.gpuDemand <= m.gpuCapacity),
             );
@@ -229,6 +234,7 @@
           if (!r.operation) startAutomaticRepair(s);
           if (!r.operation) startAutomaticBackup(s);
         }
+        context.advanceOperations(s, dt);
         s.credits = clamp(s.credits, 0, 1e15);
         s.research = clamp(s.research, 0, 1e15);
         s.lifetimeCredits = clamp(s.lifetimeCredits, 0, 1e15);

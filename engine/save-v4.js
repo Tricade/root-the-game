@@ -7,8 +7,23 @@
   'use strict';
   return function (ctx) {
     function normalizeV4(input) {
-      const s = ctx.normalizeV3({ ...input, version: 3 });
+      // Legacy validators still enforce their published limits. Validate the
+      // extended v4 counters separately, without weakening v1-v3 import rules.
+      const spent = ctx.checkedNumber(input.resilience?.budgetSpent, 0, 1e12);
+      const parts = ctx.checkedNumber(input.resilience?.parts, 0, 20000, true);
+      const s = ctx.normalizeV3({
+        ...input,
+        version: 3,
+        resilience: {
+          ...input.resilience,
+          budgetSpent: Math.min(1000, spent),
+          parts: Math.min(20, parts),
+        },
+      });
       s.business = ctx.normalizeBusiness(input.business, s);
+      s.resilience.budgetSpent = spent;
+      s.resilience.parts = parts;
+      s.operations = ctx.normalizeOperations(input.operations, s);
       const incident = input.resilience.incident;
       if (incident?.scope !== undefined) {
         const rack = s.facility.racks.find((r) => r.id === incident.rackId);

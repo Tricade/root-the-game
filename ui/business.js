@@ -56,7 +56,7 @@ export function createBusinessUI(ctx) {
       hybrid: 'Zentral mit lokaler Reserve',
       ups: 'Lokaler Strom mit zentraler USV',
     };
-    return `<section class="panel" data-business-room="${room.roomId}">${ctx.panelHeader('Raumversorgung')}<p>${ctx.tr('Kühlung')}: <strong>${ctx.tr(modes[room.supply.cooling])}</strong> · ${ctx.tr('Strom')}: <strong>${ctx.tr(modes[room.supply.power])}</strong></p><p class="policy-explainer">Zentralbetrieb ersetzt lokale Versorgung. Die Variante mit lokaler Reserve hält die lokalen Geräte zusätzlich bereit. Zentrale Kapazität wird unter angeschlossenen Racks geteilt; die USV schützt nur Räume mit zentralem Stromanschluss.</p><div class="business-controls">${field('system', 'System', `<select class="select"><option value="cooling">${ctx.tr('Kühlung')}</option><option value="power">${ctx.tr('Strom')}</option></select>`)}${field(
+    return `<section class="panel" data-business-room="${room.roomId}">${ctx.panelHeader('Raumversorgung')}<p>${ctx.tr('Kühlung')}: <strong>${ctx.tr(modes[room.supply.cooling])}</strong> · ${ctx.tr('Strom')}: <strong>${ctx.tr(modes[room.supply.power])}</strong></p><p class="policy-explainer">Zentralbetrieb ersetzt lokale Versorgung. Die Variante mit lokaler Reserve hält die lokalen Geräte zusätzlich bereit. Zentrale Kapazität wird unter angeschlossenen Racks geteilt; die USV schützt nur angeschlossene Stromkreise. Ein USV-Anschluss ist auch bei lokalem Strom möglich.</p><div class="business-controls">${field('system', 'System', `<select class="select"><option value="cooling">${ctx.tr('Kühlung')}</option><option value="power">${ctx.tr('Strom')}</option></select>`)}${field(
       'mode',
       'Zielversorgung',
       `<select class="select">${Object.entries(modes)
@@ -78,7 +78,7 @@ export function createBusinessUI(ctx) {
       .map(([k, v]) => `${ctx.dec(v)} ${resourceNames[k]}`)
       .join(
         ' · ',
-      )}</p><p>${ctx.tr('Zusätzlich möglich')}: <strong data-service-capacity="${g.kind}">${ctx.fmt(q.capacity || 0)}</strong></p><div class="business-controls">${field('units', 'Neue Einheiten', `<input class="input" type="number" min="1" max="1000000" step="1" value="1">`)}${button('contractService', 'Vertrag prüfen')}</div><div class="card-actions">${button('setServiceRenewal', g.renew ? 'Verlängerung: an' : 'Verlängerung: aus', `data-value="${!g.renew}"`)}${button('setServicePremium', g.premium ? 'Premium: an' : 'Premium: aus', `data-value="${!g.premium}"`)}</div></section>`;
+      )}</p><p>${ctx.tr('Zusätzlich möglich')}: <strong data-service-capacity="${g.kind}">${ctx.fmt(q.capacity || 0)}</strong></p><div class="business-controls">${field('units', 'Neue Einheiten', `<input class="input" type="number" min="1" max="1000000" step="1" value="1">`)}${button('contractService', 'Vertrag prüfen')}</div><div class="card-actions">${button('setServiceRenewal', g.renew ? 'Verlängerung: an' : 'Verlängerung: aus', `data-value="${!g.renew}"`)}${button('setServicePremium', g.nextPremium ? 'Premium bei Verlängerung: an' : 'Premium bei Verlängerung: aus', `data-value="${!g.nextPremium}"`)}</div></section>`;
   }
   function businessClick(target) {
     if (target.hasAttribute('data-service-confirm')) {
@@ -114,7 +114,7 @@ export function createBusinessUI(ctx) {
         : ctx.E.quoteService(ctx.state, extra.action, extra.payload);
     if (extra.action === 'convertRoomSupply')
       return `<p class="modal-intro">Raumversorgung umbauen</p><p>Dieser Raum ist beim Umbau drei Minuten offline. Ein Ausfall der Zentralanlage betrifft zentral angeschlossene Räume; lokale Reserve kann weiterhin Leistung liefern. Lokale Stromverteiler bleiben als Rack-Sicherung erforderlich.</p><div class="status-row"><span>Kosten</span><strong>${ctx.fmt(q.cost)} CR</strong></div><div class="status-row"><span>Zentralkapazität / angeschlossene Last nach Umbau</span><strong>${ctx.dec((q.centralCapacity || 0) / 1000)} / ${ctx.dec(((q.demand || 0) + (q.otherDemand || 0)) / 1000)} kW</strong></div>${q.reason ? `<div class="modal-alert">${ctx.esc(q.reason)}</div>` : ''}<button class="button primary block" data-service-confirm ${q.enabled ? '' : 'disabled'}>Bestätigen</button>`;
-    return `<p class="modal-intro">${ctx.esc(q.label || 'Betriebsplan ändern')}</p><div class="status-row"><span>Kosten</span><strong>${ctx.fmt(q.cost)} CR</strong></div><div class="status-row"><span>Dauer</span><strong>${ctx.duration(q.duration || 0)}</strong></div><p>Verträge binden Ressourcen. Teams kosten laufend Geld. Profilwechsel unterbrechen einen Teil der Versorgung.</p>${q.reason ? `<div class="modal-alert">${ctx.esc(q.reason)}</div>` : ''}<button class="button primary block" data-service-confirm ${q.enabled ? '' : 'disabled'}>Bestätigen</button>`;
+    return `<p class="modal-intro">${ctx.esc(q.label || 'Betriebsplan ändern')}</p><div class="status-row"><span>Kosten</span><strong>${ctx.fmt(q.cost)} CR</strong></div><div class="status-row"><span>Dauer</span><strong>${ctx.duration(q.duration || 0)}</strong></div><p>Verträge binden Ressourcen für drei Tage. Premiumänderungen gelten bei der nächsten Verlängerung. Teams kosten laufend Geld. Profilwechsel unterbrechen einen Teil der Versorgung.</p>${q.reason ? `<div class="modal-alert">${ctx.esc(q.reason)}</div>` : ''}<button class="button primary block" data-service-confirm ${q.enabled ? '' : 'disabled'}>Bestätigen</button>`;
   }
   function businessChange(el) {
     if (el.matches('[data-field="system"]')) {
@@ -140,7 +140,7 @@ export function createBusinessUI(ctx) {
             r.changeRemaining > 0,
             r.supply,
             r.conversion?.system,
-            r.groups.map((g) => [g.kind, g.units, g.pending, g.renew, g.premium]),
+            r.groups.map((g) => [g.kind, g.units, g.pending, g.renew, g.premium, g.nextPremium]),
           ]),
         )
       : '';
@@ -165,6 +165,15 @@ export function createBusinessUI(ctx) {
       el.textContent = ctx.dec(room.demand[key]) + ' / ' + ctx.dec(room.available[key]);
     });
     for (const g of room.groups) {
+      const cap = ctx.$(`[data-service-capacity="${g.kind}"]`);
+      if (cap)
+        cap.textContent = ctx.fmt(
+          ctx.E.quoteService(ctx.state, 'contractService', {
+            roomId: room.roomId,
+            kind: g.kind,
+            units: 1,
+          }).capacity || 0,
+        );
       const el = ctx.$(`[data-service-status="${g.kind}"]`);
       if (el)
         el.textContent = g.pending

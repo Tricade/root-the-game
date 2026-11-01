@@ -24,6 +24,7 @@
       else throw new Error('Diese Netzwerkstand-Version wird nicht unterstützt.');
       if (input.version < 4) {
         context.migrateBusiness(state);
+        state.operations = context.operationsDefaults();
         state.version = 4;
       }
       updateAchievementUnlocks(state);

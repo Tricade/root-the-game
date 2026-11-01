@@ -3,6 +3,29 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const I18N = require('../i18n.js');
 
+test('customer workflow, research dialogs and development controls have complete English labels', () => {
+  for (const [source, english] of [
+    ['Anfrage ablehnen', 'Decline enquiry'],
+    ['Forschungszweige', 'Research branches'],
+    ['Forschungsentscheidung prüfen', 'Review research decision'],
+    ['Agent-Upgrade prüfen', 'Review agent upgrade'],
+    [
+      'Kundenvertrag angenommen. Einrichtung gestartet.',
+      'Customer contract accepted. Provisioning started.',
+    ],
+    ['Noch nicht eingerichtet', 'Not provisioned yet'],
+    ['Agent entwickelt.', 'Agent upgraded.'],
+    ['Schwerpunkt angepasst.', 'Focus updated.'],
+  ])
+    assert.equal(I18N.translate(source, 'en'), english);
+});
+
+test('English compound feedback translates only its action label and preserves the agent name', () => {
+  const text = 'Tarek ist bereits im Einsatz: Netzdiagnose.';
+  assert.equal(I18N.translate(text, 'en'), 'Tarek is already on assignment: Network diagnostics.');
+  assert.equal(I18N.translate(text, 'de'), text);
+});
+
 test('automatic server labels and live backup/maintenance feedback translate without changing saved names', () => {
   const server = { type: 'edge', name: 'Randknoten 01' };
   assert.equal(I18N.isGeneratedServerName(server), true);

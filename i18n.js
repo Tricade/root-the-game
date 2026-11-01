@@ -13,7 +13,9 @@
   // Keep values as plain text: callers can translate text nodes, attributes,
   // and canvas labels without changing markup or interpolated user data.
   const localizers = new Set();
-  const { en, patterns } = createEnglish(translate);
+  // Nested substitutions belong to this English catalog even when callers
+  // explicitly request English while the persisted interface language is German.
+  const { en, patterns } = createEnglish((text) => translate(text, 'en'));
 
   // Saved automatic names remain canonical German data. Display them in the
   // selected language without rewriting saves or interpreting arbitrary names.

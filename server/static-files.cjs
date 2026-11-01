@@ -112,6 +112,11 @@ function createStaticFiles(root) {
       '/engine/agent-development.js',
       ['engine/agent-development.js', 'text/javascript; charset=utf-8'],
     ],
+    ['/ui/research.js', ['ui/research.js', 'text/javascript; charset=utf-8']],
+    ['/ui/research-cards.js', ['ui/research-cards.js', 'text/javascript; charset=utf-8']],
+    ['/research.css', ['research.css', 'text/css; charset=utf-8']],
+    ['/locales/research-en.js', ['locales/research-en.js', 'text/javascript; charset=utf-8']],
+    ['/locales/workspace-en.js', ['locales/workspace-en.js', 'text/javascript; charset=utf-8']],
     ['/engine/definitions.js', ['engine/definitions.js', 'text/javascript; charset=utf-8']],
     ['/engine/personnel.js', ['engine/personnel.js', 'text/javascript; charset=utf-8']],
     [

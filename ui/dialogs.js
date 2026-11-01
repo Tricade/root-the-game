@@ -35,12 +35,17 @@ export function createDialogsUI(ctx) {
       [
         'agents',
         '3. Gib Agenten einen Schwerpunkt',
-        'Agenten teilen ihre Leistung auf deine laufenden Aufträge auf. Rolle, Stufe und Schwerpunkt verändern Durchsatz, Forschung und Pflege.',
+        'Agenten unterstützen Projekte, Forschung, Wartung und Teamleitung. Rolle, Stufe und Schwerpunkt bestimmen den Beitrag. Prüfe vor einem Upgrade die tatsächliche Wirkung und laufenden Kosten.',
       ],
       [
         'jobs',
         '4. Wähle passende Aufträge',
-        'Aufträge bringen Credits, Forschung und Ansehen. Die Vergütung kommt beim Abschluss. Grundversorgung und Forschung laufen zusätzlich stetig weiter.',
+        'Aktive Dienste finanzieren den laufenden Betrieb. Projekte bringen bei Abschluss Credits, Forschung und Ansehen. Nicht belegte Hardware und Agenten verursachen weiterhin Kosten.',
+      ],
+      [
+        'jobs',
+        'Kundenbetrieb planen',
+        'Kundenanfragen kommen automatisch. Zusagen reservieren Ressourcen und kosten Einrichtung. Ein Agent muss den Dienst erst bereitstellen. Vertragslaufzeiten beginnen danach; Versorgung, Betreuung und geschäftliche Gründe beeinflussen Verlängerung oder Kündigung.',
       ],
       [
         'automation',
@@ -50,7 +55,7 @@ export function createDialogsUI(ctx) {
       [
         'research',
         '6. Investiere in Entwicklung',
-        'Forschung verbessert die ganze Flotte. Meilensteine geben zusätzliche Credits. Neue Sektoren öffnen anspruchsvollere Aufträge und anfangs mehr Plätze.',
+        'Ein bezahltes Laborprojekt läuft jeweils über Zeit und bindet zehn Prozent des Projektdurchsatzes. Forschungszweige haben Voraussetzungen. Die Wirkung beginnt bei Abschluss; Abbruch erstattet keine Punkte. Bisherige Forschungsstufen bleiben erhalten. Erfolge haben eine eigene Seite.',
       ],
       [
         'shield',
@@ -106,10 +111,12 @@ export function createDialogsUI(ctx) {
       'hardware-move': 'Umsetzen / Umpatchen',
       'hardware-confirm': 'Infrastruktur ändern',
       'business-confirm': 'Betriebsauftrag prüfen',
+      'research-confirm': 'Forschungsentscheidung prüfen',
       'operations-confirm': 'Betriebsauftrag prüfen',
     };
     let content = '';
-    if (type === 'business-confirm') content = ctx.businessConfirm(extra);
+    if (type === 'research-confirm') content = ctx.researchConfirm(extra);
+    else if (type === 'business-confirm') content = ctx.businessConfirm(extra);
     else if (type === 'operations-confirm') content = ctx.operationsConfirm(extra);
     else if (type === 'personnel-confirm') content = ctx.personnelConfirm(extra);
     else if (type === 'servers' || type === 'agents') content = shop(type);

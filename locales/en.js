@@ -16,11 +16,20 @@
     typeof module === 'object' && module.exports
       ? require('./customers-en.js')
       : root.RootCustomersEnglish;
-  const create = (translate) => factory(translate, { building, business, personnel, customers });
+  const research =
+    typeof module === 'object' && module.exports
+      ? require('./research-en.js')
+      : root.RootResearchEnglish;
+  const workspace =
+    typeof module === 'object' && module.exports
+      ? require('./workspace-en.js')
+      : root.RootWorkspaceEnglish;
+  const create = (translate) =>
+    factory(translate, { building, business, personnel, customers, research, workspace });
   if (typeof module === 'object' && module.exports) module.exports = create;
   if (root) root.RootEnglishCatalog = create;
 })(typeof globalThis !== 'undefined' ? globalThis : this, function (translate, catalogs) {
-  const { building, business, personnel, customers } = catalogs;
+  const { building, business, personnel, customers, research, workspace } = catalogs;
   const en = Object.create(null);
   const add = (pairs) => {
     for (const [de, english] of pairs) en[de] = english;
@@ -2611,9 +2620,15 @@
   add(staff.pairs);
   const commercial = customers(translate);
   add(commercial.pairs);
+  const control = workspace(translate);
+  add(control.pairs);
+  const laboratory = research(translate);
+  add(laboratory.pairs);
   return {
     en,
     patterns: [
+      ...control.patterns,
+      ...laboratory.patterns,
       ...commercial.patterns,
       ...staff.patterns,
       ...operations.patterns,

@@ -1441,7 +1441,7 @@ tr:last-child td {
   position: fixed;
   inset: 0;
   background: #050805bb;
-  backdrop-filter: blur(7px);
+  backdrop-filter: none;
   z-index: 1000;
   display: grid;
   place-items: center;

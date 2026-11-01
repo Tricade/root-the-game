@@ -67,14 +67,17 @@
       const profile = room.profile === SERVICES[group.kind].profile ? 0.9 : 1;
       return Object.fromEntries(RESOURCES.map((key) => [key, (needs[key] || 0) * units * profile]));
     }
-    function serviceSnapshot(s, hardware) {
+    function serviceSnapshot(s, hardware, customers = ctx.customerReadModel(s)) {
+      const premiums = customers.premiums;
       const physical = roomResources(s, hardware),
         rows = [],
         free = zeroResources(),
         committedFree = zeroResources();
       const byRoom = new Map(s.business.rooms.map((r) => [r.roomId, r]));
       const agents = new Map(
-        s.agents.filter((a) => ctx.agentProductive(s, a)).map((a) => [a.id, a]),
+        s.agents
+          .filter((a) => ctx.agentProductive(s, a, customers.assignments))
+          .map((a) => [a.id, a]),
       );
       let gross = 0,
         crewCost = 0,
@@ -128,9 +131,16 @@
           for (const key of RESOURCES) consumed[key] += needs[key] * supplied;
           roomDelivered += group.units * supplied;
           groups.push({ ...group, supplied });
-          const premium = group.premium ? 1.15 : 1;
+          const contracted = premiums.get(room.roomId + '/' + group.kind);
+          const premiumShare =
+            contracted?.units === group.units && group.units
+              ? contracted.premium / group.units
+              : group.premium
+                ? 1
+                : 0;
+          const premium = 1 + 0.15 * premiumShare;
           const compensation =
-            group.premium && s.time >= s.business.transitionUntil ? 0.2 * (1 - supplied) : 0;
+            s.time >= s.business.transitionUntil ? 0.2 * premiumShare * (1 - supplied) : 0;
           revenue +=
             group.units *
             SERVICES[group.kind].fee *

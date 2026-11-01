@@ -201,7 +201,11 @@
         if (!a) return { ok: false, message: 'Agent nicht gefunden.' };
         if (s.agents.length <= 1)
           return { ok: false, message: 'Mindestens ein Agent muss im Team bleiben.' };
-        if (a.assignment || s.operations.projects.some((x) => x.agentId === a.id))
+        if (
+          a.assignment ||
+          s.operations.projects.some((x) => x.agentId === a.id) ||
+          ctx.customerAssignment(s, a.id)
+        )
           return { ok: false, message: 'Laufende Einsätze müssen zuerst abgeschlossen werden.' };
         for (const room of s.business.rooms) if (room.managerId === a.id) room.managerId = null;
         s.agents = s.agents.filter((x) => x.id !== a.id);

@@ -7,9 +7,9 @@
   'use strict';
   return function (ctx) {
     const { clamp, RESOURCES, fraction, zeroResources } = ctx;
-    function serviceMetrics(s, base, hardware) {
-      const services = ctx.serviceSnapshot(s, hardware);
-      const active = s.agents.filter((a) => ctx.agentProductive(s, a));
+    function serviceMetrics(s, base, hardware, customers) {
+      const services = ctx.serviceSnapshot(s, hardware, customers);
+      const active = s.agents.filter((a) => ctx.agentProductive(s, a, customers.assignments));
       const engineers = active
         .filter((a) => a.role === 'engineer')
         .reduce((sum, a) => sum + a.level * ctx.agentEffects(a).care, 0);
@@ -131,6 +131,16 @@
         researchPerSecond,
         jobRates,
         serviceIncome: services.gross,
+        customerSupply: Object.fromEntries(
+          services.rooms.map((r) => [
+            r.roomId,
+            {
+              ...Object.fromEntries(r.groups.map((g) => [g.kind, g.supplied])),
+              available: r.available,
+              changing: r.changeRemaining > 0 || Boolean(r.conversion),
+            },
+          ]),
+        ),
         personnelCost: personnel,
         recoveryAllowance,
         serviceUnits: services.totalUnits,

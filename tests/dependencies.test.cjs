@@ -19,6 +19,13 @@ function fixture() {
   grantSpace(s, { rooms: 2 });
   s.facility.racks[1].roomId = 'room-2';
   s.business.rooms[1].groups[0].units = 2;
+  const customer = {
+    ...structuredClone(s.customers.contracts[0]),
+    id: 'customer-' + s.nextId++,
+    roomId: 'room-2',
+    units: 2,
+  };
+  s.customers.contracts.push(customer);
   s.resilience.graceUntil = 1e9;
   return s;
 }

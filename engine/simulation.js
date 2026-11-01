@@ -64,6 +64,7 @@
             s.business.unserved + (m.serviceUnits - m.serviceDelivered) * dt,
           );
           context.advanceServices(s, dt);
+          context.advanceCustomers(s, dt, m.customerSupply);
           context.advanceSupply(s, dt);
         }
         s.research += m.researchPerSecond * dt;

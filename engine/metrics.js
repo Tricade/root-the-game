@@ -18,6 +18,7 @@
 
     function getMetrics(s) {
       const upgrades = s.upgrades || {};
+      const customers = context.customerReadModel(s);
       const hardware = hardwareSnapshot(s);
       const gpu = gpuSnapshot(s, hardware);
       const cooling = Math.pow(0.92, Math.min(MAX_RESEARCH_LEVEL, upgrades.cooling || 0));
@@ -115,7 +116,9 @@
       const usedCapacity = s.jobs.reduce((a, j) => a + j.load, 0);
       const load = capacity > 0 ? usedCapacity / capacity : 1;
       const hardwareFactor = hardwareWeight > 0 ? hardwareWeighted / hardwareWeight : 0;
-      const activeAgents = s.agents.filter((a) => context.agentProductive(s, a));
+      const activeAgents = s.agents.filter((a) =>
+        context.agentProductive(s, a, customers.assignments),
+      );
       const engineers = activeAgents
         .filter((a) => a.role === 'engineer')
         .reduce((v, a) => v + a.level * context.agentEffects(a).care, 0);
@@ -323,7 +326,7 @@
         gpuLoad: gpu.load,
         jobBlockedReasons: gpu.blocked,
       };
-      return s.business ? context.serviceMetrics(s, metrics, hardware) : metrics;
+      return s.business ? context.serviceMetrics(s, metrics, hardware, customers) : metrics;
     }
     return { getMetrics };
   };

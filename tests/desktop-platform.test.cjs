@@ -9,6 +9,7 @@ const { isAppUrl, isAppPage, trustedSender, externalUrl } = require('../desktop/
 const {
   detectInstallation,
   profilePath,
+  installedProfilePath,
   prepareProfile,
   createPreferences,
 } = require('../desktop/profile.cjs');
@@ -31,6 +32,33 @@ test('profile redirects Chromium storage synchronously before the ready boundary
   assert.equal(paths.get('sessionData'), path.join(dir, 'chromium'));
 });
 
+test('Network OS branding retains the installed 1.5.0 profile and existing preferences', async (t) => {
+  const BRAND = require('../brand.js');
+  const metadata = require('../package.json');
+  const builder = require('../electron-builder.config.cjs');
+  assert.equal(metadata.productName, BRAND.productName);
+  assert.equal(
+    builder.productName,
+    process.platform === 'linux' ? BRAND.legacyProfileName : BRAND.productName,
+  );
+  assert.equal(builder.linux.desktop.entry.Name, BRAND.productName);
+  assert.equal(builder.appId, 'io.github.tricade.root');
+  assert.equal(metadata.name, 'root-network-os');
+  assert.equal(builder.executableName, 'root-cyberbunker');
+  const appData = await fs.mkdtemp(path.join(os.tmpdir(), 'root-brand-profile-'));
+  t.after(() => fs.rm(appData, { recursive: true, force: true }));
+  const legacy = path.join(appData, 'ROOT Cyberbunker');
+  await fs.mkdir(path.join(legacy, 'network'), { recursive: true });
+  const bytes = JSON.stringify(require('../engine.js').createState(151));
+  await fs.writeFile(path.join(legacy, 'network', 'save.json'), bytes);
+  await createPreferences(legacy).update({ language: 'en', autoCheck: false });
+  const selected = installedProfilePath(appData);
+  assert.equal(selected, legacy);
+  assert.equal(await fs.readFile(path.join(selected, 'network', 'save.json'), 'utf8'), bytes);
+  assert.equal(createPreferences(selected).read().language, 'en');
+  assert.equal(createPreferences(selected).read().autoCheck, false);
+});
+
 test('desktop bridge accepts only its own main document and exact safe origins', () => {
   for (const value of ['root://app/', 'root://app/index.html', 'root://app/ui/desktop.js'])
     assert.ok(isAppUrl(value));
@@ -51,11 +79,11 @@ test('desktop bridge accepts only its own main document and exact safe origins',
   assert.ok(trustedSender({ sender: contents, senderFrame: frame }, window));
   assert.equal(trustedSender({ sender: contents, senderFrame: { url: frame.url } }, window), false);
   assert.equal(trustedSender({ sender: {}, senderFrame: frame }, window), false);
-  frame.url = 'https://github.com/Tricade/root-the-game';
+  frame.url = 'https://github.com/Tricade/root-network-os';
   assert.equal(trustedSender({ sender: contents, senderFrame: frame }, window), false);
   assert.equal(
-    externalUrl('https://github.com/Tricade/root-the-game'),
-    'https://github.com/Tricade/root-the-game',
+    externalUrl('https://github.com/Tricade/root-network-os'),
+    'https://github.com/Tricade/root-network-os',
   );
   for (const value of [
     'file:///etc/passwd',
@@ -196,7 +224,7 @@ test('IPC enforces sender and payload validation before any privileged side effe
     false,
   );
   await handlers.get('desktop:releases')(event, 'file:///untrusted');
-  assert.equal(calls[0], 'https://github.com/Tricade/root-the-game/releases/latest');
+  assert.equal(calls[0], 'https://github.com/Tricade/root-network-os/releases/latest');
   await handlers.get('desktop:data-folder')(event, '/untrusted');
   assert.equal(calls[1], '/test-owned/network');
   cleanup();

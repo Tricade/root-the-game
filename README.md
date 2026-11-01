@@ -1,12 +1,12 @@
-[![Checks](https://github.com/Tricade/root-the-game/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/Tricade/root-the-game/actions/workflows/ci.yml)
-[![Preview 1.5.0](https://img.shields.io/badge/Preview-1.5.0-8ab4f8)](package.json)
+[![Checks](https://github.com/Tricade/root-network-os/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/Tricade/root-network-os/actions/workflows/ci.yml)
+[![Preview 1.5.1](https://img.shields.io/badge/Preview-1.5.1-8ab4f8)](package.json)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![AI transparency](https://img.shields.io/badge/AI-transparency_notice-6f42c1)](AI-DISCLOSURE.md)
 [![Support on Ko-fi](https://img.shields.io/badge/Ko--fi-Support-ff5e5b?logo=kofi&logoColor=white)](https://ko-fi.com/tricade)
-[![GitHub stars](https://img.shields.io/github/stars/Tricade/root-the-game?style=flat)](https://github.com/Tricade/root-the-game/stargazers)
+[![GitHub stars](https://img.shields.io/github/stars/Tricade/root-network-os?style=flat)](https://github.com/Tricade/root-network-os/stargazers)
 
 <p align="center">
-  <img src="screenshots/readme/wordmark.svg" alt="ROOT / Cyberbunker — build below the surface, keep your network running" width="1200">
+  <img src="screenshots/readme/wordmark.svg" alt="ROOT · Network OS — build below the surface, keep your network running" width="1200">
 </p>
 
 <p align="center">
@@ -17,7 +17,7 @@
 > [!IMPORTANT]
 > **AI transparency:** Generative AI substantially assisted ROOT's code, tests, documentation, translations and procedural assets. Changes still require review, appropriate tests and clear asset provenance. The application and its local asset generators do not call an AI provider. See [AI-DISCLOSURE.md](AI-DISCLOSURE.md) for the scope and verification limits, and [NOTICE.md](NOTICE.md) for component licenses.
 
-Enjoying ROOT? **Give the repository a ⭐ [star on GitHub](https://github.com/Tricade/root-the-game)** to help other people discover it.
+Enjoying ROOT? **Give the repository a ⭐ [star on GitHub](https://github.com/Tricade/root-network-os)** to help other people discover it.
 
 <p align="center">
   <a href="README.de.md">Deutsch</a> · <a href="#start">Quick start</a> · <a href="#console">Screenshots</a> · <a href="#features">Features</a> · <a href="CONTRIBUTING.md">Contribute</a> · <a href="https://ko-fi.com/tricade">Ko-fi</a>
@@ -32,7 +32,7 @@ Enjoying ROOT? **Give the repository a ⭐ [star on GitHub](https://github.com/T
 </p>
 
 <p align="center">
-  <a href="AI-DISCLOSURE.md"><img src="screenshots/readme/facts.svg" alt="Local browser runtime · web and first person · English and German · 1.5 preview · AI-assisted development" width="1200"></a>
+  <a href="AI-DISCLOSURE.md"><img src="screenshots/readme/facts.svg" alt="Local browser runtime · web and first person · English and German · 1.5.1 preview · AI-assisted development" width="1200"></a>
 </p>
 
 ## From one rack to a cyberbunker
@@ -136,7 +136,7 @@ The bunker has connecting corridors, adjacent-floor stairs, server rooms, plant 
 | Escape                             | Close the active dialog or console, then leave walking mode |
 | Room / floor selectors             | Navigate directly without walking                           |
 
-Room doors work from both sides and close after passage. Mouse drag remains available when pointer lock is unavailable. Reloading restores the selected location and saved walking position within that browser tab. The skippable arrival sequence can be replayed or disabled in Settings; reduced-motion preferences are respected.
+Room doors work from both sides and close after passage. Mouse drag remains available when pointer lock is unavailable. Reloading restores the selected location and saved walking position within that browser tab. The skippable arrival sequence introduces ROOT · Network OS, then returns to the web dashboard. Choose “Enter room” to start a walkthrough. It can be replayed or disabled in Settings; reduced-motion preferences are respected.
 
 </details>
 
@@ -146,7 +146,7 @@ Room doors work from both sides and close after passage. Mouse drag remains avai
 
 ### Desktop downloads
 
-[**Download ROOT for Windows or Linux →**](https://github.com/Tricade/root-the-game/releases/latest)
+[**Download ROOT for Windows or Linux →**](https://github.com/Tricade/root-network-os/releases/latest)
 
 | Windows x64                          | Linux x64                             |
 | ------------------------------------ | ------------------------------------- |
@@ -186,7 +186,7 @@ Open **[127.0.0.1:18473](http://127.0.0.1:18473/)**. On Windows, double-click **
 <details>
 <summary><strong>Preview status, progression limits and verification</strong></summary>
 
-ROOT is an evolving **1.5 preview**. Balance, localization, accessibility and 3D presentation remain open to contributions. Progression extends beyond six racks; current validation ceilings are 10,000 racks, 10,000 servers and 1,000,000 sectors, with five central-utility levels. Only the selected room is rendered. Maximum-size save validation does not establish acceptable real-time performance at that size.
+ROOT is an evolving **1.5.1 preview**. Balance, localization, accessibility and 3D presentation remain open to contributions. Progression extends beyond six racks; current validation ceilings are 10,000 racks, 10,000 servers and 1,000,000 sectors, with five central-utility levels. Only the selected room is rendered. Maximum-size save validation does not establish acceptable real-time performance at that size.
 
 See the [integration verification](docs/verification-construction.md), [runtime notes](docs/runtime-1.4.md) and [asset checks](docs/asset-audit.md) for tested behavior and limits. Desktop package tests complement the earlier 1.4 integration evidence; see the [desktop verification scope and limits](docs/desktop.md).
 
@@ -196,8 +196,8 @@ See the [integration verification](docs/verification-construction.md), [runtime 
 
 You can help with bug reports, balance experiments, translations, accessibility, original 3D assets or code. You do not need to write code to contribute.
 
-- **Found a problem?** [Report a bug](https://github.com/Tricade/root-the-game/issues/new?template=bug_report.yml) with the version, reproduction steps and a synthetic example.
-- **Have an idea?** [Suggest a feature](https://github.com/Tricade/root-the-game/issues/new?template=feature_request.yml), explain the problem it solves and describe the expected behavior.
+- **Found a problem?** [Report a bug](https://github.com/Tricade/root-network-os/issues/new?template=bug_report.yml) with the version, reproduction steps and a synthetic example.
+- **Have an idea?** [Suggest a feature](https://github.com/Tricade/root-network-os/issues/new?template=feature_request.yml), explain the problem it solves and describe the expected behavior.
 - **Want to build something?** Follow [CONTRIBUTING.md](CONTRIBUTING.md) to fork the repository, start an isolated development instance and open a focused pull request against `main`. Larger changes are easier to discuss in an issue first.
 
 ```sh

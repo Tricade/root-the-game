@@ -4,6 +4,7 @@ const fs = require('node:fs/promises');
 const path = require('node:path');
 const { createHash } = require('node:crypto');
 const { spawnSync } = require('node:child_process');
+const BRAND = require('../../brand.js');
 const { version } = require('../../package.json');
 
 async function main() {
@@ -38,7 +39,7 @@ async function main() {
       path.join(dir, 'SHA256SUMS.txt'),
       '--verify-tag',
       '--title',
-      'ROOT Cyberbunker ' + version,
+      BRAND.title + ' ' + version,
       '--notes-file',
       'docs/releases/v' + version + '.md',
       '--latest',

@@ -1,26 +1,20 @@
-ROOT / CYBERBUNKER 1.4
+ROOT · Network OS 1.5.1
 
-Start: ROOT starten.cmd oder node server.cjs
-Adresse: http://127.0.0.1:18473/
-Node.js 24 erforderlich; geprueft mit 24.22.1.
+Desktop downloads: https://github.com/Tricade/root-network-os/releases/latest
+Windows: installer or portable EXE. Linux: DEB or portable AppImage.
+Installed editions include update controls; portable editions update manually.
+Keep the adjacent ROOT-data folder when replacing a portable executable.
 
-Einstellungen -> Sprache / Language: Deutsch oder English.
-WASD bewegen, Maus ziehen/Pfeiltasten drehen, E interagieren.
-Am Rack oeffnet E zuerst die Tuer, danach die freiliegende Hardware.
-E an der Tuer schliesst sie; Raumtueren schliessen nach dem Durchgehen.
-Escape fuehrt zurueck.
-F5 behaelt Raum und Etage, im Ego-Modus auch Position und Blickrichtung.
-Intro einmal pro Browser-Tab; Einstellungen -> Einfahrt ansehen zum Wiederholen.
+Browser mode: ROOT starten.cmd or node server.cjs
+Address: http://127.0.0.1:18473/
+Requires Node.js 24 (verified: 24.22.1); packaged desktop needs no separate Node.
 
-Sechs Racks pro Raum, vier Serverraeume pro Untergeschoss.
-Start mit einem Serverraum und Flur. Weitere Raeume und Etagen einzeln bauen.
-Naechster Serverraum ab 20 Mio. Credits / 30 Minuten, Untergeschoss ab 500 Mio. / 2 Stunden.
-Kosten und Bauzeit steigen. Racks und Anlagen danach separat installieren.
-Bestehende Staende behalten ihre bisher zugaenglichen Flaechen.
-Zentrale Kuehlung ab Sektor 4, USV ab 6, Stromverteilung ab 8.
-Technikraeume muessen vorher gebaut werden.
-Alle Anlagen haben endliche Kapazitaeten und Betriebskosten.
+The introduction returns to the web dashboard. Choose Enter room to walk in 3D.
+WASD moves, mouse drag/arrows turn, E interacts. Escape returns.
+F5 retains the room, floor and an explicitly started walkthrough's position.
+Settings -> Language switches German/English and can replay/disable the intro.
 
-Sicherungen: data/save.json und data/save.backup.json.
-Persoenliche Daten werden nicht in Git aufgenommen.
-Die vollstaendige aktuelle Dokumentation steht in README.md.
+Browser saves: data/save.json and data/save.backup.json.
+Installed 1.5.0 profiles keep their original ROOT Cyberbunker folder for compatibility.
+Use Settings -> Desktop & updates -> Open data folder for the actual location.
+Personal saves are excluded from Git and releases. See README.md for full documentation.

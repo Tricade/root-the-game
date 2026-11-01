@@ -1,8 +1,8 @@
 blank_issues_enabled: true
 contact_links:
   - name: Contribution guide
-    url: https://github.com/Tricade/root-the-game/blob/main/CONTRIBUTING.md
+    url: https://github.com/Tricade/root-network-os/blob/main/CONTRIBUTING.md
     about: How to develop, test, translate or contribute original assets.
   - name: Security policy
-    url: https://github.com/Tricade/root-the-game/security/policy
+    url: https://github.com/Tricade/root-network-os/security/policy
     about: Read this before reporting vulnerabilities or sharing sensitive details.

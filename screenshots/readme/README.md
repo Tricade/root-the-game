@@ -1,8 +1,8 @@
 # README media
 
-These are real application captures made for the ROOT README on 2026-10-30. They use an isolated synthetic `ROOT / OPERATIONS` demonstration save, never a personal network. The runtime source is the construction integration at `b4d2682`; ordinary interface captures use English. Room ownership, equipment, contracts, research, assignments and faults are valid demonstration presets rendered by the normal application.
+These are real application captures made for the ROOT · Network OS README. The interface gallery was recorded on 2026-10-30 using the construction integration at `b4d2682` and an isolated synthetic `ROOT / OPERATIONS` demonstration save, never a personal network. Ordinary interface captures use English. Room ownership, equipment, contracts, research, assignments and faults are valid demonstration presets rendered by the normal application.
 
-`arrival.webp` is a 101-frame capture of the actual bunker arrival sequence, encoded as an animated WebP for a smaller download. The first and last frames have a short hold for readability. `arrival-poster.jpg` is the original first captured frame. The README uses the poster when reduced motion is requested and also links it directly. No generated scene has been substituted for a runtime capture.
+`arrival.webp` was refreshed on 2026-11-01 for version 1.5.1. It contains 51 actual Electron presentation frames of the English bunker arrival with the **root. / NETWORK OS** wordmark. Frame durations follow the capture timestamps, with a short first/last hold for readability. The isolated capture hides achievement toasts only while recording. `arrival-poster.jpg` is a frame from the entrance approach. The README uses the poster when reduced motion is requested and also links it directly. No generated scene has been substituted for a runtime capture.
 
 `wordmark.svg`, `facts.svg` and `support.svg` are original, editable SVG documentation graphics. They have no remote fonts, scripts or external image references. The application captures retain the component provenance described in [NOTICE.md](../../NOTICE.md).
 

@@ -1,9 +1,13 @@
 'use strict';
+const BRAND = require('./brand.js');
 
 // Keep publication/build sources and personal saves out of installed apps.
 module.exports = {
   appId: 'io.github.tricade.root',
-  productName: 'ROOT Cyberbunker',
+  // 26.18.0 derives the DEB payload directory from productName. Keep the
+  // existing native Linux path so 1.5.0's updater can relaunch its executable.
+  // The launcher entry and running application use the current visible brand.
+  productName: process.platform === 'linux' ? BRAND.legacyProfileName : BRAND.productName,
   executableName: 'root-cyberbunker',
   copyright: 'Copyright © Tricade and ROOT contributors',
   directories: { output: 'dist', buildResources: 'desktop/assets' },
@@ -37,7 +41,7 @@ module.exports = {
     {
       provider: 'github',
       owner: 'Tricade',
-      repo: 'root-the-game',
+      repo: BRAND.repository,
       channel: 'latest',
       releaseType: 'release',
     },
@@ -56,7 +60,7 @@ module.exports = {
     allowElevation: true,
     allowToChangeInstallationDirectory: true,
     deleteAppDataOnUninstall: false,
-    shortcutName: 'ROOT Cyberbunker',
+    shortcutName: BRAND.productName,
   },
   portable: { artifactName: 'ROOT-${version}-windows-${arch}-portable.${ext}' },
   linux: {
@@ -65,6 +69,7 @@ module.exports = {
       { target: 'deb', arch: ['x64'] },
     ],
     syncDesktopName: true,
+    desktop: { entry: { Name: BRAND.productName } },
     icon: 'desktop/assets/icon.png',
     category: 'Game',
     maintainer: 'Tricade <6281655+Tricade@users.noreply.github.com>',

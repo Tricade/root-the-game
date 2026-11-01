@@ -1,3 +1,6 @@
+import '../brand.js';
+const BRAND = globalThis.ROOTBrand;
+
 /** 3D world. The per-view context owns scene resources and mutable interaction state. */
 export function createRoomWorld(sceneContext) {
   function markup() {
@@ -569,12 +572,11 @@ export function createRoomWorld(sceneContext) {
     sceneContext.arrivalOverlay = document.createElement('div');
     sceneContext.arrivalOverlay.className = 'room-arrival-overlay';
     sceneContext.arrivalOverlay.hidden = true;
-    sceneContext.arrivalOverlay.innerHTML =
-      '<div><span>ROOT / UNDERGROUND OPERATIONS</span><h2>CYBERBUNKER</h2><p data-arrival-caption>Zugangsschleuse</p></div><button type="button" data-arrival-skip>Überspringen · Esc</button><div class="arrival-progress"><i></i></div>';
+    sceneContext.arrivalOverlay.innerHTML = `<div class="arrival-brand" aria-label="${BRAND.title}"><span>UNDERGROUND OPERATIONS</span><h2>${BRAND.wordmark}<b>.</b></h2><p class="arrival-brand-label">${BRAND.label}</p><p data-arrival-caption>Zugangsschleuse</p></div><button type="button" data-arrival-skip>Überspringen · Esc</button><div class="arrival-progress"><i></i></div>`;
     sceneContext.shell.appendChild(sceneContext.arrivalOverlay);
     sceneContext.arrivalOverlay
       .querySelector('[data-arrival-skip]')
-      .addEventListener('click', sceneContext.finishArrival);
+      .addEventListener('click', () => sceneContext.finishArrival());
     sceneContext.shell
       .querySelector('[data-room-enter]')
       .addEventListener('click', sceneContext.startExploration);

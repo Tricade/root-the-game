@@ -34,7 +34,7 @@ Personal saves, generated logs and local tools must remain untracked. Keep third
 Replace the placeholder owner in this example:
 
 ```sh
-git remote add github https://github.com/YOUR_ACCOUNT/root.git
+git remote add github https://github.com/YOUR_ACCOUNT/root-network-os.git
 git push --set-upstream github main
 ```
 

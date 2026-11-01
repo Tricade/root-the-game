@@ -1,6 +1,7 @@
 'use strict';
 
 const path = require('node:path');
+const BRAND = require('../brand.js');
 const { APP_URL, isAppUrl, isAppPage, externalUrl } = require('./security.cjs');
 
 function createWindow({ BrowserWindow, session, shell, hidden = false }) {
@@ -11,7 +12,7 @@ function createWindow({ BrowserWindow, session, shell, hidden = false }) {
     minHeight: 700,
     show: false,
     backgroundColor: '#101211',
-    title: 'ROOT Cyberbunker',
+    title: BRAND.title,
     icon: path.join(__dirname, 'assets', 'icon.png'),
     autoHideMenuBar: true,
     webPreferences: {

@@ -179,9 +179,18 @@
           v + (a.role === 'engineer' ? 0.83 : 1) * a.level * (a.focus === 'income' ? 1.08 : 1),
         0,
       );
-      const modePerformance = s.servers
-        .filter((server) => server.status === 'online')
-        .reduce((v, a) => v + (a.mode === 'performance' ? 0.03 : a.mode === 'eco' ? -0.015 : 0), 0);
+      // A fleet average is bounded independently of fleet size. Switched-off or
+      // disconnected hardware cannot lend a mode bonus to the remaining nodes.
+      const productive = s.servers.filter((server) =>
+        serverLinkState(s, server, hardware.get(server.rackId)?.rack),
+      );
+      const modePerformance = productive.length
+        ? productive.reduce(
+            (sum, server) =>
+              sum + (server.mode === 'performance' ? 0.03 : server.mode === 'eco' ? -0.015 : 0),
+            0,
+          ) / productive.length
+        : 0;
       const heatFactor = clamp(1 - heat / 190, 0.52, 1);
       const loadFactor = clamp(1 - Math.max(0, load - 0.62) * 0.42, 0.55, 1);
       const operationFactor =

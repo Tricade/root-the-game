@@ -52,7 +52,7 @@
         s.research += m.researchPerSecond * dt;
         if (s.jobs.length) {
           for (const j of s.jobs)
-            j.work = Math.min(j.totalWork, j.work + (m.jobRates[j.id] || 0) * dt);
+            j.work = clamp(j.work + Math.max(0, m.jobRates[j.id] || 0) * dt, 0, j.totalWork);
           const done = s.jobs.filter((j) => j.work >= j.totalWork);
           if (done.length) {
             for (const j of done) {
@@ -76,6 +76,16 @@
         s.timers.event -= dt;
         s.timers.history -= dt;
         if (s.timers.offer <= 0) {
+          // Pending offers are not obligations. A full, entirely infeasible
+          // automatic queue must not permanently prevent new business.
+          if (s.policies.autocontract && !s.jobs.length && s.offers.length === MAX.offers) {
+            const fit = s.offers.some(
+              (job) =>
+                job.load <= m.capacity * 0.98 &&
+                (job.kind !== 'ai' || job.gpuDemand <= m.gpuCapacity),
+            );
+            if (!fit) s.offers.shift();
+          }
           if (s.offers.length < MAX.offers) s.offers.push(makeJob(s));
           s.timers.offer = 38 + rand(s) * 34;
         }

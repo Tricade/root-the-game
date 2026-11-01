@@ -46,7 +46,7 @@
     function openMajorIncident(s) {
       const available = s.servers.filter((x) => serverLinkState(s, x));
       const failedCount = s.servers.filter((x) => x.status === 'failed').length;
-      if (!available.length || failedCount >= RESILIENCE_MAX.incidentAffected) return false;
+      if (!available.length) return false;
       const remainingAffected = RESILIENCE_MAX.incidentAffected - failedCount;
       const upsCoverage = getMetrics(s).upsCoverage;
       const powerReduction = 0.65 * upsCoverage;
@@ -73,7 +73,7 @@
                 available.length,
                 upsCoverage >= 0.95 ? 1 : remainingAffected,
               )
-            : 1,
+            : Math.min(1, remainingAffected),
         );
       const content = {
         power: {
@@ -97,6 +97,10 @@
             'Forschung und Auftragsstände sind gefährdet; ein gespeicherter Betriebsstand kann ungesicherte Fortschritte kosten.',
         },
       }[kind];
+      // Damage containment limits additional damaged hardware, not the chance
+      // of an incident. Keeping two broken nodes must never buy immunity.
+      if (!affected.length)
+        affected = s.servers.filter((server) => server.status === 'failed').slice(0, 2);
       for (const server of affected) {
         server.condition = Math.min(
           server.condition,

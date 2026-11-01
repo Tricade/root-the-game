@@ -3,6 +3,7 @@ import { createUIFoundation } from './ui/foundation.js';
 import { createChromeUI } from './ui/chrome.js';
 import { createOverviewUI } from './ui/overview.js';
 import { createWorkforceUI } from './ui/workforce.js';
+import { createPersonnelUI } from './ui/personnel.js';
 import { createWorkloadsUI } from './ui/workloads.js';
 import { createBusinessUI } from './ui/business.js';
 import { createOperationsUI } from './ui/operations.js';
@@ -105,7 +106,9 @@ import { createRoom } from './room.js';
     const a = agentOperations();
     return (
       a.agents
-        .map((x) => x.id + ':' + (x.assignment?.kind || '') + ':' + (x.cooldown > 0))
+        .map(
+          (x) => x.id + ':' + (x.assignment?.kind || '') + ':' + (x.cooldown > 0) + ':' + x.absent,
+        )
         .join('|') +
       '|' +
       a.effects.map((x) => x.kind).join(',')
@@ -349,6 +352,7 @@ import { createRoom } from './room.js';
   };
   Object.assign(ctx, createChromeUI(ctx));
   Object.assign(ctx, createOverviewUI(ctx));
+  Object.assign(ctx, createPersonnelUI(ctx));
   Object.assign(ctx, createWorkforceUI(ctx));
   Object.assign(ctx, createWorkloadsUI(ctx));
   Object.assign(ctx, createBusinessUI(ctx));
@@ -466,7 +470,7 @@ import { createRoom } from './room.js';
     render();
     if (modal) {
       if (modal.type.startsWith('hardware-')) ctx.closeModal();
-      else if (action === 'buyServer' || action === 'recruitAgent')
+      else if (action === 'buyServer' || action === 'recruitAgent' || action === 'pinCandidate')
         ctx.openModal(modal.type, modal.extra);
       else if (
         [
@@ -475,6 +479,8 @@ import { createRoom } from './room.js';
           'repairServer',
           'resolveIncident',
           'dispatchAgent',
+          'hireCandidate',
+          'dismissAgent',
         ].includes(action)
       )
         ctx.closeModal();

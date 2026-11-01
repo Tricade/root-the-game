@@ -1,3 +1,5 @@
+import { workloadArt } from './workload-art.js';
+
 /** workloads UI: reads current state through the controller context. */
 export function createWorkloadsUI(ctx) {
   function jobsView() {
@@ -11,7 +13,7 @@ export function createWorkloadsUI(ctx) {
       `<section class="panel">${ctx.panelHeader('In Bearbeitung', `<span class="tag">${ctx.state.jobs.length} / ${m.jobLimit} AUFTRÄGE</span>`)}<div class="stats-strip"><div><span>GPU belegt / nutzbar</span><strong>${ctx.stat('gpuUsed')} / ${ctx.stat('gpuCapacity')}</strong></div><div><span>Freie Kapazität</span><strong>${ctx.stat('freeCapacity')} CU</strong></div><div><span>Gemeinsamer Durchsatz</span><strong>${ctx.stat('work')} / s</strong></div><div><span>Abgeschlossen</span><strong>${ctx.fmt(ctx.state.counters.jobs)}</strong></div></div>${ctx.jobRows()}</section><div class="section-heading"><h2>Verfügbare Aufträge <span class="muted">/ ${ctx.state.offers.length}</span></h2><p>Angebote bleiben verfügbar · Aktualisierung in ${ctx.stat('offerEta')}</p></div><div class="card-grid">${ctx.state.offers
         .map(
           (j) =>
-            `<section class="offer-card"><div class="offer-card-top"><span class="job-title-icon">${ctx.icon(ctx.kindIcons[j.kind])}</span><span class="tag">${ctx.kindNames[j.kind]}</span></div><h3>${ctx.esc(j.title)}</h3><p>${ctx.esc(j.client)}</p><p class="policy-explainer">${Object.entries(
+            `<section class="offer-card">${workloadArt(j.kind)}<div class="offer-card-top"><span class="job-title-icon">${ctx.icon(ctx.kindIcons[j.kind])}</span><span class="tag">${ctx.kindNames[j.kind]}</span></div><h3>${ctx.esc(j.title)}</h3><p>${ctx.esc(j.client)}</p><p class="policy-explainer">${Object.entries(
               ctx.E.jobResources(j),
             )
               .filter(([, v]) => v > 0)
@@ -40,7 +42,7 @@ export function createWorkloadsUI(ctx) {
         'Verbessere die Architektur deines Netzwerks – Stufe für Stufe.',
         `<span class="tag blue">${ctx.icon('research')}${ctx.stat('research')} FORSCHUNGSPUNKTE</span>`,
       ) +
-      `<div class="card-grid">${ctx.E.catalog.research.map((r) => `<section class="research-card"><div class="research-top"><div class="research-icon">${ctx.icon(researchIcons[r.id])}</div><span class="tag">STUFE ${ctx.state.upgrades[r.id] || 0}</span></div><h3>${ctx.esc(r.name)}</h3><p>${ctx.esc(r.description)}</p><div class="research-effect">Dauerhaft aktiv · Ausbau bleibt erhalten</div>${ctx.actionButton('buyResearch', `${ctx.icon('plus')}Erforschen · ${ctx.fmt(ctx.E.cost(ctx.state, 'research', r.id))} FP`, { id: r.id }, '', 'research', r.id)}</section>`).join('')}</div><div class="section-heading"><h2>Erfolge & Meilensteine</h2><p>${ctx.pendingAchievements().length ? ctx.pendingAchievements().length + ' Belohnungen verfügbar' : 'Deine nächsten Ziele'}</p></div><div class="achievement-grid">${ctx.E.catalog.achievements.map((a) => `<div class="achievement ${ctx.state.achievements[a.id] ? 'claimed' : ctx.state.achievementUnlocks?.[a.id] || a.check(ctx.state) ? 'available' : ''}">${ctx.icon('trophy')}<div class="achievement-copy"><h3>${ctx.esc(a.name)}</h3><p>${ctx.esc(a.description)}</p></div>${ctx.state.achievements[a.id] ? '<span class="tag">ERREICHT</span>' : ctx.actionButton('claimAchievement', `${ctx.icon('coins')}+${ctx.fmt(a.reward)} CR`, { id: a.id }, 'small')}</div>`).join('')}</div>`
+      `<div class="card-grid">${ctx.E.catalog.research.map((r) => `<section class="research-card">${workloadArt(r.id, true)}<div class="research-top"><div class="research-icon">${ctx.icon(researchIcons[r.id])}</div><span class="tag">STUFE ${ctx.state.upgrades[r.id] || 0}</span></div><h3>${ctx.esc(r.name)}</h3><p>${ctx.esc(r.description)}</p><div class="research-effect">Dauerhaft aktiv · Ausbau bleibt erhalten</div>${ctx.actionButton('buyResearch', `${ctx.icon('plus')}Erforschen · ${ctx.fmt(ctx.E.cost(ctx.state, 'research', r.id))} FP`, { id: r.id }, '', 'research', r.id)}</section>`).join('')}</div><div class="section-heading"><h2>Erfolge & Meilensteine</h2><p>${ctx.pendingAchievements().length ? ctx.pendingAchievements().length + ' Belohnungen verfügbar' : 'Deine nächsten Ziele'}</p></div><div class="achievement-grid">${ctx.E.catalog.achievements.map((a) => `<div class="achievement ${ctx.state.achievements[a.id] ? 'claimed' : ctx.state.achievementUnlocks?.[a.id] || a.check(ctx.state) ? 'available' : ''}">${ctx.icon('trophy')}<div class="achievement-copy"><h3>${ctx.esc(a.name)}</h3><p>${ctx.esc(a.description)}</p></div>${ctx.state.achievements[a.id] ? '<span class="tag">ERREICHT</span>' : ctx.actionButton('claimAchievement', `${ctx.icon('coins')}+${ctx.fmt(a.reward)} CR`, { id: a.id }, 'small')}</div>`).join('')}</div>`
     );
   }
 

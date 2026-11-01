@@ -27,8 +27,9 @@
         def = PROJECTS[p.kind];
       if (!agent || !def) return { enabled: false, reason: 'Unbekannter Projektauftrag.', cost: 0 };
       const cost = Math.ceil(180 * Math.sqrt(agent.level) * (def.duration / 1800));
-      const reason =
-        agent.assignment || s.operations.projects.some((x) => x.agentId === agent.id)
+      const reason = !ctx.agentAvailable(s, agent)
+        ? 'Dieser Agent wartet sich selbst und kehrt automatisch zurück.'
+        : agent.assignment || s.operations.projects.some((x) => x.agentId === agent.id)
           ? 'Dieser Agent ist bereits im Einsatz.'
           : agent.cooldownUntil > s.time
             ? 'Dieser Agent benötigt eine Einsatzpause.'
@@ -81,7 +82,14 @@
     }
     function advanceProjects(s, dt = 1) {
       s.operations.projects = s.operations.projects.filter((p) => {
-        if (ctx.globalIncident(s)) return true;
+        if (
+          ctx.globalIncident(s) ||
+          !ctx.agentAvailable(
+            s,
+            s.agents.find((a) => a.id === p.agentId),
+          )
+        )
+          return true;
         p.remaining = Math.max(0, p.remaining - dt);
         if (p.remaining) return true;
         s.research += p.research;

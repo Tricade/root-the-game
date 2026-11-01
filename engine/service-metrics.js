@@ -9,18 +9,16 @@
     const { clamp, RESOURCES, fraction, zeroResources } = ctx;
     function serviceMetrics(s, base, hardware) {
       const services = ctx.serviceSnapshot(s, hardware);
-      const active = s.agents.filter(
-        (a) => !a.assignment && !s.operations?.projects?.some((p) => p.agentId === a.id),
-      );
+      const active = s.agents.filter((a) => ctx.agentProductive(s, a));
       const engineers = active
         .filter((a) => a.role === 'engineer')
-        .reduce((sum, a) => sum + a.level, 0);
+        .reduce((sum, a) => sum + a.level * ctx.agentEffects(a).care, 0);
       const analysts = active
         .filter((a) => a.role === 'analyst')
-        .reduce((sum, a) => sum + a.level, 0);
+        .reduce((sum, a) => sum + a.level * ctx.agentEffects(a).research, 0);
       const researchFocus = active
         .filter((a) => a.focus === 'research')
-        .reduce((sum, a) => sum + a.level, 0);
+        .reduce((sum, a) => sum + a.level * ctx.agentEffects(a).research, 0);
       const temperature =
         services.rooms.reduce((sum, r) => sum + r.temperature * r.racks, 0) /
         Math.max(1, s.facility.racks.length);
@@ -61,8 +59,7 @@
           ctx.catalog.servers[a.type].power * a.level * (s.policies.autorepair ? 0.012 : 0.006),
         0,
       );
-      const personnel =
-        s.agents.reduce((sum, a) => sum + 0.007 * Math.pow(a.level, 0.65), 0) + services.crewCost;
+      const personnel = s.agents.reduce((sum, a) => sum + ctx.agentWage(a), 0) + services.crewCost;
       const efficiency =
         1 - (0.25 * (s.upgrades.automation || 0)) / ((s.upgrades.automation || 0) + 12);
       const upkeep =
@@ -81,7 +78,10 @@
         1 +
         Math.min(
           0.25,
-          active.reduce((sum, a) => sum + a.level * (a.focus === 'income' ? 2 : 1), 0) / 200,
+          active.reduce(
+            (sum, a) => sum + a.level * (a.focus === 'income' ? 2 : 1) * ctx.agentEffects(a).work,
+            0,
+          ) / 200,
         );
       const workPerSecond =
         workBase *

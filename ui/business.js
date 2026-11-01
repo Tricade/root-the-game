@@ -1,6 +1,11 @@
 /** Customer portfolio UI. One selected room keeps even large facilities manageable. */
 export function createBusinessUI(ctx) {
   let selectedRoom = null;
+  function managerLabel(a) {
+    const op = ctx.agentOperations().agents.find((x) => x.id === a.id);
+    const status = op?.absent ? 'Selbstwartung' : op?.assignment ? 'Im Einsatz' : '';
+    return ctx.esc(a.name) + (status ? ' · ' + ctx.esc(ctx.tr(status)) : '');
+  }
   const resourceNames = {
     cpu: 'CPU',
     ram: 'RAM / GB',
@@ -49,7 +54,7 @@ export function createBusinessUI(ctx) {
               `<option value="${k}" ${room.profile === k ? 'selected' : ''}>${ctx.tr(name)}</option>`,
           )
           .join('')}</select>`,
-      )}${field('reserve', 'Reserve für Ausfälle und Projekte', `<select class="select">${[0, 0.2, 0.35].map((v) => `<option value="${v}" ${room.reserve === v ? 'selected' : ''}>${v * 100} %</option>`).join('')}</select>`)}${button('configureServiceRoom', 'Umstellung prüfen')}</div><p class="policy-explainer">Passende Spezialisierung spart 10 % Ressourcen. Eine Umstellung halbiert die Versorgung zwei Minuten lang. Reserve begrenzt neue Zusagen; sie erzeugt keine zusätzliche Hardware.</p><p data-room-change>${room.changeRemaining ? ctx.duration(room.changeRemaining) : ''}</p><div class="business-controls">${field('manager', 'Teamleitung', `<select class="select"><option value="">Keine Teamleitung</option>${ctx.state.agents.map((a) => `<option value="${a.id}" ${room.managerId === a.id ? 'selected' : ''}>${ctx.esc(a.name)}</option>`).join('')}</select>`)}${button('assignManager', 'Teamleitung zuweisen')}${button('hireCrew', 'Team erweitern')}</div><p>Teams: <strong>${ctx.fmt(room.crew)}</strong> · Kundenplätze: <strong>${ctx.fmt(room.crewCapacity)}</strong></p><p class="policy-explainer">Ein Team betreut 24 Einheiten. Erfahrene Teamleitungen erhöhen die Betreuung; sie können jeweils nur einen Raum leiten. Personal verursacht laufende Kosten.</p></div></section>` +
+      )}${field('reserve', 'Reserve für Ausfälle und Projekte', `<select class="select">${[0, 0.2, 0.35].map((v) => `<option value="${v}" ${room.reserve === v ? 'selected' : ''}>${v * 100} %</option>`).join('')}</select>`)}${button('configureServiceRoom', 'Umstellung prüfen')}</div><p class="policy-explainer">Passende Spezialisierung spart 10 % Ressourcen. Eine Umstellung halbiert die Versorgung zwei Minuten lang. Reserve begrenzt neue Zusagen; sie erzeugt keine zusätzliche Hardware.</p><p data-room-change>${room.changeRemaining ? ctx.duration(room.changeRemaining) : ''}</p><div class="business-controls">${field('manager', 'Teamleitung', `<select class="select"><option value="">Keine Teamleitung</option>${ctx.state.agents.map((a) => `<option value="${a.id}" ${room.managerId === a.id ? 'selected' : ''}>${managerLabel(a)}</option>`).join('')}</select>`)}${button('assignManager', 'Teamleitung zuweisen')}${button('hireCrew', 'Team erweitern')}</div><p>Teams: <strong>${ctx.fmt(room.crew)}</strong> · Kundenplätze: <strong>${ctx.fmt(room.crewCapacity)}</strong></p><p class="policy-explainer">Ein Team betreut 24 Einheiten. Erfahrene Teamleitungen erhöhen die Betreuung; sie können jeweils nur einen Raum leiten. Personal verursacht laufende Kosten. Während eines Einsatzes oder einer Selbstwartung pausiert der Teamleitungsbonus.</p></div></section>` +
       supplyCard(room) +
       `<div class="card-grid business-service-grid">${room.groups.map((g) => serviceCard(room, g, model.services[g.kind])).join('')}</div>` +
       `<div class="helper-card"><h3>Verträge sind Zusagen.</h3><p>Neue Kunden benötigen zehn Minuten Vorbereitung und einmalige Einrichtungskosten. Verträge laufen drei Tage und verlängern sich auf Wunsch. Bei Engpässen sinkt der Umsatz. Premium bringt 15 % mehr, verlangt Reserve und reduziert bei Ausfällen die Zahlung zusätzlich. Forschung und Projektarbeit nutzen die verbleibende Leistung.</p><button class="button" data-nav="jobs">Zusätzliche Projekte ansehen</button></div></div>`

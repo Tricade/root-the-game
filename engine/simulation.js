@@ -37,6 +37,7 @@
         const dt = Math.min(1, remaining);
         remaining -= dt;
         s.time += dt;
+        context.advancePersonnel(s, s.time - dt);
         advanceTemperatures(s, dt);
         const r = s.resilience;
         const incidentAtStart = Boolean(r.incident);
@@ -175,22 +176,19 @@
           r.agentEffects.diagnoseRemaining = Math.max(0, r.agentEffects.diagnoseRemaining - dt);
           r.agentEffects.optimizeRemaining = Math.max(0, r.agentEffects.optimizeRemaining - dt);
           for (const agent of s.agents) {
-            if (!agent.assignment) continue;
+            if (!agent.assignment || !context.agentAvailable(s, agent)) continue;
             agent.assignment.remaining = Math.max(0, agent.assignment.remaining - dt);
             if (agent.assignment.remaining <= 0) finishAgentMission(s, agent);
           }
         }
         if (!incidentAtStart && !r.incident && !operationFinished && s.time >= r.graceUntil) {
-          const activeAgents = s.agents.filter(
-            (agent) =>
-              !agent.assignment && !s.operations?.projects?.some((p) => p.agentId === agent.id),
-          );
+          const activeAgents = s.agents.filter((agent) => context.agentProductive(s, agent));
           const engineers = activeAgents
             .filter((agent) => agent.role === 'engineer')
-            .reduce((sum, agent) => sum + agent.level, 0);
+            .reduce((sum, agent) => sum + agent.level * context.agentEffects(agent).care, 0);
           const maintenanceFocus = activeAgents
             .filter((agent) => agent.focus === 'maintenance')
-            .reduce((sum, agent) => sum + agent.level, 0);
+            .reduce((sum, agent) => sum + agent.level * context.agentEffects(agent).care, 0);
           const coolingLevels = s.upgrades.cooling || 0;
           const wearPerHour = Math.max(
             0.002,

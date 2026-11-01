@@ -1,4 +1,5 @@
 import '../brand.js';
+import { portraitMarkup } from './personnel-art.js';
 const BRAND = globalThis.ROOTBrand;
 
 /** chrome UI: reads current state through the controller context. */
@@ -53,18 +54,7 @@ export function createChromeUI(ctx) {
   }
 
   function avatar(agent) {
-    let hash = [...agent.name].reduce((h, c) => (h * 31 + c.charCodeAt(0)) >>> 0, 3);
-    let cells = '';
-    for (let y = 0; y < 5; y++)
-      for (let x = 0; x < 3; x++) {
-        hash = (hash * 1664525 + 1013904223) >>> 0;
-        if (hash % 3) {
-          cells += `<rect x="${x * 4}" y="${y * 4}" width="3" height="3" rx=".6"/>`;
-          if (x < 2)
-            cells += `<rect x="${(4 - x) * 4}" y="${y * 4}" width="3" height="3" rx=".6"/>`;
-        }
-      }
-    return `<div class="agent-avatar ${ctx.roleClass(agent.role)}"><svg viewBox="0 0 19 19" fill="${agent.role === 'analyst' ? '#9cbce0' : agent.role === 'engineer' ? '#d9bc84' : '#b3d690'}" aria-hidden="true">${cells}</svg></div>`;
+    return portraitMarkup(agent, ctx.roleClass(agent.role));
   }
 
   function shell() {

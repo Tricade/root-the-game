@@ -79,7 +79,10 @@
             def.base * (1 + Math.min(20, Math.max(0, s.sector - 1)) * 0.12),
           );
           let reason;
-          if (paused) reason = 'Krisenbetrieb: Einsätze beginnen erst nach der Wiederherstellung.';
+          if (!context.agentAvailable(s, agent))
+            reason = 'Dieser Agent wartet sich selbst und kehrt automatisch zurück.';
+          else if (paused)
+            reason = 'Krisenbetrieb: Einsätze beginnen erst nach der Wiederherstellung.';
           else if (s.operations?.projects.some((p) => p.agentId === agent.id))
             reason = 'Dieser Agent arbeitet an einem Langzeitprojekt.';
           else if (assignment)
@@ -103,7 +106,7 @@
             reason,
           };
         });
-        return { id: agent.id, assignment, cooldown, options };
+        return { id: agent.id, assignment, cooldown, options, ...context.agentHealth(s, agent) };
       });
       return {
         effects: activeEffects,

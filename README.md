@@ -97,6 +97,9 @@ _Real application captures using a separate synthetic demonstration save. Click 
 ### Agents, contracts and research
 
 - **Three agent roles:** operators accelerate project work, analysts produce research, and technicians support maintenance and reliability. Each agent has a level, trait and configurable focus.
+- **Robot recruitment agency:** six applicants every 30 minutes, one permanent shortlist slot, and 64 original robot portraits. Appearance and abilities are rolled independently and persist across reloads.
+- **Strengths with trade-offs:** compare a unit's process, research, maintenance and leadership traits against its running costs and drawbacks before activation. Existing staff retain their abilities when loading an older save.
+- **Automatic self-maintenance:** individual units can temporarily go offline. Their normal contributions and paid assignments pause; other systems continue, rewards are preserved, and units return automatically. [Recruitment and balance rules →](docs/personnel.md)
 - **Special assignments:** network diagnostics reduce risk, load optimization improves throughput, and research assignments deliver research points. The assigned agent contributes nothing to normal operations until completion, then has a cooldown. Matching roles complete their specialist work more efficiently.
 - **Competing contracts:** monitoring, migration, audits, optimization, recovery, research and AI work share finite capacity. Rewards, reputation and research arrive when a contract finishes. Automatic acceptance can favor a balanced mix, income or research.
 - **Five repeatable research tracks:** routing, cooling, contract analysis, workflow efficiency and knowledge synthesis improve the whole fleet. Achievements provide separately claimable credit rewards.

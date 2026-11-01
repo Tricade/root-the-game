@@ -35,6 +35,7 @@ export function createTelemetryUI(ctx) {
 
   function updateLive() {
     if (!ctx.state) return;
+    ctx.updatePersonnel?.();
     ctx.updateBusiness?.();
     ctx.updateOperations?.();
     if (ctx.view === 'facility') ctx.updateCentralTelemetry();
@@ -127,7 +128,8 @@ export function createTelemetryUI(ctx) {
                 : 'SYSTEM ONLINE',
       achievementCount: achievements.length,
       achievementReward: ctx.fmt(achievements.reduce((sum, x) => sum + x.reward, 0)),
-      activeAgentCount: ctx.state.agents.length - a.agents.filter((x) => x.assignment).length,
+      activeAgentCount:
+        ctx.state.agents.length - a.agents.filter((x) => x.assignment || x.absent).length,
     });
     ctx.$$('[data-stat]').forEach((el) => {
       const raw = String(values[el.dataset.stat] ?? ''),
@@ -186,13 +188,20 @@ export function createTelemetryUI(ctx) {
     });
     a.agents.forEach((agent) => {
       ctx.$$(`[data-agent-status="${agent.id}"]`).forEach((el) => {
-        el.textContent = agent.assignment
-          ? agent.assignment.label +
-            ' · ' +
-            (r.safetyMode ? 'pausiert' : ctx.duration(agent.assignment.remaining))
-          : agent.cooldown > 0
-            ? 'Nächster Sondereinsatz in ' + ctx.duration(agent.cooldown)
-            : 'Für Sondereinsatz verfügbar';
+        el.textContent = agent.absent
+          ? ctx.tr('Selbstwartung · Rückkehr in') +
+            ' ' +
+            ctx.duration(agent.remaining) +
+            (agent.assignment
+              ? ' · ' + ctx.tr(agent.assignment.label) + ' · ' + ctx.tr('pausiert')
+              : '')
+          : agent.assignment
+            ? agent.assignment.label +
+              ' · ' +
+              (r.safetyMode || agent.absent ? 'pausiert' : ctx.duration(agent.assignment.remaining))
+            : agent.cooldown > 0
+              ? 'Nächster Sondereinsatz in ' + ctx.duration(agent.cooldown)
+              : 'Für Sondereinsatz verfügbar';
       });
       ctx.$$(`[data-agent-progress="${agent.id}"]`).forEach((el) => {
         if (agent.assignment)

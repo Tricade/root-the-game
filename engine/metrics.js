@@ -115,13 +115,13 @@
       const usedCapacity = s.jobs.reduce((a, j) => a + j.load, 0);
       const load = capacity > 0 ? usedCapacity / capacity : 1;
       const hardwareFactor = hardwareWeight > 0 ? hardwareWeighted / hardwareWeight : 0;
-      const activeAgents = s.agents.filter((a) => !a.assignment);
+      const activeAgents = s.agents.filter((a) => context.agentProductive(s, a));
       const engineers = activeAgents
         .filter((a) => a.role === 'engineer')
-        .reduce((v, a) => v + a.level, 0);
+        .reduce((v, a) => v + a.level * context.agentEffects(a).care, 0);
       const maintenanceFocus = activeAgents
         .filter((a) => a.focus === 'maintenance')
-        .reduce((v, a) => v + a.level, 0);
+        .reduce((v, a) => v + a.level * context.agentEffects(a).care, 0);
       heat = Math.max(
         0,
         heat * cooling * (1 - Math.min(0.32, engineers * 0.035 + maintenanceFocus * 0.018)) +
@@ -155,7 +155,7 @@
         centralUpkeep;
       const ops = activeAgents
         .filter((a) => a.role === 'operator')
-        .reduce((v, a) => v + a.level, 0);
+        .reduce((v, a) => v + a.level * context.agentEffects(a).work, 0);
       const incomeMult = context.automationMultiplier(upgrades.automation || 0);
       const incomePerSecond =
         onlineServers === 0 || (s.resilience && s.resilience.incident)
@@ -165,7 +165,7 @@
             upkeep;
       const analysts = activeAgents
         .filter((a) => a.role === 'analyst')
-        .reduce((v, a) => v + a.level, 0);
+        .reduce((v, a) => v + a.level * context.agentEffects(a).research, 0);
       const contained = Boolean(s.resilience && s.resilience.incident);
       const researchPerSecond =
         (onlineServers > 0 && !contained ? 1 : 0) *
@@ -174,11 +174,15 @@
           analysts * 0.026 +
           activeAgents
             .filter((a) => a.focus === 'research')
-            .reduce((v, a) => v + a.level * 0.012, 0)) *
+            .reduce((v, a) => v + a.level * 0.012 * context.agentEffects(a).research, 0)) *
         Math.pow(1.15, Math.min(MAX_RESEARCH_LEVEL, upgrades.synthesis || 0));
       const workBase = activeAgents.reduce(
         (v, a) =>
-          v + (a.role === 'engineer' ? 0.83 : 1) * a.level * (a.focus === 'income' ? 1.08 : 1),
+          v +
+          (a.role === 'engineer' ? 0.83 : 1) *
+            a.level *
+            (a.focus === 'income' ? 1.08 : 1) *
+            context.agentEffects(a).work,
         0,
       );
       // A fleet average is bounded independently of fleet size. Switched-off or

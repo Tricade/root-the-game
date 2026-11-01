@@ -24,11 +24,12 @@ export function createOverviewUI(ctx) {
   }
 
   function agentRows() {
+    const operations = ctx.agentOperations();
     return ctx.state.agents
       .slice(0, 4)
       .map(
         (a) =>
-          `<div class="agent-row">${ctx.avatar(a)}<div><div class="agent-name">${ctx.esc(a.name)}<span class="level-pill">LVL ${a.level}</span></div><div class="agent-role">${ctx.E.catalog.roles[a.role].name}</div></div><div class="agent-action"><i class="live-dot"></i>${a.assignment ? ctx.esc(a.assignment.label) : ctx.focusNames[a.focus]}</div></div>`,
+          `<div class="agent-row">${ctx.avatar(a)}<div><div class="agent-name">${ctx.esc(a.name)}<span class="level-pill">LVL ${a.level}</span></div><div class="agent-role">${ctx.E.catalog.roles[a.role].name}</div></div><div class="agent-action"><i class="live-dot"></i>${operations.agents.find((x) => x.id === a.id)?.absent ? ctx.tr('Selbstwartung') : ctx.esc(operations.agents.find((x) => x.id === a.id)?.assignment?.label || ctx.focusNames[a.focus])}</div></div>`,
       )
       .join('');
   }

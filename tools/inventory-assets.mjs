@@ -62,22 +62,27 @@ for (const entry of (await fs.readdir(path.join(pack, 'textures'), { recursive: 
     bytes = await fs.readFile(file),
     name = path.basename(file),
     walnut = name.startsWith('walnut-'),
-    own = name.startsWith('root-');
+    own = name.startsWith('root-'),
+    robot = /^personnel-[1-4]\.png$/.test(name);
   textures.push({
     path: relative(file),
     sha256: hash(bytes),
     bytes: bytes.length,
     provenanceKind: walnut
       ? 'external-cc0-material-texture'
-      : own
-        ? 'root-original'
-        : 'supplied-copy',
+      : robot
+        ? 'root-generated-ui'
+        : own
+          ? 'root-original'
+          : 'supplied-copy',
     licenseSPDX: 'CC0-1.0',
     source: walnut
       ? 'https://polyhaven.com/a/american_walnut_veneer'
-      : own
-        ? 'tools/asset-generator/build_interiors.mjs'
-        : 'User-supplied Root_Assets 1.0',
+      : robot
+        ? 'asset-pack/docs/personnel-prompts.json'
+        : own
+          ? 'tools/asset-generator/build_interiors.mjs'
+          : 'User-supplied Root_Assets 1.0',
   });
 }
 const inventory = {

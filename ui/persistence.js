@@ -251,7 +251,7 @@ export function createPersistenceUI(ctx, platform = globalThis) {
     const emptyServerAfterConflict =
       remoteRead && ctx.remoteRevision === 'empty' && conflicting && Boolean(stored);
     ctx.state =
-      remoteState && (Number(localVersion) < 3 || conflicting)
+      remoteState && (Number(localVersion) < 4 || conflicting)
         ? remoteState
         : emptyServerAfterConflict
           ? ctx.E.createState(Math.floor(Math.random() * 0xffffffff))

@@ -8,7 +8,7 @@ const { randomUUID, createHash } = require('node:crypto');
 const ROOT = __dirname;
 const PORT = Number.parseInt(process.env.ROOT_PORT || '18473', 10);
 const DATA_DIR = path.resolve(process.env.ROOT_DATA_DIR || path.join(ROOT, 'data'));
-const API_VERSION = 3;
+const API_VERSION = 4;
 const RELEASE = require('./package.json').version;
 const MAX_BODY = 16 * 1024 * 1024;
 const { createStaticFiles } = require('./server/static-files.cjs');
@@ -213,7 +213,7 @@ function createServer(options = {}) {
           parsed &&
           typeof parsed === 'object' &&
           !Array.isArray(parsed) &&
-          (parsed.version === 1 || parsed.version === 2)
+          (parsed.version === 1 || parsed.version === 2 || parsed.version === 3)
         ) {
           return send(res, 409, {
             ok: false,
@@ -230,7 +230,7 @@ function createServer(options = {}) {
           parsed &&
           typeof parsed === 'object' &&
           !Array.isArray(parsed) &&
-          parsed.version === 3
+          parsed.version === 4
         ) {
           const facility = parsed.facility;
           if (

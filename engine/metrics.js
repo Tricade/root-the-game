@@ -270,7 +270,7 @@
       const powerRiskReductionPct = upsCoverage * 65;
       const incidentActive = Boolean(s.resilience && s.resilience.incident);
       const safetyMode = incidentActive;
-      return {
+      const metrics = {
         capacity,
         usedCapacity,
         load,
@@ -314,6 +314,7 @@
         gpuLoad: gpu.load,
         jobBlockedReasons: gpu.blocked,
       };
+      return s.business ? context.serviceMetrics(s, metrics, hardware) : metrics;
     }
     return { getMetrics };
   };

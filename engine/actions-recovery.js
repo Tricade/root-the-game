@@ -124,6 +124,24 @@
         s.credits -= option.cost;
         s.resilience.parts -= option.parts;
         incident.resolution = option.key;
+        // A local recovery cannot roll back work earned elsewhere while its
+        // technician is busy. Apply only the quoted affected share at start.
+        if (incident.scope) {
+          if (effect.restoreSnapshot) {
+            const backup = s.resilience.backup,
+              share = context.incidentShare(s),
+              saved = new Map(backup.jobs.map((j) => [j.id, j.work]));
+            s.research = Math.max(0, s.research + (backup.protectedResearch - s.research) * share);
+            for (const job of s.jobs)
+              job.work = Math.max(0, job.work + ((saved.get(job.id) || 0) - job.work) * share);
+          } else {
+            applyWorkLosses(s, effect.workLosses);
+            if (effect.research !== undefined) s.research = effect.research;
+          }
+          effect.restoreSnapshot = false;
+          effect.workLosses = [];
+          delete effect.research;
+        }
         s.resilience.operation = {
           kind: incident.kind,
           label: option.label,

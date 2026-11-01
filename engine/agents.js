@@ -25,7 +25,7 @@
           label: 'Optimierungsprofil aktiv',
           remaining: r.agentEffects.optimizeRemaining,
         });
-      const paused = Boolean(r.incident);
+      const paused = context.globalIncident(s);
       const agents = s.agents.map((agent) => {
         const cooldown = Math.max(0, agent.cooldownUntil - s.time);
         const assignment = agent.assignment

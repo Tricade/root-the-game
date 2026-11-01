@@ -91,6 +91,11 @@ function incidentFixture(kind, withBackup = false) {
     }
     const incident = getResilience(state).incident;
     if (incident?.kind === kind) {
+      // These fixtures exercise legacy global recovery promises; scoped v4
+      // behavior has separate dependency and local-recovery regression tests.
+      delete state.resilience.incident.scope;
+      delete state.resilience.incident.rackId;
+      delete state.resilience.incident.roomId;
       incidentCache.set(cacheKey, structuredClone(state));
       return state;
     }
@@ -170,7 +175,7 @@ test('new state exposes a read-only resilience model and consequential starting 
   ]) {
     assert.ok(Object.hasOwn(model, field), `read model exposes ${field}`);
   }
-  assert.equal(state.version, 3);
+  assert.equal(state.version, 4);
   assert.deepEqual(state, before, 'reading resilience must not change persisted state');
   assert.equal(model.online, state.servers.length);
   assert.equal(model.failed, 0);
@@ -200,7 +205,7 @@ test('v1 migration preserves purchased assets and progress while adding a fresh 
   old.upgrades = { routing: 4, cooling: 2 };
   old.policies = { power: 'eco', autocontract: true, autorepair: false, priority: 'income' };
   const migrated = normalizeState(old);
-  assert.equal(migrated.version, 3);
+  assert.equal(migrated.version, 4);
   assert.equal(migrated.networkName, old.networkName);
   for (const key of ['credits', 'research', 'reputation', 'lifetimeCredits', 'sector', 'time'])
     assert.equal(migrated[key], old[key], `${key} survives migration`);
@@ -324,7 +329,7 @@ test('v2 migration packs legacy assets into physical hardware without inventing 
   old.servers[0].mode = 'eco';
   old.jobs[0].work = 18.25;
   const migrated = normalizeState(old);
-  assert.equal(migrated.version, 3);
+  assert.equal(migrated.version, 4);
   for (const key of [
     'networkName',
     'credits',
@@ -392,7 +397,7 @@ test('v2 migration preserves an active repair and its remaining maintenance time
   const priorOperation = structuredClone(old.resilience.operation);
   const priorCredits = old.credits;
   const migrated = normalizeState(old);
-  assert.equal(migrated.version, 3);
+  assert.equal(migrated.version, 4);
   assert.deepEqual(migrated.resilience.operation, priorOperation);
   assert.equal(
     migrated.servers.find((server) => server.id === priorOperation.serverId)?.status,
@@ -422,7 +427,7 @@ test('v2 migration preserves an active major crisis and already-damaged assets',
   ).condition;
   const priorCredits = old.credits;
   const migrated = normalizeState(old);
-  assert.equal(migrated.version, 3);
+  assert.equal(migrated.version, 4);
   assert.deepEqual(migrated.resilience.incident, priorIncident);
   assert.equal(
     migrated.servers.find((server) => server.id === priorIncident.affected[0]).status,
@@ -459,7 +464,7 @@ test('v2 roundtrip keeps failed nodes, operation progress, snapshot, and protect
   assert.equal(act(state, 'repairServer', { id: state.servers[0].id, method: 'patch' }).ok, true);
   const modelBefore = getResilience(state);
   const restored = normalizeState(JSON.parse(JSON.stringify(state)));
-  assert.equal(restored.version, 3);
+  assert.equal(restored.version, 4);
   assert.equal(restored.servers[0].status, 'repairing');
   assert.equal(restored.resilience.operation.remaining, state.resilience.operation.remaining);
   assert.equal(
@@ -1182,7 +1187,7 @@ test('diagnosis and optimization effects have their promised magnitude and durat
   );
   assert.equal(
     getMetrics(diagnosis).riskPerHour,
-    initialRisk - 12,
+    Math.max(1, initialRisk - 12),
     'diagnosis reduces risk by 12 percentage points per hour',
   );
   advance(diagnosis, 1200);

@@ -4,6 +4,7 @@ import { createChromeUI } from './ui/chrome.js';
 import { createOverviewUI } from './ui/overview.js';
 import { createWorkforceUI } from './ui/workforce.js';
 import { createWorkloadsUI } from './ui/workloads.js';
+import { createBusinessUI } from './ui/business.js';
 import { createProtectionUI } from './ui/protection.js';
 import { createDialogsUI } from './ui/dialogs.js';
 import { createTelemetryUI } from './ui/telemetry.js';
@@ -115,6 +116,7 @@ import { createRoom } from './room.js';
   const serverStatusNames = { ...R.statusNames, failed: 'Ausgefallen' };
 
   navs.push(['facility', 'layers', 'Gebäude & Technik']);
+  navs.push(['business', 'jobs', 'Kunden & Betrieb']);
 
   // The controller owns shared UI state. Getters keep async callbacks and mounted
   // feature modules on the same current save rather than capturing an old object.
@@ -346,6 +348,7 @@ import { createRoom } from './room.js';
   Object.assign(ctx, createOverviewUI(ctx));
   Object.assign(ctx, createWorkforceUI(ctx));
   Object.assign(ctx, createWorkloadsUI(ctx));
+  Object.assign(ctx, createBusinessUI(ctx));
   Object.assign(ctx, createProtectionUI(ctx));
   Object.assign(ctx, createDialogsUI(ctx));
   Object.assign(ctx, createTelemetryUI(ctx));
@@ -365,6 +368,7 @@ import { createRoom } from './room.js';
     inbox: ctx.inboxView,
     log: ctx.logView,
     facility: ctx.facilityView,
+    business: ctx.businessView,
   };
 
   function render() {

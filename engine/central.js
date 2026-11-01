@@ -26,7 +26,8 @@
     }
 
     function activeRackIds(s) {
-      if (s.resilience.incident) return new Set();
+      if (context.globalIncident(s)) return new Set();
+      const racks = new Map(s.facility.racks.map((r) => [r.id, r]));
       return new Set(
         s.servers
           .filter(
@@ -35,6 +36,7 @@
               server.bootRemaining <= 0 &&
               server.status === 'online' &&
               server.condition > 0 &&
+              !context.incidentAffects(s, server, racks.get(server.rackId)) &&
               !(s.facility.operation && s.facility.operation.rackId === server.rackId),
           )
           .map((server) => server.rackId),

@@ -68,7 +68,7 @@
           server.bootRemaining <= 0 &&
           server.status === 'online' &&
           server.condition > 0 &&
-          !s.resilience.incident &&
+          !context.incidentAffects(s, server, row.rack) &&
           !(s.facility.operation && s.facility.operation.rackId === server.rackId);
         const demand =
           available && !row.rack.disabledPorts.includes(server.port)
@@ -157,7 +157,7 @@
         server.bootRemaining <= 0 &&
         !rack.disabledPorts.includes(server.port) &&
         !(s.facility.operation && s.facility.operation.rackId === rack.id) &&
-        !s.resilience.incident,
+        !context.incidentAffects(s, server, rack),
       );
     }
 

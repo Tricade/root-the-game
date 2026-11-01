@@ -43,6 +43,7 @@ function fleet(count) {
 test('large eco fleets advance work and unpowered modes do not change production', () => {
   const s = fleet(100);
   assert(E.getMetrics(s).workPerSecond > 0);
+  s.jobs[0].totalWork = 1e9;
   E.advance(s, 1);
   assert(s.jobs[0].work > 0);
   for (const server of s.servers.slice(1)) server.powered = false;
@@ -80,6 +81,8 @@ test('two outstanding hardware faults do not prevent further incidents', () => {
   s.resilience.graceUntil = 0;
   s.policies.autorepair = false;
   s.policies.power = 'performance';
+  s.rng = 1;
+  s.servers.forEach((n) => (n.condition = 10));
   for (const server of s.servers.slice(0, 2)) {
     server.status = 'failed';
     server.condition = 42;

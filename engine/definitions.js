@@ -210,6 +210,14 @@
       'recovery',
       'research',
       'ai',
+      'database',
+      'backup',
+      'loadtest',
+      'archive',
+      'containers',
+      'security',
+      'replication',
+      'rendering',
     ];
     const MAX = { servers: 10000, agents: 12, jobs: 8, offers: 6, events: 3, log: 80, history: 60 };
     const MAX_RESEARCH_LEVEL = 1000;

@@ -115,9 +115,11 @@ export function createDialogsUI(ctx) {
       'hardware-shop': 'Hardware einbauen',
       'hardware-move': 'Umsetzen / Umpatchen',
       'hardware-confirm': 'Infrastruktur ändern',
+      'business-confirm': 'Betriebsauftrag prüfen',
     };
     let content = '';
-    if (type === 'servers' || type === 'agents') content = shop(type);
+    if (type === 'business-confirm') content = ctx.businessConfirm(extra);
+    else if (type === 'servers' || type === 'agents') content = shop(type);
     else if (type.startsWith('hardware-')) content = ctx.R.modal(type, extra);
     else if (type === 'sector') content = sectorModal();
     else if (type === 'repair') content = ctx.repairModal(extra);

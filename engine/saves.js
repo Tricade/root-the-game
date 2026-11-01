@@ -20,7 +20,12 @@
       if (input.version === 1) state = packLegacyHardware(normalizeV2(migrateV1(input)));
       else if (input.version === 2) state = packLegacyHardware(normalizeV2(input));
       else if (input.version === 3) state = normalizeV3(input);
+      else if (input.version === 4) state = context.normalizeV4(input);
       else throw new Error('Diese Netzwerkstand-Version wird nicht unterstützt.');
+      if (input.version < 4) {
+        context.migrateBusiness(state);
+        state.version = 4;
+      }
       updateAchievementUnlocks(state);
       return state;
     }

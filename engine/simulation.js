@@ -48,7 +48,17 @@
         const m = getMetrics(s);
         const earned = m.incomePerSecond * dt;
         s.credits += earned;
-        s.lifetimeCredits += earned;
+        s.lifetimeCredits += Math.max(0, earned);
+        if (s.business) {
+          s.business.revenue = Math.min(1e15, s.business.revenue + m.serviceIncome * dt);
+          s.business.wages = Math.min(1e15, s.business.wages + m.personnelCost * dt);
+          s.business.delivered = Math.min(1e15, s.business.delivered + m.serviceDelivered * dt);
+          s.business.unserved = Math.min(
+            1e15,
+            s.business.unserved + (m.serviceUnits - m.serviceDelivered) * dt,
+          );
+          context.advanceServices(s, dt);
+        }
         s.research += m.researchPerSecond * dt;
         if (s.jobs.length) {
           for (const j of s.jobs)
@@ -79,10 +89,11 @@
           // Pending offers are not obligations. A full, entirely infeasible
           // automatic queue must not permanently prevent new business.
           if (s.policies.autocontract && !s.jobs.length && s.offers.length === MAX.offers) {
-            const fit = s.offers.some(
-              (job) =>
-                job.load <= m.capacity * 0.98 &&
-                (job.kind !== 'ai' || job.gpuDemand <= m.gpuCapacity),
+            const fit = s.offers.some((job) =>
+              s.business
+                ? context.jobsFit(s, job, m.freeResources)
+                : job.load <= m.capacity * 0.98 &&
+                  (job.kind !== 'ai' || job.gpuDemand <= m.gpuCapacity),
             );
             if (!fit) s.offers.shift();
           }
@@ -150,8 +161,11 @@
           }
         }
         const constructionMessage = context.advanceConstruction(s, dt);
-        if (constructionMessage) constructionCompleted.push(constructionMessage);
-        if (!incidentAtStart && !r.incident) {
+        if (constructionMessage) {
+          constructionCompleted.push(constructionMessage);
+          context.syncServiceRooms(s);
+        }
+        if (!context.globalIncident(s)) {
           r.agentEffects.diagnoseRemaining = Math.max(0, r.agentEffects.diagnoseRemaining - dt);
           r.agentEffects.optimizeRemaining = Math.max(0, r.agentEffects.optimizeRemaining - dt);
           for (const agent of s.agents) {

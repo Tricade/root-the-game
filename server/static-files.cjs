@@ -78,6 +78,12 @@ function createStaticFiles(root) {
     ],
     ['/vendor/SkeletonUtils.js', ['vendor/SkeletonUtils.js', 'text/javascript; charset=utf-8']],
     ['/engine/definitions.js', ['engine/definitions.js', 'text/javascript; charset=utf-8']],
+    ['/engine/personnel.js', ['engine/personnel.js', 'text/javascript; charset=utf-8']],
+    [
+      '/engine/personnel-market.js',
+      ['engine/personnel-market.js', 'text/javascript; charset=utf-8'],
+    ],
+    ['/engine/save-personnel.js', ['engine/save-personnel.js', 'text/javascript; charset=utf-8']],
     ['/engine/state.js', ['engine/state.js', 'text/javascript; charset=utf-8']],
     ['/engine/economy.js', ['engine/economy.js', 'text/javascript; charset=utf-8']],
     ['/engine/building.js', ['engine/building.js', 'text/javascript; charset=utf-8']],

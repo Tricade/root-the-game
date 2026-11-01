@@ -73,9 +73,8 @@
         free = zeroResources(),
         committedFree = zeroResources();
       const byRoom = new Map(s.business.rooms.map((r) => [r.roomId, r]));
-      const busy = new Set((s.operations?.projects || []).map((p) => p.agentId));
       const agents = new Map(
-        s.agents.filter((a) => !a.assignment && !busy.has(a.id)).map((a) => [a.id, a]),
+        s.agents.filter((a) => ctx.agentProductive(s, a)).map((a) => [a.id, a]),
       );
       let gross = 0,
         crewCost = 0,
@@ -103,7 +102,7 @@
               0.2,
               Math.log2(1 + manager.level) * 0.025 +
                 (manager.role === 'operator' ? 0.025 : 0) +
-                (manager.trait === 'zuverlässig' ? 0.02 : 0),
+                ctx.agentEffects(manager).management,
             )
           : 1;
         const crewCapacity = room.crew * 24 * management;

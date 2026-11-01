@@ -50,7 +50,7 @@ export function decoratePlantUnit(
       unit,
       'STROMVERTEILUNG',
       'ATS / 3~ 400 V',
-      [0, 1.99, front],
+      [0, 1.97, front],
       1.0,
       0.105,
     ).userData.fasciaRole = 'heading';
@@ -59,7 +59,7 @@ export function decoratePlantUnit(
         unit,
         source < 0 ? 'QUELLE A' : 'QUELLE B',
         'L1 · L2 · L3',
-        [source * 0.29, 1.65, 0.361],
+        [source * 0.29, 1.64, 0.361],
         0.43,
         0.075,
       ).userData.fasciaRole = 'source';

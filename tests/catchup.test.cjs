@@ -4,6 +4,41 @@ const test = require('node:test'),
   path = require('node:path');
 const { Worker } = require('node:worker_threads');
 const E = require('../engine');
+
+test('worker preserves paid research and staffed customer setup, completing both exactly once', async (t) => {
+  const source = E.createState(929);
+  source.credits = 1e7;
+  source.research = 100;
+  source.resilience.graceUntil = 1e9;
+  source.policies.autobackup = false;
+  assert.ok(E.act(source, 'upgradeServer', { id: source.servers[0].id }).ok);
+  const roomId = source.business.rooms[0].roomId;
+  const lead = source.customers.leads.find(
+    (l) => E.quoteCustomer(source, 'acceptCustomerLead', { id: l.id, roomId }).enabled,
+  );
+  assert.ok(lead, 'Real request must fit the upgraded start server');
+  assert.ok(E.act(source, 'acceptCustomerLead', { id: lead.id, roomId }).ok);
+  assert.ok(source.customers.contracts.some((c) => c.stage === 'setup' && c.agentId));
+  assert.ok(E.act(source, 'buyResearch', { id: 'network-fabric' }).ok);
+  const expected = E.normalizeState(source),
+    report = E.advance(expected, 1200);
+  const worker = new Worker(path.join(__dirname, 'helpers/worker-adapter.cjs'));
+  t.after(() => worker.terminate());
+  const actual = await new Promise((resolve, reject) => {
+    worker.on('error', reject);
+    worker.on('message', (data) => {
+      if (data.type === 'complete') resolve(data);
+      else if (data.type === 'error') reject(new Error(data.message));
+    });
+    worker.postMessage({ state: source, seconds: 1200 });
+  });
+  assert.deepEqual(actual.state, expected);
+  assert.deepEqual(actual.report, { ...report, capped: false });
+  assert.equal(actual.state.lab.project, null);
+  assert.ok(actual.state.lab.owned.includes('network-fabric'));
+  assert.equal(actual.state.customers.contracts.filter((c) => c.stage === 'setup').length, 0);
+  assert.equal(actual.report.researchCompleted.length, 1);
+});
 test('worker uses the production script order and matches deterministic direct progression', async (t) => {
   const source = E.createState(826);
   source.credits = 1e6;

@@ -16,6 +16,7 @@
         jobsCompleted = 0,
         eventCount = 0;
       const constructionCompleted = [];
+      const researchCompleted = [];
       return {
         state,
         get progress() {
@@ -28,6 +29,7 @@
           jobsCompleted += report.jobsCompleted;
           eventCount += report.eventCount;
           constructionCompleted.push(...report.constructionCompleted);
+          researchCompleted.push(...report.researchCompleted);
           return elapsed < total;
         },
         report() {
@@ -38,6 +40,7 @@
             jobsCompleted,
             eventCount,
             constructionCompleted,
+            researchCompleted,
             capped: seconds > 43200,
           };
         },

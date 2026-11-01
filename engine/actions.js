@@ -25,6 +25,7 @@
         context.applyPersonnel,
         context.applyOperations,
         context.applySupply,
+        context.applyResearch,
         context.applyCustomers,
         context.applyServices,
         applyInfrastructure,

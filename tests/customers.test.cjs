@@ -142,6 +142,15 @@ test('automatic sales respect the exact hourly fee and cash reserve, never charg
   const request = lead(s);
   const q = E.quoteCustomer(s, 'acceptCustomerLead', { id: request.id, roomId: 'room-1' });
   assert.equal(q.cost, 252, 'decimal service fees do not round up by a stray credit');
+  const reserved = E.getBusinessModel(s).rooms[0].reserved;
+  const probe = structuredClone(s);
+  assert.ok(E.act(probe, 'acceptCustomerLead', { id: request.id, roomId: 'room-1' }).ok);
+  const after = E.getBusinessModel(probe).rooms[0].reserved;
+  for (const [key, need] of Object.entries(q.resources))
+    assert.ok(
+      Math.abs(after[key] - reserved[key] - need) < 1e-9,
+      'Quoted ' + key + ' must match the actual commitment',
+    );
   s.customers.autoAccept = true;
   s.customers.autoAssign = false;
   s.customers.budget = 251;

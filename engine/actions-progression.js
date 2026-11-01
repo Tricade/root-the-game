@@ -6,7 +6,7 @@
 })(typeof globalThis !== 'undefined' ? globalThis : this, function () {
   'use strict';
   return function createDomain(context) {
-    const { catalog, MAX_RESEARCH_LEVEL, clamp } = context;
+    const { catalog, clamp } = context;
     // Late domain calls avoid circular module imports; no simulation state is stored here.
     const addLog = (...args) => context.addLog(...args);
     const autoContract = (...args) => context.autoContract(...args);
@@ -57,28 +57,6 @@
         s.offers = s.offers.filter((v) => v.id !== j.id);
         addLog(s, 'system', `Auftrag abgelehnt: ${j.title}.`);
         return { ok: true, message: 'Auftrag aus der Liste entfernt.' };
-      }
-      if (action === 'buyResearch') {
-        const u = catalog.research.find((v) => v.id === payload.id);
-        if (!u) return fail('Diese Forschung ist unbekannt.');
-        if (context.globalIncident(s))
-          return fail(
-            'Forschung bleibt während der offenen Daten- oder Versorgungskrise gesperrt.',
-          );
-        if ((s.upgrades[u.id] || 0) >= MAX_RESEARCH_LEVEL)
-          return fail('Diese Forschungsreihe hat ihre höchste Stufe erreicht.');
-        const price = cost(s, 'research', u.id);
-        if (s.research < price)
-          return fail(`Es fehlen ${Math.ceil(price - s.research)} Forschungspunkte.`);
-        s.research -= price;
-        if (s.resilience.backup)
-          s.resilience.backup.protectedResearch = Math.max(
-            0,
-            s.resilience.backup.protectedResearch - price,
-          );
-        s.upgrades[u.id] = (s.upgrades[u.id] || 0) + 1;
-        addLog(s, 'success', `Forschung abgeschlossen: ${u.name}, Stufe ${s.upgrades[u.id]}.`);
-        return { ok: true, message: 'Forschung abgeschlossen.' };
       }
       if (action === 'setPolicy') {
         const { key, value } = payload;

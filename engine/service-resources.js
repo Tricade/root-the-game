@@ -61,14 +61,17 @@
       }
       return rooms;
     }
-    function groupDemand(room, group, includePending = false) {
+    function groupDemand(room, group, includePending = false, efficiency = 1) {
       const needs = SERVICES[group.kind].needs;
       const units = group.units + (includePending ? group.pending : 0);
       const profile = room.profile === SERVICES[group.kind].profile ? 0.9 : 1;
-      return Object.fromEntries(RESOURCES.map((key) => [key, (needs[key] || 0) * units * profile]));
+      return Object.fromEntries(
+        RESOURCES.map((key) => [key, (needs[key] || 0) * units * profile * efficiency]),
+      );
     }
     function serviceSnapshot(s, hardware, customers = ctx.customerReadModel(s)) {
       const premiums = customers.premiums;
+      const research = ctx.researchEffects(s);
       const physical = roomResources(s, hardware),
         rows = [],
         free = zeroResources(),
@@ -90,8 +93,8 @@
           demand = zeroResources(),
           reserved = zeroResources();
         for (const group of room.groups) {
-          const active = groupDemand(room, group),
-            committed = groupDemand(room, group, true);
+          const active = groupDemand(room, group, false, research.serviceEfficiency),
+            committed = groupDemand(room, group, true, research.serviceEfficiency);
           for (const key of RESOURCES) {
             demand[key] += active[key];
             reserved[key] += committed[key];
@@ -99,15 +102,7 @@
         }
         const units = room.groups.reduce((sum, g) => sum + g.units, 0);
         const manager = agents.get(room.managerId);
-        const management = manager
-          ? 1 +
-            Math.min(
-              0.2,
-              Math.log2(1 + manager.level) * 0.025 +
-                (manager.role === 'operator' ? 0.025 : 0) +
-                ctx.agentEffects(manager).management,
-            )
-          : 1;
+        const management = ctx.managerMultiplier(manager);
         const crewCapacity = room.crew * 24 * management;
         const crewFactor =
           Math.min(1, crewCapacity / Math.max(1, units)) * (room.changeRemaining > 0 ? 0.5 : 1);
@@ -117,7 +112,7 @@
         const consumed = zeroResources(),
           groups = [];
         for (const group of room.groups) {
-          const needs = groupDemand(room, group);
+          const needs = groupDemand(room, group, false, research.serviceEfficiency);
           // Only resources needed by this service can block it. A missing GPU
           // must not stop hosting or archives sharing the same room.
           const supplied =
@@ -144,6 +139,7 @@
           revenue +=
             group.units *
             SERVICES[group.kind].fee *
+            (group.kind === 'inference' ? research.inferenceIncome : 1) *
             trust *
             Math.max(0, supplied * premium - compensation);
         }

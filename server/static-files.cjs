@@ -102,6 +102,16 @@ function createStaticFiles(root) {
       ['engine/customer-lifecycle.js', 'text/javascript; charset=utf-8'],
     ],
     ['/engine/save-customers.js', ['engine/save-customers.js', 'text/javascript; charset=utf-8']],
+    [
+      '/engine/research-catalog.js',
+      ['engine/research-catalog.js', 'text/javascript; charset=utf-8'],
+    ],
+    ['/engine/research.js', ['engine/research.js', 'text/javascript; charset=utf-8']],
+    ['/engine/save-research.js', ['engine/save-research.js', 'text/javascript; charset=utf-8']],
+    [
+      '/engine/agent-development.js',
+      ['engine/agent-development.js', 'text/javascript; charset=utf-8'],
+    ],
     ['/engine/definitions.js', ['engine/definitions.js', 'text/javascript; charset=utf-8']],
     ['/engine/personnel.js', ['engine/personnel.js', 'text/javascript; charset=utf-8']],
     [

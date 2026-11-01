@@ -34,7 +34,8 @@
       } else {
         const accepted =
           supplied >= 0.95 &&
-          ctx.personnelHash(s.seed, c.id + '/retention/' + Math.floor(s.time / 86400)) % 100 < 65;
+          ctx.personnelHash(s.seed, c.id + '/retention/' + Math.floor(s.time / 86400)) % 100 <
+            100 * (0.65 + ctx.researchEffects(s).retentionBonus);
         if (accepted) {
           c.notice = 0;
           c.departure = '';
@@ -113,15 +114,10 @@
             room &&
             !room.changing &&
             (c.stage !== 'setup' ||
-              Object.entries(needs).every(
-                ([key, value]) => room.available[key] >= value * c.units * 0.9,
-              ));
+              Object.keys(needs).every((key) => room.available[key] >= room.reserved[key]));
           if (agent && ctx.agentAvailable(s, agent) && ready) {
             if (c.stage === 'setup') ledgerChanged = true;
-            const speed =
-              Math.min(1.5, 1 + Math.max(0, agent.level - 1) * 0.04) *
-              ctx.agentEffects(agent).work *
-              (ctx.researchEffects?.(s).onboarding || 1);
+            const speed = ctx.customerWorkSpeed(s, agent);
             c.workRemaining = Math.max(0, c.workRemaining - dt * speed);
             if (!c.workRemaining) finishCustomerWork(s, c, supplied);
           }

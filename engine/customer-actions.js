@@ -9,7 +9,8 @@
     function customerQuote(s, action, p = {}) {
       let reason = '',
         cost = 0,
-        duration = 0;
+        duration = 0,
+        resources = {};
       const c = s.customers.contracts.find((c) => c.id === p.id);
       if (action === 'acceptCustomerLead') {
         const lead = s.customers.leads.find((l) => l.id === p.id && l.expiresAt > s.time);
@@ -23,6 +24,7 @@
           reason = q.reason;
           cost = q.cost;
           duration = q.duration;
+          resources = q.resources;
           if (
             !reason &&
             s.customers.contracts.filter((c) => c.roomId === p.roomId).length >=
@@ -66,7 +68,7 @@
           reason = 'Ungültige Kundenautomatik.';
       } else return { enabled: false, reason: 'Unbekannter Kundenauftrag.', cost: 0, duration: 0 };
       if (!reason && s.credits < cost) reason = 'Das verfügbare Budget reicht nicht aus.';
-      return { enabled: !reason, reason, cost, duration };
+      return { enabled: !reason, reason, cost, duration, resources };
     }
     function applyCustomers(s, action, p) {
       if (action === 'contractService')
@@ -110,6 +112,12 @@
           'system',
           `${contract.client}: Vertrag angenommen. Ein Agent muss den Dienst einrichten.`,
         );
+        return {
+          ok: true,
+          message: contract.agentId
+            ? 'Kundenvertrag angenommen. Einrichtung gestartet.'
+            : 'Kundenvertrag angenommen. Einrichtung wartet auf einen verfügbaren Agenten.',
+        };
       }
       if (action === 'assignCustomerAgent') c.agentId = p.agentId;
       if (action === 'supportCustomer' || action === 'retainCustomer') {

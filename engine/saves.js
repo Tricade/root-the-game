@@ -23,6 +23,7 @@
       else if (input.version === 4) state = context.normalizeV4(input);
       else if (input.version === 5) state = context.normalizeV5(input);
       else if (input.version === 6) state = context.normalizeV6(input);
+      else if (input.version === 7) state = context.normalizeV7(input);
       else throw new Error('Diese Netzwerkstand-Version wird nicht unterstützt.');
       if (input.version < 4) {
         context.migrateBusiness(state);
@@ -31,6 +32,7 @@
       }
       if (input.version < 5) context.migratePersonnel(state);
       if (input.version < 6) context.migrateCustomers(state);
+      if (input.version < 7) context.migrateResearch(state);
       updateAchievementUnlocks(state);
       return state;
     }

@@ -155,6 +155,6 @@
       agent.assignment = null;
       agent.cooldownUntil = s.time + 300;
     }
-    return { getAgentOperations, finishAgentMission };
+    return { getAgentOperations, finishAgentMission, missionResearch };
   };
 });

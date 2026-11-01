@@ -26,7 +26,10 @@
       const id = ctx.uid(s, 'customer');
       return {
         id,
-        client: CUSTOMER_NAMES[ctx.personnelHash(s.seed, id) % CUSTOMER_NAMES.length] + ' / ' + id.split('-').at(-1),
+        client:
+          CUSTOMER_NAMES[ctx.personnelHash(s.seed, id) % CUSTOMER_NAMES.length] +
+          ' / ' +
+          id.split('-').at(-1),
         roomId,
         kind,
         units,
@@ -97,8 +100,18 @@
       const kinds = Object.keys(ctx.SERVICES).filter((key) => s.sector >= ctx.SERVICES[key].sector);
       const kind = kinds[Math.floor(random() * kinds.length)];
       const needs = ctx.SERVICES[kind].needs;
-      const roomCapacity = ctx.serviceSnapshot(s).rooms.reduce((max, room) => Math.max(max,
-        Math.min(...Object.entries(needs).map(([key, demand]) => room.installed[key] / demand))), 0);
+      const roomCapacity = ctx
+        .serviceSnapshot(s)
+        .rooms.reduce(
+          (max, room) =>
+            Math.max(
+              max,
+              Math.min(
+                ...Object.entries(needs).map(([key, demand]) => room.installed[key] / demand),
+              ),
+            ),
+          0,
+        );
       // Enquiries grow with usable hardware, including upgrades, rather than an arbitrary account count.
       const scale = Math.max(1, Math.min(1e6, Math.floor(roomCapacity * 0.15)));
       const id = ctx.uid(s, 'lead');
@@ -156,15 +169,22 @@
       }
       return { premiums, assignments };
     }
-    function getCustomers(s) {
+    function getCustomers(s, options = {}) {
       const contracts = s.customers?.contracts || [];
       return {
         ...s.customers,
-        contracts: contracts.map((c) => ({ ...c })),
+        contracts: options.summaryOnly
+          ? []
+          : contracts
+              .filter((c) => !options.roomId || c.roomId === options.roomId)
+              .map((c) => ({ ...c })),
+        history: (s.customers?.history || []).map((entry) => ({ ...entry })),
         leads: (s.customers?.leads || []).map((l) => ({ ...l })),
         active: contracts.filter((c) => c.stage === 'active').length,
         settingUp: contracts.filter((c) => c.stage === 'setup').length,
         attention: contracts.filter((c) => c.issue || c.notice).length,
+        notices: contracts.filter((c) => c.notice > 0).length,
+        waitingAgents: contracts.filter((c) => c.work && !c.agentId).length,
         units: contracts.filter((c) => c.stage === 'active').reduce((n, c) => n + c.units, 0),
       };
     }

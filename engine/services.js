@@ -22,7 +22,8 @@
         duration = 0,
         reason = '',
         label = 'Betriebsplan ändern',
-        capacity = 0;
+        capacity = 0,
+        resources = {};
       if (action === 'contractService') {
         const def = SERVICES[p.kind],
           units = Number(p.units),
@@ -31,7 +32,14 @@
           reason = 'Ungültige Vertragsmenge.';
         else {
           const reserve = 1 - room.reserve,
-            efficiency = room.profile === def.profile ? 0.9 : 1;
+            efficiency =
+              (room.profile === def.profile ? 0.9 : 1) * ctx.researchEffects(s).serviceEfficiency;
+          resources = ctx.groupDemand(
+            room,
+            { kind: p.kind, units, pending: 0 },
+            false,
+            ctx.researchEffects(s).serviceEfficiency,
+          );
           const projects = ctx.zeroResources();
           for (const job of s.jobs)
             for (const [key, value] of Object.entries(ctx.jobResources(job)))
@@ -94,7 +102,7 @@
           reason = 'Premiumverträge benötigen Reserve und mindestens zwei aktive Knoten.';
       } else return { enabled: false, reason: 'Unbekannter Betriebsauftrag.', cost: 0 };
       if (!reason && s.credits < cost) reason = 'Das verfügbare Budget reicht nicht aus.';
-      return { enabled: !reason, reason, cost, duration, label, capacity };
+      return { enabled: !reason, reason, cost, duration, label, capacity, resources };
     }
     function applyServices(s, action, p) {
       if (
@@ -144,8 +152,8 @@
       for (const room of s.business.rooms)
         room.changeRemaining = Math.max(0, room.changeRemaining - dt);
     }
-    function getBusinessModel(s) {
-      const model = ctx.serviceSnapshot(s);
+    function getBusinessModel(s, metrics = null) {
+      const model = metrics?.serviceModel || ctx.serviceSnapshot(s);
       return {
         ...model,
         services: SERVICES,

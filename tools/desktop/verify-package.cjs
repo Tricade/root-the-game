@@ -7,7 +7,9 @@ const asar = require('@electron/asar');
 
 const resources = path.resolve(process.argv[2]);
 const archive = path.join(resources, 'app.asar');
-const files = asar.listPackage(archive).map((file) => file.replaceAll('\\', '/'));
+const files = asar
+  .listPackage(archive, { isPack: false })
+  .map((file) => file.replaceAll('\\', '/'));
 for (const file of files) {
   assert.ok(
     !/^\/(?:data|tests|tools|screenshots|\.git|\.local-data|\.desktop-build)(?:\/|$)/.test(file),
@@ -33,7 +35,11 @@ assert.equal(metadata.author.name, 'Tricade');
 assert.equal(metadata.author.email, '6281655+Tricade@users.noreply.github.com');
 assert.equal(metadata.version, require('../../package.json').version);
 assert.ok(files.some((file) => file.startsWith('/node_modules/electron-updater/')));
-assert.ok(!files.some((file) => file.startsWith('/node_modules/electron-builder/')));
+for (const name of ['electron-builder', '@electron/asar', '@root-network-os/build-temp', 'temp'])
+  assert.ok(
+    !files.some((file) => file.startsWith('/node_modules/' + name + '/')),
+    'Build-only dependency in runtime: ' + name,
+  );
 for (const file of ['LICENSE.electron.txt', 'LICENSES.chromium.html'])
   assert.ok(fs.existsSync(path.join(resources, '..', file)), 'Missing framework notices: ' + file);
 console.log('Packaged runtime, save exclusion, public identity and framework notices verified.');

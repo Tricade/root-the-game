@@ -51,6 +51,7 @@ export function buildPlantConnections(materials, systemId, units, hasUPS = false
           0.12,
         );
       kit.wallPort(group, x, y, -5.35, !cooling);
+      for (const z of [-4.2, -1.7, 0.8]) kit.support(group, side, y, z, Math.abs(x));
       // The identification plate is mounted on the room-facing duct/header.
       kit.label(group, circuit, [x, y - 0.24, -5.298], 0.24, 0.07);
       for (const unit of row) {
@@ -88,8 +89,6 @@ export function buildPlantConnections(materials, systemId, units, hasUPS = false
         }
       }
     });
-    for (const z of [-4.2, -1.7, 0.8])
-      kit.support(group, side, circuits.length === 3 ? 2.35 : 2.48, z);
   }
   return { group, dispose: kit.dispose };
 }

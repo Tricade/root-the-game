@@ -41,7 +41,10 @@ export function buildSupplyFixtures(materials) {
       );
     }
   }
-  for (const z of [-3.1, 0.2, 3.2]) kit.support(cooling, 1, 2.42, z);
+  for (const z of [-3.1, 0.2, 3.2]) {
+    kit.support(cooling, 1, 2.42, z, 3.58);
+    kit.support(cooling, 1, 2.65, z, 3.83);
+  }
   // Chilled water exchanges heat with room air here. The rectangular outlets
   // enter the raised-floor plenum, rather than pretending a water pipe is a duct.
   kit.box(cooling, [1.7, 0.92, 0.44], [0, 1.05, -5.02], 'room-fan-coil');

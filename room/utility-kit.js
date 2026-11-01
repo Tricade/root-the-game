@@ -137,9 +137,17 @@ export function createUtilityKit(materials) {
     }
     rod(parent, [x, y, z + 0.18], [x, y, z + 0.22], 0.028, steel, 'handwheel-hub');
   }
-  function support(parent, side, y, z) {
+  function support(parent, side, y, z, reach = 3.55) {
     box(parent, [0.03, 0.21, 0.16], [side * 4.075, y - 0.04, z], 'wall-anchor', steel);
-    box(parent, [0.55, 0.035, 0.08], [side * 3.8, y - 0.09, z], 'header-support', steel);
+    const end = reach - 0.12,
+      length = 4.075 - end;
+    box(
+      parent,
+      [length, 0.035, 0.08],
+      [side * (end + length / 2), y - 0.09, z],
+      'header-support',
+      steel,
+    );
   }
   function label(parent, text, position, width = 0.65, height = 0.12, turn = 0) {
     if (typeof document === 'undefined') return;

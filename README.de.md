@@ -141,6 +141,7 @@ Verbindungsflure, Treppen zwischen angrenzenden Etagen, Server- und Technikräum
 
 | Steuerung                                  | Funktion                                                            |
 | :----------------------------------------- | :------------------------------------------------------------------ |
+| Shift + WASD                               | Sprinten                                                            |
 | WASD                                       | Bewegen                                                             |
 | Maus ziehen / Pfeiltasten links und rechts | Umsehen                                                             |
 | E am geschlossenen Rack                    | Tür öffnen                                                          |

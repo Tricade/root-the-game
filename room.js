@@ -130,6 +130,7 @@ export function createRoom({
     lastSessionWrite: 0,
     lastSessionValue: '',
     tr: (text) => window.ROOTI18N?.translate(String(text)) || String(text),
+    serverName: (server) => window.ROOTI18N?.serverName(server) || server.name,
     readingSnapshot: false,
     snapshot: null,
     facilityLayout: () =>

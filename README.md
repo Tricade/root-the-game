@@ -141,6 +141,7 @@ The bunker has connecting corridors, adjacent-floor stairs, server rooms, plant 
 
 | Control                            | Action                                                      |
 | :--------------------------------- | :---------------------------------------------------------- |
+| Shift + WASD                       | Sprint                                                      |
 | WASD                               | Move                                                        |
 | Mouse drag / left and right arrows | Look around                                                 |
 | E on a closed rack                 | Open its door                                               |

@@ -175,15 +175,15 @@ export function createTelemetryUI(ctx) {
                   .find((x) => x.id === b.dataset.id)
                   ?.repairs.find((x) => x.key === b.dataset.method);
       b.disabled = !o?.enabled;
-      b.title = o?.reason || '';
+      b.title = ctx.tr(o?.reason || '');
       const card = b.closest('.protection-option');
       if (o && card) {
         const description = ctx.$('[data-option-description]', card),
           cost = ctx.$('[data-option-cost]', card),
           reason = ctx.$('[data-option-reason]', card);
-        if (description) description.textContent = o.description;
-        if (cost) cost.textContent = ctx.optionSummary(o);
-        if (reason) reason.textContent = o.reason;
+        if (description) description.textContent = ctx.tr(o.description);
+        if (cost) cost.textContent = ctx.tr(ctx.optionSummary(o));
+        if (reason) reason.textContent = ctx.tr(o.reason);
       }
     });
     a.agents.forEach((agent) => {

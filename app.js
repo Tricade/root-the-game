@@ -520,7 +520,7 @@ import { createRoom } from './room.js';
       state
         ? [
             state.networkName,
-            ...state.servers.map((s) => s.name),
+            ...state.servers.filter((s) => !I18N.isGeneratedServerName(s)).map((s) => s.name),
             ...state.agents.map((a) => a.name),
             ...state.facility.racks.map((r) => r.name),
           ]

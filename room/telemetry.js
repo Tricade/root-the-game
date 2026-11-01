@@ -184,7 +184,7 @@ export function createRoomTelemetry(sceneContext) {
         sceneContext.canvas.setAttribute(
           'aria-label',
           sceneContext.tr(
-            `Begehbarer Serverraum: ${sceneContext.rackGroups.size} Racks und ${sceneContext.serverGroups.size} eingebaute Server. WASD bewegen, Maus oder Pfeiltasten drehen, E Gerät öffnen, Escape zurück.`,
+            `Begehbarer Serverraum: ${sceneContext.rackGroups.size} Racks und ${sceneContext.serverGroups.size} eingebaute Server. WASD bewegen, Shift sprinten, Maus oder Pfeiltasten drehen, E Gerät öffnen, Escape zurück.`,
           ),
         );
       const status = resilience.safetyMode

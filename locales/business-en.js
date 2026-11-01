@@ -4,6 +4,13 @@
   if (root) root.RootBusinessEnglish = factory;
 })(typeof globalThis !== 'undefined' ? globalThis : this, function (translate) {
   const pairs = [
+    ['Keine Lieferungen unterwegs.', 'No deliveries in transit.'],
+    ['Ersatzteil unterwegs', 'spare part in transit'],
+    ['Ersatzteile unterwegs', 'spare parts in transit'],
+    ['Standardlieferung', 'Standard delivery'],
+    ['Expresslieferung', 'Express delivery'],
+    ['Ankunft in', 'Arriving in'],
+    ['Lieferfortschritt', 'Delivery progress'],
     ['FP / min', 'RP / min'],
     ['Leitstelle im Raum', 'In-room control console'],
     [

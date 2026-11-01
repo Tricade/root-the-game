@@ -11,6 +11,54 @@
   flex: 1;
   min-width: 150px;
 }
+.business-controls input,
+.business-controls select {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+[data-ops-form] {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.delivery-card {
+  margin-top: 16px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--accent);
+  border-radius: 10px;
+  background: #101810;
+}
+.delivery-card header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  justify-content: space-between;
+}
+.delivery-card p {
+  color: var(--muted);
+  margin: 12px 0;
+}
+.delivery-card p strong {
+  color: var(--text);
+  font-family: var(--mono);
+}
+.delivery-card progress {
+  display: block;
+  width: 100%;
+  height: 6px;
+  accent-color: var(--accent);
+  border: 0;
+  border-radius: 6px;
+  overflow: hidden;
+}
+.delivery-card progress::-webkit-progress-bar {
+  background: #263126;
+}
+.delivery-card progress::-webkit-progress-value {
+  background: var(--accent);
+}
 .business-resources {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
@@ -49,4 +97,9 @@
 .catchup-panel progress {
   width: 100%;
   accent-color: #b9dd82;
+}
+
+/* Size to the available console width, not just the browser viewport. */
+.policy-grid.operations-grid {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
 }

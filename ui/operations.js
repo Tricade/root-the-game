@@ -12,6 +12,16 @@ export function createOperationsUI(ctx) {
     upgradeCentral: 'Zentralanlage ausbauen',
     convertRoomSupply: 'Raumversorgung umbauen',
   };
+  function deliveries(orders) {
+    if (!orders.length)
+      return `<p class="policy-explainer">${ctx.tr('Keine Lieferungen unterwegs.')}</p>`;
+    return orders
+      .map(
+        (order, index) =>
+          `<article class="delivery-card" data-delivery="${index}"><header><strong>${ctx.fmt(order.quantity)} ${ctx.tr(order.quantity === 1 ? 'Ersatzteil unterwegs' : 'Ersatzteile unterwegs')}</strong><span class="tag">${ctx.tr(order.method === 'express' ? 'Expresslieferung' : 'Standardlieferung')}</span></header><p>${ctx.tr('Ankunft in')} <strong data-delivery-eta></strong></p><progress max="100" value="0" aria-label="${ctx.tr('Lieferfortschritt')}"></progress></article>`,
+      )
+      .join('');
+  }
   function operationsView() {
     const o = ctx.E.getOperations(ctx.state),
       rooms = ctx.E.getFacilityLayout(ctx.state).rooms;
@@ -20,7 +30,7 @@ export function createOperationsUI(ctx) {
         'Betriebspläne',
         'Budgets, Lieferungen und Projekte laufen auch während deiner Abwesenheit weiter.',
       ) +
-      `<div class="policy-grid"><section class="panel" data-ops-form="limits">${ctx.panelHeader('Budgets & Reserven')}<div class="panel-body"><div class="business-controls">${[
+      `<div class="policy-grid operations-grid"><section class="panel" data-ops-form="limits">${ctx.panelHeader('Budgets & Reserven')}<div class="panel-body"><div class="business-controls">${[
         ['repair', 'Reparaturen / Stunde'],
         ['backup', 'Backups / Stunde'],
         ['parts', 'Beschaffung / Stunde'],
@@ -39,7 +49,7 @@ export function createOperationsUI(ctx) {
           ['standard', 'Standard · 30 Minuten'],
           ['express', 'Express · 5 Minuten · doppelter Preis'],
         ],
-      )}</div>${button('delivery', 'Bestellung prüfen')}<div data-ops-deliveries></div><p class="policy-explainer">Jeder Serverraum erweitert das Lager. Höchstens zwei Lieferungen können gleichzeitig unterwegs sein.</p></div></section></div>` +
+      )}</div>${button('delivery', 'Bestellung prüfen')}<div class="deliveries">${deliveries(o.orders)}</div><p class="policy-explainer">Jeder Serverraum erweitert das Lager. Höchstens zwei Lieferungen können gleichzeitig unterwegs sein.</p></div></section></div>` +
       `<section class="panel section-spacer">${ctx.panelHeader('Ablaufplan', button('pause', o.paused ? 'Fortsetzen' : 'Pausieren', `data-value="${!o.paused}"`))}<div class="panel-body"><p>Maßnahmen starten nacheinander. Fehlen Geld, Ersatzteile oder Voraussetzungen, wartet der Plan mit einer sichtbaren Begründung. Maximal zwölf Einträge.</p><div class="business-controls" data-ops-form="plan">${select('action', 'Maßnahme', Object.entries(planNames))}<div data-plan-for="upgradeRack" hidden>${select(
         'rackId',
         'Rack',
@@ -193,12 +203,14 @@ export function createOperationsUI(ctx) {
       'stock',
       `${ctx.tr('Ersatzteile im Lager')}: ${ctx.fmt(ctx.state.resilience.parts)} / ${ctx.fmt(o.partsCapacity)}`,
     );
-    put(
-      'deliveries',
-      o.orders
-        .map((x) => `${x.quantity} · ${ctx.duration(Math.max(0, x.arrivalAt - ctx.state.time))}`)
-        .join(' | '),
-    );
+    ctx.$$('.view-content [data-delivery]').forEach((el) => {
+      const order = o.orders[Number(el.dataset.delivery)];
+      if (!order) return;
+      const duration = order.method === 'express' ? 300 : 1800;
+      const remaining = Math.max(0, Math.min(duration, order.arrivalAt - ctx.state.time));
+      el.querySelector('[data-delivery-eta]').textContent = ctx.duration(remaining);
+      el.querySelector('progress').value = 100 * (1 - remaining / duration);
+    });
     put(
       'projects',
       o.projects

@@ -88,10 +88,10 @@
         centralOperatingCost(levels, beforePowerW, s.policies.power);
       const effect =
         system.id === 'cooling'
-          ? `${capacityGainW} W zusätzliche Kühlleistung; danach ${capacityAfterW} W zentral. Auf aktive Racks verteilt.`
+          ? `${capacityGainW} W zusätzliche Kühlleistung; danach ${capacityAfterW} W zentral. Auf angeschlossene aktive Racks verteilt.`
           : system.id === 'ups'
             ? `${capacityGainW} W zusätzliche USV-Leistung; danach ${capacityAfterW} W gesamt. Bei passender Lastabdeckung sinkt die Chance schwerer Stromausfälle um bis zu 65 %; deren Folgen werden gemindert.`
-            : `${capacityGainW} W zusätzliche Gesamtreserve; danach ${capacityAfterW} W zentral. Gleichmäßig auf aktive Racks verteilt.`;
+            : `${capacityGainW} W zusätzliche Gesamtreserve; danach ${capacityAfterW} W zentral. Gleichmäßig auf angeschlossene aktive Racks verteilt.`;
       return {
         label: `${system.name} ausbauen`,
         description: `${price} Credits; ${duration} Sekunden Wartung. ${effect} Laufende Mehrkosten: ${upkeepIncrease.toFixed(3).replace('.', ',')} CR/s; zusätzliche Leistungsaufnahme: ${powerIncreaseW} W.`,

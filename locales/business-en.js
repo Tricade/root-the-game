@@ -4,6 +4,14 @@
   if (root) root.RootBusinessEnglish = factory;
 })(typeof globalThis !== 'undefined' ? globalThis : this, function (translate) {
   const pairs = [
+    [
+      'Zentrale Kühlleistung wird nur auf angeschlossene aktive Racks verteilt. Die Anlage benötigt selbst Strom; Temperaturen sinken allmählich.',
+      'Central cooling capacity is shared only by connected active racks. The plant uses power; temperatures decrease gradually.',
+    ],
+    [
+      'Das zentrale Strombudget wird nur auf angeschlossene aktive Racks verteilt. Lokale Reserve bleibt nur bei Hybridversorgung verfügbar.',
+      'The central power budget is shared only by connected active racks. Local reserve remains available only with hybrid supply.',
+    ],
     ['Keine aktiven Aufträge', 'No active jobs'],
     [
       'Die automatische Vergabe ist aktiv und prüft passende Angebote.',

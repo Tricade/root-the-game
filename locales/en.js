@@ -2005,12 +2005,12 @@
         `${price} credits; ${seconds} seconds of maintenance. ${translate(effect, 'en')} Additional running costs: ${upkeep.replace(',', '.')} credits/s; additional power draw: ${power} W.`,
     ],
     [
-      /^(\d+) W zusätzliche Kühlleistung; danach (\d+) W zentral\. Auf aktive Racks verteilt\.$/,
-      '$1 W more cooling capacity; $2 W total central capacity afterward. Distributed across active racks.',
+      /^(\d+) W zusätzliche Kühlleistung; danach (\d+) W zentral\. Auf (?:angeschlossene )?aktive Racks verteilt\.$/,
+      '$1 W more cooling capacity; $2 W total central capacity afterward. Distributed across connected active racks.',
     ],
     [
-      /^(\d+) W zusätzliche Gesamtreserve; danach (\d+) W zentral\. Gleichmäßig auf aktive Racks verteilt\.$/,
-      '$1 W more total reserve; $2 W total central reserve afterward. Distributed evenly across active racks.',
+      /^(\d+) W zusätzliche Gesamtreserve; danach (\d+) W zentral\. Gleichmäßig auf (?:angeschlossene )?aktive Racks verteilt\.$/,
+      '$1 W more total reserve; $2 W total central reserve afterward. Distributed evenly across connected active racks.',
     ],
     [
       /^(\d+) W zusätzliche USV-Leistung; danach (\d+) W gesamt\. Bei passender Lastabdeckung sinkt die Chance schwerer Stromausfälle um bis zu 65 %; deren Folgen werden gemindert\.$/,

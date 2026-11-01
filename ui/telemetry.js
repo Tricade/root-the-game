@@ -37,6 +37,7 @@ export function createTelemetryUI(ctx) {
     if (!ctx.state) return;
     ctx.updatePersonnel?.();
     ctx.updateBusiness?.();
+    ctx.updateRoomOperations?.();
     ctx.updateOperations?.();
     if (ctx.view === 'facility') ctx.updateCentralTelemetry();
     const m = ctx.E.getMetrics(ctx.state),

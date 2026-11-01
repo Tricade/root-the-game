@@ -1,3 +1,4 @@
+import { consoleNavigation } from '../ui/navigation.js';
 /** 3D exploration. The per-view context owns scene resources and mutable interaction state. */
 export function createRoomExploration(sceneContext) {
   function startExploration(pointer = true, restored = null) {
@@ -90,7 +91,8 @@ export function createRoomExploration(sceneContext) {
     if (document.pointerLockElement === sceneContext.canvas) document.exitPointerLock();
     sceneContext.shell.classList.add('console-open');
     sceneContext.consolePanel.hidden = false;
-    sceneContext.consolePanel.querySelector('[data-room-console-title]').textContent = title;
+    sceneContext.consolePanel.querySelector('[data-room-console-title]').textContent =
+      sceneContext.tr(title);
     sceneContext.consoleContent.scrollTop = 0;
     sceneContext.consoleContent.focus({ preventScroll: true });
   }
@@ -104,11 +106,12 @@ export function createRoomExploration(sceneContext) {
   }
 
   function setConsoleTitle(title, view) {
-    sceneContext.consolePanel.querySelector('[data-room-console-title]').textContent = title;
-    sceneContext.consolePanel.querySelectorAll('[data-nav]').forEach((b) => {
-      b.classList.toggle('active', b.dataset.nav === view);
-      b.setAttribute('aria-current', b.dataset.nav === view ? 'page' : 'false');
-    });
+    sceneContext.consolePanel.querySelector('[data-room-console-title]').textContent =
+      sceneContext.tr(title);
+    sceneContext.consolePanel.querySelector('.room-console-nav').innerHTML = consoleNavigation(
+      view,
+      sceneContext.tr,
+    );
   }
 
   function hide() {

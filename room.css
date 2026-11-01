@@ -690,13 +690,29 @@ body.root-room-open {
   cursor: pointer;
 }
 .room-console-nav {
-  display: flex;
+  display: block;
   flex-shrink: 0;
   gap: 4px;
   flex-wrap: wrap;
   padding: 10px 14px;
   border-bottom: 1px solid #354336;
   background: #141c17;
+}
+.room-console-groups,
+.room-console-sections {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.room-console-groups {
+  padding-bottom: 7px;
+  margin-bottom: 7px;
+  border-bottom: 1px solid #354336;
+}
+.room-console-tools {
+  margin-left: auto;
+  display: flex;
 }
 .room-console-nav button {
   border: 0;

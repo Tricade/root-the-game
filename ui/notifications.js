@@ -20,9 +20,9 @@ export function createNotificationsUI(ctx, platform = globalThis) {
       toast(
         fresh.length === 1
           ? 'Erfolg freigeschaltet: ' + fresh[0].name
-          : fresh.length + ' Erfolge freigeschaltet. Belohnungen warten in der Forschung.',
+          : fresh.length + ' Erfolge freigeschaltet. Belohnungen warten unter Erfolge.',
         false,
-        'research',
+        'achievements',
       );
   }
 

@@ -1,3 +1,4 @@
+import { consoleNavigation } from '../ui/navigation.js';
 import '../brand.js';
 const BRAND = globalThis.ROOTBrand;
 
@@ -597,23 +598,8 @@ export function createRoomWorld(sceneContext) {
     sceneContext.consolePanel.setAttribute('aria-label', 'Raumkonsole');
     sceneContext.consolePanel.innerHTML =
       '<header class="room-console-header"><div><span>ROOT / OPERATIONS TERMINAL</span><strong data-room-console-title>Leitstelle</strong></div><button type="button" data-room-console-close>Zurück in den Raum · Esc</button></header><nav class="room-console-nav" aria-label="Bereiche der Raumkonsole">' +
-      [
-        ['overview', 'Leitstelle'],
-        ['network', 'Hardware'],
-        ['agents', 'Agenten'],
-        ['jobs', 'Aufträge'],
-        ['research', 'Forschung'],
-        ['automation', 'Automatik'],
-        ['resilience', 'Backups & Betrieb'],
-        ['inbox', 'Entscheidungen'],
-        ['log', 'Protokoll'],
-        ['facility', 'Gebäudetechnik'],
-        ['business', 'Kunden & Betrieb'],
-        ['operations', 'Betriebspläne'],
-      ]
-        .map(([id, label]) => '<button type="button" data-nav="' + id + '">' + label + '</button>')
-        .join('') +
-      '<button type="button" data-modal="settings">Einstellungen</button><button type="button" data-modal="help">Handbuch</button></nav><div class="room-console-content" tabindex="-1"></div>';
+      consoleNavigation('overview', sceneContext.tr) +
+      '</nav><div class="room-console-content" tabindex="-1"></div>';
     sceneContext.shell.appendChild(sceneContext.consolePanel);
     sceneContext.consoleContent = sceneContext.consolePanel.querySelector('.room-console-content');
     sceneContext.consolePanel

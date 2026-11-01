@@ -1,0 +1,95 @@
+/* Commercial activity uses the same solid, readable surfaces as the operations UI. */
+.business-room-selector {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 12px;
+}
+.business-room-selector .field-label {
+  flex: 1 1 260px;
+  max-width: 420px;
+}
+.customer-contracts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(340px, 100%), 1fr));
+  gap: 18px;
+}
+.customer-contract {
+  padding: 22px;
+  min-width: 0;
+}
+.customer-contract-heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+.customer-contract h3,
+.customer-lead h3 {
+  overflow-wrap: anywhere;
+  margin: 6px 0 12px;
+}
+.customer-facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin: 16px 0;
+}
+.customer-facts > span {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  color: var(--muted);
+  font-size: 11px;
+}
+.customer-facts strong {
+  color: var(--text);
+  font: 12px var(--mono);
+}
+.customer-work {
+  display: grid;
+  gap: 12px;
+  border-top: 1px solid var(--line);
+  padding: 16px 0;
+}
+.customer-issue {
+  color: var(--amber);
+  line-height: 1.7;
+}
+.customer-lead .card-actions,
+.customer-contract .card-actions {
+  flex-wrap: wrap;
+  gap: 9px;
+  margin-top: 18px;
+}
+.customer-lead .workload-art {
+  margin: -4px -4px 18px;
+}
+.customer-policies .panel-body > p {
+  margin-top: 0;
+  color: var(--muted);
+  line-height: 1.8;
+}
+.room-operating-plan .business-panel-body > h3 {
+  margin: 25px 0 15px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+}
+.business-service-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 18px;
+}
+@media (max-width: 600px) {
+  .customer-contract {
+    padding: 17px;
+  }
+  .customer-facts {
+    grid-template-columns: 1fr;
+  }
+  .business-room-selector .field-label {
+    max-width: none;
+  }
+}

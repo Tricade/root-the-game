@@ -1,3 +1,4 @@
+import { NAVIGATION_ITEMS } from './navigation.js';
 /** Shared formatting and icon data; no mutable simulation state. */
 export function createUIFoundation(I18N) {
   const tr = (text) => I18N?.translate(String(text)) || String(text);
@@ -86,17 +87,7 @@ export function createUIFoundation(I18N) {
   };
   const icon = (name, cls = '') =>
     `<svg class="icon ${cls}" viewBox="0 0 24 24" aria-hidden="true">${iconPaths[name] || iconPaths.grid}</svg>`;
-  const navs = [
-    ['overview', 'grid', 'Übersicht'],
-    ['network', 'server', 'Rechenzentrum'],
-    ['agents', 'agents', 'Agenten'],
-    ['jobs', 'jobs', 'Aufträge'],
-    ['research', 'research', 'Forschung'],
-    ['automation', 'automation', 'Automatisierung'],
-    ['resilience', 'shield', 'Betrieb & Schutz'],
-    ['inbox', 'inbox', 'Entscheidungen'],
-    ['log', 'log', 'Aktivitätslog'],
-  ];
+  const navs = NAVIGATION_ITEMS.map(([id, icon, label]) => [id, icon, label]);
   const focusNames = {
     income: 'Auftragsarbeit',
     research: 'Forschung',

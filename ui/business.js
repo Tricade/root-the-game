@@ -1,106 +1,57 @@
-/** Customer portfolio UI. One selected room keeps even large facilities manageable. */
+import { createCustomerCards } from './customer-cards.js';
+import { createCustomerControls } from './customer-controls.js';
+
+/** Customer sales, contracts and service quality. Room engineering lives in Facility. */
 export function createBusinessUI(ctx) {
   let selectedRoom = null;
-  function managerLabel(a) {
-    const op = ctx.agentOperations().agents.find((x) => x.id === a.id);
-    const status = op?.absent ? 'Selbstwartung' : op?.assignment ? 'Im Einsatz' : '';
-    return ctx.esc(a.name) + (status ? ' · ' + ctx.esc(ctx.tr(status)) : '');
-  }
-  const resourceNames = {
-    cpu: 'CPU',
-    ram: 'RAM / GB',
-    storage: 'Speicher / TB',
-    network: 'Netz / Mbit/s',
-    gpu: 'GPU',
-    vram: 'VRAM / GB',
-  };
-  const button = (action, label, extra = '') =>
-    `<button class="button" data-service="${action}" ${extra}>${label}</button>`;
-  const field = (name, label, content) =>
-    `<label class="field-label">${label}${content.replace('<select', '<select data-field="' + name + '"').replace('<input', '<input data-field="' + name + '"')}</label>`;
+  const cards = createCustomerCards(ctx),
+    controls = createCustomerControls(ctx);
   function businessView() {
     const model = ctx.E.getBusinessModel(ctx.state),
-      m = ctx.E.getMetrics(ctx.state),
-      roomNames = new Map(
-        ctx.E.getFacilityLayout(ctx.state).rooms.map((r) => [
-          r.id,
-          `${ctx.tr(`Untergeschoss ${r.floor}`)} · ${ctx.tr(`Raum ${r.number}`)}`,
-        ]),
-      );
+      book = ctx.E.getCustomers(ctx.state);
     if (!model.rooms.some((r) => r.roomId === selectedRoom)) selectedRoom = model.rooms[0].roomId;
-    const room = model.rooms.find((r) => r.roomId === selectedRoom);
+    const room = model.rooms.find((r) => r.roomId === selectedRoom),
+      layout = ctx.E.getFacilityLayout(ctx.state);
+    const contracts = book.contracts.filter((c) => c.roomId === selectedRoom);
     return (
       ctx.head(
-        'Kunden & Betrieb',
-        'Plane Auslastung, Reserven und Teams. Nur erbrachte Dienste erzielen Umsatz.',
+        'Kunden & Verträge',
+        'Kunden fragen Dienste an. Dein Team richtet sie ein und betreut verbindliche Verträge.',
       ) +
-      `<div class="business-layout"><section class="panel business-summary">${ctx.panelHeader('Betriebsbilanz', `<span class="tag business-supply-status"><span>Versorgung</span><strong data-business-stat="supply">${ctx.dec(model.totalUnits ? (100 * model.delivered) / model.totalUnits : 100)} %</strong></span>`)}<div class="stats-strip"><div><span>Kundenumsatz / min</span><strong data-business-stat="gross">${ctx.dec(model.gross * 60)} CR</strong></div><div><span>Starthilfe / min</span><strong data-business-stat="allowance">${ctx.dec(m.recoveryAllowance * 60)} CR</strong></div><div><span>Alle Kosten / min</span><strong data-business-stat="cost">${ctx.dec(m.upkeep * 60)} CR</strong></div><div><span>Netto / min</span><strong data-business-stat="net" class="${m.incomePerSecond < 0 ? 'negative' : ''}">${ctx.dec(m.incomePerSecond * 60)} CR</strong></div></div></section>` +
-      (model.transitionRemaining
-        ? `<div class="helper-card"><h3>Bestand übernommen</h3><p>Deine bisherigen Kunden wurden auf die vorhandene Hardware verteilt. Geld und laufende Aufträge bleiben erhalten. Premium-Ausgleich ist für die ersten zwölf Betriebsstunden ausgesetzt.</p></div>`
-        : '') +
-      `<section class="panel business-room" data-business-room="${room.roomId}">${ctx.panelHeader('Raumplanung')}<div class="panel-body business-panel-body"><label class="field-label">Serverraum<select class="select" data-business-select>${model.rooms.map((r) => `<option value="${r.roomId}" ${r.roomId === room.roomId ? 'selected' : ''}>${ctx.esc(roomNames.get(r.roomId) || r.roomId)} · ${ctx.tr(model.profiles[r.profile])} · ${ctx.fmt(r.units)}</option>`).join('')}</select></label><div class="business-resources">${Object.entries(
-        resourceNames,
+      `<div class="business-layout"><section class="panel business-summary">${ctx.panelHeader('Geschäftsbilanz', '<span class="tag green">LIVE</span>')}<div class="stats-strip"><div><span>Aktive Verträge</span><strong data-customer-stat="active">${book.active}</strong></div><div><span>Kundenumsatz / min</span><strong data-business-stat="gross"></strong></div><div><span>Alle Kosten / min</span><strong data-business-stat="cost"></strong></div><div><span>Netto / min</span><strong data-business-stat="net"></strong></div></div></section>
+      <div class="business-room-selector"><label class="field-label">Vertragsstandort<select class="select" data-business-select>${layout.rooms.map((r) => `<option value="${r.id}" ${r.id === selectedRoom ? 'selected' : ''}>${ctx.tr(`Untergeschoss ${r.floor}`)} · ${ctx.tr(`Raum ${r.number}`)}</option>`).join('')}</select></label><button class="button small" data-nav="facility">Raumbetrieb & Versorgung</button><button class="button small" data-nav="automation">Kundenautomatik</button></div>
+      <section class="panel">${ctx.panelHeader('Ressourcen am Vertragsstandort')}<div class="business-resources panel-body">${Object.entries(
+        {
+          cpu: 'CPU',
+          ram: 'RAM / GB',
+          storage: 'Speicher / TB',
+          network: 'Netz / Mbit/s',
+          gpu: 'GPU',
+          vram: 'VRAM / GB',
+        },
       )
         .map(
-          ([key, name]) =>
-            `<div><span>${name}</span><strong data-room-resource="${key}">${ctx.dec(room.demand[key])} / ${ctx.dec(room.available[key])}</strong><small>Belegt / verfügbar</small></div>`,
+          ([key, label]) =>
+            `<div><span>${ctx.tr(label)}</span><strong data-room-resource="${key}">${ctx.dec(room.reserved[key])} / ${ctx.dec(room.available[key])}</strong><small>Reserviert / verfügbar</small></div>`,
         )
-        .join('')}</div><div class="business-controls">${field(
-        'profile',
-        'Spezialisierung',
-        `<select class="select">${Object.entries(model.profiles)
-          .map(
-            ([k, name]) =>
-              `<option value="${k}" ${room.profile === k ? 'selected' : ''}>${ctx.tr(name)}</option>`,
-          )
-          .join('')}</select>`,
-      )}${field('reserve', 'Reserve für Ausfälle und Projekte', `<select class="select">${[0, 0.2, 0.35].map((v) => `<option value="${v}" ${room.reserve === v ? 'selected' : ''}>${v * 100} %</option>`).join('')}</select>`)}${button('configureServiceRoom', 'Umstellung prüfen')}</div><p class="policy-explainer">Passende Spezialisierung spart 10 % Ressourcen. Eine Umstellung halbiert die Versorgung zwei Minuten lang. Reserve begrenzt neue Zusagen; sie erzeugt keine zusätzliche Hardware.</p><p data-room-change>${room.changeRemaining ? ctx.duration(room.changeRemaining) : ''}</p><div class="business-controls">${field('manager', 'Teamleitung', `<select class="select"><option value="">Keine Teamleitung</option>${ctx.state.agents.map((a) => `<option value="${a.id}" ${room.managerId === a.id ? 'selected' : ''}>${managerLabel(a)}</option>`).join('')}</select>`)}${button('assignManager', 'Teamleitung zuweisen')}${button('hireCrew', 'Team erweitern')}</div><p>Teams: <strong>${ctx.fmt(room.crew)}</strong> · Kundenplätze: <strong>${ctx.fmt(room.crewCapacity)}</strong></p><p class="policy-explainer">Ein Team betreut 24 Einheiten. Erfahrene Teamleitungen erhöhen die Betreuung; sie können jeweils nur einen Raum leiten. Personal verursacht laufende Kosten. Während eines Einsatzes oder einer Selbstwartung pausiert der Teamleitungsbonus.</p></div></section>` +
-      supplyCard(room) +
-      `<div class="card-grid business-service-grid">${room.groups.map((g) => serviceCard(room, g, model.services[g.kind])).join('')}</div>` +
-      `<div class="helper-card"><h3>Verträge sind Zusagen.</h3><p>Neue Kunden benötigen zehn Minuten Vorbereitung und einmalige Einrichtungskosten. Verträge laufen drei Tage und verlängern sich auf Wunsch. Bei Engpässen sinkt der Umsatz. Premium bringt 15 % mehr, verlangt Reserve und reduziert bei Ausfällen die Zahlung zusätzlich. Forschung und Projektarbeit nutzen die verbleibende Leistung.</p><button class="button" data-nav="jobs">Zusätzliche Projekte ansehen</button></div></div>`
+        .join('')}</div></section>
+      <div class="section-heading"><h2>Anfrageeingang</h2><p><span data-customer-stat="leads">${book.leads.length}</span> / 12</p></div><p class="policy-explainer">Anfragen sind noch keine Zusagen. Prüfe Raum, Reserve und Kosten; eine Ablehnung kostet keine Reputation. Neue Anfragen kommen automatisch. Unbeantwortete Anfragen laufen nach vier Stunden aus.</p>
+      <div class="card-grid customer-leads">${book.leads.map((lead) => cards.leadCard(lead, selectedRoom, model)).join('') || ctx.empty('Neue Kundenanfragen sind unterwegs', 'Dein Anfrageeingang füllt sich automatisch, während dein Betrieb weiterläuft.', '', '', 'inbox')}</div>
+      <div class="section-heading"><h2>Verträge an diesem Standort</h2><p>${contracts.length} / 16</p></div><div class="customer-contracts">${contracts.map((c) => cards.contractCard(c, model)).join('') || ctx.empty('Noch keine Kunden an diesem Standort', 'Nimm eine passende Kundenanfrage an. Die Einrichtung benötigt einen verfügbaren Agenten.', '', '', 'jobs')}</div>
+      <section class="panel">${ctx.panelHeader('Vertragsstandards für neue Zusagen')}<div class="panel-body business-service-grid">${room.groups.map((g) => `<div data-business-room="${room.roomId}" data-service-kind="${g.kind}"><strong>${ctx.tr(model.services[g.kind].name)}</strong><p>${ctx.dec(model.services[g.kind].fee * 60)} CR / min · ${ctx.tr('Basisumsatz je Diensteinheit')}</p><button class="button small" data-service="setServicePremium" data-value="${!g.nextPremium}">${ctx.tr(g.nextPremium ? 'Premium bei Verlängerung: an' : 'Premium bei Verlängerung: aus')}</button></div>`).join('')}</div></section>
+      <div class="helper-card"><h3>Verträge sind Zusagen.</h3><p>Einrichtung reserviert Hardware und bindet einen Agenten. Umsatz beginnt nach der Einrichtung und hängt von der tatsächlichen Versorgung ab. Kurze Störungen sind reparierbar; anhaltende Defizite führen zu Beschwerden und Kündigungsfristen. Auch gesunde Kunden können zum Vertragsende aus geschäftlichen Gründen wechseln. Automatische Verlängerung garantiert keine ewige Bindung.</p></div>
+      ${
+        book.history.length
+          ? `<section class="panel">${ctx.panelHeader('Beendete Kundenverträge')}<div class="activity-list">${book.history
+              .slice(0, 6)
+              .map(
+                (h) =>
+                  `<div class="activity-row"><span class="activity-time">${ctx.clock(h.time)}</span><span>${ctx.esc(h.client)} · ${ctx.tr({ sla: 'Versorgungsprobleme', budget: 'Kundenbudget', consolidation: 'Zusammenlegung', competitor: 'Anbieterwechsel', term: 'Vertragsende' }[h.reason])}</span></div>`,
+              )
+              .join('')}</div></section>`
+          : ''
+      }</div>`
     );
-  }
-  function supplyCard(room) {
-    const modes = {
-      local: 'Lokal',
-      central: 'Zentral',
-      hybrid: 'Zentral mit lokaler Reserve',
-      ups: 'Lokaler Strom mit zentraler USV',
-    };
-    return `<section class="panel business-supply" data-business-room="${room.roomId}">${ctx.panelHeader('Raumversorgung')}<div class="panel-body business-panel-body"><p>${ctx.tr('Kühlung')}: <strong>${ctx.tr(modes[room.supply.cooling])}</strong> · ${ctx.tr('Strom')}: <strong>${ctx.tr(modes[room.supply.power])}</strong></p><p class="policy-explainer">Zentralbetrieb ersetzt lokale Versorgung. Die Variante mit lokaler Reserve hält die lokalen Geräte zusätzlich bereit. Zentrale Kapazität wird unter angeschlossenen Racks geteilt; die USV schützt nur angeschlossene Stromkreise. Ein USV-Anschluss ist auch bei lokalem Strom möglich.</p><div class="business-controls">${field('system', 'System', `<select class="select"><option value="cooling">${ctx.tr('Kühlung')}</option><option value="power">${ctx.tr('Strom')}</option></select>`)}${field(
-      'mode',
-      'Zielversorgung',
-      `<select class="select">${Object.entries(modes)
-        .map(
-          ([k, v]) => `<option value="${k}" ${k === 'ups' ? 'disabled' : ''}>${ctx.tr(v)}</option>`,
-        )
-        .join('')}</select>`,
-    )}${button('convertRoomSupply', 'Umbau prüfen')}</div><p data-room-conversion>${ctx.esc(conversionStatus(room))}</p><button class="button ghost" data-nav="facility">Zentralanlagen ausbauen</button></div></section>`;
-  }
-  function conversionStatus(room) {
-    const p = room.conversion;
-    if (!p) return ctx.tr('Versorgung aktiv');
-    const modes = {
-      local: 'Lokal',
-      central: 'Zentral',
-      hybrid: 'Zentral mit lokaler Reserve',
-      ups: 'Lokaler Strom mit zentraler USV',
-    };
-    return `${ctx.tr('Umbau aktiv')}: ${ctx.tr(p.system === 'cooling' ? 'Kühlung' : 'Strom')} → ${ctx.tr(modes[p.mode])} · ${ctx.duration(p.remaining)}`;
-  }
-  function serviceCard(room, g, def) {
-    const q = ctx.E.quoteService(ctx.state, 'contractService', {
-      roomId: room.roomId,
-      kind: g.kind,
-      units: 1,
-    });
-    return `<section class="offer-card service-card" data-business-room="${room.roomId}" data-service-kind="${g.kind}"><span class="tag">${ctx.tr(def.name)}</span><h3>${ctx.fmt(g.units)} ${ctx.tr('Kundeneinheiten')}</h3><p data-service-status="${g.kind}">${g.pending ? ctx.fmt(g.pending) + ' · ' + ctx.duration(g.onboarding) : ctx.duration(g.remaining)}</p><p>${ctx.dec(def.fee * 60)} CR / min · ${ctx.tr('je vollständig versorgter Einheit')}</p><p>${Object.entries(
-      def.needs,
-    )
-      .map(([k, v]) => `${ctx.dec(v)} ${ctx.tr(resourceNames[k])}`)
-      .join(
-        ' · ',
-      )}</p><p>${ctx.tr('Zusätzlich möglich')}: <strong data-service-capacity="${g.kind}">${ctx.fmt(q.capacity || 0)}</strong></p><div class="business-controls">${field('units', 'Neue Einheiten', `<input class="input" type="number" min="1" max="1000000" step="1" value="1">`)}${button('contractService', 'Vertrag prüfen')}</div><div class="card-actions">${button('setServiceRenewal', g.renew ? 'Verlängerung: an' : 'Verlängerung: aus', `data-value="${!g.renew}"`)}${button('setServicePremium', g.nextPremium ? 'Premium bei Verlängerung: an' : 'Premium bei Verlängerung: aus', `data-value="${!g.nextPremium}"`)}</div></section>`;
   }
   function businessClick(target) {
     if (target.hasAttribute('data-service-confirm')) {
@@ -110,12 +61,12 @@ export function createBusinessUI(ctx) {
       ctx.execute(extra.action, extra.payload);
       return true;
     }
+    if (controls.customerClick(target)) return true;
     const action = target.dataset.service;
     if (!action) return false;
-    const card = target.closest('[data-business-room]');
-    const read = (key) => card.querySelector(`[data-field="${key}"]`)?.value;
+    const card = target.closest('[data-business-room]'),
+      read = (key) => card.querySelector(`[data-field="${key}"]`)?.value;
     const payload = { roomId: card.dataset.businessRoom, kind: card.dataset.serviceKind };
-    if (action === 'contractService') payload.units = Number(read('units'));
     if (action === 'convertRoomSupply') {
       payload.system = read('system');
       payload.mode = read('mode');
@@ -130,86 +81,109 @@ export function createBusinessUI(ctx) {
     return true;
   }
   function businessConfirm(extra) {
+    if (extra.action.includes('Customer')) return controls.customerConfirm(extra);
     const q =
       extra.action === 'convertRoomSupply'
         ? ctx.E.quoteSupply(ctx.state, extra.payload)
         : ctx.E.quoteService(ctx.state, extra.action, extra.payload);
-    if (extra.action === 'convertRoomSupply')
-      return `<p class="modal-intro">Raumversorgung umbauen</p><p>Dieser Raum ist beim Umbau drei Minuten offline. Ein Ausfall der Zentralanlage betrifft zentral angeschlossene Räume; lokale Reserve kann weiterhin Leistung liefern. Lokale Stromverteiler bleiben als Rack-Sicherung erforderlich.</p><div class="status-row"><span>Kosten</span><strong>${ctx.fmt(q.cost)} CR</strong></div><div class="status-row"><span>Zentralkapazität / angeschlossene Last nach Umbau</span><strong>${ctx.dec((q.centralCapacity || 0) / 1000)} / ${ctx.dec(((q.demand || 0) + (q.otherDemand || 0)) / 1000)} kW</strong></div>${q.reason ? `<div class="modal-alert">${ctx.esc(ctx.tr(q.reason))}</div>` : ''}<button class="button primary block" data-service-confirm ${q.enabled ? '' : 'disabled'}>Bestätigen</button>`;
-    return `<p class="modal-intro">${ctx.esc(ctx.tr(q.label || 'Betriebsplan ändern'))}</p><div class="status-row"><span>Kosten</span><strong>${ctx.fmt(q.cost)} CR</strong></div><div class="status-row"><span>Dauer</span><strong>${ctx.duration(q.duration || 0)}</strong></div><p>Verträge binden Ressourcen für drei Tage. Premiumänderungen gelten bei der nächsten Verlängerung. Teams kosten laufend Geld. Profilwechsel unterbrechen einen Teil der Versorgung.</p>${q.reason ? `<div class="modal-alert">${ctx.esc(ctx.tr(q.reason))}</div>` : ''}<button class="button primary block" data-service-confirm ${q.enabled ? '' : 'disabled'}>Bestätigen</button>`;
+    return `<p class="modal-intro">${ctx.esc(ctx.tr(q.label || 'Betriebsplan ändern'))}</p><div class="status-row"><span>Kosten</span><strong>${ctx.fmt(q.cost)} CR</strong></div><div class="status-row"><span>Dauer</span><strong>${ctx.duration(q.duration || 0)}</strong></div><p>${extra.action === 'convertRoomSupply' ? 'Dieser Raum ist beim Umbau drei Minuten offline. Zentrale Versorgung betrifft nur angeschlossene Räume; lokale Reserve kann weiterhin Leistung liefern.' : 'Raumprofile, Reserve und Teams beeinflussen die zugesagte Kundenversorgung. Teams verursachen laufende Kosten; bestehende Premiumzusagen bleiben bis zur Verlängerung bindend.'}</p>${q.reason ? `<div class="modal-alert">${ctx.esc(ctx.tr(q.reason))}</div>` : ''}<button class="button primary block" data-service-confirm ${q.enabled ? '' : 'disabled'}>Bestätigen</button>`;
   }
   function businessChange(el) {
-    if (el.matches('[data-field="system"]')) {
-      const mode = el.closest('[data-business-room]').querySelector('[data-field="mode"]');
-      mode.querySelector('[value="ups"]').disabled = el.value !== 'power';
-      if (el.value !== 'power' && mode.value === 'ups') mode.value = 'local';
-      return true;
-    }
+    if (ctx.roomOperationsChange?.(el)) return true;
     if (!el.hasAttribute('data-business-select')) return false;
     selectedRoom = el.value;
     ctx.render();
     return true;
   }
   function businessSignature() {
-    return ctx.view === 'business'
-      ? JSON.stringify(
-          ctx.state.business.rooms.map((r) => [
-            r.roomId,
-            r.profile,
-            r.reserve,
-            r.crew,
-            r.managerId,
-            r.changeRemaining > 0,
-            r.supply,
-            r.conversion?.system,
-            r.groups.map((g) => [g.kind, g.units, g.pending, g.renew, g.premium, g.nextPremium]),
-          ]),
-        )
-      : '';
+    if (!['business', 'facility', 'overview', 'agents', 'operations'].includes(ctx.view)) return '';
+    return JSON.stringify([
+      ctx.state.business.rooms.map((r) => [
+        r.roomId,
+        r.profile,
+        r.reserve,
+        r.crew,
+        r.managerId,
+        r.changeRemaining > 0,
+        r.supply,
+        r.conversion?.system,
+        r.groups.map((g) => [g.kind, g.units, g.pending, g.renew, g.nextPremium]),
+      ]),
+      ctx.state.customers.leads.map((l) => l.id),
+      ctx.state.customers.contracts.map((c) => [
+        c.id,
+        c.stage,
+        c.work,
+        c.agentId,
+        c.issue,
+        c.notice > 0,
+        c.renew,
+        c.retentionUsed,
+      ]),
+      ctx.state.customers.history[0]?.id,
+      ctx.state.jobs.map((j) => j.id),
+    ]);
   }
   function updateBusiness() {
-    if (ctx.view !== 'business') return;
+    if (!['overview', 'business', 'automation'].includes(ctx.view)) return;
     const model = ctx.E.getBusinessModel(ctx.state),
       m = ctx.E.getMetrics(ctx.state),
-      room = model.rooms.find((r) => r.roomId === selectedRoom);
-    if (!room) return;
+      book = ctx.E.getCustomers(ctx.state);
+    const room = model.rooms.find((r) => r.roomId === selectedRoom);
     const values = {
       gross: ctx.dec(model.gross * 60) + ' CR',
       cost: ctx.dec(m.upkeep * 60) + ' CR',
-      allowance: ctx.dec(m.recoveryAllowance * 60) + ' CR',
       net: ctx.dec(m.incomePerSecond * 60) + ' CR',
-      supply: ctx.dec(model.totalUnits ? (100 * model.delivered) / model.totalUnits : 100) + ' %',
+      allowance: ctx.dec(m.recoveryAllowance * 60) + ' CR',
     };
     ctx.$$('[data-business-stat]').forEach((el) => {
       el.textContent = values[el.dataset.businessStat];
       if (el.dataset.businessStat === 'net') el.classList.toggle('negative', m.incomePerSecond < 0);
     });
-    ctx.$$('[data-room-resource]').forEach((el) => {
-      const key = el.dataset.roomResource;
-      el.textContent = ctx.dec(room.demand[key]) + ' / ' + ctx.dec(room.available[key]);
+    ctx.$$('[data-customer-stat]').forEach((el) => {
+      const key = el.dataset.customerStat;
+      el.textContent = ctx.fmt(key === 'leads' ? book.leads.length : book[key] || 0);
     });
-    for (const g of room.groups) {
-      const cap = ctx.$(`[data-service-capacity="${g.kind}"]`);
-      if (cap)
-        cap.textContent = ctx.fmt(
-          ctx.E.quoteService(ctx.state, 'contractService', {
-            roomId: room.roomId,
-            kind: g.kind,
-            units: 1,
-          }).capacity || 0,
-        );
-      const el = ctx.$(`[data-service-status="${g.kind}"]`);
-      if (el)
-        el.textContent = g.pending
-          ? ctx.fmt(g.pending) + ' · ' + ctx.duration(g.onboarding)
-          : ctx.duration(g.remaining);
+    if (room)
+      ctx.$$('[data-room-resource]').forEach((el) => {
+        const key = el.dataset.roomResource;
+        el.textContent = ctx.dec(room.reserved[key]) + ' / ' + ctx.dec(room.available[key]);
+      });
+    if (ctx.view !== 'business') return;
+    for (const c of book.contracts.filter((c) => c.roomId === selectedRoom)) {
+      const supplied =
+        model.rooms.find((r) => r.roomId === c.roomId)?.groups.find((g) => g.kind === c.kind)
+          ?.supplied || 0;
+      const write = (key, value) => {
+        const el = ctx.$(`[data-customer-${key}="${c.id}"]`);
+        if (el) el.textContent = value;
+      };
+      write('time', ctx.duration(c.stage === 'setup' ? c.term : c.remaining));
+      write('notice', ctx.duration(c.notice));
+      write('satisfaction', ctx.dec(c.satisfaction) + ' %');
+      write('supply', ctx.dec(supplied * 100) + ' %');
+      const agent = ctx.state.agents.find((a) => a.id === c.agentId);
+      write(
+        'work',
+        (agent ? agent.name : ctx.tr('Wartet auf Agent')) + ' · ' + ctx.duration(c.workRemaining),
+      );
+      const progress = ctx.$(`[data-customer-progress="${c.id}"]`);
+      if (progress)
+        progress.style.width = (c.workTotal ? 100 * (1 - c.workRemaining / c.workTotal) : 0) + '%';
     }
-    const change = ctx.$('[data-room-change]');
-    if (change) change.textContent = room.changeRemaining ? ctx.duration(room.changeRemaining) : '';
-    const conversion = ctx.$('[data-room-conversion]');
-    if (conversion) conversion.textContent = conversionStatus(room);
+    ctx.$$('[data-customer-ready]').forEach((card) => {
+      if (card.dataset.customerReady !== 'true') return;
+      const affordable = ctx.state.credits >= Number(card.dataset.customerCost);
+      card.querySelector('[data-customer="acceptCustomerLead"]').disabled = !affordable;
+      card.querySelector('[data-customer-reason]').textContent = affordable
+        ? ''
+        : ctx.tr('Das verfügbare Budget reicht nicht aus.');
+    });
+    const spent = ctx.$('[data-customer-spent]');
+    if (spent) spent.textContent = ctx.fmt(book.spent) + ' CR';
   }
   return {
+    ...controls,
     businessView,
     businessClick,
     businessChange,

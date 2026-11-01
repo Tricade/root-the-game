@@ -13,10 +13,12 @@ export function createOverviewUI(ctx) {
           )
           .join('')
       : ctx.empty(
-          'Kapazitäten sind frei',
-          'Nimm einen Auftrag an oder aktiviere die automatische Vergabe.',
+          'Keine aktiven Aufträge',
+          ctx.state.policies.autocontract
+            ? 'Die automatische Vergabe ist aktiv und prüft passende Angebote.'
+            : 'Nimm einen Auftrag an oder aktiviere die automatische Vergabe.',
           'jobs',
-          'Aufträge entdecken',
+          'Aufträge ansehen',
           'jobs',
         );
   }

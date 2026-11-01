@@ -4,6 +4,12 @@
   if (root) root.RootBusinessEnglish = factory;
 })(typeof globalThis !== 'undefined' ? globalThis : this, function (translate) {
   const pairs = [
+    ['Keine aktiven Aufträge', 'No active jobs'],
+    [
+      'Die automatische Vergabe ist aktiv und prüft passende Angebote.',
+      'Automatic assignment is enabled and checks for suitable offers.',
+    ],
+    ['Aufträge ansehen', 'View jobs'],
     ['Abwesenheitsbericht', 'Absence report'],
     ['Änderung des Guthabens', 'Balance change'],
     [

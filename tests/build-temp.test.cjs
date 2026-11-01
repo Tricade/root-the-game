@@ -48,7 +48,9 @@ test('the real installer consumer receives unique tracked directories and exit c
   `,
   );
   for (const created of [result.a, result.b]) {
-    assert.equal(path.dirname(created), await fs.realpath(directory));
+    // Windows can expose the same parent with a DOS short name or a long name.
+    // Resolve both sides with the same native filesystem API before comparing.
+    assert.equal(await fs.realpath(path.dirname(created)), await fs.realpath(directory));
     assert.match(path.basename(created), /^si-/);
     await assert.rejects(fs.stat(created), { code: 'ENOENT' });
   }

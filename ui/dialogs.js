@@ -5,18 +5,7 @@ const BRAND = globalThis.ROOTBrand;
 export function createDialogsUI(ctx) {
   function shop(type) {
     if (type === 'servers') return ctx.R.shop();
-    const server = type === 'servers',
-      items = server ? ctx.E.catalog.servers : ctx.E.catalog.roles;
-    return `<p class="modal-intro">${server ? 'Jeder Knoten liefert Grundversorgung und Rechenkapazität. Wähle die passende Architektur für dein Netzwerk.' : 'Agenten arbeiten autonom an deinen Aufträgen. Jede Rolle bringt einen eigenen Vorteil ins Netzwerk.'}</p><div class="shop-grid">${Object.entries(
-      items,
-    )
-      .map(
-        ([id, item]) =>
-          `<div class="shop-card"><span class="server-icon">${ctx.icon(server ? (id === 'compute' ? 'cpu' : id === 'storage' ? 'storage' : 'server') : 'agents')}</span><h3>${ctx.esc(item.name)}</h3><p>${ctx.esc(item.description)}</p><div class="shop-spec">${server ? `${item.capacity} CU Basiskapazität<br>${ctx.dec(item.power)} kW Grundverbrauch` : 'Stufe 1 · Autonom aktiv<br>Schwerpunkt frei wählbar'}</div>${ctx.actionButton(server ? 'buyServer' : 'recruitAgent', `${ctx.icon('plus')}${ctx.fmt(ctx.E.cost(ctx.state, server ? 'server' : 'agent', id))} CR`, server ? { type: id } : { role: id }, 'primary', server ? 'server' : 'agent', id)}</div>`,
-      )
-      .join(
-        '',
-      )}</div><div class="modal-bottom"><span>${server ? ctx.state.servers.length : ctx.state.agents.length} / ${server ? ctx.E.getMetrics(ctx.state).serverLimit : ctx.E.getMetrics(ctx.state).agentLimit} Plätze belegt</span><span>Budget: <strong class="positive">${ctx.stat('credits')} CR</strong></span></div>`;
+    return ctx.marketModal();
   }
 
   function sectorModal() {
@@ -102,7 +91,7 @@ export function createDialogsUI(ctx) {
     ctx.modal = { type, extra };
     const titles = {
       servers: 'Dein Netzwerk erweitern',
-      agents: 'Dein Team erweitern',
+      agents: 'Arbeitsamt',
       sector: 'Nächsten Sektor erschließen',
       help: 'Willkommen bei ROOT',
       settings: 'Einstellungen',
@@ -112,6 +101,7 @@ export function createDialogsUI(ctx) {
       repair: 'Reparatur planen',
       'incident-confirm': 'Folgen deiner Entscheidung',
       'agent-task': 'Agent gezielt einsetzen',
+      'personnel-confirm': 'Personalentscheidung prüfen',
       'hardware-shop': 'Hardware einbauen',
       'hardware-move': 'Umsetzen / Umpatchen',
       'hardware-confirm': 'Infrastruktur ändern',
@@ -121,6 +111,7 @@ export function createDialogsUI(ctx) {
     let content = '';
     if (type === 'business-confirm') content = ctx.businessConfirm(extra);
     else if (type === 'operations-confirm') content = ctx.operationsConfirm(extra);
+    else if (type === 'personnel-confirm') content = ctx.personnelConfirm(extra);
     else if (type === 'servers' || type === 'agents') content = shop(type);
     else if (type.startsWith('hardware-')) content = ctx.R.modal(type, extra);
     else if (type === 'sector') content = sectorModal();

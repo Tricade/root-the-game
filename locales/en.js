@@ -8,10 +8,15 @@
     typeof module === 'object' && module.exports
       ? require('./business-en.js')
       : root.RootBusinessEnglish;
-  const create = (translate) => factory(translate, building, business);
+  const personnel =
+    typeof module === 'object' && module.exports
+      ? require('./personnel-en.js')
+      : root.RootPersonnelEnglish;
+  const create = (translate) => factory(translate, { building, business, personnel });
   if (typeof module === 'object' && module.exports) module.exports = create;
   if (root) root.RootEnglishCatalog = create;
-})(typeof globalThis !== 'undefined' ? globalThis : this, function (translate, building, business) {
+})(typeof globalThis !== 'undefined' ? globalThis : this, function (translate, catalogs) {
+  const { building, business, personnel } = catalogs;
   const en = Object.create(null);
   const add = (pairs) => {
     for (const [de, english] of pairs) en[de] = english;
@@ -2564,5 +2569,10 @@
   add(extra.pairs);
   const operations = business(translate);
   add(operations.pairs);
-  return { en, patterns: [...operations.patterns, ...extra.patterns, ...patterns] };
+  const staff = personnel(translate);
+  add(staff.pairs);
+  return {
+    en,
+    patterns: [...staff.patterns, ...operations.patterns, ...extra.patterns, ...patterns],
+  };
 });

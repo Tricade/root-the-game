@@ -371,3 +371,23 @@ test('language choice is stored separately under root.language and normalizes un
     else globalThis.localStorage = original;
   }
 });
+
+test('robot agency, every perk and self-maintenance feedback are localized', () => {
+  const pairs = require('../locales/personnel-en.js')().pairs;
+  for (const [de, en] of pairs) assert.equal(I18N.translate(de, 'en'), en, de);
+  for (const [de, en] of [
+    [
+      'Mira benötigt Selbstwartung. Einsätze pausieren; Rückkehr erfolgt automatisch.',
+      'Mira needs self-maintenance. Assignments pause; return is automatic.',
+    ],
+    ['Mira ist wieder im Dienst.', 'Mira is back on duty.'],
+    ['im Normalbetrieb / 9 Plätze', 'on regular duties / 9 slots'],
+    ['3 Belohnungen verfügbar', '3 rewards available'],
+  ])
+    assert.equal(I18N.translate(de, 'en'), en);
+  const { STRENGTHS, WEAKNESSES } = require('../engine/personnel.js')({});
+  for (const value of [...Object.values(STRENGTHS), ...Object.values(WEAKNESSES)]) {
+    assert.notEqual(I18N.translate(value.name, 'en'), value.name, value.name);
+    assert.notEqual(I18N.translate(value.description, 'en'), value.description, value.description);
+  }
+});

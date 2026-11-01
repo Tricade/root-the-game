@@ -212,14 +212,20 @@ export function createRoomTelemetry(sceneContext) {
         0,
       );
       const activeAssignments = operations.agents
-        .filter((agent) => agent.assignment)
+        .filter((agent) => agent.assignment || agent.absent)
         .map((agent) => {
           const data = state.agents.find((person) => person.id === agent.id);
           return (
             (data ? data.name + ': ' : '') +
-            agent.assignment.label +
-            ' · ' +
-            sceneContext.duration(agent.assignment.remaining)
+            (agent.absent
+              ? sceneContext.tr('Selbstwartung · Rückkehr in') +
+                ' ' +
+                sceneContext.duration(agent.remaining)
+              : sceneContext.tr(agent.assignment.label) +
+                ' · ' +
+                (operations.paused
+                  ? sceneContext.tr('pausiert')
+                  : sceneContext.duration(agent.assignment.remaining)))
           );
         });
       const activeEffects = operations.effects.map(

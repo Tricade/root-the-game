@@ -6,8 +6,8 @@ export function createWorkforceUI(ctx) {
     return (
       ctx.head(
         'Agenten',
-        'Gib deinem Team einen Schwerpunkt — und gezielte Einsätze.',
-        `<span class="budget-info">${ctx.stat('activeAgentCount')} im Normalbetrieb / ${m.agentLimit} Plätze</span><button class="button primary" data-modal="agents">${ctx.icon('plus')}Agent einstellen</button>`,
+        'Stärken nutzen, Eigenheiten einplanen und dein Team gezielt einsetzen.',
+        `<span class="budget-info">${ctx.stat('activeAgentCount')} im Normalbetrieb / ${m.agentLimit} Plätze</span><button class="button primary" data-modal="agents">${ctx.icon('agents')}Arbeitsamt</button>`,
       ) +
       (ops.effects.length
         ? `<div class="effect-strip">${ops.effects.map((e) => `<span>${ctx.icon('spark')}${ctx.esc(e.label)} <strong data-effect="${e.kind}"></strong></span>`).join('')}</div>`
@@ -15,7 +15,7 @@ export function createWorkforceUI(ctx) {
       `<div class="card-grid">${ctx.state.agents
         .map((a) => {
           const op = ops.agents.find((x) => x.id === a.id);
-          return `<section class="agent-card ${op.assignment ? 'on-assignment' : ''}"><div class="agent-card-top">${ctx.avatar(a)}<span class="tag ${a.role === 'analyst' ? 'blue' : a.role === 'engineer' ? 'amber' : 'green'}">STUFE ${a.level}</span></div><h3>${ctx.esc(a.name)}</h3><p class="role-desc">${ctx.E.catalog.roles[a.role].name} · ${ctx.E.catalog.roles[a.role].description}</p><span class="agent-trait">${ctx.icon('spark')}${ctx.esc(a.trait)}</span><div class="agent-assignment"><span class="assignment-label">${ctx.icon(op.assignment ? 'timer' : 'pulse')}${op.assignment ? 'SONDEREINSATZ' : 'EINSATZSTATUS'}</span><strong data-agent-status="${a.id}"></strong>${op.assignment ? `<div class="progress-track"><div class="progress-fill blue" data-agent-progress="${a.id}"></div></div>` : ''}<button class="button block ${op.assignment ? 'ghost' : 'primary'}" data-modal="agent-task" data-id="${a.id}">${ctx.icon('jobs')}${op.assignment ? 'Einsatz ansehen' : 'Einsatz planen'}</button></div><div class="agent-controls"><label class="field-label" for="focus-${a.id}">Schwerpunkt im Normalbetrieb</label><select id="focus-${a.id}" class="select" data-change="agent-focus" data-id="${a.id}">${Object.entries(
+          return `<section class="agent-card ${op.assignment ? 'on-assignment' : ''}"><div class="agent-card-top">${ctx.avatar(a)}<span class="tag ${a.role === 'analyst' ? 'blue' : a.role === 'engineer' ? 'amber' : 'green'}">STUFE ${a.level}</span></div><h3>${ctx.esc(a.name)}</h3><p class="role-desc">${ctx.E.catalog.roles[a.role].name} · ${ctx.E.catalog.roles[a.role].description}</p>${ctx.personnelPerks(a)}<div class="candidate-wage"><span>Betriebskosten / Stunde</span><strong data-personnel-wage="${a.id}"></strong></div><div class="agent-assignment"><span class="assignment-label">${ctx.icon(op.assignment ? 'timer' : 'pulse')}${op.assignment ? 'SONDEREINSATZ' : 'EINSATZSTATUS'}</span><strong data-agent-status="${a.id}"></strong>${op.assignment ? `<div class="progress-track"><div class="progress-fill blue" data-agent-progress="${a.id}"></div></div>` : ''}<button class="button block ${op.assignment ? 'ghost' : 'primary'}" data-modal="agent-task" data-id="${a.id}">${ctx.icon('jobs')}${op.assignment ? 'Einsatz ansehen' : 'Einsatz planen'}</button></div><div class="agent-controls"><label class="field-label" for="focus-${a.id}">Schwerpunkt im Normalbetrieb</label><select id="focus-${a.id}" class="select" data-change="agent-focus" data-id="${a.id}">${Object.entries(
             ctx.focusNames,
           )
             .map(
@@ -23,11 +23,11 @@ export function createWorkforceUI(ctx) {
             )
             .join(
               '',
-            )}</select>${ctx.actionButton('upgradeAgent', `${ctx.icon('plus')}Entwickeln · ${ctx.fmt(ctx.E.cost(ctx.state, 'agentUpgrade', a.id))} CR`, { id: a.id }, 'block', 'agentUpgrade', a.id)}</div></section>`;
+            )}</select>${ctx.actionButton('upgradeAgent', `${ctx.icon('plus')}Entwickeln · ${ctx.fmt(ctx.E.cost(ctx.state, 'agentUpgrade', a.id))} CR`, { id: a.id }, 'block', 'agentUpgrade', a.id)}<button class="text-button personnel-dismiss" data-personnel="dismiss" data-id="${a.id}">Agent ausmustern</button></div></section>`;
         })
         .join(
           '',
-        )}</div><div class="helper-card"><h3>Wen kannst du gerade entbehren?</h3><p>Im Sondereinsatz fehlt ein Agent bei Aufträgen, Forschung und Pflege. Techniker diagnostizieren schneller, Operatoren optimieren schneller, Analysten liefern mehr Forschung. Die Wirkung beginnt erst nach Abschluss. Danach ist der Agent wieder im Normalbetrieb; ein weiterer Sondereinsatz muss bis zum Ende der Erholungszeit warten. Große Krisen pausieren laufende Einsätze.</p></div>`
+        )}</div><div class="helper-card"><h3>Wen kannst du gerade entbehren?</h3><p>Im Sondereinsatz fehlt ein Agent bei Aufträgen, Forschung und Pflege. Techniker diagnostizieren schneller, Operatoren optimieren schneller, Analysten liefern mehr Forschung. Die Wirkung beginnt erst nach Abschluss. Danach ist der Agent wieder im Normalbetrieb; ein weiterer Sondereinsatz muss bis zum Ende der Erholungszeit warten. Große Krisen und Selbstwartung pausieren laufende Einsätze. Selbstwartung endet automatisch; Betriebskosten laufen weiter. Stärken und Nachteile verändern jeweils den eigenen Beitrag, nicht pauschal das gesamte Netzwerk.</p></div>`
     );
   }
 

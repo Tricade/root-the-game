@@ -24,9 +24,16 @@
 }
 .business-summary .stats-strip {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 140px), 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 20px;
   border-bottom: 0;
+}
+.business-summary .panel-header {
+  flex-wrap: wrap;
+}
+.business-summary .stats-strip > div {
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 .business-summary [data-business-stat='net'].negative {
   color: var(--red);
@@ -252,6 +259,9 @@
 }
 
 @media (max-width: 700px) {
+  .business-summary .stats-strip {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
   .card-grid.business-service-grid {
     grid-template-columns: 1fr;
   }

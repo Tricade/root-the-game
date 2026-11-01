@@ -92,15 +92,28 @@ export function buildSupplyFixtures(materials) {
     feed.name = `rack-feed-${index + 1}`;
     power.add(feed);
     // This roof position is on the rear half of the rotated rack42 model.
-    kit.duct(
+    // A busway tap feeds a removable rack through a flexible cable, not a
+    // rigid duct. A small sag and roof gland keep its route easy to read.
+    const cable = kit.pipe(
       feed,
       [
-        [side * wallX, busY, z],
-        [x, busY, z],
+        [side * (wallX - 0.08), busY - 0.055, z],
+        [side * 3.3, 2.16, z],
+        [side * 2.45, 2.16, z],
+        [x, 2.18, z],
         [x, 2.07, z],
       ],
       'rack-feed-branch',
-      0.09,
+      0.018,
+    );
+    cable.material = kit.gasket;
+    kit.rod(
+      feed,
+      [side * (wallX - 0.1), busY - 0.055, z],
+      [side * (wallX - 0.16), busY - 0.055, z],
+      0.034,
+      kit.gasket,
+      'tap-cable-gland',
     );
     kit.box(feed, [0.15, 0.04, 0.15], [x, 2.075, z], 'rack-roof-gland', kit.gasket);
     kit.box(feed, [0.22, 0.25, 0.24], [side * wallX, busY - 0.025, z], 'bus-tap');

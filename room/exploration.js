@@ -186,7 +186,9 @@ export function createRoomExploration(sceneContext) {
     if (sceneContext.keys.has('ArrowRight')) sceneContext.yaw -= delta * 1.6;
     if (!forward && !strafe) return;
     const length = Math.hypot(forward, strafe) || 1,
-      speed = (sceneContext.keys.has('ShiftLeft') ? 2.6 : 1.65) * Math.min(delta, 0.05);
+      sprinting = sceneContext.keys.has('ShiftLeft') || sceneContext.keys.has('ShiftRight'),
+      // Scale both paces together so Shift remains useful at the faster walking speed.
+      speed = (sprinting ? 3.9 : 2.475) * Math.min(delta, 0.05);
     const dx =
       ((-Math.sin(sceneContext.yaw) * forward + Math.cos(sceneContext.yaw) * strafe) / length) *
       speed;

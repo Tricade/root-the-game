@@ -117,6 +117,7 @@ function createStaticFiles(root) {
     ['/research.css', ['research.css', 'text/css; charset=utf-8']],
     ['/locales/research-en.js', ['locales/research-en.js', 'text/javascript; charset=utf-8']],
     ['/locales/workspace-en.js', ['locales/workspace-en.js', 'text/javascript; charset=utf-8']],
+    ['/ui/agent-development.js', ['ui/agent-development.js', 'text/javascript; charset=utf-8']],
     ['/engine/definitions.js', ['engine/definitions.js', 'text/javascript; charset=utf-8']],
     ['/engine/personnel.js', ['engine/personnel.js', 'text/javascript; charset=utf-8']],
     [

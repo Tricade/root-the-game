@@ -23,7 +23,7 @@ export function createWorkforceUI(ctx) {
             )
             .join(
               '',
-            )}</select>${ctx.actionButton('upgradeAgent', `${ctx.icon('plus')}Entwickeln · ${ctx.fmt(ctx.E.cost(ctx.state, 'agentUpgrade', a.id))} CR`, { id: a.id }, 'block', 'agentUpgrade', a.id)}<button class="text-button personnel-dismiss" data-personnel="dismiss" data-id="${a.id}">Agent ausmustern</button></div></section>`;
+            )}</select><button class="button block" data-modal="agent-upgrade" data-id="${a.id}">${ctx.icon('plus')}Upgrade prüfen · ${ctx.fmt(ctx.E.cost(ctx.state, 'agentUpgrade', a.id))} CR</button><button class="text-button personnel-dismiss" data-personnel="dismiss" data-id="${a.id}">Agent ausmustern</button></div></section>`;
         })
         .join(
           '',

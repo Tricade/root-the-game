@@ -4,6 +4,7 @@ import { createRacks } from './rack-ui.js';
 import { createUIFoundation } from './ui/foundation.js';
 import { createChromeUI } from './ui/chrome.js';
 import { createOverviewUI } from './ui/overview.js';
+import { createAgentDevelopmentUI } from './ui/agent-development.js';
 import { createWorkforceUI } from './ui/workforce.js';
 import { createPersonnelUI } from './ui/personnel.js';
 import { createWorkloadsUI } from './ui/workloads.js';
@@ -352,6 +353,7 @@ import { createRoom } from './room.js';
   };
   Object.assign(ctx, createChromeUI(ctx));
   Object.assign(ctx, createOverviewUI(ctx));
+  Object.assign(ctx, createAgentDevelopmentUI(ctx));
   Object.assign(ctx, createPersonnelUI(ctx));
   Object.assign(ctx, createWorkforceUI(ctx));
   Object.assign(ctx, createWorkloadsUI(ctx));
@@ -471,6 +473,7 @@ import { createRoom } from './room.js';
           'repairServer',
           'resolveIncident',
           'dispatchAgent',
+          'upgradeAgent',
           'hireCandidate',
           'dismissAgent',
         ].includes(action)

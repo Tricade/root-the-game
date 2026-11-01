@@ -48,6 +48,7 @@ export function createTelemetryUI(ctx) {
       limited = facility.racks.some((x) => x.status !== 'online');
     ctx.updateBusiness?.(m);
     ctx.updateResearch?.(m);
+    ctx.updateAgentDevelopment?.();
     const serverRows = new Map(
       facility.racks.flatMap((rack) => rack.servers.map((server) => [server.id, server])),
     );

@@ -106,6 +106,7 @@ export function createDialogsUI(ctx) {
       repair: 'Reparatur planen',
       'incident-confirm': 'Folgen deiner Entscheidung',
       'agent-task': 'Agent gezielt einsetzen',
+      'agent-upgrade': 'Agent-Upgrade prüfen',
       'personnel-confirm': 'Personalentscheidung prüfen',
       'hardware-shop': 'Hardware einbauen',
       'hardware-move': 'Umsetzen / Umpatchen',
@@ -115,7 +116,8 @@ export function createDialogsUI(ctx) {
       'operations-confirm': 'Betriebsauftrag prüfen',
     };
     let content = '';
-    if (type === 'research-confirm') content = ctx.researchConfirm(extra);
+    if (type === 'agent-upgrade') content = ctx.agentUpgradeModal(extra);
+    else if (type === 'research-confirm') content = ctx.researchConfirm(extra);
     else if (type === 'business-confirm') content = ctx.businessConfirm(extra);
     else if (type === 'operations-confirm') content = ctx.operationsConfirm(extra);
     else if (type === 'personnel-confirm') content = ctx.personnelConfirm(extra);

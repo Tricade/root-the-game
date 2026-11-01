@@ -3,6 +3,24 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const I18N = require('../i18n.js');
 
+test('customer, utility and unattended operation feedback is translated without renaming clients', () => {
+  for (const [source, expected] of [
+    ['Kunden & Betrieb', 'Customers & operations'],
+    ['Betriebspläne', 'Operation plans'],
+    ['Strom', 'Power'],
+    ['Zentralanlage ausbauen', 'Expand central plant'],
+    ['Lokaler Strom mit zentraler USV', 'Local power with central UPS'],
+    ['Umbau aktiv', 'Conversion in progress'],
+    [
+      '3 Ersatzteile bestellt. Lieferung in 300 Sekunden.',
+      '3 spare parts ordered. Delivery in 300 seconds.',
+    ],
+    ['3 Ersatzteile eingetroffen.', '3 spare parts delivered.'],
+    ['Nordlicht Mobilität', 'Nordlicht Mobilität'],
+  ])
+    assert.equal(I18N.translate(source, 'en'), expected);
+});
+
 test('facility counts use correct singulars and section names without changing standalone names', () => {
   for (const [source, expected] of [
     ['1 Racks · 1 Server', '1 rack · 1 server'],

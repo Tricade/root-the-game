@@ -181,7 +181,10 @@
           }
         }
         if (!incidentAtStart && !r.incident && !operationFinished && s.time >= r.graceUntil) {
-          const activeAgents = s.agents.filter((agent) => !agent.assignment);
+          const activeAgents = s.agents.filter(
+            (agent) =>
+              !agent.assignment && !s.operations?.projects?.some((p) => p.agentId === agent.id),
+          );
           const engineers = activeAgents
             .filter((agent) => agent.role === 'engineer')
             .reduce((sum, agent) => sum + agent.level, 0);

@@ -3,7 +3,7 @@ export function createOperationsUI(ctx) {
   const numeric = (key, label, value) =>
     `<label class="field-label">${ctx.tr(label)}<input class="input" data-ops-field="${key}" type="number" min="0" max="1000000000000" step="1" value="${value}"></label>`;
   const select = (key, label, rows) =>
-    `<label class="field-label">${ctx.tr(label)}<select class="select" data-ops-field="${key}">${rows.map(([v, t]) => `<option value="${ctx.esc(v)}">${ctx.esc(ctx.tr(t))}</option>`).join('')}</select></label>`;
+    `<label class="field-label">${ctx.tr(label)}<select class="select" data-ops-field="${key}">${rows.map(([v, t]) => `<option value="${ctx.esc(v)}" ${key === 'mode' && v === 'ups' ? 'disabled' : ''}>${ctx.esc(ctx.tr(t))}</option>`).join('')}</select></label>`;
   const button = (action, label, extra = '') =>
     `<button class="button" data-ops="${action}" ${extra}>${ctx.tr(label)}</button>`;
   const planNames = {
@@ -31,7 +31,7 @@ export function createOperationsUI(ctx) {
         .map(([key, label]) => numeric(key, label, o.limits[key]))
         .join(
           '',
-        )}</div><p data-ops-spent></p><p class="policy-explainer">Wartung nutzt die Geldreserve als Untergrenze. Geplante Ausbauten schützen zusätzlich dein Sparziel. Änderungen setzen verbrauchte Stundenbudgets nicht zurück.</p>${numeric('partsTarget', 'Zielbestand Ersatzteile', o.partsTarget)}<label class="field-label"><input data-ops-field="autoParts" type="checkbox" ${o.autoParts ? 'checked' : ''}> ${ctx.tr('Ersatzteile automatisch nachbestellen')}</label>${button('policy', 'Betriebsplan speichern')}</div></section>` +
+        )}</div><p data-ops-spent></p><p class="policy-explainer"><span>Budget für vier Sicherungen pro Stunde:</span> <strong data-ops-backup-budget></strong></p><p class="policy-explainer">Wartung nutzt die Geldreserve als Untergrenze. Geplante Ausbauten schützen zusätzlich dein Sparziel. Änderungen setzen verbrauchte Stundenbudgets nicht zurück.</p>${numeric('partsTarget', 'Zielbestand Ersatzteile', o.partsTarget)}<label class="field-label"><input data-ops-field="autoParts" type="checkbox" ${o.autoParts ? 'checked' : ''}> ${ctx.tr('Ersatzteile automatisch nachbestellen')}</label>${button('policy', 'Betriebsplan speichern')}</div></section>` +
       `<section class="panel" data-ops-form="delivery">${ctx.panelHeader('Ersatzteillogistik')}<div class="panel-body"><p data-ops-stock></p><div class="business-controls">${numeric('quantity', 'Bestellmenge', 3)}${select(
         'method',
         'Lieferung',
@@ -131,6 +131,12 @@ export function createOperationsUI(ctx) {
     return true;
   }
   function operationsChange(el) {
+    if (el.matches('[data-ops-field="supplySystem"]')) {
+      const mode = el.closest('[data-ops-form]').querySelector('[data-ops-field="mode"]');
+      mode.querySelector('[value="ups"]').disabled = el.value !== 'power';
+      if (el.value !== 'power' && mode.value === 'ups') mode.value = 'local';
+      return true;
+    }
     if (!el.matches('[data-ops-field="action"]')) return false;
     for (const section of el.closest('[data-ops-form]').querySelectorAll('[data-plan-for]'))
       section.hidden = section.dataset.planFor !== el.value;
@@ -150,7 +156,7 @@ export function createOperationsUI(ctx) {
             : ctx.E.quoteHardware(ctx.state, p.action, p.payload);
     }
     const planned = extra.action === 'queueOperation';
-    return `<p class="modal-intro">${ctx.esc(ctx.tr(q.label || 'Maßnahme prüfen'))}</p><div class="status-row"><span>Kosten jetzt</span><strong>${ctx.fmt(q.cost || 0)} CR</strong></div><div class="status-row"><span>Dauer</span><strong>${ctx.duration(q.duration || 0)}</strong></div>${q.research !== undefined ? `<p>${ctx.fmt(q.research)} FP · ${ctx.fmt(q.reputation)} ${ctx.tr('Ansehen')}</p><p>Regulärer Beitrag und Teamleitung pausieren während dieses Projekts.</p>` : ''}${planned ? '<p>Die Aufnahme in den Plan kostet nichts. Bei Ausführung werden Preis, Voraussetzungen, Stundenbudget und Reserven erneut geprüft. Ausbauten und Umbauten unterbrechen den betroffenen Bereich.</p>' : ''}${q.reason ? `<p class="modal-alert">${ctx.esc(ctx.tr(q.reason))}</p>` : ''}<button class="button primary block" data-ops-confirm ${!planned && !q.enabled ? 'disabled' : ''}>${ctx.tr('Bestätigen')}</button>`;
+    return `<p class="modal-intro">${ctx.esc(ctx.tr(q.label || 'Maßnahme prüfen'))}</p><div class="status-row"><span>Kosten jetzt</span><strong>${ctx.fmt(q.cost || 0)} CR</strong></div><div class="status-row"><span>Dauer</span><strong>${ctx.duration(q.duration || 0)}</strong></div>${q.research !== undefined ? `<p>${ctx.fmt(q.research)} ${ctx.tr('FP')} · ${ctx.fmt(q.reputation)} ${ctx.tr('Ansehen')}</p><p>Regulärer Beitrag und Teamleitung pausieren während dieses Projekts.</p>` : ''}${planned ? '<p>Die Aufnahme in den Plan kostet nichts. Bei Ausführung werden Preis, Voraussetzungen, Stundenbudget und Reserven erneut geprüft. Ausbauten und Umbauten unterbrechen den betroffenen Bereich.</p>' : ''}${q.reason ? `<p class="modal-alert">${ctx.esc(ctx.tr(q.reason))}</p>` : ''}<button class="button primary block" data-ops-confirm ${!planned && !q.enabled ? 'disabled' : ''}>${ctx.tr('Bestätigen')}</button>`;
   }
   function operationsSignature() {
     if (ctx.view !== 'operations') return '';
@@ -172,8 +178,17 @@ export function createOperationsUI(ctx) {
         ctx.$$('.view-content [data-ops-' + key + ']').forEach((el) => (el.textContent = value));
     put(
       'spent',
-      `${ctx.tr('Verbraucht')}: ${ctx.fmt(o.repairSpent)} / ${ctx.fmt(o.backupSpent)} / ${ctx.fmt(o.partsSpent)} / ${ctx.fmt(o.planSpent)} CR`,
+      `${ctx.tr('Verbraucht')}: ` +
+        [
+          ['Reparaturen', o.repairSpent],
+          ['Backups', o.backupSpent],
+          ['Beschaffung', o.partsSpent],
+          ['Ablaufplan', o.planSpent],
+        ]
+          .map(([label, amount]) => `${ctx.tr(label)} ${ctx.fmt(amount)} CR`)
+          .join(' · '),
     );
+    put('backup-budget', ctx.fmt(ctx.E.getResilience(ctx.state).backup.cost * 4) + ' CR');
     put(
       'stock',
       `${ctx.tr('Ersatzteile im Lager')}: ${ctx.fmt(ctx.state.resilience.parts)} / ${ctx.fmt(o.partsCapacity)}`,

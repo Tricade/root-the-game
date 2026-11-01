@@ -30,6 +30,7 @@ function createStaticFiles(root) {
     ['/app.js', ['app.js', 'text/javascript; charset=utf-8']],
     ['/brand.js', ['brand.js', 'text/javascript; charset=utf-8']],
     ['/locales/building-en.js', ['locales/building-en.js', 'text/javascript; charset=utf-8']],
+    ['/locales/business-en.js', ['locales/business-en.js', 'text/javascript; charset=utf-8']],
     ['/locales/en.js', ['locales/en.js', 'text/javascript; charset=utf-8']],
     ['/i18n.js', ['i18n.js', 'text/javascript; charset=utf-8']],
     ['/ui/racks/faces.js', ['ui/racks/faces.js', 'text/javascript; charset=utf-8']],

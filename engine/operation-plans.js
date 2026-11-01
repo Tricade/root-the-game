@@ -37,6 +37,8 @@
         const payload = planPayload(p.action, p.payload || {});
         if (
           !payload ||
+          (payload.rackId && !s.facility.racks.some((r) => r.id === payload.rackId)) ||
+          (payload.roomId && !s.business.rooms.some((r) => r.roomId === payload.roomId)) ||
           o.queue.length >= 12 ||
           !Number.isSafeInteger(p.ceiling) ||
           p.ceiling < 0 ||

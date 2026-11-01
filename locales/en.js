@@ -4,10 +4,14 @@
     typeof module === 'object' && module.exports
       ? require('./building-en.js')
       : root.RootBuildingEnglish;
-  const create = (translate) => factory(translate, building);
+  const business =
+    typeof module === 'object' && module.exports
+      ? require('./business-en.js')
+      : root.RootBusinessEnglish;
+  const create = (translate) => factory(translate, building, business);
   if (typeof module === 'object' && module.exports) module.exports = create;
   if (root) root.RootEnglishCatalog = create;
-})(typeof globalThis !== 'undefined' ? globalThis : this, function (translate, building) {
+})(typeof globalThis !== 'undefined' ? globalThis : this, function (translate, building, business) {
   const en = Object.create(null);
   const add = (pairs) => {
     for (const [de, english] of pairs) en[de] = english;
@@ -2558,5 +2562,7 @@
 
   const extra = building(translate);
   add(extra.pairs);
-  return { en, patterns: [...extra.patterns, ...patterns] };
+  const operations = business(translate);
+  add(operations.pairs);
+  return { en, patterns: [...operations.patterns, ...extra.patterns, ...patterns] };
 });

@@ -58,7 +58,7 @@ export function createTelemetryUI(ctx) {
       credits: ctx.compact(ctx.state.credits),
       capacity: ctx.dec(m.capacity),
       research: ctx.compact(ctx.state.research),
-      incomeMinute: ctx.dec(m.incomePerSecond * 60),
+      incomeMinute: (m.incomePerSecond >= 0 ? '+' : '') + ctx.dec(m.incomePerSecond * 60),
       researchMinute: ctx.dec(m.researchPerSecond * 60),
       reliability: ctx.dec(m.reliability),
       load: ctx.dec(m.load * 100),
@@ -134,6 +134,8 @@ export function createTelemetryUI(ctx) {
         v = el.dataset.stat === 'name' ? raw : ctx.tr(raw);
       if (el.textContent !== v) el.textContent = v;
       if (el.classList.contains('nav-count')) el.hidden = v === '0';
+      if (el.dataset.stat === 'incomeMinute')
+        el.style.color = m.incomePerSecond < 0 ? 'var(--red)' : 'var(--accent)';
     });
     ctx.$$('[data-system-tag]').forEach((el) => {
       el.classList.toggle('red', r.safetyMode || !r.online);

@@ -71,7 +71,7 @@
       roles: {
         operator: {
           name: 'Operator',
-          description: 'Hält Aufträge am Laufen und steigert die Netzwerkerlöse.',
+          description: 'Beschleunigt Projektarbeit und kann ein Raumteam leiten.',
           baseCost: 260,
           color: '#65d6c4',
         },
@@ -93,7 +93,7 @@
           id: 'routing',
           name: 'Adaptives Routing',
           description:
-            'Mehr Durchsatz pro Agent. Wiederholbar: +12 Prozentpunkte Arbeitstempo je Stufe.',
+            'Mehr Tempo für Projektarbeit. Wiederholbar: +12 Prozentpunkte Arbeitstempo je Stufe.',
           baseCost: 8,
           currency: 'research',
           effect: 'work',
@@ -101,7 +101,8 @@
         {
           id: 'cooling',
           name: 'Flüssigkühlung',
-          description: 'Weniger Wärme und Ausfallrisiko. Wiederholbar: −8 % Wärme je Stufe.',
+          description:
+            'Senkt thermischen Stress und Ausfallrisiko mit abnehmendem Zusatznutzen. Ersetzt keine reale Kühlleistung.',
           baseCost: 10,
           currency: 'research',
           effect: 'heat',
@@ -118,7 +119,7 @@
           id: 'automation',
           name: 'Selbstheilende Abläufe',
           description:
-            'Wartung und passive Erlöse werden effizienter. Wiederholbar: +9 Prozentpunkte Netzwerkerlös je Stufe (ohne Zinseszins).',
+            'Senkt Energie- und Hardwarepflegekosten mit abnehmendem Zusatznutzen um bis zu 25 %. Personal und Zentralanlagen bleiben kostenpflichtig.',
           baseCost: 15,
           currency: 'research',
           effect: 'income',
@@ -127,7 +128,7 @@
           id: 'synthesis',
           name: 'Wissenssynthese',
           description:
-            'Analysen liefern mehr Erkenntnisse. Wiederholbar: +15 % Forschung je Stufe.',
+            'Steigert passive Forschung und Agentenprojekte mit abnehmendem Zusatznutzen um bis zu 60 %.',
           baseCost: 18,
           currency: 'research',
           effect: 'research',

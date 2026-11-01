@@ -42,6 +42,10 @@ export function createRoomLocation(sceneContext, platform = globalThis) {
       );
     }
     sceneContext.stationSystem?.setVisible(sceneContext.locationId === 'control');
+    if (sceneContext.fallbackCooling)
+      sceneContext.fallbackCooling.visible =
+        sceneContext.locationId.startsWith('room-') &&
+        sceneContext.currentLocation().supply?.cooling !== 'central';
     const rear = Math.max(5.4, (rows - 1) * 4.2 + 1.5);
     sceneContext.scene.fog = new sceneContext.THREE.Fog(
       0x101516,

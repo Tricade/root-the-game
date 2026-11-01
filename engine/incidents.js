@@ -119,11 +119,12 @@
       }[kind];
       // Damage containment limits additional damaged hardware, not the chance
       // of an incident. Keeping two broken nodes must never buy immunity.
-      if (!affected.length)
+      const reusingDamage = !affected.length;
+      if (reusingDamage)
         affected = s.servers.filter((server) => server.status === 'failed').slice(0, 2);
       // Reusing damaged nodes must not move the failure outside its domain.
       const actualRack = s.facility.racks.find((r) => r.id === affected[0]?.rackId);
-      const actualScope = affected.every((n) => n.rackId === actualRack?.id) ? scope : 'nodes';
+      const actualScope = reusingDamage ? 'nodes' : scope;
       for (const server of affected) {
         server.condition = Math.min(
           server.condition,

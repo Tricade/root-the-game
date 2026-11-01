@@ -90,6 +90,15 @@ test('two outstanding hardware faults do not prevent further incidents', () => {
   }
   E.advance(s, 43200);
   assert(s.resilience.incident);
+  assert.equal(s.resilience.incident.scope, 'nodes');
+  assert(
+    s.servers
+      .slice(2)
+      .some(
+        (n) =>
+          E.getRackModel(s).racks.find((r) => r.id === n.rackId).servers[0].status === 'online',
+      ),
+  );
   assert(s.servers.filter((x) => x.status === 'failed').length <= 2);
   E.normalizeState(s);
 });

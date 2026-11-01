@@ -90,6 +90,13 @@ test('queue safeguards respect savings, price ceilings, explicit action whitelis
     false,
   );
   assert.deepEqual(s, before);
+  for (const [action, payload] of [
+    ['upgradeRack', { rackId: 'missing', component: 'cooling' }],
+    ['convertRoomSupply', { roomId: 'missing', system: 'power', mode: 'central' }],
+  ]) {
+    assert.equal(E.act(s, 'queueOperation', { action, payload, ceiling: 10000 }).ok, false);
+    assert.deepEqual(s, before, 'invalid references must not consume ids or poison the save');
+  }
   s.operations.limits.savings = 0;
   s.operations.queue[0].ceiling = 1;
   E.advance(s, 60);
@@ -115,4 +122,16 @@ test('long projects remove management and normal work, preserve fixed rewards, a
   assert.ok(Math.abs(loaded.research - start - passive * q.duration - q.research) < 1e-6);
   assert.equal(E.getBusinessModel(loaded).rooms[0].crewCapacity, capacity);
   assert.ok(loaded.agents[1].cooldownUntil > loaded.time);
+});
+
+test('a technician on a long project also stops reducing routine hardware wear', () => {
+  const working = setup();
+  working.resilience.graceUntil = 0;
+  working.agents[0].role = 'engineer';
+  working.agents[0].level = 10;
+  const assigned = structuredClone(working);
+  assert.ok(E.act(assigned, 'startProject', { id: assigned.agents[0].id, kind: 'audit' }).ok);
+  E.advance(working, 1);
+  E.advance(assigned, 1);
+  assert.ok(assigned.servers[0].condition < working.servers[0].condition);
 });

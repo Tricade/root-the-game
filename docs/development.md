@@ -35,3 +35,13 @@ Manual browser checks are still needed for visual artifacts, legibility, interac
 The published `main` branch contains the checked baseline. Keep unfinished features on separate branches, and tag only reviewed snapshots. Local development history and personal save backups are not part of this clean publication history.
 
 Export progress before changing versions, and use separate folders/ports/data directories when comparing them. Old single-room releases cannot represent every expanded-fleet save. Schema changes must preserve the explicit import/migration route and the stale-client capability guard.
+
+## Service economy and worker boundary
+
+Schema 4 adds resource-backed customers (`service-catalog`, `service-resources`, `service-metrics`, `services`), explicit supply routing (`room-supply`, `dependencies`), bounded plans and deliveries (`operations`, `operation-plans`), and long assignments (`projects`). Each has validation at the save boundary. User controls live in `ui/business.js` and `ui/operations.js`; both also run inside the 3D console. See [rules and reproducible balance checks](service-economy.md).
+
+`engine.js` owns the ordered module manifest for Node, the browser and the classic dedicated worker. `advance-worker.js` uses `importScripts`; it is not a module worker. `ui/offline.js` retains the source state until a complete worker result passes state-identity and save-conflict guards. Worker startup failures fall back once to yielding main-thread chunks. An import waits for pending catch-up rather than mutating it in place.
+
+Runtime facts checked before implementation: Node **24.22.1**, Electron **45.2.1**, Chromium **156.0.8078.75**, vendored Three.js **0.186.1**. No package or protocol permissions changed. Compatibility references are the [HTML dedicated-worker/importScripts specification](https://html.spec.whatwg.org/multipage/workers.html) (reviewed 2026-11-01), [Node 24.22.1 worker_threads source documentation](https://github.com/nodejs/node/blob/v24.22.1/doc/api/worker_threads.md) and [Electron 45.2.1 protocol documentation](https://github.com/electron/electron/blob/v45.2.1/docs/api/protocol.md). The existing standard, secure `root://app` protocol supports the classic worker in the same configured session.
+
+The Node worker test proves script ordering, serialization and deterministic results. Separately, `desktop/catchup-smoke.cjs` runs an actual Chromium worker under `root://app`, compares a full simulated hour to the direct engine result, and verifies renderer timer heartbeats continue during computation. The exercised Windows runtime passed; this does not claim Linux execution or long-run performance at the maximum save size.

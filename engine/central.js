@@ -138,6 +138,13 @@
         duration: step,
         enabled: !reason,
         reason,
+        ...(component === 'cooling' && context.roomSupply(s, rack.roomId).cooling === 'central'
+          ? {
+              warnings: [
+                'Lokale Kühlung ist bei Zentralbetrieb stillgelegt. Dieser Ausbau wirkt erst nach Umbau auf lokale oder hybride Versorgung.',
+              ],
+            }
+          : {}),
       };
     }
 

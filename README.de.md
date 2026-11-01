@@ -97,6 +97,9 @@ _Echte Aufnahmen mit einem getrennten, synthetischen Demostand und englischer Ob
 ### Agenten, Aufträge und Forschung
 
 - **Drei Rollen:** Operatoren beschleunigen Projektarbeit, Analysten liefern Forschung, Techniker helfen bei Wartung und Zuverlässigkeit. Agenten haben Stufen, Eigenschaften und einen einstellbaren Schwerpunkt.
+- **Arbeitsamt für Roboter:** sechs Bewerbungen alle 30 Minuten, eine dauerhafte Vormerkung und 64 eigene Roboterporträts. Aussehen und Fähigkeiten werden unabhängig voneinander gewürfelt und bleiben nach dem Neuladen erhalten.
+- **Stärken mit Gegenleistung:** Prozessarbeit, Forschung, Pflege und Teamleitung gegen Betriebskosten und Nachteile abwägen, bevor du eine Einheit aktivierst. Bestandsagenten behalten beim Laden ihre Fähigkeiten.
+- **Automatische Selbstwartung:** einzelne Einheiten können zeitweise aussetzen. Ihr normaler Beitrag und bezahlte Einsätze pausieren; andere Systeme arbeiten weiter. Belohnungen bleiben erhalten und die Einheiten kommen automatisch zurück. [Personal und Balancing →](docs/personnel.md)
 - **Gezielte Einsätze:** Netzdiagnose senkt das Risiko, Lastoptimierung erhöht den Durchsatz und Forschungsaufträge liefern Punkte. Während eines Einsatzes fehlt der Agent vollständig im Normalbetrieb. Die Wirkung beginnt nach Abschluss; anschließend gilt eine Erholungszeit. Passende Rollen arbeiten bei ihren Spezialaufgaben effizienter.
 - **Konkurrierende Kundenaufträge:** Monitoring, Migration, Audits, Optimierung, Wiederherstellung, Forschung und KI-Arbeit teilen sich begrenzte Kapazitäten. Credits, Ansehen und Forschung werden bei Abschluss vergeben. Die automatische Annahme kann ausgewogen, auf Einnahmen oder auf Forschung ausgerichtet werden.
 - **Fünf wiederholbare Forschungszweige:** Routing, Kühlung, Vertragsanalyse, effiziente Abläufe und Wissenssynthese verbessern das gesamte Netzwerk. Erfolgsbelohnungen werden separat abgeholt.

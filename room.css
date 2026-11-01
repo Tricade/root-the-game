@@ -647,9 +647,7 @@ body.root-room-open {
   border: 1px solid #668076;
   border-radius: 14px;
   background: #101715;
-  box-shadow:
-    0 28px 100px #000c,
-    0 0 0 1px #a0dd9b12;
+  box-shadow: none;
   color: #dce5d6;
   font: 12px var(--font);
 }

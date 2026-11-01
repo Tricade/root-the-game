@@ -39,6 +39,7 @@ export function createRoomLocation(sceneContext, platform = globalThis) {
       sceneContext.assetHall.setServerRoom(
         sceneContext.locationId.startsWith('room-'),
         sceneContext.currentLocation().supply,
+        racks.length,
       );
     }
     sceneContext.stationSystem?.setVisible(sceneContext.locationId === 'control');

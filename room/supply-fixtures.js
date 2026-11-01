@@ -1,102 +1,118 @@
 import * as THREE from '../vendor/three.module.js';
-import { metricBox } from '../room-surfaces.js';
+import { createUtilityKit } from './utility-kit.js';
 
-/** Original modular headers, isolation valves and bus duct. Dimensions are metres.
- * Mounted above the walking/door envelope; no external models or textures. */
+/** Original room-side services. Routes connect firestopped entries to the room
+ * coil and only the racks that exist. Local equipment remains the fallback. */
 export function buildSupplyFixtures(materials) {
   const group = new THREE.Group();
   group.name = 'central-room-connections';
-  const cooling = new THREE.Group();
+  const cooling = new THREE.Group(),
+    power = new THREE.Group();
   cooling.name = 'chilled-water-headers';
-  group.add(cooling);
-  const power = new THREE.Group();
   power.name = 'central-power-bus';
-  group.add(power);
-  const insulated = new THREE.MeshStandardMaterial({
-    color: 0x2c3c45,
-    roughness: 0.76,
-    metalness: 0.18,
-  });
-  const blue = new THREE.MeshStandardMaterial({ color: 0x4a9abd, roughness: 0.5, metalness: 0.25 });
-  function box(parent, size, pos, material, name) {
-    const m = metricBox(size, material);
-    m.position.set(...pos);
-    m.name = name;
-    parent.add(m);
-    return m;
-  }
-  function pipe(parent, from, to, radius, material, name) {
-    const a = new THREE.Vector3(...from),
-      b = new THREE.Vector3(...to),
-      axis = b.clone().sub(a);
-    const mesh = new THREE.Mesh(
-      new THREE.CylinderGeometry(radius, radius, axis.length(), 12),
-      material,
+  group.add(cooling, power);
+  const kit = createUtilityKit(materials),
+    feeds = [];
+  // Two different elevations keep the return bend clear of the supply branch.
+  for (const [i, x, y, end] of [
+    [0, 3.58, 2.42, -0.32],
+    [1, 3.83, 2.65, 0.32],
+  ]) {
+    kit.pipe(
+      cooling,
+      [
+        [x, y, 5.43],
+        [x, y, -5.02],
+        [end, y, -5.02],
+        [end, 1.48, -5.02],
+      ],
+      'room-water-circuit',
     );
-    mesh.position.copy(a.add(b).multiplyScalar(0.5));
-    mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), axis.normalize());
-    mesh.name = name;
-    parent.add(mesh);
-    return mesh;
-  }
-  for (const offset of [-0.12, 0.12]) {
-    const x = 3.7 + offset;
-    pipe(cooling, [x, 2.62, -4.8], [x, 2.62, 4.7], 0.065, insulated, 'insulated-supply-return');
-    pipe(cooling, [x, 1.1, 4.7], [x, 2.62, 4.7], 0.065, insulated, 'entry-riser');
-    for (const z of [-4.6, -1.6, 1.6, 4.5]) {
-      pipe(cooling, [x, 2.62, z - 0.035], [x, 2.62, z + 0.035], 0.08, blue, 'flow-band');
+    kit.wallPort(cooling, x, y, 5.35);
+    kit.valve(cooling, end, 1.89, -5.02, i ? kit.returning : kit.supply);
+    for (const z of [-3.1, 0.2, 3.2]) {
+      kit.rod(
+        cooling,
+        [x, y, z - 0.04],
+        [x, y, z + 0.04],
+        0.066,
+        i ? kit.returning : kit.supply,
+        'water-identification-band',
+      );
     }
-    const wheel = new THREE.Mesh(new THREE.TorusGeometry(0.12, 0.014, 6, 20), blue);
-    wheel.position.set(x - 0.08, 1.48, 4.81);
-    wheel.name = 'isolation-valve';
-    cooling.add(wheel);
-    const end = 3.2 + offset;
-    pipe(cooling, [x, 2.62, -4.8], [x, 2.62, -5.08], 0.065, insulated, 'rear-pipe-elbow');
-    pipe(cooling, [x, 2.62, -5.08], [end, 2.62, -5.08], 0.065, insulated, 'rear-pipe-link');
-    pipe(cooling, [end, 2.62, -5.08], [end, 2.38, -5.08], 0.065, insulated, 'header-connection');
   }
-  for (const z of [-4.6, -1.6, 1.6, 4.5]) {
-    box(cooling, [0.55, 0.035, 0.08], [3.795, 2.52, z], materials.brushed, 'pipe-wall-bracket');
-    box(cooling, [0.02, 0.15, 0.18], [4.08, 2.52, z], materials.brushed, 'pipe-anchor-plate');
+  for (const z of [-3.1, 0.2, 3.2]) kit.support(cooling, 1, 2.42, z);
+  // Chilled water exchanges heat with room air here. The rectangular outlets
+  // enter the raised-floor plenum, rather than pretending a water pipe is a duct.
+  kit.box(cooling, [1.7, 0.92, 0.44], [0, 1.05, -5.02], 'room-fan-coil');
+  kit.box(cooling, [1.5, 0.53, 0.022], [0, 1.02, -4.788], 'coil-return-grille', kit.gasket);
+  for (let y = 0.8; y <= 1.25; y += 0.06)
+    kit.box(cooling, [1.48, 0.018, 0.025], [0, y, -4.77], 'coil-louvre', kit.steel);
+  kit.label(cooling, 'CHW / ROOM COIL', [0, 1.395, -4.787], 0.95, 0.12);
+  for (const x of [-0.49, 0.49]) {
+    kit.box(cooling, [0.34, 0.61, 0.3], [x, 0.3, -5.02], 'floor-plenum-outlet');
+    kit.box(cooling, [0.44, 0.055, 0.4], [x, 0.0275, -5.02], 'sealed-floor-boot', kit.gasket);
   }
-  // Rear supply header feeds the raised-floor plenum; return runs remain visible.
-  box(cooling, [6.9, 0.24, 0.22], [0, 2.38, -5.08], materials.brushed, 'plenum-header');
-  for (const x of [-2.2, 2.2])
-    box(cooling, [0.26, 1.88, 0.18], [x, 1.32, -5.08], materials.shellDark, 'plenum-drop');
-  box(
-    cooling,
-    [0.42, 0.3, 0.15],
-    [3.72, 1.88, 4.7],
-    materials.shellDark,
-    'cooling-isolation-control',
+  const busY = 2.28,
+    wallX = 3.79;
+  kit.duct(
+    power,
+    [
+      [-wallX, busY, 5.43],
+      [-wallX, busY, -3.15],
+      [wallX, busY, -3.15],
+      [wallX, busY, 0.65],
+    ],
+    'room-distribution-bus',
   );
-  box(cooling, [0.28, 0.12, 0.015], [3.72, 1.91, 4.785], blue, 'cooling-control-screen');
-  box(
-    cooling,
-    [0.36, 0.08, 0.12],
-    [3.99, 1.88, 4.7],
-    materials.brushed,
-    'cooling-panel-wall-mount',
+  kit.wallPort(power, -wallX, busY, 5.35, true);
+  kit.box(power, [0.24, 0.36, 0.48], [-wallX, busY - 0.04, 3.8], 'room-bus-isolator');
+  kit.box(
+    power,
+    [0.05, 0.18, 0.09],
+    [-wallX + 0.15, busY - 0.04, 3.8],
+    'isolator-handle',
+    kit.gasket,
   );
-  box(power, [0.19, 0.16, 9.6], [-3.72, 2.62, 0], materials.brushed, 'insulated-power-bus');
-  box(power, [0.19, 1.52, 0.16], [-3.72, 1.86, 4.72], materials.brushed, 'power-entry-riser');
-  for (const z of [-3.4, 0, 3.4]) {
-    box(power, [0.32, 0.27, 0.4], [-3.72, 2.56, z], materials.shellDark, 'bus-tap');
-    box(power, [2.06, 0.08, 0.08], [-2.6, 2.58, z], materials.trim, 'rack-feed-branch');
-    box(power, [0.035, 0.23, 0.18], [-3.54, 2.56, z], materials.green, 'breaker-status-strip');
+  kit.label(power, 'ATS / ROOM FEED', [-wallX + 0.126, busY + 0.05, 3.8], 0.4, 0.075, Math.PI / 2);
+  for (const side of [-1, 1])
+    for (const z of [-2.6, 0.4, 3.7]) {
+      if (side > 0 && z > 0.65) continue;
+      kit.support(power, side, busY, z);
+    }
+  for (let index = 0; index < 6; index++) {
+    const feed = new THREE.Group(),
+      side = index % 2 === 0 ? -1 : 1,
+      z = -Math.floor(index / 2) * 0.84 - 0.25,
+      x = side * 1.99;
+    feed.name = `rack-feed-${index + 1}`;
+    power.add(feed);
+    // This roof position is on the rear half of the rotated rack42 model.
+    kit.duct(
+      feed,
+      [
+        [side * wallX, busY, z],
+        [x, busY, z],
+        [x, 2.07, z],
+      ],
+      'rack-feed-branch',
+      0.09,
+    );
+    kit.box(feed, [0.15, 0.04, 0.15], [x, 2.075, z], 'rack-roof-gland', kit.gasket);
+    kit.box(feed, [0.22, 0.25, 0.24], [side * wallX, busY - 0.025, z], 'bus-tap');
+    feeds.push(feed);
   }
-  box(power, [0.46, 0.55, 0.2], [-3.72, 1.44, 4.72], materials.shellDark, 'room-isolator');
-  box(power, [0.09, 0.2, 0.06], [-3.72, 1.44, 4.86], materials.brushed, 'lockable-disconnect');
-  box(power, [0.36, 0.12, 0.14], [-3.99, 1.44, 4.72], materials.brushed, 'power-panel-wall-mount');
-  for (const z of [-3.4, 0, 3.4])
-    box(power, [0.35, 0.05, 0.12], [-3.91, 2.51, z], materials.brushed, 'power-bus-wall-mount');
   return {
     group,
     cooling,
     power,
-    set(supply = { cooling: 'local', power: 'local' }) {
+    set(supply = { cooling: 'local', power: 'local' }, rackCount = 0) {
       cooling.visible = supply.cooling !== 'local';
       power.visible = supply.power !== 'local';
+      feeds.forEach((feed, i) => {
+        feed.visible = i < rackCount;
+      });
     },
+    dispose: kit.dispose,
   };
 }

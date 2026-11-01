@@ -3,6 +3,7 @@ export { roomLocation, corridorPlan, stairHeight } from './room-navigation.js';
 import * as THREE from './vendor/three.module.js';
 import { metricBox } from './room-surfaces.js';
 import { facilityReadout, drawInstrument } from './room-instruments.js';
+import { buildPlantConnections } from './room/plant-connections.js';
 
 const tr = (text) => globalThis.ROOTI18N?.translate(String(text)) || String(text);
 
@@ -19,7 +20,8 @@ export function buildFacilityInterior({ bank, scene, materials, location, layout
     geometries = [],
     textures = [],
     ownedMaterials = [],
-    instruments = [];
+    instruments = [],
+    serviceKits = [];
   let lastInstrumentUpdate = -Infinity,
     lastInstrumentLanguage = '';
   const concrete = materials.bunkerConcrete || materials.wall;
@@ -282,7 +284,8 @@ export function buildFacilityInterior({ bank, scene, materials, location, layout
     if (location.id !== 'control') colliders.push({ x: -1.55, z: 5.12, hx: 0.74, hz: 0.31 });
     const system = central.systems.find((item) => item.id === location.id);
     if (system) {
-      const count = system.level ? Math.min(3, system.level + 1) : 0;
+      const count = system.level ? Math.min(3, system.level + 1) : 0,
+        units = [];
       for (let i = 0; i < count; i++)
         for (const side of [-1, 1]) {
           const x = side * 2.35,
@@ -291,6 +294,11 @@ export function buildFacilityInterior({ bank, scene, materials, location, layout
           unit.position.set(x, 0, z);
           unit.rotation.y = side < 0 ? Math.PI / 2 : -Math.PI / 2;
           group.add(unit);
+          units.push({
+            x,
+            z,
+            roof: system.id === 'cooling' ? 2.1 : system.id === 'ups' ? 2.0225 : 2.0625,
+          });
           const original = unit.getObjectByName(
             system.id === 'cooling'
               ? 'crac_cooling_unit_cabinet_LOD0_5'
@@ -352,6 +360,14 @@ export function buildFacilityInterior({ bank, scene, materials, location, layout
               : { x: center.x, z: center.z, hx: size.x / 2 + 0.17, hz: size.z / 2 + 0.17 },
           );
         }
+      const services = buildPlantConnections(
+        materials,
+        system.id,
+        units,
+        central.systems.some((item) => item.id === 'ups' && item.level > 0),
+      );
+      group.add(services.group);
+      serviceKits.push(services);
     }
   }
   const local = (p, x, z) => ({
@@ -442,6 +458,7 @@ export function buildFacilityInterior({ bank, scene, materials, location, layout
     },
     dispose() {
       scene.remove(group);
+      serviceKits.forEach((kit) => kit.dispose());
       geometries.forEach((item) => item.dispose());
       textures.forEach((item) => item.dispose());
       ownedMaterials.forEach((item) => item.dispose());

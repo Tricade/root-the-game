@@ -869,10 +869,10 @@ export function buildAssetHall({ bank, scene, materials }) {
     get coolingFans() {
       return serverFixtures.visible && localCooling.visible ? coolingFans : [];
     },
-    setServerRoom(value, supply = { cooling: 'local', power: 'local' }) {
+    setServerRoom(value, supply = { cooling: 'local', power: 'local' }, rackCount = 0) {
       serverFixtures.visible = value;
       localCooling.visible = supply.cooling !== 'central';
-      connections.set(supply);
+      connections.set(supply, rackCount);
       closedFloor.visible = !value;
       roomLighting.visible = !value;
     },

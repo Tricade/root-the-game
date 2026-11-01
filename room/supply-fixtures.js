@@ -1,5 +1,6 @@
 import * as THREE from '../vendor/three.module.js';
 import { createUtilityKit } from './utility-kit.js';
+import { buildCableTray } from './cable-tray.js';
 
 /** Original room-side services. Routes connect firestopped entries to the room
  * coil and only the racks that exist. Local equipment remains the fallback. */
@@ -9,7 +10,7 @@ export function buildSupplyFixtures(materials) {
   const cooling = new THREE.Group(),
     power = new THREE.Group();
   cooling.name = 'chilled-water-headers';
-  power.name = 'central-power-bus';
+  power.name = 'central-power-trays';
   group.add(cooling, power);
   const kit = createUtilityKit(materials),
     feeds = [];
@@ -59,7 +60,8 @@ export function buildSupplyFixtures(materials) {
   }
   const busY = 2.28,
     wallX = 3.79;
-  kit.duct(
+  buildCableTray(
+    kit,
     power,
     [
       [-wallX, busY, 5.43],
@@ -67,7 +69,7 @@ export function buildSupplyFixtures(materials) {
       [wallX, busY, -3.15],
       [wallX, busY, 0.65],
     ],
-    'room-distribution-bus',
+    'room-power-tray',
   );
   kit.wallPort(power, -wallX, busY, 5.29, true);
   kit.box(power, [0.24, 0.36, 0.48], [-wallX, busY - 0.04, 3.8], 'room-bus-isolator');
@@ -82,8 +84,22 @@ export function buildSupplyFixtures(materials) {
   for (const side of [-1, 1])
     for (const z of [-2.6, 0.4, 3.7]) {
       if (side > 0 && z > 0.65) continue;
-      kit.support(power, side, busY, z);
+      kit.support(power, side, busY, z, wallX, 0.03);
     }
+  // The cross-room span needs its own ceiling hangers; side-wall brackets
+  // cannot support a tray spanning the entire aisle.
+  for (const x of [-2.1, 2.1]) {
+    for (const z of [-3.31, -2.99])
+      kit.rod(power, [x, 2.215, z], [x, 3.035, z], 0.007, kit.steel, 'tray-hanger-rod');
+    kit.box(
+      power,
+      [0.07, 0.035, 0.4],
+      [x, busY - 0.0475, -3.15],
+      'tray-hanger-crossbar',
+      kit.steel,
+    );
+    kit.box(power, [0.12, 0.025, 0.44], [x, 3.025, -3.15], 'tray-ceiling-anchor', kit.steel);
+  }
   for (let index = 0; index < 6; index++) {
     const feed = new THREE.Group(),
       side = index % 2 === 0 ? -1 : 1,
@@ -92,7 +108,7 @@ export function buildSupplyFixtures(materials) {
     feed.name = `rack-feed-${index + 1}`;
     power.add(feed);
     // This roof position is on the rear half of the rotated rack42 model.
-    // A busway tap feeds a removable rack through a flexible cable, not a
+    // A protected tray tap feeds a removable rack through a flexible cable, not a
     // rigid duct. A small sag and roof gland keep its route easy to read.
     const cable = kit.pipe(
       feed,

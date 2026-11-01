@@ -135,6 +135,7 @@ function createStaticFiles(root) {
     ['/room/utility-kit.js', ['room/utility-kit.js', 'text/javascript; charset=utf-8']],
     ['/room/plant-connections.js', ['room/plant-connections.js', 'text/javascript; charset=utf-8']],
     ['/room/plant-fascia.js', ['room/plant-fascia.js', 'text/javascript; charset=utf-8']],
+    ['/room/cable-tray.js', ['room/cable-tray.js', 'text/javascript; charset=utf-8']],
     ['/engine.js', ['engine.js', 'text/javascript; charset=utf-8']],
     ['/favicon.svg', ['favicon.svg', 'image/svg+xml']],
   ]);

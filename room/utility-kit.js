@@ -1,10 +1,11 @@
 import * as THREE from '../vendor/three.module.js';
 import { metricBox } from '../room-surfaces.js';
 import { RoundedBoxGeometry } from '../vendor/RoundedBoxGeometry.js';
+import { mergeGeometries } from '../vendor/BufferGeometryUtils.js';
 
 /** Original metric service fittings. Ownership stays with the room that creates
  * the kit; shared hall materials are never disposed by a room transition. */
-export function createUtilityKit(materials) {
+export function createUtilityKit() {
   const geometries = new Set(),
     owned = new Set(),
     textures = new Set();
@@ -18,7 +19,7 @@ export function createUtilityKit(materials) {
     supply = material(0x5db6cf),
     returning = material(0x889bc0),
     gasket = material(0x171e22, 0.98, 0),
-    steel = materials.brushed || paint;
+    steel = material(0x718085, 0.44, 0.72);
   function mesh(parent, geometry, mat, position, name) {
     geometries.add(geometry);
     const result = new THREE.Mesh(geometry, mat);
@@ -60,7 +61,7 @@ export function createUtilityKit(materials) {
   }
   // Round bends in one continuous surface, rather than intersecting cylinders
   // with exposed cut ends. Straight sections remain exactly on the route.
-  function pipe(parent, points, name, radius = 0.055) {
+  function pipe(parent, points, name, radius = 0.055, radialSegments = 12) {
     const vertices = points.map((p) => new THREE.Vector3(...p)),
       path = new THREE.CurvePath();
     let cursor = vertices[0];
@@ -80,9 +81,9 @@ export function createUtilityKit(materials) {
       parent,
       new THREE.TubeGeometry(
         path,
-        Math.max(24, Math.ceil(path.getLength() * 32)),
+        points.length === 2 ? 1 : Math.max(24, Math.ceil(path.getLength() * 32)),
         radius,
-        12,
+        radialSegments,
         false,
       ),
       insulation,
@@ -92,24 +93,25 @@ export function createUtilityKit(materials) {
     result.userData.route = points;
     return result;
   }
-  function duct(parent, points, name, width = 0.14) {
-    const group = new THREE.Group();
-    group.name = name;
-    group.userData.route = points;
-    parent.add(group);
-    // Butt joints avoid coplanar overlapping faces at every elbow.
-    points.forEach((p) => box(group, [width, width, width], p, 'duct-elbow'));
-    for (let i = 1; i < points.length; i++) {
-      const a = new THREE.Vector3(...points[i - 1]),
-        b = new THREE.Vector3(...points[i]),
-        d = b.clone().sub(a),
-        axis = ['x', 'y', 'z'].find((k) => Math.abs(d[k]) > 1e-5),
-        size = { x: width, y: width, z: width };
-      if (!axis || d.length() <= width) continue;
-      size[axis] = d.length() - width - 0.001;
-      box(group, [size.x, size.y, size.z], a.add(b).multiplyScalar(0.5).toArray(), 'duct-run');
+  function batch(group) {
+    const parts = group.children.filter((node) => node.isMesh);
+    if (!parts.length) return;
+    if (parts.some((node) => node.material !== parts[0].material))
+      throw new Error('Tray batch requires one material');
+    const copies = parts.map((node) => {
+      node.updateMatrix();
+      const copy = node.geometry.index ? node.geometry.toNonIndexed() : node.geometry.clone();
+      return copy.applyMatrix4(node.matrix);
+    });
+    const merged = mergeGeometries(copies);
+    copies.forEach((copy) => copy.dispose());
+    if (!merged) throw new Error('Tray geometry attributes differ');
+    for (const node of parts) {
+      geometries.delete(node.geometry);
+      node.geometry.dispose();
+      node.removeFromParent();
     }
-    return group;
+    mesh(group, merged, parts[0].material, [0, 0, 0], 'batched-tray-rails-and-rungs');
   }
   // Every service passes through a sealed sleeve; neither ends in free air.
   function wallPort(parent, x, y, z, electrical = false) {
@@ -150,14 +152,14 @@ export function createUtilityKit(materials) {
     }
     rod(parent, [x, y, z + 0.18], [x, y, z + 0.22], 0.028, steel, 'handwheel-hub');
   }
-  function support(parent, side, y, z, reach = 3.55) {
+  function support(parent, side, y, z, reach = 3.55, underside = 0.055) {
     box(parent, [0.03, 0.21, 0.16], [side * 4.075, y - 0.04, z], 'wall-anchor', steel);
     const end = reach - 0.12,
       length = 4.075 - end;
     box(
       parent,
       [length, 0.035, 0.08],
-      [side * (end + length / 2), y - 0.09, z],
+      [side * (end + length / 2), y - underside - 0.0175, z],
       'header-support',
       steel,
     );
@@ -205,7 +207,8 @@ export function createUtilityKit(materials) {
     box,
     rod,
     pipe,
-    duct,
+    mesh,
+    batch,
     wallPort,
     valve,
     support,

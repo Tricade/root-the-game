@@ -34,7 +34,7 @@ Conversion costs **4,200 CR per rack for cooling** or **3,200 CR per rack for po
 
 Each cooling module supplies 3.5 kW, each distribution module 6 kW and each UPS module protects 3 kW, shared among connected racks. UPS reduces upstream power-failure risk; it cannot repair a broken downstream cabinet. Central module levels can grow beyond five. Physical cabinet rendering remains bounded; displays represent aggregate installed capacity.
 
-Original runtime geometry in `room/supply-fixtures.js` adds insulated supply/return headers, isolation valves, power bus ducts and branch connections. Central-only rooms hide local cooling units; hybrid rooms retain them. The same rule applies to the procedural fallback scene. No external furniture or model downloads were introduced.
+Original runtime geometry in `room/supply-fixtures.js` adds insulated supply/return headers, isolation valves, open cable trays, visible power cables and flexible rack connections. Central-only rooms hide local cooling units; hybrid rooms retain them. The same rule applies to the procedural fallback scene. No external furniture or model downloads were introduced.
 
 ## Failures have boundaries
 

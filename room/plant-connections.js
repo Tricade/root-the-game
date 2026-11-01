@@ -1,5 +1,6 @@
 import * as THREE from '../vendor/three.module.js';
 import { createUtilityKit } from './utility-kit.js';
+import { buildCableTray, buildCableTail } from './cable-tray.js';
 
 /** Source-side services for the same circuits represented in converted rooms.
  * The streamed room boundary is a sealed service penetration, not a loose end.
@@ -40,19 +41,29 @@ export function buildPlantConnections(materials, systemId, units, hasUPS = false
           index ? kit.returning : kit.supply,
           'header-end-cap',
         );
-      } else
-        kit.duct(
+      } else {
+        buildCableTray(
+          kit,
           group,
           [
             [x, y, firstZ],
             [x, y, -5.43],
           ],
           'plant-power-header',
-          0.12,
+          0.22,
         );
+        kit.box(
+          group,
+          [0.17, 0.08, 0.14],
+          [x, y + 0.01, firstZ - 0.03],
+          'tray-terminal-box',
+          kit.gasket,
+        );
+      }
       kit.wallPort(group, x, y, -5.29, !cooling);
-      for (const z of [-4.2, -1.7, 0.8]) kit.support(group, side, y, z, Math.abs(x));
-      // The identification plate is mounted on the room-facing duct/header.
+      for (const z of [-4.2, -1.7, 0.8])
+        kit.support(group, side, y, z, Math.abs(x), cooling ? 0.055 : 0.03);
+      // The identification plate is mounted on the room-facing tray/header.
       kit.label(group, circuit, [x, y - 0.24, -5.267], 0.24, 0.07);
       for (const unit of row) {
         const connectionX = unit.x + side * 0.25,
@@ -78,7 +89,21 @@ export function buildPlantConnections(materials, systemId, units, hasUPS = false
           group.add(valve);
           kit.valve(valve, 0, 0, 0, index ? kit.returning : kit.supply);
         } else {
-          kit.duct(group, route, 'plant-power-connection', 0.1);
+          // Lift tails over the tray lip before entering the junction; a cable
+          // must not pass sideways through the solid metal rail.
+          buildCableTail(
+            kit,
+            group,
+            [route[0], [connectionX, y + 0.12, z], [x, y + 0.12, z], route[2]],
+            'plant-power-connection',
+          );
+          kit.box(
+            group,
+            [0.17, 0.052, 0.115],
+            [x, y + 0.012, z],
+            'plant-tray-junction',
+            kit.gasket,
+          );
           kit.box(
             group,
             [0.17, 0.045, 0.17],

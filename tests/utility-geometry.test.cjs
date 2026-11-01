@@ -71,6 +71,12 @@ test('connected room feeds meet the actual rack roofs and never populate empty s
       'flange stands proud of the inner wall face without z-fighting',
     );
   }
+  const trayMetal = fixtures.power.getObjectByName('open-tray-metal'),
+    trayBounds = new THREE.Box3().setFromObject(trayMetal);
+  for (const support of named(fixtures.power, 'header-support')) {
+    const bounds = new THREE.Box3().setFromObject(support);
+    assert.ok(Math.abs(bounds.max.y - trayBounds.min.y) < 0.001, 'tray rests on its brackets');
+  }
   fixtures.set({ cooling: 'hybrid', power: 'ups' }, 6);
   assert.equal(named(fixtures.group, 'rack-feed-branch').length, 6);
   assert.equal(geometryCount(), initialCount, 'mode/count changes reuse geometry');
@@ -163,10 +169,11 @@ test('all utility cabinets connect roof glands to bounded headers leaving their 
     const headers = named(services, water ? 'plant-water-header' : 'plant-power-header');
     assert.equal(connections.length, 6 * circuits);
     for (const node of connections) {
-      const [start, , end] = node.userData.route;
+      const start = node.userData.route[0],
+        end = node.userData.route.at(-1);
       assert.ok(
         Math.abs(start[1] - body.max.y) < 0.03,
-        id + ' pipe/duct starts inside the actual roof',
+        id + ' connection starts inside the actual roof',
       );
       assert.ok(
         headers.some((header) => {
@@ -183,6 +190,25 @@ test('all utility cabinets connect roof glands to bounded headers leaving their 
     }
     for (const header of headers)
       assert.ok(header.userData.route.at(-1)[2] < -5.4, 'header crosses the wall firestop');
+    if (!water) {
+      const rails = named(services, 'batched-tray-rails-and-rungs');
+      for (const connection of connections) {
+        for (const cable of connection.children) {
+          const positions = cable.geometry.attributes.position;
+          for (let i = 1; i < positions.count; i++) {
+            const a = new THREE.Vector3().fromBufferAttribute(positions, i - 1),
+              b = new THREE.Vector3().fromBufferAttribute(positions, i),
+              length = a.distanceTo(b);
+            if (length < 1e-6) continue;
+            const hit = new THREE.Raycaster(a, b.sub(a).normalize(), 0, length).intersectObjects(
+              rails,
+            );
+            assert.equal(hit.length, 0, 'cabinet tail clears the solid tray rails and rungs');
+          }
+        }
+      }
+    }
+
     const bounds = new THREE.Box3().setFromObject(services);
     assert.ok(
       bounds.max.y < 2.85 && bounds.min.x > -4.1 && bounds.max.x < 4.1,

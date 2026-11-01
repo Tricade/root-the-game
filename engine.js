@@ -40,7 +40,10 @@
     'save-operations',
     'save-v4',
     'saves',
+    'catchup',
   ];
+  if (typeof root.importScripts === 'function' && !root.RootEngineModules)
+    root.importScripts(...names.map((name) => 'engine/' + name + '.js'));
   const modules = names.map((name) =>
     typeof module === 'object' && module.exports
       ? require('./engine/' + name + '.js')
@@ -82,6 +85,7 @@
     jobProfiles: context.JOB_PROFILES,
     quoteHardware: context.quoteHardware,
     advance: context.advance,
+    createCatchup: context.createCatchup,
     act: context.act,
     cost: context.cost,
   };

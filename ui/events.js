@@ -75,8 +75,9 @@ export function createEventsUI(ctx, platform = globalThis) {
         ctx.render();
       }
       if (command === 'export') {
-        ctx.exportSave();
-        ctx.toast('Netzwerkstand als Datei exportiert.');
+        return Promise.resolve(ctx.exportSave()).then(() =>
+          ctx.toast('Netzwerkstand als Datei exportiert.'),
+        );
       }
       if (command === 'export-conflict') {
         const body = ctx.storageGet('root.conflict.save');

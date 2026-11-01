@@ -453,8 +453,8 @@ test('failed persistence after import reports failure, never persisted success',
   const target = { dataset: { command: 'import-confirm' }, disabled: false };
   target.closest = () => target;
   const actions = [...h.listeners.get('click')].map((listener) => listener({ target }));
-  const outcome = await h.app.drain();
   await Promise.all(actions);
+  const outcome = await h.app.drain();
 
   assert.equal(outcome.persisted, false);
   assert.equal(h.app.state().marker, 'imported');

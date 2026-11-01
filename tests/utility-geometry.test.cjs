@@ -109,6 +109,32 @@ test('all utility cabinets connect roof glands to bounded headers leaving their 
       layout,
       central,
     });
+    interior.group.updateMatrixWorld(true);
+    const displays = [];
+    interior.group.traverse((node) => {
+      if (node.userData.fasciaRole === 'readout') displays.push(node);
+    });
+    for (const display of displays) {
+      const faces = [],
+        leds = [];
+      display.parent.traverse((node) => {
+        if (node.userData.fasciaRole) faces.push(node);
+        if (/^led_(ups|distribution)_|^crac_cooling_unit_cabinet_LOD0_[67]$/.test(node.name))
+          leds.push(node);
+      });
+      for (const face of faces) {
+        const a = new THREE.Box3().setFromObject(face);
+        for (const other of [...leds, ...faces.filter((n) => n !== face)]) {
+          const b = new THREE.Box3().setFromObject(other);
+          // Both rows face +/-X, so Y/Z is the front elevation. Depth separation
+          // cannot disguise a label covering another label or indicator.
+          const overlap =
+            Math.min(a.max.y, b.max.y) - Math.max(a.min.y, b.min.y) > 0.001 &&
+            Math.min(a.max.z, b.max.z) - Math.max(a.min.z, b.min.z) > 0.001;
+          assert.equal(overlap, false, `${id}: ${face.userData.fasciaRole} clears ${other.name}`);
+        }
+      }
+    }
     const services = interior.group.getObjectByName('plant-service-connections');
     assert.ok(services);
     const water = id === 'cooling',

@@ -4,6 +4,16 @@
   if (root) root.RootBusinessEnglish = factory;
 })(typeof globalThis !== 'undefined' ? globalThis : this, function (translate) {
   const pairs = [
+    ['Abwesenheitsbericht', 'Absence report'],
+    ['Änderung des Guthabens', 'Balance change'],
+    [
+      'Der Saldo enthält Einnahmen, Betriebskosten und automatische Ausgaben während deiner Abwesenheit.',
+      'The balance includes income, operating costs and automatic spending while you were away.',
+    ],
+    [
+      'Betroffene Geräte und Versorgung stehen im Vorfallbericht.',
+      'Affected equipment and utilities are listed in the incident report.',
+    ],
     ['Keine Lieferungen unterwegs.', 'No deliveries in transit.'],
     ['Ersatzteil unterwegs', 'spare part in transit'],
     ['Ersatzteile unterwegs', 'spare parts in transit'],

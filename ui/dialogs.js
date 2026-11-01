@@ -106,7 +106,7 @@ export function createDialogsUI(ctx) {
       sector: 'Nächsten Sektor erschließen',
       help: 'Willkommen bei ROOT',
       settings: 'Einstellungen',
-      offline: 'Dein Netzwerk war fleißig',
+      offline: 'Abwesenheitsbericht',
       reset: 'Ein neues Netzwerk beginnen',
       import: 'Sicherung wiederherstellen',
       repair: 'Reparatur planen',
@@ -131,7 +131,7 @@ export function createDialogsUI(ctx) {
     else if (type === 'settings') content = settingsModal();
     else if (type === 'offline') {
       const r = extra;
-      content = `<span class="tag green">${ctx.icon('automation')}AUTONOMER BETRIEB</span><div class="offline-title">Willkommen zurück.</div><p class="modal-intro">Während deiner Abwesenheit hat ROOT ${ctx.duration(r.seconds)} weitergearbeitet.${r.capped ? ' Berücksichtigt wurden maximal 12 Stunden.' : ''}</p><div class="offline-grid"><div class="offline-stat"><strong>+${ctx.compact(r.credits)}</strong><span>Credits erwirtschaftet</span></div><div class="offline-stat"><strong>+${ctx.compact(r.research)}</strong><span>Forschungspunkte</span></div><div class="offline-stat"><strong>${ctx.fmt(r.jobsCompleted)}</strong><span>Aufträge abgeschlossen</span></div></div>${ctx.E.getResilience(ctx.state).incident ? `<div class="modal-alert">${ctx.esc(ctx.E.getResilience(ctx.state).incident.title)}: Das Netz wartet im Schutzmodus. Weitere Schäden sind gestoppt.</div><button class="button primary block" data-nav="resilience">Vorfall ansehen${ctx.icon('arrow')}</button>` : ''}<button class="button ${ctx.E.getResilience(ctx.state).incident ? 'ghost' : 'primary'} block" data-command="close">Zur Leitstelle${ctx.icon('arrow')}</button>`;
+      content = `<span class="tag green">${ctx.icon('automation')}AUTONOMER BETRIEB</span><div class="offline-title">Willkommen zurück.</div><p class="modal-intro">Während deiner Abwesenheit hat ROOT ${ctx.duration(r.seconds)} weitergearbeitet.${r.capped ? ' Berücksichtigt wurden maximal 12 Stunden.' : ''}</p><div class="offline-grid"><div class="offline-stat${r.credits < 0 ? ' negative' : ''}"><strong>${r.credits > 0 ? '+' : ''}${ctx.compact(r.credits)}</strong><span>Änderung des Guthabens</span></div><div class="offline-stat"><strong>${r.research > 0 ? '+' : ''}${ctx.compact(r.research)}</strong><span>Forschungspunkte</span></div><div class="offline-stat"><strong>${ctx.fmt(r.jobsCompleted)}</strong><span>Aufträge abgeschlossen</span></div></div><p class="policy-explainer">Der Saldo enthält Einnahmen, Betriebskosten und automatische Ausgaben während deiner Abwesenheit.</p>${ctx.E.getResilience(ctx.state).incident ? `<div class="modal-alert">${ctx.esc(ctx.E.getResilience(ctx.state).incident.title)}: Betroffene Geräte und Versorgung stehen im Vorfallbericht.</div><button class="button primary block" data-nav="resilience">Vorfall ansehen${ctx.icon('arrow')}</button>` : ''}<button class="button ${ctx.E.getResilience(ctx.state).incident ? 'ghost' : 'primary'} block" data-command="close">Zur Leitstelle${ctx.icon('arrow')}</button>`;
     } else if (type === 'reset')
       content = `<p class="modal-intro">Du startest mit 800 Credits, einem Server und zwei Agenten. Vorher wird dein bisheriger Netzwerkstand als JSON-Datei exportiert. Über „Importieren“ kannst du jederzeit zu ihm zurückkehren.</p><button class="button danger block" data-command="reset-confirm">${ctx.icon('refresh')}Stand exportieren & neu beginnen</button>`;
     else if (type === 'import')

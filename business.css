@@ -103,3 +103,11 @@
 .policy-grid.operations-grid {
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
 }
+
+.offline-stat.negative {
+  background: #302320;
+  border-color: #644036;
+}
+.offline-stat.negative strong {
+  color: var(--red);
+}

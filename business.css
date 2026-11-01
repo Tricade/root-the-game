@@ -1,3 +1,81 @@
+/* Business sections share the same inset as their headers. Grid gaps keep
+ * neighbouring panels separate without accumulating paragraph margins. */
+.business-layout {
+  display: grid;
+  gap: 20px;
+  min-width: 0;
+}
+.business-layout .panel-header {
+  padding: 17px 20px;
+}
+.business-panel-body {
+  display: grid;
+  gap: 20px;
+  min-width: 0;
+}
+.business-panel-body > p,
+.business-panel-body > .field-label,
+.business-panel-body .business-controls,
+.business-layout > .helper-card {
+  margin: 0;
+}
+.business-panel-body > [data-room-change]:empty {
+  display: none;
+}
+.business-summary .stats-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 140px), 1fr));
+  gap: 20px;
+  border-bottom: 0;
+}
+.business-summary [data-business-stat='net'].negative {
+  color: var(--red);
+}
+.business-layout .helper-card h3 {
+  margin: 0 0 10px;
+}
+.business-layout .helper-card > .button {
+  margin-top: 16px;
+}
+.business-layout .button,
+[data-ops-form] .button {
+  min-width: 0;
+  max-width: 100%;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  line-height: 1.5;
+}
+.business-panel-body > .field-label .select {
+  width: 100%;
+  min-width: 0;
+}
+.card-grid.business-service-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.service-card {
+  min-width: 0;
+}
+.service-card > .tag {
+  align-self: start;
+}
+.service-card .business-controls {
+  margin: 0 0 18px;
+}
+.service-card .business-controls .field-label {
+  flex-basis: 100px;
+  min-width: min(100%, 100px);
+}
+.service-card .card-actions {
+  display: grid;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+.service-card .card-actions .button {
+  width: 100%;
+}
+
 .business-controls {
   display: flex;
   gap: 12px;
@@ -8,8 +86,9 @@
 .business-controls .field-label {
   display: grid;
   gap: 8px;
-  flex: 1;
-  min-width: 150px;
+  flex: 1 1 180px;
+  min-width: min(100%, 180px);
+  margin: 0;
 }
 .business-controls input,
 .business-controls select {
@@ -61,13 +140,19 @@
 }
 .business-resources {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 20px;
-  margin: 24px 0;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin: 0;
 }
 .business-resources div {
   display: grid;
   gap: 8px;
+  min-width: 0;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel2);
+  overflow-wrap: anywhere;
 }
 .business-resources span,
 .business-resources small {
@@ -76,7 +161,7 @@
 .business-resources strong {
   font-family: var(--mono);
 }
-.business-room > .field-label {
+.business-panel-body > .field-label {
   display: grid;
   gap: 8px;
   max-width: 560px;
@@ -101,6 +186,7 @@
 
 /* Size to the available console width, not just the browser viewport. */
 .policy-grid.operations-grid {
+  align-items: start;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
 }
 
@@ -110,4 +196,63 @@
 }
 .offline-stat.negative strong {
   color: var(--red);
+}
+
+.operations-grid .panel-body,
+.operations-policy-footer {
+  display: grid;
+  gap: 16px;
+  min-width: 0;
+}
+.operations-grid .panel-body > p,
+.operations-grid .business-controls {
+  margin: 0;
+}
+.operations-policy-footer > .field-label {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+}
+.operations-policy-footer .input {
+  width: 100%;
+  min-width: 0;
+}
+.operations-policy-footer > .operations-check {
+  display: flex;
+  align-items: center;
+  line-height: 1.5;
+}
+.operations-check input {
+  margin: 0;
+  accent-color: var(--accent);
+  flex-shrink: 0;
+}
+.operations-grid .panel-body > .button,
+.operations-policy-footer > .button {
+  justify-self: start;
+}
+/* A conditional form group gets its own row. Hidden groups must stay hidden. */
+[data-ops-form='plan'] [data-plan-for]:not([hidden]) {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 12px;
+  flex-basis: 100%;
+  min-width: 0;
+}
+@media (max-width: 600px) {
+  .business-resources {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 360px) {
+  .business-resources {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 700px) {
+  .card-grid.business-service-grid {
+    grid-template-columns: 1fr;
+  }
 }

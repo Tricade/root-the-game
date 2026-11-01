@@ -41,7 +41,7 @@ export function createOperationsUI(ctx) {
         .map(([key, label]) => numeric(key, label, o.limits[key]))
         .join(
           '',
-        )}</div><p data-ops-spent></p><p class="policy-explainer"><span>Budget für vier Sicherungen pro Stunde:</span> <strong data-ops-backup-budget></strong></p><p class="policy-explainer">Wartung nutzt die Geldreserve als Untergrenze. Geplante Ausbauten schützen zusätzlich dein Sparziel. Änderungen setzen verbrauchte Stundenbudgets nicht zurück.</p>${numeric('partsTarget', 'Zielbestand Ersatzteile', o.partsTarget)}<label class="field-label"><input data-ops-field="autoParts" type="checkbox" ${o.autoParts ? 'checked' : ''}> ${ctx.tr('Ersatzteile automatisch nachbestellen')}</label>${button('policy', 'Betriebsplan speichern')}</div></section>` +
+        )}</div><p data-ops-spent></p><p class="policy-explainer"><span>Budget für vier Sicherungen pro Stunde:</span> <strong data-ops-backup-budget></strong></p><p class="policy-explainer">Wartung nutzt die Geldreserve als Untergrenze. Geplante Ausbauten schützen zusätzlich dein Sparziel. Änderungen setzen verbrauchte Stundenbudgets nicht zurück.</p><div class="operations-policy-footer">${numeric('partsTarget', 'Zielbestand Ersatzteile', o.partsTarget)}<label class="field-label operations-check"><input data-ops-field="autoParts" type="checkbox" ${o.autoParts ? 'checked' : ''}> ${ctx.tr('Ersatzteile automatisch nachbestellen')}</label>${button('policy', 'Betriebsplan speichern')}</div></div></section>` +
       `<section class="panel" data-ops-form="delivery">${ctx.panelHeader('Ersatzteillogistik')}<div class="panel-body"><p data-ops-stock></p><div class="business-controls">${numeric('quantity', 'Bestellmenge', 3)}${select(
         'method',
         'Lieferung',
@@ -65,7 +65,10 @@ export function createOperationsUI(ctx) {
       ])}</div><div data-plan-for="convertRoomSupply" hidden>${select(
         'roomId',
         'Raum',
-        rooms.map((r) => [r.id, r.name]),
+        rooms.map((r) => [
+          r.id,
+          `${ctx.tr(`Untergeschoss ${r.floor}`)} · ${ctx.tr(`Raum ${r.number}`)}`,
+        ]),
       )}${select('supplySystem', 'System', [
         ['cooling', 'Kühlung'],
         ['power', 'Strom'],

@@ -84,9 +84,19 @@ _Echte Aufnahmen mit einem getrennten, synthetischen Demostand und englischer Ob
 - **Simulierte KI-Infrastruktur:** Der ROOT A480 belegt in der Grundausstattung 4U und liefert vier simulierte Beschleuniger mit 320 GB VRAM. Inferenz- und Trainingsaufträge brauchen GPU-Kapazität; freie CPU-Leistung ersetzt sie nicht.
 - **Eingriffe mit Folgen:** Ausgewogen, Leistung und Öko tauschen Durchsatz gegen Strom und Wärme. Neustarts und Umpatchen dauern; Rackausbauten unterbrechen die angeschlossene Hardware vorübergehend. Kühlung verändert Temperaturen allmählich.
 
+### Kunden, Raumplanung und Zentralversorgung
+
+- **Umsatz aus erbrachten Diensten:** Hosting, Archive, Datenbanken und KI-Inferenz belegen CPU, RAM, Speicher, Netzwerk, GPUs und VRAM. Ungenutzte Hardware verursacht trotzdem Kosten.
+- **Zusagen und Reserven:** Dreitägige Verträge, zehn Minuten Kundenvorbereitung, Premiumverpflichtungen, Raumprofile, bezahlte Teams und Agenten als Teamleitung machen Ausbauentscheidungen bedeutsam.
+- **Kostenpflichtiger Raumumbau:** Bestehende Räume an zentrale Kühlung, Stromverteilung oder USV anschließen oder lokale Reserve behalten. Nur der betroffene Raum fällt beim Umbau aus. Selbst erzeugte Rohre und Stromschienen zeigen den Anschluss im 3D-Raum.
+- **15 Auftragsfamilien mit 46 Titeln:** Unterschiedliche Anforderungen an Arbeitsspeicher, Netzwerk, Speicher und Beschleuniger. Längere Agentenprojekte tauschen den normalen Beitrag gegen zugesagte Forschung, Ansehen oder Optimierung.
+- **Nachberechnung im Hintergrund:** Bis zu zwölf Stunden werden mit Fortschrittsanzeige berechnet. Online und offline gelten dieselben Regeln.
+
+[Regeln zu Wirtschaft, Ausfallbereichen und Betriebsplänen (Englisch) →](docs/service-economy.md)
+
 ### Agenten, Aufträge und Forschung
 
-- **Drei Rollen:** Operatoren unterstützen Aufträge und Einnahmen, Analysten liefern Forschung, Techniker helfen bei Wartung und Zuverlässigkeit. Agenten haben Stufen, Eigenschaften und einen einstellbaren Schwerpunkt.
+- **Drei Rollen:** Operatoren beschleunigen Projektarbeit, Analysten liefern Forschung, Techniker helfen bei Wartung und Zuverlässigkeit. Agenten haben Stufen, Eigenschaften und einen einstellbaren Schwerpunkt.
 - **Gezielte Einsätze:** Netzdiagnose senkt das Risiko, Lastoptimierung erhöht den Durchsatz und Forschungsaufträge liefern Punkte. Während eines Einsatzes fehlt der Agent vollständig im Normalbetrieb. Die Wirkung beginnt nach Abschluss; anschließend gilt eine Erholungszeit. Passende Rollen arbeiten bei ihren Spezialaufgaben effizienter.
 - **Konkurrierende Kundenaufträge:** Monitoring, Migration, Audits, Optimierung, Wiederherstellung, Forschung und KI-Arbeit teilen sich begrenzte Kapazitäten. Credits, Ansehen und Forschung werden bei Abschluss vergeben. Die automatische Annahme kann ausgewogen, auf Einnahmen oder auf Forschung ausgerichtet werden.
 - **Fünf wiederholbare Forschungszweige:** Routing, Kühlung, Vertragsanalyse, effiziente Abläufe und Wissenssynthese verbessern das gesamte Netzwerk. Erfolgsbelohnungen werden separat abgeholt.
@@ -96,9 +106,9 @@ _Echte Aufnahmen mit einem getrennten, synthetischen Demostand und englischer Ob
 
 - **Verschleiß und Ausfälle:** Zustand, Wärme und Betriebsrisiko können Server ausfallen lassen und den Auftragsdurchsatz senken.
 - **Reparaturentscheidungen:** Schnellreparatur, Generalüberholung und langsame Notfallwiederherstellung unterscheiden sich bei Geld, Ersatzteilen, Ausfallzeit, Endzustand und Arbeitsverlust. Ein Neustart oder ein anderer Port behebt keinen Hardwaredefekt. Die manuelle Wiederherstellung bietet einen langsamen Ausweg ohne Credits oder Ersatzteile, kostet dafür aber Arbeitsfortschritt und erreicht nur einen eingeschränkten Endzustand.
-- **Große Vorfälle:** Stromausfälle, Kühlungsausfälle und Datenkorruption verlangen eine bewusste Wiederherstellungsentscheidung. Der Schutzmodus begrenzt weitere Schäden während der Abwesenheit. Betroffene Aufträge und Agenteneinsätze pausieren bis zur Wiederherstellung.
+- **Große Vorfälle:** Stromausfälle, Kühlungsausfälle und Datenkorruption verlangen eine bewusste Wiederherstellungsentscheidung. Der Schutzmodus begrenzt weitere Schäden während der Abwesenheit. Der angeschlossene Ausfallbereich wird isoliert; unabhängige Hardware, Kunden und Agenten arbeiten weiter. Knoten, Rack, Raum und Zentralversorgung haben unterschiedliche Ausfallfolgen.
 - **Betriebsbackups:** Schützen Forschung und laufende Auftragsarbeit vor Datenkorruption. Eine Rücksicherung kann Fortschritt seit dem Sicherungszeitpunkt kosten. Sie ist etwas anderes als der Export des vollständigen Speicherstands.
-- **Begrenzte Automatik:** Automatische kleinere Reparaturen benötigen Ersatzteile. Reparaturen und Betriebsbackups beachten ein stündliches Ausgabenlimit und die geschützte Geldreserve. Die Routine läuft selbstständig; größere Wiederherstellungsentscheidungen bleiben relevant. [Automatisierungsansicht öffnen →](screenshots/readme/automation.jpg)
+- **Begrenzte Automatik:** Automatische kleinere Reparaturen benötigen Ersatzteile. Reparaturen, Backups, Beschaffung und geplante Maßnahmen haben getrennte Stundenbudgets. Standard- und Expresslieferungen brauchen Zeit. Ablaufpläne beachten Preisfreigaben, Geldreserve und Sparziel. Die Routine läuft selbstständig; größere Wiederherstellungsentscheidungen bleiben relevant. [Automatisierungsansicht öffnen →](screenshots/readme/automation.jpg)
 
 ### Kostenpflichtiger Ausbau unter der Erde
 

@@ -2,12 +2,22 @@
 (function (root, factory) {
   const names = [
     'definitions',
+    'dependencies',
+    'job-catalog',
+    'service-catalog',
+    'room-supply',
+    'operations',
+    'operation-plans',
+    'projects',
     'state',
     'economy',
     'building',
     'central',
     'hardware',
     'gpu',
+    'service-resources',
+    'service-metrics',
+    'services',
     'metrics',
     'hardware-quotes',
     'racks',
@@ -26,8 +36,14 @@
     'save-legacy',
     'save-v2',
     'save-v3',
+    'save-business',
+    'save-operations',
+    'save-v4',
     'saves',
+    'catchup',
   ];
+  if (typeof root.importScripts === 'function' && !root.RootEngineModules)
+    root.importScripts(...names.map((name) => 'engine/' + name + '.js'));
   const modules = names.map((name) =>
     typeof module === 'object' && module.exports
       ? require('./engine/' + name + '.js')
@@ -58,8 +74,18 @@
     getBuildingModel: context.getBuildingModel,
     getConstructionProject: context.getConstructionProject,
     getCentralInfrastructure: context.getCentralInfrastructure,
+    getBusinessModel: context.getBusinessModel,
+    quoteService: context.serviceQuote,
+    quoteSupply: context.supplyQuote,
+    getOperations: context.getOperations,
+    quoteDelivery: context.deliveryQuote,
+    quoteProject: context.projectQuote,
+    jobResources: context.jobResources,
+    jobsFit: context.jobsFit,
+    jobProfiles: context.JOB_PROFILES,
     quoteHardware: context.quoteHardware,
     advance: context.advance,
+    createCatchup: context.createCatchup,
     act: context.act,
     cost: context.cost,
   };

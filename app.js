@@ -4,6 +4,9 @@ import { createChromeUI } from './ui/chrome.js';
 import { createOverviewUI } from './ui/overview.js';
 import { createWorkforceUI } from './ui/workforce.js';
 import { createWorkloadsUI } from './ui/workloads.js';
+import { createBusinessUI } from './ui/business.js';
+import { createOperationsUI } from './ui/operations.js';
+import { createOfflineUI } from './ui/offline.js';
 import { createProtectionUI } from './ui/protection.js';
 import { createDialogsUI } from './ui/dialogs.js';
 import { createTelemetryUI } from './ui/telemetry.js';
@@ -115,6 +118,8 @@ import { createRoom } from './room.js';
   const serverStatusNames = { ...R.statusNames, failed: 'Ausgefallen' };
 
   navs.push(['facility', 'layers', 'Gebäude & Technik']);
+  navs.push(['business', 'jobs', 'Kunden & Betrieb']);
+  navs.push(['operations', 'automation', 'Betriebspläne']);
 
   // The controller owns shared UI state. Getters keep async callbacks and mounted
   // feature modules on the same current save rather than capturing an old object.
@@ -346,6 +351,9 @@ import { createRoom } from './room.js';
   Object.assign(ctx, createOverviewUI(ctx));
   Object.assign(ctx, createWorkforceUI(ctx));
   Object.assign(ctx, createWorkloadsUI(ctx));
+  Object.assign(ctx, createBusinessUI(ctx));
+  Object.assign(ctx, createOperationsUI(ctx));
+  Object.assign(ctx, createOfflineUI(ctx));
   Object.assign(ctx, createProtectionUI(ctx));
   Object.assign(ctx, createDialogsUI(ctx));
   Object.assign(ctx, createTelemetryUI(ctx));
@@ -365,6 +373,8 @@ import { createRoom } from './room.js';
     inbox: ctx.inboxView,
     log: ctx.logView,
     facility: ctx.facilityView,
+    business: ctx.businessView,
+    operations: ctx.operationsView,
   };
 
   function render() {
@@ -442,7 +452,11 @@ import { createRoom } from './room.js';
       ctx.toast('Diese Sitzung pausiert. Bitte Seite neu laden.', true);
       return;
     }
-    ctx.simulate();
+    const simulation = ctx.simulate();
+    if (simulation?.then || ctx.catchUpBusy() || ctx.catchUpFailed()) {
+      ctx.toast('Bitte warte, bis die Abwesenheit nachberechnet wurde.', true);
+      return;
+    }
     const result = E.act(state, action, payload);
     if (!result.ok) {
       ctx.toast(result.message, true);

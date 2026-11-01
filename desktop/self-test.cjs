@@ -61,6 +61,7 @@ async function runSelfTest({ app, output, startDesktop }) {
     assert.equal(initial.settingsButton, true);
     assert.equal(initial.canUpdate, ['nsis', 'deb'].includes(installation.kind));
     result.initial = initial;
+    result.catchup = await require('./catchup-smoke.cjs').checkCatchup(contents);
     result.arrival = await require('./arrival-smoke.cjs').checkArrival({ window, output });
     // Reload the same origin while the loopback service keeps its ephemeral port.
     assert.equal(await reload(), true);

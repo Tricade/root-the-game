@@ -10,6 +10,8 @@ export function createEventsUI(ctx, platform = globalThis) {
         return;
       }
       if (target.disabled || ctx.desktopClosing?.()) return;
+      if (ctx.businessClick?.(target)) return;
+      if (ctx.operationsClick?.(target)) return;
       if (ctx.handleDesktopCommand?.(target.dataset.desktopCommand)) return;
       const hardware = ctx.R.click(target);
       if (hardware) {
@@ -73,8 +75,9 @@ export function createEventsUI(ctx, platform = globalThis) {
         ctx.render();
       }
       if (command === 'export') {
-        ctx.exportSave();
-        ctx.toast('Netzwerkstand als Datei exportiert.');
+        return Promise.resolve(ctx.exportSave()).then(() =>
+          ctx.toast('Netzwerkstand als Datei exportiert.'),
+        );
       }
       if (command === 'export-conflict') {
         const body = ctx.storageGet('root.conflict.save');
@@ -118,6 +121,8 @@ export function createEventsUI(ctx, platform = globalThis) {
     });
     platform.document.addEventListener('change', (event) => {
       if (ctx.desktopClosing?.()) return;
+      if (ctx.businessChange?.(event.target)) return;
+      if (ctx.operationsChange?.(event.target)) return;
       if (event.target.hasAttribute('data-building-floor')) {
         if (ctx.selectFacilityFloor(event.target.value)) ctx.render();
         return;

@@ -508,10 +508,12 @@ export function createRoomWorld(sceneContext) {
       );
     }
     // In-row precision-cooling cabinets: intake grille, status panel, and paired fan discs.
+    sceneContext.fallbackCooling = new sceneContext.THREE.Group();
+    sceneContext.scene.add(sceneContext.fallbackCooling);
     for (const x of [-6.12, 6.12]) {
       const unit = new sceneContext.THREE.Group();
       unit.position.set(x, 0, back + 3.2);
-      sceneContext.scene.add(unit);
+      sceneContext.fallbackCooling.add(unit);
       sceneContext.addBox(unit, 0.72, 2.55, 1.0, sceneContext.materials.shell, 0, 1.28, 0, {
         castShadow: false,
         radius: 0.05,
@@ -606,6 +608,8 @@ export function createRoomWorld(sceneContext) {
         ['inbox', 'Entscheidungen'],
         ['log', 'Protokoll'],
         ['facility', 'Gebäudetechnik'],
+        ['business', 'Kunden & Betrieb'],
+        ['operations', 'Betriebspläne'],
       ]
         .map(([id, label]) => '<button type="button" data-nav="' + id + '">' + label + '</button>')
         .join('') +

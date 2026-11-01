@@ -43,7 +43,7 @@
       if (action === 'setAgentFocus') {
         const x = s.agents.find((v) => v.id === payload.id);
         if (!x) return fail('Agent nicht gefunden.');
-        if (x.assignment)
+        if (x.assignment || s.operations.projects.some((p) => p.agentId === x.id))
           return fail('Der Agent ist im Einsatz; der Schwerpunkt lässt sich danach wieder ändern.');
         if (!FOCI.includes(payload.focus)) return fail('Dieser Schwerpunkt ist ungültig.');
         x.focus = payload.focus;
@@ -52,7 +52,7 @@
       if (action === 'upgradeAgent') {
         const x = s.agents.find((v) => v.id === payload.id);
         if (!x) return fail('Agent nicht gefunden.');
-        if (x.assignment)
+        if (x.assignment || s.operations.projects.some((p) => p.agentId === x.id))
           return fail('Der Agent ist im Einsatz und kann erst danach entwickelt werden.');
         if (x.level >= 10000)
           return fail('Dieser Agent hat die höchste Entwicklungsstufe erreicht.');

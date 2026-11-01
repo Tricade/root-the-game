@@ -41,7 +41,7 @@ async function makeHarness(
     },
   };
   const stateSeed = () => ({
-    version: 3,
+    version: 4,
     savedAt: Date.now(),
     networkName: 'Testnetz',
     servers: [],
@@ -196,13 +196,13 @@ test('failed GET leaves revision unverified and boot never POSTs without a revis
   assert.equal(calls[0][1].method, undefined); // GET probe is read-only
   assert.equal(calls[0][1].cache, 'no-store');
   assert.equal(h.values.get('root.server.unverified'), '1');
-  assert.equal(h.app.state().version, 3);
+  assert.equal(h.app.state().version, 4);
   assert.equal(h.values.get('root.network.save.v1'), JSON.stringify(h.app.state()));
 });
 
 test('conflicting local data does not replace an authoritative empty server', async (t) => {
   const oldLocal = {
-    version: 3,
+    version: 4,
     savedAt: Date.now(),
     marker: 'old-browser-copy',
     networkName: 'Old local',
@@ -244,7 +244,7 @@ test('conflicting local data does not replace an authoritative empty server', as
 
 test('unrevisioned newer v3 browser state is backed up; saved server fleet wins and advances', async (t) => {
   const makeFleet = (rackCount, serverCount, name, savedAt) => ({
-    version: 3,
+    version: 4,
     savedAt,
     networkName: name,
     marker: name,
@@ -453,8 +453,8 @@ test('failed persistence after import reports failure, never persisted success',
   const target = { dataset: { command: 'import-confirm' }, disabled: false };
   target.closest = () => target;
   const actions = [...h.listeners.get('click')].map((listener) => listener({ target }));
-  const outcome = await h.app.drain();
   await Promise.all(actions);
+  const outcome = await h.app.drain();
 
   assert.equal(outcome.persisted, false);
   assert.equal(h.app.state().marker, 'imported');

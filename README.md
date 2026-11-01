@@ -84,9 +84,19 @@ _Real application captures using a separate synthetic demonstration save. Click 
 - **Simulated AI infrastructure:** the base ROOT A480 occupies 4U and supplies four simulated accelerators with 320 GB VRAM. Inference and training contracts require GPU capacity; ordinary CPU capacity cannot substitute for it.
 - **Consequential controls:** balanced, performance and eco profiles trade throughput against power and heat. Reboots and repatching take time; rack upgrades temporarily interrupt the attached hardware. Cooling changes temperature gradually instead of resetting it.
 
+### Customers, room specialization and connected utilities
+
+- **Resource-backed customers:** hosting, archives, databases and AI inference reserve CPU, RAM, storage, network, GPUs and VRAM. Only delivered service earns income; unused hardware still costs money.
+- **Commitments and reserves:** three-day contracts, ten-minute onboarding, premium obligations, room profiles, paid crews and agent team leads give expansion real operating consequences.
+- **Paid room conversion:** connect existing rooms to central cooling, distribution or UPS, or retain local backup capacity. Only the converting room stops. Original pipework and bus ducts reflect the connection in 3D.
+- **Fifteen project families and 46 titles:** different memory, network, storage and accelerator needs keep contract choices varied. Longer agent projects trade ordinary contributions for fixed research, reputation or optimization rewards.
+- **Responsive offline calculation:** up to twelve hours run in a background worker with progress feedback; the same policies and simulation rules apply online and offline.
+
+[Read the service economy, failure boundaries and operating-plan rules →](docs/service-economy.md)
+
 ### Agents, contracts and research
 
-- **Three agent roles:** operators support contracts and revenue, analysts produce research, and technicians support maintenance and reliability. Each agent has a level, trait and configurable focus.
+- **Three agent roles:** operators accelerate project work, analysts produce research, and technicians support maintenance and reliability. Each agent has a level, trait and configurable focus.
 - **Special assignments:** network diagnostics reduce risk, load optimization improves throughput, and research assignments deliver research points. The assigned agent contributes nothing to normal operations until completion, then has a cooldown. Matching roles complete their specialist work more efficiently.
 - **Competing contracts:** monitoring, migration, audits, optimization, recovery, research and AI work share finite capacity. Rewards, reputation and research arrive when a contract finishes. Automatic acceptance can favor a balanced mix, income or research.
 - **Five repeatable research tracks:** routing, cooling, contract analysis, workflow efficiency and knowledge synthesis improve the whole fleet. Achievements provide separately claimable credit rewards.
@@ -96,9 +106,9 @@ _Real application captures using a separate synthetic demonstration save. Click 
 
 - **Wear and defects:** condition, heat and operating risk can take servers offline and reduce contract output.
 - **Repair choices:** quick repair, overhaul and slow emergency recovery differ in money, parts, downtime, resulting condition and lost work. A power cycle or a new port does not repair broken hardware. Manual recovery provides a slow route without credits or spare parts, at the cost of lost work and a reduced final condition.
-- **Major incidents:** power failures, cooling failures and data corruption require explicit recovery decisions. Protection contains further damage while you are away; affected contract work and agent assignments pause until recovery.
+- **Major incidents:** power failures, cooling failures and data corruption require explicit recovery decisions. Protection contains further damage while you are away; the connected failure domain is isolated while independent hardware, customers and agents continue. Local, rack, room and central failures have different consequences.
 - **Operations backups:** preserve research and ongoing contract work for corruption recovery. A rollback can lose progress made since the backup. These are distinct from exporting the complete save file.
-- **Budgeted automation:** automatic minor repairs require spare parts. Both automatic repairs and operations backups respect an hourly spending limit and a protected cash reserve. Automation handles routine work; recovery choices still matter. [See the automation console →](screenshots/readme/automation.jpg)
+- **Budgeted automation:** automatic minor repairs require spare parts. Repairs, backups, procurement and scheduled work have separate hourly budgets and a protected cash reserve. Parts arrive by standard or express delivery; explicit plans run sequentially within price ceilings and savings targets. Automation handles routine work; recovery choices still matter. [See the automation console →](screenshots/readme/automation.jpg)
 
 ### Paid underground expansion
 

@@ -60,6 +60,8 @@ Low-level builders remain available for maintainers. Running `build_facility_ass
 
 Do not add external furniture or downloaded model meshes. Compatible material textures may be used with their source, license and file hash recorded. Keep UV/material alignment and legible displays; avoid overlapping coplanar surfaces.
 
+Runtime utility assemblies live in `room/utility-kit.js`, `room/plant-connections.js` and `room/supply-fixtures.js`. They are original metric code geometry linked to installed plant and rack counts, rather than additional downloaded models or prebuilt GLBs. Their ownership, measured attachment points and regression checks are described in the [development guide](../../docs/development.md#connected-utility-geometry).
+
 ## Provenance and licenses
 
 The base generator, helper and base models were supplied with ROOT under the notices retained in [UPSTREAM_LICENSE.md](UPSTREAM_LICENSE.md) and [asset-pack/LICENSE.md](../../asset-pack/LICENSE.md). These documents assert MIT for code and CC0 for assets; their authorship claims are supplied evidence, not independently verified ownership.

@@ -44,15 +44,31 @@
         if (budgetWindow > r.budgetWindowStart) {
           r.budgetWindowStart = budgetWindow;
           r.budgetSpent = 0;
+          if (s.operations) {
+            s.operations.backupSpent = 0;
+            s.operations.partsSpent = 0;
+            s.operations.planSpent = 0;
+          }
         }
         const m = getMetrics(s);
         const earned = m.incomePerSecond * dt;
         s.credits += earned;
-        s.lifetimeCredits += earned;
+        s.lifetimeCredits += Math.max(0, earned);
+        if (s.business) {
+          s.business.revenue = Math.min(1e15, s.business.revenue + m.serviceIncome * dt);
+          s.business.wages = Math.min(1e15, s.business.wages + m.personnelCost * dt);
+          s.business.delivered = Math.min(1e15, s.business.delivered + m.serviceDelivered * dt);
+          s.business.unserved = Math.min(
+            1e15,
+            s.business.unserved + (m.serviceUnits - m.serviceDelivered) * dt,
+          );
+          context.advanceServices(s, dt);
+          context.advanceSupply(s, dt);
+        }
         s.research += m.researchPerSecond * dt;
         if (s.jobs.length) {
           for (const j of s.jobs)
-            j.work = Math.min(j.totalWork, j.work + (m.jobRates[j.id] || 0) * dt);
+            j.work = clamp(j.work + Math.max(0, m.jobRates[j.id] || 0) * dt, 0, j.totalWork);
           const done = s.jobs.filter((j) => j.work >= j.totalWork);
           if (done.length) {
             for (const j of done) {
@@ -76,6 +92,17 @@
         s.timers.event -= dt;
         s.timers.history -= dt;
         if (s.timers.offer <= 0) {
+          // Pending offers are not obligations. A full, entirely infeasible
+          // automatic queue must not permanently prevent new business.
+          if (s.policies.autocontract && !s.jobs.length && s.offers.length === MAX.offers) {
+            const fit = s.offers.some((job) =>
+              s.business
+                ? context.jobsFit(s, job, m.admissionResources)
+                : job.load <= m.capacity * 0.98 &&
+                  (job.kind !== 'ai' || job.gpuDemand <= m.gpuCapacity),
+            );
+            if (!fit) s.offers.shift();
+          }
           if (s.offers.length < MAX.offers) s.offers.push(makeJob(s));
           s.timers.offer = 38 + rand(s) * 34;
         }
@@ -140,8 +167,11 @@
           }
         }
         const constructionMessage = context.advanceConstruction(s, dt);
-        if (constructionMessage) constructionCompleted.push(constructionMessage);
-        if (!incidentAtStart && !r.incident) {
+        if (constructionMessage) {
+          constructionCompleted.push(constructionMessage);
+          context.syncServiceRooms(s);
+        }
+        if (!context.globalIncident(s)) {
           r.agentEffects.diagnoseRemaining = Math.max(0, r.agentEffects.diagnoseRemaining - dt);
           r.agentEffects.optimizeRemaining = Math.max(0, r.agentEffects.optimizeRemaining - dt);
           for (const agent of s.agents) {
@@ -151,7 +181,10 @@
           }
         }
         if (!incidentAtStart && !r.incident && !operationFinished && s.time >= r.graceUntil) {
-          const activeAgents = s.agents.filter((agent) => !agent.assignment);
+          const activeAgents = s.agents.filter(
+            (agent) =>
+              !agent.assignment && !s.operations?.projects?.some((p) => p.agentId === agent.id),
+          );
           const engineers = activeAgents
             .filter((agent) => agent.role === 'engineer')
             .reduce((sum, agent) => sum + agent.level, 0);
@@ -204,6 +237,7 @@
           if (!r.operation) startAutomaticRepair(s);
           if (!r.operation) startAutomaticBackup(s);
         }
+        context.advanceOperations(s, dt);
         s.credits = clamp(s.credits, 0, 1e15);
         s.research = clamp(s.research, 0, 1e15);
         s.lifetimeCredits = clamp(s.lifetimeCredits, 0, 1e15);

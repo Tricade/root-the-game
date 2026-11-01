@@ -111,6 +111,14 @@ export function createUIFoundation(I18N) {
     recovery: 'Wiederherstellung',
     research: 'Forschung',
     ai: 'KI-Workload',
+    database: 'Datenbanken',
+    backup: 'Backup-Prüfung',
+    loadtest: 'Lasttest',
+    archive: 'Archivierung',
+    containers: 'Bereitstellung',
+    security: 'Sicherheitsanalyse',
+    replication: 'Replikation',
+    rendering: 'Rendering',
   };
   const kindIcons = {
     monitoring: 'pulse',
@@ -120,6 +128,14 @@ export function createUIFoundation(I18N) {
     recovery: 'storage',
     research: 'research',
     ai: 'cpu',
+    database: 'storage',
+    backup: 'shield',
+    loadtest: 'pulse',
+    archive: 'storage',
+    containers: 'layers',
+    security: 'shield',
+    replication: 'globe',
+    rendering: 'cpu',
   };
   const roleClass = (role) => (role === 'analyst' ? 'blue' : role === 'engineer' ? 'amber' : '');
 

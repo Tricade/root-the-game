@@ -4,10 +4,10 @@ export function createFacilityUI(ctx) {
   const { E, esc, fmt, dec, duration, icon, tr } = ctx;
   const details = {
     cooling:
-      'Zusätzliche Kühlleistung wird auf aktive Racks verteilt. Die Anlage benötigt selbst Strom; Temperaturen sinken allmählich.',
+      'Zentrale Kühlleistung wird nur auf angeschlossene aktive Racks verteilt. Die Anlage benötigt selbst Strom; Temperaturen sinken allmählich.',
     ups: 'Die USV schützt nur die Last innerhalb ihrer Leistungskapazität. Sie senkt Wahrscheinlichkeit und Schwere von Stromausfällen.',
     distribution:
-      'Ein endliches zusätzliches Strombudget wird auf aktive Racks verteilt. Leere Racks verbrauchen keine Reserve.',
+      'Das zentrale Strombudget wird nur auf angeschlossene aktive Racks verteilt. Lokale Reserve bleibt nur bei Hybridversorgung verfügbar.',
   };
 
   function quoteButton(action, payload, quote, label = 'Bau prüfen') {

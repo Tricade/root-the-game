@@ -3,6 +3,8 @@ export { roomLocation, corridorPlan, stairHeight } from './room-navigation.js';
 import * as THREE from './vendor/three.module.js';
 import { metricBox } from './room-surfaces.js';
 import { facilityReadout, drawInstrument } from './room-instruments.js';
+import { buildPlantConnections } from './room/plant-connections.js';
+import { decoratePlantUnit } from './room/plant-fascia.js';
 
 const tr = (text) => globalThis.ROOTI18N?.translate(String(text)) || String(text);
 
@@ -19,7 +21,8 @@ export function buildFacilityInterior({ bank, scene, materials, location, layout
     geometries = [],
     textures = [],
     ownedMaterials = [],
-    instruments = [];
+    instruments = [],
+    serviceKits = [];
   let lastInstrumentUpdate = -Infinity,
     lastInstrumentLanguage = '';
   const concrete = materials.bunkerConcrete || materials.wall;
@@ -282,7 +285,8 @@ export function buildFacilityInterior({ bank, scene, materials, location, layout
     if (location.id !== 'control') colliders.push({ x: -1.55, z: 5.12, hx: 0.74, hz: 0.31 });
     const system = central.systems.find((item) => item.id === location.id);
     if (system) {
-      const count = system.level ? Math.min(3, system.level + 1) : 0;
+      const count = system.level ? Math.min(3, system.level + 1) : 0,
+        units = [];
       for (let i = 0; i < count; i++)
         for (const side of [-1, 1]) {
           const x = side * 2.35,
@@ -291,55 +295,18 @@ export function buildFacilityInterior({ bank, scene, materials, location, layout
           unit.position.set(x, 0, z);
           unit.rotation.y = side < 0 ? Math.PI / 2 : -Math.PI / 2;
           group.add(unit);
-          const original = unit.getObjectByName(
-            system.id === 'cooling'
-              ? 'crac_cooling_unit_cabinet_LOD0_5'
-              : system.id === 'ups'
-                ? 'ups_telemetry_display'
-                : 'pdu_telemetry_display',
-          );
-          if (original) original.visible = false;
-          // All readings are on the fixed instrument fascia, above the access
-          // doors. The original tiny atlas screens/hostnames are replaced locally.
-          const cooling = system.id === 'cooling',
-            ups = system.id === 'ups',
-            front = cooling ? 0.448 : ups ? 0.429 : 0.369;
-          const screenAt = cooling
-            ? [-0.18, 1.84, front]
-            : [ups ? -0.2 : -0.27, ups ? 1.78 : 1.77, front];
-          const screenSize = cooling ? [0.37, 0.17] : [0.34, 0.11];
-          box(
-            unit,
-            [screenSize[0] + 0.018, screenSize[1] + 0.018, 0.014],
-            [screenAt[0], screenAt[1], front - 0.009],
-            materials.shellDark,
-          );
-          instrument(unit, screenAt, ...screenSize, true);
-          const code = system.id === 'cooling' ? 'CRAC' : system.id === 'ups' ? 'UPS' : 'ATS';
-          sign(
-            unit,
-            `${code} ${String(i + 1).padStart(2, '0')}${side < 0 ? 'A' : 'B'}`,
-            `ROOT / ${tr(`Untergeschoss ${location.floor}`)}`,
-            [cooling ? 0.2 : ups ? 0.2 : 0.27, cooling ? 1.84 : ups ? 1.78 : 1.77, front],
-            cooling ? 0.23 : ups ? 0.3 : 0.38,
-            cooling ? 0.1 : 0.09,
-          );
-          if (ups)
-            unit.traverse((node) => {
-              if (/^led_ups_status_/.test(node.name)) node.position.y += 0.12;
-            });
-          if (system.id === 'distribution') {
-            sign(unit, 'STROMVERTEILUNG', 'ATS / 3~ 400 V', [0, 1.965, 0.363], 1.0, 0.15);
-            for (const source of [-1, 1])
-              sign(
-                unit,
-                source < 0 ? 'QUELLE A' : 'QUELLE B',
-                'L1 · L2 · L3',
-                [source * 0.29, 1.65, 0.361],
-                0.43,
-                0.075,
-              );
-          }
+          units.push({
+            x,
+            z,
+            roof: system.id === 'cooling' ? 2.1 : system.id === 'ups' ? 2.0225 : 2.0625,
+          });
+          decoratePlantUnit(unit, system.id, i, side, location.floor, {
+            box,
+            sign,
+            instrument,
+            tr,
+            materials,
+          });
           unit.traverse((node) => {
             if (/^cooling_fan_\d+$/.test(node.name)) fans.push(node);
           });
@@ -352,6 +319,14 @@ export function buildFacilityInterior({ bank, scene, materials, location, layout
               : { x: center.x, z: center.z, hx: size.x / 2 + 0.17, hz: size.z / 2 + 0.17 },
           );
         }
+      const services = buildPlantConnections(
+        materials,
+        system.id,
+        units,
+        central.systems.some((item) => item.id === 'ups' && item.level > 0),
+      );
+      group.add(services.group);
+      serviceKits.push(services);
     }
   }
   const local = (p, x, z) => ({
@@ -442,6 +417,7 @@ export function buildFacilityInterior({ bank, scene, materials, location, layout
     },
     dispose() {
       scene.remove(group);
+      serviceKits.forEach((kit) => kit.dispose());
       geometries.forEach((item) => item.dispose());
       textures.forEach((item) => item.dispose());
       ownedMaterials.forEach((item) => item.dispose());

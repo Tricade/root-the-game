@@ -857,7 +857,7 @@ p {
   font-size: 12px;
   line-height: 1.7;
 }
-.empty-state .icon {
+.empty-state > .icon {
   margin: 0 auto 12px;
   width: 25px;
   height: 25px;
@@ -1019,6 +1019,7 @@ p {
 }
 .stats-strip {
   display: flex;
+  flex-wrap: wrap;
   gap: 24px;
   padding: 16px 20px;
   border-bottom: 1px solid var(--line);

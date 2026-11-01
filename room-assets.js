@@ -2,6 +2,7 @@ import * as THREE from './vendor/three.module.js';
 import { GLTFLoader } from './vendor/GLTFLoader.js';
 import { mergeGeometries } from './vendor/BufferGeometryUtils.js';
 import { metricBox } from './room-surfaces.js';
+import { buildSupplyFixtures } from './room/supply-fixtures.js';
 
 // ROOT asset pack 1.0.0. All positions below are meters, +Y up, +Z front.
 const U = 0.04445;
@@ -823,8 +824,6 @@ export function buildAssetHall({ bank, scene, materials }) {
   tiles('floor', vents, closedFloor);
   for (const x of [-1.04, 1.04])
     block([0.035, 0.002, 4.8], [x, 0.003, -0.6], materials.green, serverFixtures);
-  for (const x of [-3.8, 3.8])
-    for (let z = -4.8; z <= 4.8; z += 1.2) block([0.015, 2.9, 0.025], [x, 1.5, z], materials.trim);
   for (const z of [-3.6, 0, 3.6]) {
     const lamp = bank.make('light');
     lamp.position.set(0, 2.72, z);
@@ -849,10 +848,16 @@ export function buildAssetHall({ bank, scene, materials }) {
       roomLighting.add(light);
     }
   const coolingFans = [];
+  const localCooling = new THREE.Group();
+  localCooling.name = 'local-cooling-units';
+  serverFixtures.add(localCooling);
+  const connections = buildSupplyFixtures(materials);
+  serverFixtures.add(connections.group);
+  connections.set();
   for (const x of [-3.25, 3.25]) {
     const cooling = bank.make('cooling');
     cooling.position.set(x, 0, -4.45);
-    serverFixtures.add(cooling);
+    localCooling.add(cooling);
     cooling.traverse((node) => {
       if (/^cooling_fan_\d+$/.test(node.name)) coolingFans.push(node);
     });
@@ -860,10 +865,12 @@ export function buildAssetHall({ bank, scene, materials }) {
   return {
     group,
     get coolingFans() {
-      return serverFixtures.visible ? coolingFans : [];
+      return serverFixtures.visible && localCooling.visible ? coolingFans : [];
     },
-    setServerRoom(value) {
+    setServerRoom(value, supply = { cooling: 'local', power: 'local' }, rackCount = 0) {
       serverFixtures.visible = value;
+      localCooling.visible = supply.cooling !== 'central';
+      connections.set(supply, rackCount);
       closedFloor.visible = !value;
       roomLighting.visible = !value;
     },

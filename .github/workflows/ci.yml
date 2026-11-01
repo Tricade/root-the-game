@@ -27,6 +27,7 @@ jobs:
           node-version: '24.22.1'
           package-manager-cache: false
       - run: npm ci --ignore-scripts
+      - run: npm audit --audit-level=moderate
       - run: npm run check
 
   python-assets:

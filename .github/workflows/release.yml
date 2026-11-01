@@ -28,6 +28,7 @@ jobs:
           git merge-base --is-ancestor HEAD origin/main
           node -e 'if (process.env.GITHUB_REF_NAME !== "v" + require("./package.json").version) process.exit(1)'
       - run: npm ci --ignore-scripts
+      - run: npm audit --audit-level=moderate
       - run: npm run check
   build:
     needs: verify

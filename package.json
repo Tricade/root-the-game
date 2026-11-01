@@ -30,6 +30,7 @@
     "assets:inventory": "node tools/inventory-assets.mjs"
   },
   "devDependencies": {
+    "@electron/asar": "4.3.1",
     "@eslint/js": "10.0.1",
     "electron": "45.2.1",
     "electron-builder": "26.18.0",
@@ -40,6 +41,25 @@
   "dependencies": {
     "electron-updater": "6.8.11",
     "semver": "7.8.5"
+  },
+  "overrides": {
+    "@electron/asar": {
+      ".": "4.3.1",
+      "glob": "14.0.3",
+      "minimatch": "11.0.3"
+    },
+    "app-builder-lib@26.18.0": {
+      "@electron/universal": "3.0.6",
+      "ejs": "7.0.2",
+      "minimatch": "11.0.3"
+    },
+    "temp": "file:./tools/desktop/build-temp",
+    "eslint@10.14.0": {
+      "minimatch": "11.0.3"
+    },
+    "@eslint/config-array@0.23.5": {
+      "minimatch": "11.0.3"
+    }
   },
   "desktopName": "io.github.tricade.root.desktop"
 }

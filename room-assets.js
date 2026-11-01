@@ -2,6 +2,7 @@ import * as THREE from './vendor/three.module.js';
 import { GLTFLoader } from './vendor/GLTFLoader.js';
 import { mergeGeometries } from './vendor/BufferGeometryUtils.js';
 import { metricBox } from './room-surfaces.js';
+import { buildSupplyFixtures } from './room/supply-fixtures.js';
 
 // ROOT asset pack 1.0.0. All positions below are meters, +Y up, +Z front.
 const U = 0.04445;
@@ -849,10 +850,16 @@ export function buildAssetHall({ bank, scene, materials }) {
       roomLighting.add(light);
     }
   const coolingFans = [];
+  const localCooling = new THREE.Group();
+  localCooling.name = 'local-cooling-units';
+  serverFixtures.add(localCooling);
+  const connections = buildSupplyFixtures(materials);
+  serverFixtures.add(connections.group);
+  connections.set();
   for (const x of [-3.25, 3.25]) {
     const cooling = bank.make('cooling');
     cooling.position.set(x, 0, -4.45);
-    serverFixtures.add(cooling);
+    localCooling.add(cooling);
     cooling.traverse((node) => {
       if (/^cooling_fan_\d+$/.test(node.name)) coolingFans.push(node);
     });
@@ -860,10 +867,12 @@ export function buildAssetHall({ bank, scene, materials }) {
   return {
     group,
     get coolingFans() {
-      return serverFixtures.visible ? coolingFans : [];
+      return serverFixtures.visible && localCooling.visible ? coolingFans : [];
     },
-    setServerRoom(value) {
+    setServerRoom(value, supply = { cooling: 'local', power: 'local' }) {
       serverFixtures.visible = value;
+      localCooling.visible = supply.cooling !== 'central';
+      connections.set(supply);
       closedFloor.visible = !value;
       roomLighting.visible = !value;
     },

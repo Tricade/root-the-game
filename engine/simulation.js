@@ -58,6 +58,7 @@
             s.business.unserved + (m.serviceUnits - m.serviceDelivered) * dt,
           );
           context.advanceServices(s, dt);
+          context.advanceSupply(s, dt);
         }
         s.research += m.researchPerSecond * dt;
         if (s.jobs.length) {

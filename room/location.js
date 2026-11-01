@@ -36,7 +36,10 @@ export function createRoomLocation(sceneContext, platform = globalThis) {
       });
       sceneContext.pickTargets.push(...sceneContext.facilityInterior.picks);
       sceneContext.assetHall.group.visible = sceneContext.locationId !== 'hall';
-      sceneContext.assetHall.setServerRoom(sceneContext.locationId.startsWith('room-'));
+      sceneContext.assetHall.setServerRoom(
+        sceneContext.locationId.startsWith('room-'),
+        sceneContext.currentLocation().supply,
+      );
     }
     sceneContext.stationSystem?.setVisible(sceneContext.locationId === 'control');
     const rear = Math.max(5.4, (rows - 1) * 4.2 + 1.5);
@@ -57,6 +60,7 @@ export function createRoomLocation(sceneContext, platform = globalThis) {
   function getStructureSignature(racks) {
     return [
       sceneContext.locationId,
+      JSON.stringify(sceneContext.currentLocation().supply),
       sceneContext.selectedFloor,
       sceneContext.roomStructureKey(sceneContext.facilityLayout()),
       sceneContext

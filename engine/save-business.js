@@ -42,8 +42,51 @@
         if (r.managerId !== null && (!agents.has(r.managerId) || managers.has(r.managerId)))
           throw new Error('Ungültige Teamleitung.');
         if (r.managerId) managers.add(r.managerId);
-        const plant = checkedRecord(r.plant),
+        const supply = checkedRecord(r.supply),
           kinds = new Set();
+        for (const system of ['cooling', 'power'])
+          if (
+            !Object.hasOwn(ctx.SUPPLY_MODES, supply[system]) ||
+            (system === 'cooling' && supply[system] === 'ups')
+          )
+            throw new Error('Ungültige Raumversorgung.');
+        let conversion = null;
+        if (r.conversion !== null) {
+          const c = checkedRecord(r.conversion);
+          if (
+            !['cooling', 'power'].includes(c.system) ||
+            !Object.hasOwn(ctx.SUPPLY_MODES, c.mode) ||
+            c.mode === supply[c.system] ||
+            c.total !== 180 ||
+            (c.system === 'cooling' && c.mode === 'ups')
+          )
+            throw new Error('Ungültiger Versorgungsumbau.');
+          conversion = {
+            system: c.system,
+            mode: c.mode,
+            total: 180,
+            remaining: checkedNumber(c.remaining, Number.MIN_VALUE, 180),
+            cost: checkedNumber(c.cost, 0, 1e12),
+            quotedRacks: checkedNumber(c.quotedRacks, 1, 6, true),
+          };
+          if (conversion.cost !== ctx.conversionPrice(c.system, c.mode, conversion.quotedRacks))
+            throw new Error('Ungültiger bezahlter Umbaupreis.');
+          if (
+            conversion.quotedRacks !==
+            Math.max(1, s.facility.racks.filter((x) => x.roomId === r.roomId).length)
+          )
+            throw new Error('Raumbelegung während des Umbaus verändert.');
+        }
+        for (const system of ['cooling', 'power'])
+          for (const mode of [
+            supply[system],
+            conversion?.system === system ? conversion.mode : 'local',
+          ]) {
+            if (mode === 'local') continue;
+            const key = mode === 'ups' ? 'ups' : system === 'power' ? 'distribution' : 'cooling';
+            if (s.facility.central[key] < 1 || !s.facility.building.specialRooms.includes(key))
+              throw new Error('Zentralanschluss ohne gebaute Anlage.');
+          }
         if (!Array.isArray(r.groups) || r.groups.length !== Object.keys(ctx.SERVICES).length)
           throw new Error('Unvollständiger Kundenplan.');
         const groups = r.groups.map((value) => {
@@ -73,12 +116,8 @@
           crew: checkedNumber(r.crew, 1, 100000, true),
           managerId: r.managerId,
           changeRemaining: checkedNumber(r.changeRemaining, 0, 120),
-          plant: Object.fromEntries(
-            ['cooling', 'ups', 'distribution'].map((k) => [
-              k,
-              checkedNumber(plant[k], 0, 10000, true),
-            ]),
-          ),
+          supply: { cooling: supply.cooling, power: supply.power },
+          conversion,
           groups,
         };
       });

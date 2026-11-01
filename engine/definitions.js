@@ -230,7 +230,7 @@
         unlockSector: 4,
         baseCost: 4800,
         duration: 120,
-        maxLevel: 5,
+        maxLevel: 10000,
       },
       {
         id: 'ups',
@@ -238,7 +238,7 @@
         unlockSector: 6,
         baseCost: 6200,
         duration: 150,
-        maxLevel: 5,
+        maxLevel: 10000,
       },
       {
         id: 'distribution',
@@ -246,7 +246,7 @@
         unlockSector: 8,
         baseCost: 8400,
         duration: 180,
-        maxLevel: 5,
+        maxLevel: 10000,
       },
     ];
     const CENTRAL_DEFAULTS = { cooling: 0, ups: 0, distribution: 0 };

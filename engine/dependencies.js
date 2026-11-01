@@ -5,7 +5,7 @@
   if (root) (root.RootEngineModules ||= {}).dependencies = create;
 })(typeof globalThis !== 'undefined' ? globalThis : this, function () {
   'use strict';
-  return function () {
+  return function (ctx) {
     function globalIncident(s) {
       return Boolean(s.resilience.incident && !s.resilience.incident.scope);
     }
@@ -14,6 +14,8 @@
       if (!incident) return false;
       if (!incident.scope) return true; // Keep already-paid legacy recovery semantics.
       if (incident.scope === 'nodes') return incident.affected.includes(server.id);
+      if (incident.scope === 'central')
+        return ctx.roomSupply(s, rack?.roomId)[incident.system] === 'central';
       if (incident.scope === 'rack') return incident.rackId === server.rackId;
       return incident.roomId === rack?.roomId;
     }
@@ -25,6 +27,15 @@
         Math.max(1, s.servers.length)
       );
     }
-    return { globalIncident, incidentAffects, incidentShare };
+    function rackIncident(s, rack) {
+      const i = s.resilience.incident;
+      if (!i || !rack) return false;
+      if (!i.scope) return true;
+      if (i.scope === 'central') return ctx.roomSupply(s, rack.roomId)[i.system] === 'central';
+      if (i.scope === 'room') return i.roomId === rack.roomId;
+      if (i.scope === 'rack') return i.rackId === rack.id;
+      return false; // A failed node does not lock every other slot in its rack.
+    }
+    return { globalIncident, incidentAffects, incidentShare, rackIncident };
   };
 });

@@ -304,6 +304,7 @@
       });
       const rooms = building.rooms.map((room, index) => ({
         ...room,
+        supply: { ...context.roomSupply(s, room.id) },
         index,
         number: index + 1,
         rackIds: assigned.get(room.id),

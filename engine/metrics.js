@@ -8,7 +8,6 @@
   return function createDomain(context) {
     const { catalog, MAX, MAX_RESEARCH_LEVEL, clamp } = context;
     // Late domain calls avoid circular module imports; no simulation state is stored here.
-    const activeRackIds = (...args) => context.activeRackIds(...args);
     const centralLevels = (...args) => context.centralLevels(...args);
     const centralOperatingCost = (...args) => context.centralOperatingCost(...args);
     const cost = (...args) => context.cost(...args);
@@ -101,9 +100,12 @@
       );
       const centralPowerW = [...hardware.values()].reduce((sum, row) => sum + row.centralPowerW, 0);
       const centralDistributionCapacityW = central.distribution * 6000;
-      const centralDistributionWPerRack = activeRackIds(s).size
+      const connectedPowerRacks = [...hardware.values()].filter(
+        (r) => r.centralPowerCapacityW > 0,
+      ).length;
+      const centralDistributionWPerRack = connectedPowerRacks
         ? [...hardware.values()].reduce((sum, row) => sum + row.centralPowerCapacityW, 0) /
-          activeRackIds(s).size
+          connectedPowerRacks
         : 0;
       const centralUpkeep = centralOperatingCost(central, centralPowerW, s.policies.power);
       const installedEconomicPower = s.servers.reduce(
@@ -266,7 +268,10 @@
       );
       const upsCapacityW = central.ups * 3000;
       const upsCoverage =
-        upsCapacityW > 0 ? clamp(upsCapacityW / Math.max(1, physicalPowerW), 0, 1) : 0;
+        [...hardware.values()].reduce(
+          (sum, r) => sum + Math.min(r.powerW, r.upsCapacityW || 0),
+          0,
+        ) / Math.max(1, physicalPowerW);
       const powerRiskReductionPct = upsCoverage * 65;
       const incidentActive = Boolean(s.resilience && s.resilience.incident);
       const safetyMode = incidentActive;

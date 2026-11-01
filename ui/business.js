@@ -44,9 +44,27 @@ export function createBusinessUI(ctx) {
           )
           .join('')}</select>`,
       )}${field('reserve', 'Reserve für Ausfälle und Projekte', `<select class="select">${[0, 0.2, 0.35].map((v) => `<option value="${v}" ${room.reserve === v ? 'selected' : ''}>${v * 100} %</option>`).join('')}</select>`)}${button('configureServiceRoom', 'Umstellung prüfen')}</div><p class="policy-explainer">Passende Spezialisierung spart 10 % Ressourcen. Eine Umstellung halbiert die Versorgung zwei Minuten lang. Reserve begrenzt neue Zusagen; sie erzeugt keine zusätzliche Hardware.</p><p data-room-change>${room.changeRemaining ? ctx.duration(room.changeRemaining) : ''}</p><div class="business-controls">${field('manager', 'Teamleitung', `<select class="select"><option value="">Keine Teamleitung</option>${ctx.state.agents.map((a) => `<option value="${a.id}" ${room.managerId === a.id ? 'selected' : ''}>${ctx.esc(a.name)}</option>`).join('')}</select>`)}${button('assignManager', 'Teamleitung zuweisen')}${button('hireCrew', 'Team erweitern')}</div><p>Teams: <strong>${ctx.fmt(room.crew)}</strong> · Kundenplätze: <strong>${ctx.fmt(room.crewCapacity)}</strong></p><p class="policy-explainer">Ein Team betreut 24 Einheiten. Erfahrene Teamleitungen erhöhen die Betreuung; sie können jeweils nur einen Raum leiten. Personal verursacht laufende Kosten.</p></section>` +
+      supplyCard(room) +
       `<div class="card-grid">${room.groups.map((g) => serviceCard(room, g, model.services[g.kind])).join('')}</div>` +
       `<div class="helper-card"><h3>Verträge sind Zusagen.</h3><p>Neue Kunden benötigen zehn Minuten Vorbereitung und einmalige Einrichtungskosten. Verträge laufen drei Tage und verlängern sich auf Wunsch. Bei Engpässen sinkt der Umsatz. Premium bringt 15 % mehr, verlangt Reserve und reduziert bei Ausfällen die Zahlung zusätzlich. Forschung und Projektarbeit nutzen die verbleibende Leistung.</p><button class="button" data-nav="jobs">Zusätzliche Projekte ansehen</button></div>`
     );
+  }
+  function supplyCard(room) {
+    const modes = {
+      local: 'Lokal',
+      central: 'Zentral',
+      hybrid: 'Zentral mit lokaler Reserve',
+      ups: 'Lokaler Strom mit zentraler USV',
+    };
+    return `<section class="panel" data-business-room="${room.roomId}">${ctx.panelHeader('Raumversorgung')}<p>${ctx.tr('Kühlung')}: <strong>${ctx.tr(modes[room.supply.cooling])}</strong> · ${ctx.tr('Strom')}: <strong>${ctx.tr(modes[room.supply.power])}</strong></p><p class="policy-explainer">Zentralbetrieb ersetzt lokale Versorgung. Die Variante mit lokaler Reserve hält die lokalen Geräte zusätzlich bereit. Zentrale Kapazität wird unter angeschlossenen Racks geteilt; die USV schützt nur Räume mit zentralem Stromanschluss.</p><div class="business-controls">${field('system', 'System', `<select class="select"><option value="cooling">${ctx.tr('Kühlung')}</option><option value="power">${ctx.tr('Strom')}</option></select>`)}${field(
+      'mode',
+      'Zielversorgung',
+      `<select class="select">${Object.entries(modes)
+        .map(
+          ([k, v]) => `<option value="${k}" ${k === 'ups' ? 'disabled' : ''}>${ctx.tr(v)}</option>`,
+        )
+        .join('')}</select>`,
+    )}${button('convertRoomSupply', 'Umbau prüfen')}</div><p data-room-conversion>${room.conversion ? ctx.duration(room.conversion.remaining) : ''}</p><button class="button ghost" data-nav="facility">Zentralanlagen ausbauen</button></section>`;
   }
   function serviceCard(room, g, def) {
     const q = ctx.E.quoteService(ctx.state, 'contractService', {
@@ -76,6 +94,10 @@ export function createBusinessUI(ctx) {
     const read = (key) => card.querySelector(`[data-field="${key}"]`)?.value;
     const payload = { roomId: card.dataset.businessRoom, kind: card.dataset.serviceKind };
     if (action === 'contractService') payload.units = Number(read('units'));
+    if (action === 'convertRoomSupply') {
+      payload.system = read('system');
+      payload.mode = read('mode');
+    }
     if (action === 'configureServiceRoom') {
       payload.profile = read('profile');
       payload.reserve = Number(read('reserve'));
@@ -86,10 +108,21 @@ export function createBusinessUI(ctx) {
     return true;
   }
   function businessConfirm(extra) {
-    const q = ctx.E.quoteService(ctx.state, extra.action, extra.payload);
+    const q =
+      extra.action === 'convertRoomSupply'
+        ? ctx.E.quoteSupply(ctx.state, extra.payload)
+        : ctx.E.quoteService(ctx.state, extra.action, extra.payload);
+    if (extra.action === 'convertRoomSupply')
+      return `<p class="modal-intro">Raumversorgung umbauen</p><p>Dieser Raum ist beim Umbau drei Minuten offline. Ein Ausfall der Zentralanlage betrifft zentral angeschlossene Räume; lokale Reserve kann weiterhin Leistung liefern. Lokale Stromverteiler bleiben als Rack-Sicherung erforderlich.</p><div class="status-row"><span>Kosten</span><strong>${ctx.fmt(q.cost)} CR</strong></div><div class="status-row"><span>Zentralkapazität / angeschlossene Last nach Umbau</span><strong>${ctx.dec((q.centralCapacity || 0) / 1000)} / ${ctx.dec(((q.demand || 0) + (q.otherDemand || 0)) / 1000)} kW</strong></div>${q.reason ? `<div class="modal-alert">${ctx.esc(q.reason)}</div>` : ''}<button class="button primary block" data-service-confirm ${q.enabled ? '' : 'disabled'}>Bestätigen</button>`;
     return `<p class="modal-intro">${ctx.esc(q.label || 'Betriebsplan ändern')}</p><div class="status-row"><span>Kosten</span><strong>${ctx.fmt(q.cost)} CR</strong></div><div class="status-row"><span>Dauer</span><strong>${ctx.duration(q.duration || 0)}</strong></div><p>Verträge binden Ressourcen. Teams kosten laufend Geld. Profilwechsel unterbrechen einen Teil der Versorgung.</p>${q.reason ? `<div class="modal-alert">${ctx.esc(q.reason)}</div>` : ''}<button class="button primary block" data-service-confirm ${q.enabled ? '' : 'disabled'}>Bestätigen</button>`;
   }
   function businessChange(el) {
+    if (el.matches('[data-field="system"]')) {
+      const mode = el.closest('[data-business-room]').querySelector('[data-field="mode"]');
+      mode.querySelector('[value="ups"]').disabled = el.value !== 'power';
+      if (el.value !== 'power' && mode.value === 'ups') mode.value = 'local';
+      return true;
+    }
     if (!el.hasAttribute('data-business-select')) return false;
     selectedRoom = el.value;
     ctx.render();
@@ -105,6 +138,8 @@ export function createBusinessUI(ctx) {
             r.crew,
             r.managerId,
             r.changeRemaining > 0,
+            r.supply,
+            r.conversion?.system,
             r.groups.map((g) => [g.kind, g.units, g.pending, g.renew, g.premium]),
           ]),
         )
@@ -138,6 +173,9 @@ export function createBusinessUI(ctx) {
     }
     const change = ctx.$('[data-room-change]');
     if (change) change.textContent = room.changeRemaining ? ctx.duration(room.changeRemaining) : '';
+    const conversion = ctx.$('[data-room-conversion]');
+    if (conversion)
+      conversion.textContent = room.conversion ? ctx.duration(room.conversion.remaining) : '';
   }
   return {
     businessView,

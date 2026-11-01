@@ -121,6 +121,8 @@ function createStaticFiles(root) {
     ['/engine/save-business.js', ['engine/save-business.js', 'text/javascript; charset=utf-8']],
     ['/engine/save-v4.js', ['engine/save-v4.js', 'text/javascript; charset=utf-8']],
     ['/engine/dependencies.js', ['engine/dependencies.js', 'text/javascript; charset=utf-8']],
+    ['/engine/room-supply.js', ['engine/room-supply.js', 'text/javascript; charset=utf-8']],
+    ['/room/supply-fixtures.js', ['room/supply-fixtures.js', 'text/javascript; charset=utf-8']],
     ['/engine.js', ['engine.js', 'text/javascript; charset=utf-8']],
     ['/favicon.svg', ['favicon.svg', 'image/svg+xml']],
   ]);

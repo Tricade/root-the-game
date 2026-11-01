@@ -22,6 +22,7 @@
         return fail('Diese Aktion ist ungültig.');
       const m = getMetrics(s);
       for (const apply of [
+        context.applySupply,
         context.applyServices,
         applyInfrastructure,
         applyWorkforce,

@@ -68,7 +68,8 @@
       crew: 1,
       managerId: null,
       changeRemaining: 0,
-      plant: { cooling: 0, ups: 0, distribution: 0 },
+      supply: { cooling: 'local', power: 'local' },
+      conversion: null,
       groups: Object.keys(SERVICES).map(groupDefaults),
     });
     function businessDefaults(s, migrated = false) {

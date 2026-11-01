@@ -163,6 +163,15 @@
       // services. Existing credits, accepted projects and hardware stay intact.
       const resources = ctx.roomResources(s);
       for (const room of s.business.rooms) {
+        room.supply = {
+          cooling: s.facility.central.cooling > 0 ? 'hybrid' : 'local',
+          power:
+            s.facility.central.distribution > 0
+              ? 'hybrid'
+              : s.facility.central.ups > 0
+                ? 'ups'
+                : 'local',
+        };
         const available = { ...resources.get(room.roomId).installed };
         const kinds =
           available.gpu > 0

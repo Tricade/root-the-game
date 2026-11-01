@@ -13,7 +13,7 @@
       if (incident?.scope !== undefined) {
         const rack = s.facility.racks.find((r) => r.id === incident.rackId);
         if (
-          !['nodes', 'rack', 'room'].includes(incident.scope) ||
+          !['nodes', 'rack', 'room', 'central'].includes(incident.scope) ||
           !rack ||
           rack.roomId !== incident.roomId
         )
@@ -32,6 +32,11 @@
           rackId: incident.rackId,
           roomId: incident.roomId,
         });
+        if (incident.scope === 'central') {
+          if (!['cooling', 'power'].includes(incident.system))
+            throw new Error('Ungültiger Zentralanlagenausfall.');
+          s.resilience.incident.system = incident.system;
+        }
       }
       for (const key of ['jobs', 'offers'])
         s[key].forEach((job, i) => {

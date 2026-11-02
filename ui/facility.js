@@ -93,6 +93,7 @@ export function createFacilityUI(ctx) {
       `<div class="rack-summary"><div><span>Serverräume</span><strong>${building.roomCount}</strong></div><div><span>Untergeschosse</span><strong>${building.floorCount}</strong></div><div><span>Freie Rackplätze</span><strong>${building.freeRackSlots}</strong></div><div><span>Technikkosten</span><strong data-central-stat="upkeep">${dec(central.upkeep * 60)} CR / min</strong></div></div>` +
       projectPanel(building.project) +
       roomPlan(layout, building) +
+      ctx.roomOperationsView() +
       `<section class="panel section-spacer building-excavation"><div class="panel-body"><span class="eyebrow">TIEFBAU / NÄCHSTE EBENE</span><h2>Untergeschoss ${building.floorCount + 1} erschließen</h2><p>Eine neue Ebene umfasst Flur, Treppe und vier unbebaute Raumplätze. Sie enthält noch keine Serverräume oder Hardware.</p>${quoteButton('buildFloor', {}, building.buyFloor, 'Untergeschoss planen')}</div></section>` +
       serviceRooms(building) +
       centralSystems(central) +

@@ -16,14 +16,16 @@ test('loss of GPU supply does not stop unrelated hosting customers in the same r
 test('premium obligations cannot be toggled off during an outage', () => {
   const s = E.createState(731),
     g = s.business.rooms[0].groups[0];
+  const contract = s.customers.contracts[0];
+  contract.premium = true;
   g.premium = true;
   g.nextPremium = true;
   assert.ok(E.act(s, 'setServicePremium', { roomId: 'room-1', kind: 'hosting', value: false }).ok);
   assert.equal(g.premium, true);
   assert.equal(g.nextPremium, false);
-  g.remaining = 1;
+  contract.remaining = 1;
   E.advance(s, 1);
-  assert.equal(g.premium, false);
+  assert.equal(contract.premium, false);
 });
 
 test('customers use real resources, new idle servers do not mint unearned revenue', () => {
@@ -34,9 +36,18 @@ test('customers use real resources, new idle servers do not mint unearned revenu
   const next = E.getMetrics(s);
   assert.equal(next.serviceIncome, base.serviceIncome);
   assert.ok(next.upkeep > base.upkeep);
-  const q = E.quoteService(s, 'contractService', { roomId: 'room-1', kind: 'hosting', units: 2 });
+  const lead = {
+    id: 'lead-' + s.nextId++,
+    client: 'Fixture customer',
+    kind: 'hosting',
+    units: 2,
+    term: 259200,
+    expiresAt: s.time + 14400,
+  };
+  s.customers.leads.push(lead);
+  const q = E.quoteCustomer(s, 'acceptCustomerLead', { id: lead.id, roomId: 'room-1' });
   assert.ok(q.enabled, q.reason);
-  assert.ok(E.act(s, 'contractService', { roomId: 'room-1', kind: 'hosting', units: 2 }).ok);
+  assert.ok(E.act(s, 'acceptCustomerLead', { id: lead.id, roomId: 'room-1' }).ok);
   assert.equal(E.getMetrics(s).serviceIncome, base.serviceIncome);
   s.resilience.graceUntil = 1e9;
   E.advance(s, 600);
@@ -77,7 +88,7 @@ test('legacy v3 migration keeps assets, balances and contractual promises', () =
   delete s.business;
   s.credits = 14000000;
   const copy = E.normalizeState(s);
-  assert.equal(copy.version, 5);
+  assert.equal(copy.version, 7);
   assert.equal(copy.credits, s.credits);
   assert.deepEqual(copy.jobs, s.jobs);
   assert.deepEqual(copy.servers, s.servers);

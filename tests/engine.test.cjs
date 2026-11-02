@@ -56,7 +56,7 @@ test('catalog, initial state, and exported engine API match the ROOT contract', 
     assert.ok(Number.isFinite(catalog.servers[id].baseCost) && catalog.servers[id].baseCost > 0);
   }
   const state = createState(12345);
-  assert.equal(state.version, 5);
+  assert.equal(state.version, 7);
   assert.equal(state.seed, 12345);
   assert.ok(state.servers.length >= 1);
   assert.ok(state.agents.length >= 2);
@@ -445,6 +445,9 @@ test('routing research keeps its advertised +12% benefit at level six', () => {
   const state = createState(506);
   state.research = 100000;
   state.upgrades.routing = 5;
+  state.lab.owned = ['network-fabric']; // completed foundation; this case measures the repeatable level
+  state.resilience.graceUntil = 1e9;
+  state.policies.autobackup = false; // compare steady work rates without an unrelated backup window
   const description = catalog.research.find((item) => item.id === 'routing').description;
   assert.match(description, /12 Prozentpunkte.*Arbeitstempo je Stufe/i);
   const baseRateState = structuredClone(state);
@@ -453,6 +456,8 @@ test('routing research keeps its advertised +12% benefit at level six', () => {
   const before = getMetrics(state).workPerSecond;
   assert.equal(cost(state, 'research', 'routing') > 0, true);
   assert.equal(act(state, 'buyResearch', { id: 'routing' }).ok, true);
+  assert.equal(state.upgrades.routing, 5, 'funding alone does not grant the next level');
+  advance(state, state.lab.project.total);
   assert.equal(state.upgrades.routing, 6);
   const after = getMetrics(state).workPerSecond;
   assert.ok(after > before, 'sixth routing level remains mechanically useful');
@@ -565,12 +570,25 @@ test('moderately advanced purchased fleets survive normalization and can keep ad
   const state = createState(509);
   state.credits = 1e6;
   state.research = 1e6;
+  state.resilience.graceUntil = 1e9;
+  // Complete actual funded projects sequentially; the S1 fleet buys physical
+  // cooling rather than depending on the S2 thermal-research prerequisite.
+  for (const id of ['network-fabric', 'automation-workflows', 'routing', 'automation']) {
+    assert.equal(act(state, 'buyResearch', { id }).ok, true);
+    advance(state, state.lab.project.total);
+  }
+  for (const component of ['power', 'cooling'])
+    for (let level = 1; level < 7; level++) {
+      assert.equal(
+        act(state, 'upgradeRack', { rackId: state.facility.racks[0].id, component }).ok,
+        true,
+      );
+      advance(state, state.facility.operation.total);
+    }
   for (const type of ['compute', 'storage', 'edge', 'compute'])
     assert.equal(act(state, 'buyServer', { type }).ok, true);
   for (const role of ['engineer', 'analyst', 'operator'])
     assert.equal(act(state, 'recruitAgent', { role }).ok, true);
-  for (const id of ['routing', 'cooling', 'automation'])
-    assert.equal(act(state, 'buyResearch', { id }).ok, true);
   assert.equal(act(state, 'setPolicy', { key: 'autocontract', value: true }).ok, true);
   const loaded = normalizeState(JSON.parse(JSON.stringify(state)));
   loaded.resilience.graceUntil = loaded.time + 43200;

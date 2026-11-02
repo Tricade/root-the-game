@@ -101,6 +101,8 @@ export function createOfflineUI(ctx, platform = globalThis) {
         ctx.state.savedAt = now;
         for (const message of result.report.constructionCompleted)
           ctx.toast(message, false, 'facility');
+        for (const message of result.report.researchCompleted || [])
+          ctx.toast(message, false, 'research');
         return result.report;
       } catch {
         failed = true;

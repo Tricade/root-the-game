@@ -2,6 +2,13 @@ import { workloadArt } from './workload-art.js';
 
 /** workloads UI: reads current state through the controller context. */
 export function createWorkloadsUI(ctx) {
+  function jobReward(job) {
+    return (
+      job.reward *
+      (1 + (ctx.state.upgrades.market || 0) * 0.1) *
+      (job.kind === 'ai' ? ctx.E.getResearchEffects(ctx.state).aiReward : 1)
+    );
+  }
   function jobsView() {
     const m = ctx.E.getMetrics(ctx.state);
     return (
@@ -20,29 +27,11 @@ export function createWorkloadsUI(ctx) {
               .map(([k, v]) => `${ctx.dec(v)} ${k.toUpperCase()}`)
               .join(
                 ' · ',
-              )}</p><div class="offer-stats"><div><small>Vergütung</small><strong>${ctx.fmt(j.reward * (1 + (ctx.state.upgrades.market || 0) * 0.1))} CR</strong></div><div><small>Forschung</small><strong>${ctx.fmt(j.science)} FP</strong></div><div><small>Kapazität</small><strong>${ctx.dec(j.load)} CU${j.kind === 'ai' ? ` · ${j.gpuDemand} GPU` : ''}</strong></div></div><div class="card-actions">${ctx.actionButton('acceptJob', `${ctx.icon('plus')}Annehmen`, { id: j.id }, 'primary')}<button class="icon-button" data-action="declineJob" data-id="${j.id}" aria-label="${ctx.esc(j.title)} ablehnen" title="Angebot ablehnen">${ctx.icon('cross')}</button></div></section>`,
+              )}</p><div class="offer-stats"><div><small>Vergütung</small><strong>${ctx.fmt(jobReward(j))} CR</strong></div><div><small>Forschung</small><strong>${ctx.fmt(j.science)} FP</strong></div><div><small>Kapazität</small><strong>${ctx.dec(j.load)} CU${j.kind === 'ai' ? ` · ${j.gpuDemand} GPU` : ''}</strong></div></div><div class="card-actions">${ctx.actionButton('acceptJob', `${ctx.icon('plus')}Annehmen`, { id: j.id }, 'primary')}<button class="icon-button" data-action="declineJob" data-id="${j.id}" aria-label="${ctx.esc(j.title)} ablehnen" title="Angebot ablehnen">${ctx.icon('cross')}</button></div></section>`,
         )
         .join(
           '',
         )}</div>${!ctx.state.offers.length ? `<section class="panel">${ctx.empty('Neue Angebote sind unterwegs', 'Dein Netzwerk wird in Kürze wieder angefragt. Die automatische Vergabe übernimmt auf Wunsch neue passende Aufträge.', '', '', 'timer')}</section>` : ''}<div class="helper-card"><h3>Teile die Arbeit bewusst auf.</h3><p>Aufträge teilen sich freie CPU, RAM, Speicher, Netz und gegebenenfalls GPU/VRAM nach Versorgung deiner Kunden. Mehr parallele Arbeit belegt mehr Ressourcen. Mit einer Priorität unter Automatisierung kannst du lukrative oder forschungsintensive Aufträge vorziehen.</p></div>`
-    );
-  }
-
-  function researchView() {
-    const researchIcons = {
-      routing: 'globe',
-      cooling: 'heat',
-      market: 'jobs',
-      automation: 'automation',
-      synthesis: 'research',
-    };
-    return (
-      ctx.head(
-        'Forschung & Entwicklung',
-        'Verbessere die Architektur deines Netzwerks – Stufe für Stufe.',
-        `<span class="tag blue">${ctx.icon('research')}${ctx.stat('research')} FORSCHUNGSPUNKTE</span>`,
-      ) +
-      `<div class="card-grid">${ctx.E.catalog.research.map((r) => `<section class="research-card">${workloadArt(r.id, true)}<div class="research-top"><div class="research-icon">${ctx.icon(researchIcons[r.id])}</div><span class="tag">STUFE ${ctx.state.upgrades[r.id] || 0}</span></div><h3>${ctx.esc(r.name)}</h3><p>${ctx.esc(r.description)}</p><div class="research-effect">Dauerhaft aktiv · Ausbau bleibt erhalten</div>${ctx.actionButton('buyResearch', `${ctx.icon('plus')}Erforschen · ${ctx.fmt(ctx.E.cost(ctx.state, 'research', r.id))} FP`, { id: r.id }, '', 'research', r.id)}</section>`).join('')}</div><div class="section-heading"><h2>Erfolge & Meilensteine</h2><p>${ctx.pendingAchievements().length ? ctx.pendingAchievements().length + ' Belohnungen verfügbar' : 'Deine nächsten Ziele'}</p></div><div class="achievement-grid">${ctx.E.catalog.achievements.map((a) => `<div class="achievement ${ctx.state.achievements[a.id] ? 'claimed' : ctx.state.achievementUnlocks?.[a.id] || a.check(ctx.state) ? 'available' : ''}">${ctx.icon('trophy')}<div class="achievement-copy"><h3>${ctx.esc(a.name)}</h3><p>${ctx.esc(a.description)}</p></div>${ctx.state.achievements[a.id] ? '<span class="tag">ERREICHT</span>' : ctx.actionButton('claimAchievement', `${ctx.icon('coins')}+${ctx.fmt(a.reward)} CR`, { id: a.id }, 'small')}</div>`).join('')}</div>`
     );
   }
 
@@ -60,6 +49,7 @@ export function createWorkloadsUI(ctx) {
         'Lege die Regeln fest. Dein Netzwerk kümmert sich um die Routine.',
         `<span class="tag green">${ctx.icon('automation')}AUTONOMER BETRIEB</span>`,
       ) +
+      ctx.customerAutomationView() +
       `<div class="policy-grid"><section class="panel">${ctx.panelHeader('Betriebsregeln', ctx.icon('settings'))}${[
         [
           'autocontract',
@@ -115,5 +105,5 @@ export function createWorkloadsUI(ctx) {
       `<section class="panel">${ctx.panelHeader('Netzwerkprotokoll', `<span class="tag">LETZTE ${entries.length} EREIGNISSE</span>`)}${entries.map((l) => `<div class="log-detail"><span class="tag ${l.type === 'success' ? 'green' : ''}">${l.type === 'success' ? 'ERFOLG' : 'SYSTEM'}</span><div><p>${ctx.esc(l.message)}</p><small>Betriebszeit ${ctx.clock(l.time)}</small></div></div>`).join('') || ctx.empty('Noch keine Einträge', 'Neue Ereignisse erscheinen hier automatisch.', '', '', 'log')}</section>`
     );
   }
-  return { jobsView, researchView, automationView, inboxView, logView };
+  return { jobsView, jobReward, automationView, inboxView, logView };
 }

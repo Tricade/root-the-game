@@ -12,19 +12,32 @@
     typeof module === 'object' && module.exports
       ? require('./personnel-en.js')
       : root.RootPersonnelEnglish;
-  const create = (translate) => factory(translate, { building, business, personnel });
+  const customers =
+    typeof module === 'object' && module.exports
+      ? require('./customers-en.js')
+      : root.RootCustomersEnglish;
+  const research =
+    typeof module === 'object' && module.exports
+      ? require('./research-en.js')
+      : root.RootResearchEnglish;
+  const workspace =
+    typeof module === 'object' && module.exports
+      ? require('./workspace-en.js')
+      : root.RootWorkspaceEnglish;
+  const create = (translate) =>
+    factory(translate, { building, business, personnel, customers, research, workspace });
   if (typeof module === 'object' && module.exports) module.exports = create;
   if (root) root.RootEnglishCatalog = create;
 })(typeof globalThis !== 'undefined' ? globalThis : this, function (translate, catalogs) {
-  const { building, business, personnel } = catalogs;
+  const { building, business, personnel, customers, research, workspace } = catalogs;
   const en = Object.create(null);
   const add = (pairs) => {
     for (const [de, english] of pairs) en[de] = english;
   };
   add([
     [
-      'Raum betreten öffnet die Ego-Ansicht. WASD bewegt dich, Maus oder Pfeiltasten links/rechts drehen den Blick. Am Rack öffnet E zuerst die Tür und danach die freiliegende Hardware. E an der Tür schließt sie. Raumtüren lassen sich von beiden Seiten bedienen und schließen nach dem Durchgehen. Escape führt zurück. Ohne Mausbindung halte die Maustaste zum Umsehen gedrückt. Die Geräte-Liste führt auch direkt zu jedem Server. Die Monitore an den Leitständen und die Konsole öffnen alle Verwaltungsbereiche direkt im Raum. Escape schließt zuerst den Dialog, dann die Konsole; Weboberfläche beendet den Rundgang.',
-      'Entering the room opens first-person view. Use WASD to move and the mouse or left/right arrow keys to turn. Press E while targeting a rack to open its door. Press E while targeting the open door to close it; target the exposed hardware to manage it. Room doors can be operated from either side and close after you pass through. Press Escape to return. If pointer lock is unavailable, hold the mouse button to look around. The device list also links directly to each server. The control desk monitors and console open every management area in the room. Escape closes the dialog first, then the console; switch to the web interface to leave the tour.',
+      'Raum betreten öffnet die Ego-Ansicht. WASD bewegt dich, Shift lässt dich sprinten, Maus oder Pfeiltasten links/rechts drehen den Blick. Am Rack öffnet E zuerst die Tür und danach die freiliegende Hardware. E an der Tür schließt sie. Raumtüren lassen sich von beiden Seiten bedienen und schließen nach dem Durchgehen. Escape führt zurück. Ohne Mausbindung halte die Maustaste zum Umsehen gedrückt. Die Geräte-Liste führt auch direkt zu jedem Server. Die Monitore an den Leitständen und die Konsole öffnen alle Verwaltungsbereiche direkt im Raum. Escape schließt zuerst den Dialog, dann die Konsole; Weboberfläche beendet den Rundgang.',
+      'Entering the room opens first-person view. Use WASD to move, hold Shift to sprint, and use the mouse or left/right arrow keys to turn. Press E while targeting a rack to open its door. Press E while targeting the open door to close it; target the exposed hardware to manage it. Room doors can be operated from either side and close after you pass through. Press Escape to return. If pointer lock is unavailable, hold the mouse button to look around. The device list also links directly to each server. The control desk monitors and console open every management area in the room. Escape closes the dialog first, then the console; switch to the web interface to leave the tour.',
     ],
     ['Weboberfläche und Raumkonsole', 'Web interface and room console'],
     ['Zugang zum Cyberbunker', 'Cyberbunker access'],
@@ -435,8 +448,8 @@
     ['WORKSPACE / PHYSICAL INFRASTRUCTURE', 'WORKSPACE / PHYSICAL INFRASTRUCTURE'],
     ['Begehe deinen Serverraum', 'Explore your server room'],
     [
-      'Raum betreten öffnet die Ego-Ansicht. WASD bewegt dich, Maus oder Pfeiltasten links/rechts drehen den Blick. Am Rack öffnet E zuerst die Tür und danach die freiliegende Hardware. E an der Tür schließt sie. Raumtüren lassen sich von beiden Seiten bedienen und schließen nach dem Durchgehen. Escape führt zurück. Ohne Mausbindung halte die Maustaste zum Umsehen gedrückt. Die Geräte-Liste führt auch direkt zu jedem Server. Die Monitore an den Leitständen und die Konsole öffnen alle Verwaltungsbereiche direkt im Raum. Escape schließt zuerst den Dialog, dann die Konsole; Weboberfläche beendet den Rundgang.',
-      'Enter room opens the first-person view. WASD moves you; use the mouse or left/right arrow keys to turn. E opens the targeted device; Escape returns. If mouse capture is unavailable, hold the mouse button to look around. The device list also links directly to each server. The control desk monitors and console open every management area in the room. Escape closes the dialog first, then the console; Web UI ends the tour.',
+      'Raum betreten öffnet die Ego-Ansicht. WASD bewegt dich, Shift lässt dich sprinten, Maus oder Pfeiltasten links/rechts drehen den Blick. Am Rack öffnet E zuerst die Tür und danach die freiliegende Hardware. E an der Tür schließt sie. Raumtüren lassen sich von beiden Seiten bedienen und schließen nach dem Durchgehen. Escape führt zurück. Ohne Mausbindung halte die Maustaste zum Umsehen gedrückt. Die Geräte-Liste führt auch direkt zu jedem Server. Die Monitore an den Leitständen und die Konsole öffnen alle Verwaltungsbereiche direkt im Raum. Escape schließt zuerst den Dialog, dann die Konsole; Weboberfläche beendet den Rundgang.',
+      'Enter room opens the first-person view. WASD moves you; hold Shift to sprint and use the mouse or left/right arrow keys to turn. E opens the targeted device; Escape returns. If mouse capture is unavailable, hold the mouse button to look around. The device list also links directly to each server. The control desk monitors and console open every management area in the room. Escape closes the dialog first, then the console; Web UI ends the tour.',
     ],
     ['Plane dein Rechenzentrum', 'Plan your data center'],
     ['Gib Agenten einen Schwerpunkt', 'Assign agents a focus'],
@@ -1175,6 +1188,7 @@
     ['Maus', 'Mouse'],
     ['Ziehen / ← → drehen', 'Drag / ← → turn'],
     ['Bewegen', 'Move'],
+    ['Sprinten', 'Sprint'],
     ['Öffnen', 'Open'],
     ['Umsehen', 'Look around'],
     ['Esc zurück', 'Esc to return'],
@@ -1403,7 +1417,7 @@
     ['Netzwerkstand überschreitet Sektorgrenzen.', 'Network state exceeds sector limits.'],
     ['Wiederherstellung ohne gültige Sicherung.', 'Recovery without a valid backup.'],
     [
-      'Krisen- oder Wartungsmaßnahme verhindert gerade eine neue Sicherung.',
+      'Eine Krisen- oder Wartungsmaßnahme verhindert gerade eine neue Sicherung.',
       'A crisis or maintenance operation is currently preventing a new backup.',
     ],
     [
@@ -1914,6 +1928,7 @@
     ['Dialog schließen', 'Close dialog'],
     ['Willkommen zurück.', 'Welcome back.'],
     ['Bewegen', 'Move'],
+    ['Sprinten', 'Sprint'],
     ['Ziehen / ← → drehen', 'Drag / ← → rotate'],
     ['Öffnen', 'Open'],
     ['Konsole', 'Console'],
@@ -1992,6 +2007,38 @@
     ['FREIER EINBAUPLATZ', 'FREE INSTALLATION SLOT'],
   ]);
   const patterns = [
+    [
+      /^(Randknoten|Edge-Knoten|Rechenknoten|Speicherknoten|KI-Beschleuniger) (\d{2,})$/,
+      (_, prefix, number) => `${translate(prefix, 'en')} ${number}`,
+    ],
+    [
+      /^Automatische Betriebssicherung gestartet: (.+?) Credits\.$/,
+      'Automatic operations backup started: $1 credits.',
+    ],
+    [
+      /^Automatische Wartung gestartet: (.+?), (.+?) Credits und (\d+) Ersatzteil(?:e)?\.$/,
+      (_, name, credits, parts) =>
+        `Automatic maintenance started: ${translate(name, 'en')}, ${credits} credits and ${parts} spare part${parts === '1' ? '' : 's'}.`,
+    ],
+    [
+      /^Wartung abgeschlossen: (.+?) bei ([\d.,]+)% Zustand\.$/,
+      (_, name, condition) =>
+        `Maintenance complete: ${translate(name, 'en')} at ${condition}% condition.`,
+    ],
+    [
+      /^(.+?) auf Stufe (\d+) ausgebaut\.$/,
+      (_, name, level) => `${translate(name, 'en')} upgraded to level ${level}.`,
+    ],
+    [/^(.+?) erreicht Stufe (\d+)\.$/, '$1 reached level $2.'],
+    [
+      /^(.+?) hat den Forschungsauftrag abgeschlossen: \+(\d+) Forschungspunkte\.$/,
+      '$1 completed the research assignment: +$2 research points.',
+    ],
+    [
+      /^(.+?) hat den Einsatz „(.+?)“ abgeschlossen\. Die Wirkung ist aktiv\.$/,
+      (_, name, label) =>
+        `${name} completed the “${translate(label, 'en')}” assignment. Its effect is active.`,
+    ],
     [
       /^Mach dein Netzwerk bereit für Sektor (\d+)\. Jeder Ausbau eröffnet neue Möglichkeiten\.$/,
       (_, sector) =>
@@ -2125,9 +2172,9 @@
         `${racks} rack${racks === '1' ? '' : 's'} · ${servers} installed server${servers === '1' ? '' : 's'}.`,
     ],
     [
-      /^Begehbarer Serverraum: (\d+) Racks und (\d+) eingebaute Server\. WASD bewegen, Maus oder Pfeiltasten drehen, E Gerät öffnen, Escape zurück\.$/,
+      /^Begehbarer Serverraum: (\d+) Racks und (\d+) eingebaute Server\. WASD bewegen, Shift sprinten, Maus oder Pfeiltasten drehen, E Gerät öffnen, Escape zurück\.$/,
       (whole, racks, servers) =>
-        `Walkable server room: ${racks} rack${racks === '1' ? '' : 's'} and ${servers} installed server${servers === '1' ? '' : 's'}. WASD to move, mouse or arrow keys to turn, E to open a device, Escape to return.`,
+        `Walkable server room: ${racks} rack${racks === '1' ? '' : 's'} and ${servers} installed server${servers === '1' ? '' : 's'}. WASD to move, hold Shift to sprint, mouse or arrow keys to turn, E to open a device, Escape to return.`,
     ],
     [
       /^Während deiner Abwesenheit hat ROOT (.+?) weitergearbeitet\. Berücksichtigt wurden maximal 12 Stunden\.$/,
@@ -2571,8 +2618,22 @@
   add(operations.pairs);
   const staff = personnel(translate);
   add(staff.pairs);
+  const commercial = customers(translate);
+  add(commercial.pairs);
+  const control = workspace(translate);
+  add(control.pairs);
+  const laboratory = research(translate);
+  add(laboratory.pairs);
   return {
     en,
-    patterns: [...staff.patterns, ...operations.patterns, ...extra.patterns, ...patterns],
+    patterns: [
+      ...control.patterns,
+      ...laboratory.patterns,
+      ...commercial.patterns,
+      ...staff.patterns,
+      ...operations.patterns,
+      ...extra.patterns,
+      ...patterns,
+    ],
   };
 });

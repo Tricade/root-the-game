@@ -644,6 +644,8 @@ body.root-room-open {
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  /* A fixed inner rim keeps scrolling content clear of the rounded frame. */
+  padding-bottom: 14px;
   border: 1px solid #668076;
   border-radius: 14px;
   background: #101715f7;
@@ -657,6 +659,7 @@ body.root-room-open {
 }
 .room-console-header {
   display: flex;
+  flex-shrink: 0;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
@@ -687,12 +690,29 @@ body.root-room-open {
   cursor: pointer;
 }
 .room-console-nav {
-  display: flex;
+  display: block;
+  flex-shrink: 0;
   gap: 4px;
   flex-wrap: wrap;
   padding: 10px 14px;
   border-bottom: 1px solid #354336;
   background: #141c17;
+}
+.room-console-groups,
+.room-console-sections {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.room-console-groups {
+  padding-bottom: 7px;
+  margin-bottom: 7px;
+  border-bottom: 1px solid #354336;
+}
+.room-console-tools {
+  margin-left: auto;
+  display: flex;
 }
 .room-console-nav button {
   border: 0;

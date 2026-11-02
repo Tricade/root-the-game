@@ -31,6 +31,7 @@
       const initialCredits = s.credits,
         initialResearch = s.research;
       const constructionCompleted = [];
+      const researchCompleted = [];
       const rackById = new Map(s.facility.racks.map((rack) => [rack.id, rack]));
       // One-second deterministic slices keep work, rewards, and generated opportunities consistent online/offline.
       while (remaining > 0) {
@@ -64,8 +65,11 @@
             s.business.unserved + (m.serviceUnits - m.serviceDelivered) * dt,
           );
           context.advanceServices(s, dt);
+          context.advanceCustomers(s, dt, m.customerSupply);
           context.advanceSupply(s, dt);
         }
+        const researchNotice = context.advanceResearch(s, dt, m);
+        if (researchNotice) researchCompleted.push(researchNotice);
         s.research += m.researchPerSecond * dt;
         if (s.jobs.length) {
           for (const j of s.jobs)
@@ -73,7 +77,10 @@
           const done = s.jobs.filter((j) => j.work >= j.totalWork);
           if (done.length) {
             for (const j of done) {
-              const reward = j.reward * (1 + (s.upgrades.market || 0) * 0.1);
+              const reward =
+                j.reward *
+                (1 + (s.upgrades.market || 0) * 0.1) *
+                (j.kind === 'ai' ? context.researchEffects(s).aiReward : 1);
               s.credits += reward;
               s.lifetimeCredits += reward;
               s.research += j.science;
@@ -182,34 +189,7 @@
           }
         }
         if (!incidentAtStart && !r.incident && !operationFinished && s.time >= r.graceUntil) {
-          const activeAgents = s.agents.filter((agent) => context.agentProductive(s, agent));
-          const engineers = activeAgents
-            .filter((agent) => agent.role === 'engineer')
-            .reduce((sum, agent) => sum + agent.level * context.agentEffects(agent).care, 0);
-          const maintenanceFocus = activeAgents
-            .filter((agent) => agent.focus === 'maintenance')
-            .reduce((sum, agent) => sum + agent.level * context.agentEffects(agent).care, 0);
-          const coolingLevels = s.upgrades.cooling || 0;
-          const wearPerHour = Math.max(
-            0.002,
-            (0.012 +
-              Math.max(0, m.heat - 8) * 0.0015 +
-              Math.max(0, m.load - 0.65) * 0.035 +
-              (s.policies.power === 'performance' ? 0.025 : 0) +
-              (!s.policies.autorepair ? 0.018 : 0)) *
-              Math.max(
-                0.25,
-                1 -
-                  Math.min(
-                    0.65,
-                    engineers * 0.045 +
-                      maintenanceFocus * 0.025 +
-                      coolingLevels * 0.008 +
-                      (s.policies.power === 'eco' ? 0.18 : 0) +
-                      (s.policies.autorepair ? 0.14 : 0),
-                  ),
-              ),
-          );
+          const wearPerHour = context.serverWearPerHour(s, m);
           for (const server of s.servers)
             if (
               serverLinkState(s, server, rackById.get(server.rackId)) &&
@@ -249,6 +229,7 @@
         jobsCompleted: completed,
         eventCount,
         constructionCompleted,
+        researchCompleted,
       };
     }
     return { advance };

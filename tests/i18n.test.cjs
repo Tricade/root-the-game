@@ -3,6 +3,74 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const I18N = require('../i18n.js');
 
+test('customer workflow, research dialogs and development controls have complete English labels', () => {
+  for (const [source, english] of [
+    ['Anfrage ablehnen', 'Decline enquiry'],
+    ['Forschungszweige', 'Research branches'],
+    ['Forschungsentscheidung prüfen', 'Review research decision'],
+    ['Agent-Upgrade prüfen', 'Review agent upgrade'],
+    [
+      'Kundenvertrag angenommen. Einrichtung gestartet.',
+      'Customer contract accepted. Provisioning started.',
+    ],
+    ['Noch nicht eingerichtet', 'Not provisioned yet'],
+    ['Agent entwickelt.', 'Agent upgraded.'],
+    ['Netzwerkstand gespeichert.', 'Network saved.'],
+    ['Schwerpunkt angepasst.', 'Focus updated.'],
+    ['19 Zoll · 18 HE', '19 in · 18 RU'],
+    ['3 Server · 9 / 16 HE', '3 servers · 9 / 16 RU'],
+  ])
+    assert.equal(I18N.translate(source, 'en'), english);
+});
+
+test('English compound feedback translates only its action label and preserves the agent name', () => {
+  const text = 'Tarek ist bereits im Einsatz: Netzdiagnose.';
+  assert.equal(I18N.translate(text, 'en'), 'Tarek is already on assignment: Network diagnostics.');
+  assert.equal(I18N.translate(text, 'de'), text);
+});
+
+test('automatic server labels and live backup/maintenance feedback translate without changing saved names', () => {
+  const server = { type: 'edge', name: 'Randknoten 01' };
+  assert.equal(I18N.isGeneratedServerName(server), true);
+  assert.equal(I18N.serverName(server, 'en'), 'Edge node 01');
+  assert.equal(I18N.serverName(server, 'de'), 'Randknoten 01');
+  assert.equal(server.name, 'Randknoten 01');
+  assert.equal(I18N.serverName({ type: 'edge', name: 'Mein Knoten' }, 'en'), 'Mein Knoten');
+  assert.equal(I18N.isGeneratedServerName({ type: 'compute', name: 'Randknoten 01' }), false);
+  for (const [source, english] of [
+    ['Speicherknoten 32', 'Storage node 32'],
+    [
+      'Eine Krisen- oder Wartungsmaßnahme verhindert gerade eine neue Sicherung.',
+      'A crisis or maintenance operation is currently preventing a new backup.',
+    ],
+    [
+      'Automatische Betriebssicherung gestartet: 185 Credits.',
+      'Automatic operations backup started: 185 credits.',
+    ],
+    [
+      'Automatische Wartung gestartet: Rechenknoten 02, 185 Credits und 2 Ersatzteil.',
+      'Automatic maintenance started: Compute node 02, 185 credits and 2 spare parts.',
+    ],
+    [
+      'Wartung abgeschlossen: Rechenknoten 02 bei 100% Zustand.',
+      'Maintenance complete: Compute node 02 at 100% condition.',
+    ],
+    ['Rechenknoten 02 auf Stufe 2 ausgebaut.', 'Compute node 02 upgraded to level 2.'],
+    ['Mira erreicht Stufe 2.', 'Mira reached level 2.'],
+    [
+      'Mira hat den Forschungsauftrag abgeschlossen: +12 Forschungspunkte.',
+      'Mira completed the research assignment: +12 research points.',
+    ],
+    [
+      'Mira hat den Einsatz „Netzdiagnose“ abgeschlossen. Die Wirkung ist aktiv.',
+      'Mira completed the “Network diagnostics” assignment. Its effect is active.',
+    ],
+  ]) {
+    assert.equal(I18N.translate(source, 'en'), english);
+    assert.equal(I18N.translate(source, 'de'), source);
+  }
+});
+
 test('customer, utility and unattended operation feedback is translated without renaming clients', () => {
   for (const [source, expected] of [
     ['Kunden & Betrieb', 'Customers & operations'],

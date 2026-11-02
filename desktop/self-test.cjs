@@ -10,11 +10,14 @@ async function runSelfTest({ app, output, startDesktop }) {
   const result = { ok: false, version: app.getVersion(), runtime: { ...process.versions } };
   const write = () =>
     fs.writeFile(path.join(output, 'result.json'), JSON.stringify(result, null, 2) + '\n');
-  const deadline = setTimeout(async () => {
-    result.error = 'Desktop did not finish within 60 seconds';
-    await write();
-    app.exit(1);
-  }, 60000);
+  const deadline = setTimeout(
+    async () => {
+      result.error = 'Desktop did not finish within 60 seconds';
+      await write();
+      app.exit(1);
+    },
+    process.env.ROOT_CAPTURE_DOCS === '1' ? 120000 : 60000,
+  );
   async function fail(error) {
     clearTimeout(deadline);
     result.error = error.message;
@@ -172,6 +175,13 @@ async function runSelfTest({ app, output, startDesktop }) {
     assert.equal(save.servers.length, 1);
     result.saved = true;
     result.reloaded = reloaded;
+    result.workspaces = await require('./workspace-smoke.cjs').checkWorkspaces(contents);
+    if (process.env.ROOT_CAPTURE_DOCS === '1')
+      result.documentation = await require('./docs-capture.cjs').captureDocumentation({
+        window,
+        output,
+        reload,
+      });
     result.updateTransport = await require('./update-smoke.cjs').checkUpdateTransport({
       directory: output,
       version: app.getVersion(),

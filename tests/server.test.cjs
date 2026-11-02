@@ -28,6 +28,46 @@ function fixture() {
   return engine.createState(24680);
 }
 
+test('schema 5 and 6 load as schema 7 without losing progress; old writers cannot erase customers or paid research', async (t) => {
+  const E = require('../engine.js');
+  for (const version of [5, 6])
+    await withServer(t, async ({ base, dataDir }) => {
+      const old = E.createState(700 + version);
+      old.version = version;
+      delete old.lab;
+      if (version === 5) delete old.customers;
+      old.agents[0].level = 7;
+      old.upgrades.routing = 9;
+      old.credits = 123456;
+      const original = JSON.stringify(old, null, 2) + '\n';
+      await fs.writeFile(path.join(dataDir, 'save.json'), original);
+      const loaded = (await (await fetch(base + '/api/save')).json()).save;
+      assert.equal(loaded.version, 7);
+      assert.equal(loaded.agents[0].level, 7);
+      assert.equal(loaded.upgrades.routing, 9);
+      assert.equal(loaded.credits, 123456);
+      assert.equal(
+        loaded.customers.contracts.reduce((n, c) => n + c.units, 0),
+        3,
+      );
+      const post = (save) =>
+        fetch(base + '/api/save', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json', origin: base },
+          body: JSON.stringify(save),
+        });
+      assert.equal((await post(old)).status, 409);
+      assert.equal(await fs.readFile(path.join(dataDir, 'save.json'), 'utf8'), original);
+      loaded.research = 100;
+      assert.ok(E.act(loaded, 'buyResearch', { id: 'network-fabric' }).ok);
+      assert.equal((await post(loaded)).status, 200);
+      assert.equal(await fs.readFile(path.join(dataDir, 'save.backup.json'), 'utf8'), original);
+      const current = (await (await fetch(base + '/api/save')).json()).save;
+      assert.equal(current.lab.project.id, 'network-fabric');
+      assert.equal(current.lab.project.remaining, 600);
+    });
+});
+
 async function legacyFixture() {
   return JSON.parse(await fs.readFile(path.join(__dirname, 'fixtures', 'v1-save.json'), 'utf8'));
 }
@@ -42,7 +82,7 @@ test('health endpoint, loopback-only static allowlist, and API boundaries', asyn
     assert.equal(health.status, 200);
     assert.deepEqual(await health.json(), {
       app: 'ROOT',
-      version: 5,
+      version: 7,
       release: require('../package.json').version,
     });
     for (const file of [
@@ -169,8 +209,8 @@ test('save round-trip persists data and preserves the previous save as backup', 
     }
     const stored = JSON.parse(await fs.readFile(path.join(dataDir, 'save.json'), 'utf8'));
     const backup = JSON.parse(await fs.readFile(path.join(dataDir, 'save.backup.json'), 'utf8'));
-    assert.equal(stored.version, 5);
-    assert.equal(backup.version, 5);
+    assert.equal(stored.version, 7);
+    assert.equal(backup.version, 7);
     if (second.marker) assert.equal(stored.marker, 'fixture');
     assert.ok(await (await fetch(`${base}/api/save`)).json());
   });
@@ -188,7 +228,7 @@ test('schema 4 upgrades in memory, survives a v5 write as exact backup and stale
     await fs.writeFile(path.join(dataDir, 'save.json'), original);
     const response = await fetch(base + '/api/save');
     const upgraded = (await response.json()).save;
-    assert.equal(upgraded.version, 5);
+    assert.equal(upgraded.version, 7);
     assert.equal(upgraded.agents[0].level, 3);
     assert.ok(upgraded.agents.every((a) => a.profile.weakness === null));
     assert.equal(await fs.readFile(path.join(dataDir, 'save.json'), 'utf8'), original);
@@ -264,7 +304,7 @@ test('GET migrates a v1 source in memory and retains its bytes until the explici
     const response = await fetch(`${base}/api/save`);
     assert.equal(response.status, 200);
     const migrated = (await response.json()).save;
-    assert.equal(migrated.version, 5);
+    assert.equal(migrated.version, 7);
     assert.equal(migrated.credits, legacy.credits);
     assert.equal(migrated.research, legacy.research);
     assert.equal(migrated.servers[0].id, legacy.servers[0].id);
@@ -294,13 +334,13 @@ test('GET migrates a v1 source in memory and retains its bytes until the explici
       body: JSON.stringify(migrated),
     });
     assert.equal(saved.status, 200);
-    assert.equal(JSON.parse(await fs.readFile(source, 'utf8')).version, 5);
+    assert.equal(JSON.parse(await fs.readFile(source, 'utf8')).version, 7);
     assert.deepEqual(
       JSON.parse(await fs.readFile(path.join(dataDir, 'save.backup.json'), 'utf8')),
       legacy,
     );
-    assert.equal((await (await fetch(`${base}/api/save`)).json()).save.version, 5);
-    assert.equal(engine.normalizeState(migrated).version, 5);
+    assert.equal((await (await fetch(`${base}/api/save`)).json()).save.version, 7);
+    assert.equal(engine.normalizeState(migrated).version, 7);
   });
 });
 
@@ -318,7 +358,7 @@ test('GET migrates a v2 source in memory and retains its bytes until the explici
     const response = await fetch(`${base}/api/save`);
     assert.equal(response.status, 200);
     const migrated = (await response.json()).save;
-    assert.equal(migrated.version, 5);
+    assert.equal(migrated.version, 7);
     assert.equal(migrated.networkName, legacy.networkName);
     assert.equal(migrated.credits, legacy.credits);
     assert.equal(migrated.servers[0].id, legacy.servers[0].id);
@@ -334,20 +374,20 @@ test('GET migrates a v2 source in memory and retains its bytes until the explici
       body: JSON.stringify(migrated),
     });
     assert.equal(saved.status, 200);
-    assert.equal(JSON.parse(await fs.readFile(source, 'utf8')).version, 5);
+    assert.equal(JSON.parse(await fs.readFile(source, 'utf8')).version, 7);
     assert.deepEqual(
       JSON.parse(await fs.readFile(path.join(dataDir, 'save.backup.json'), 'utf8')),
       legacy,
     );
-    assert.equal((await (await fetch(`${base}/api/save`)).json()).save.version, 5);
-    assert.equal(engine.normalizeState(migrated).version, 5);
+    assert.equal((await (await fetch(`${base}/api/save`)).json()).save.version, 7);
+    assert.equal(engine.normalizeState(migrated).version, 7);
   });
 });
 
 test('v3 save round-trip preserves resilience settings, condition and protected backup research', async (t) => {
   const engine = require('../engine.js');
   const fixture = engine.createState(2026);
-  assert.equal(fixture.version, 5);
+  assert.equal(fixture.version, 7);
   fixture.servers[0].condition = 73;
   fixture.servers[0].status = 'online';
   fixture.servers[0].fault = null;

@@ -10,6 +10,9 @@ export function createEventsUI(ctx, platform = globalThis) {
         return;
       }
       if (target.disabled || ctx.desktopClosing?.()) return;
+      if (target.dataset.dashboardTour !== undefined) return ctx.Room.enter();
+      if (ctx.agentDevelopmentClick?.(target)) return;
+      if (ctx.researchClick?.(target)) return;
       if (ctx.personnelClick?.(target)) return;
       if (ctx.businessClick?.(target)) return;
       if (ctx.operationsClick?.(target)) return;

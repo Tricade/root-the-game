@@ -17,6 +17,7 @@
       );
 
     function getAgentOperations(s) {
+      const customers = context.customerReadModel(s);
       const r = s.resilience,
         activeEffects = [];
       if (r.agentEffects.diagnoseRemaining > 0)
@@ -35,21 +36,34 @@
       const agents = s.agents.map((agent) => {
         const project = s.operations?.projects.find((p) => p.agentId === agent.id);
         const cooldown = Math.max(0, agent.cooldownUntil - s.time);
-        const assignment = agent.assignment
+        const customer = customers.assignments.get(agent.id);
+        const assignment = customer
           ? {
-              kind: agent.assignment.kind,
-              label: agent.assignment.label,
-              remaining: agent.assignment.remaining,
-              total: agent.assignment.total,
+              kind: 'customer',
+              label:
+                customer.work === 'setup'
+                  ? 'Kundeneinrichtung'
+                  : customer.work === 'retention'
+                    ? 'Kundenrückgewinnung'
+                    : 'Kundenbetreuung',
+              remaining: customer.workRemaining,
+              total: customer.workTotal,
             }
-          : project
+          : agent.assignment
             ? {
-                kind: 'project',
-                label: context.PROJECTS[project.kind].name,
-                remaining: project.remaining,
-                total: project.total,
+                kind: agent.assignment.kind,
+                label: agent.assignment.label,
+                remaining: agent.assignment.remaining,
+                total: agent.assignment.total,
               }
-            : null;
+            : project
+              ? {
+                  kind: 'project',
+                  label: context.PROJECTS[project.kind].name,
+                  remaining: project.remaining,
+                  total: project.total,
+                }
+              : null;
         const definitions = [
           {
             key: 'diagnose',
@@ -141,6 +155,6 @@
       agent.assignment = null;
       agent.cooldownUntil = s.time + 300;
     }
-    return { getAgentOperations, finishAgentMission };
+    return { getAgentOperations, finishAgentMission, missionResearch };
   };
 });

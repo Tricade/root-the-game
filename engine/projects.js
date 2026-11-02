@@ -29,7 +29,7 @@
       const cost = Math.ceil(180 * Math.sqrt(agent.level) * (def.duration / 1800));
       const reason = !ctx.agentAvailable(s, agent)
         ? 'Dieser Agent wartet sich selbst und kehrt automatisch zurück.'
-        : agent.assignment || s.operations.projects.some((x) => x.agentId === agent.id)
+        : !ctx.agentProductive(s, agent)
           ? 'Dieser Agent ist bereits im Einsatz.'
           : agent.cooldownUntil > s.time
             ? 'Dieser Agent benötigt eine Einsatzpause.'

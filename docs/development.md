@@ -55,3 +55,11 @@ The geometry uses the bundled Three.js 0.186.1 revision documented in [dependenc
 `tests/utility-geometry.test.cjs` checks feeds against the real rack and plant model bounds, separate water circuits, proud wall flanges, front-elevation label/LED clearance, bounded geometry and disposal on room transitions. `tests/cable-trays.test.cjs` additionally raycasts through the open gaps and checks cable visibility and batched geometry disposal. These geometric checks supplement visual inspection; they do not prove appearance or absence of flicker at every camera angle.
 
 Schema 5 adds the finite robot recruitment board, persisted profiles and common self-maintenance availability. See [personnel rules, migration and tests](personnel.md). This feature has no new dependency, background timer or external asset source.
+
+## Shared navigation, commercial work and research
+
+`ui/navigation.js` defines the grouped web and room routes. `ui/dashboard-model.js` feeds both Dashboard and `room/station-content.js`; actual customer delivery and recurring margin share engine metrics. Engineering controls live in Buildings & utilities; named enquiries and contracts live in Customers & contracts. Achievements have their own renderer and notification destination.
+
+Schema 6 introduced customer cohorts; schema 7 adds the paid research ledger. Separate engine domains own catalogs, actions, progression and strict validation. Customer assignments use the common availability rules. Research effects are declarative, and upgrading an agent previews the actual metrics through a pure copied-agent comparison. Old write clients receive 409 instead of erasing new fields. Tests exercise raw-backup preservation, failed quotes, delayed completion and worker parity.
+
+The native Electron 45.2.1 workspace smoke checks web routes, upgrade confirmation and actual modal scroll geometry. Optional `ROOT_CAPTURE_DOCS=1` captures fictional demonstration data through the real application. Its renderer checks and native frame presentation checks supplement unit tests. The capture API and presentation subscription follow the [45.2.1 webContents documentation](https://github.com/electron/electron/blob/v45.2.1/docs/api/web-contents.md). No private profile, external asset download or additional package is required.

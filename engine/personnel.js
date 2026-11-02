@@ -130,10 +130,11 @@
     function agentAvailable(s, a) {
       return !agentHealth(s, a).absent;
     }
-    function agentProductive(s, a) {
+    function agentProductive(s, a, customerAssignments = null) {
       return (
         agentAvailable(s, a) &&
         !a.assignment &&
+        !(customerAssignments ? customerAssignments.has(a.id) : ctx.customerAssignment(s, a.id)) &&
         !s.operations?.projects?.some((p) => p.agentId === a.id)
       );
     }

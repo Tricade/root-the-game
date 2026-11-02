@@ -13,6 +13,7 @@ export function createTelemetryUI(ctx) {
       ctx.facilitySignature(),
       ctx.businessSignature?.(),
       ctx.operationsSignature?.(),
+      ctx.researchSignature?.(),
     ].join('|');
     if (ctx.view === 'overview')
       return [
@@ -36,7 +37,7 @@ export function createTelemetryUI(ctx) {
   function updateLive() {
     if (!ctx.state) return;
     ctx.updatePersonnel?.();
-    ctx.updateBusiness?.();
+    ctx.updateRoomOperations?.();
     ctx.updateOperations?.();
     if (ctx.view === 'facility') ctx.updateCentralTelemetry();
     const m = ctx.E.getMetrics(ctx.state),
@@ -45,6 +46,10 @@ export function createTelemetryUI(ctx) {
       a = ctx.agentOperations(),
       achievements = ctx.pendingAchievements(),
       limited = facility.racks.some((x) => x.status !== 'online');
+    ctx.updateBusiness?.(m);
+    ctx.updateResearch?.(m);
+    ctx.updateDashboard?.(m, r, a);
+    ctx.updateAgentDevelopment?.();
     const serverRows = new Map(
       facility.racks.flatMap((rack) => rack.servers.map((server) => [server.id, server])),
     );
@@ -175,15 +180,15 @@ export function createTelemetryUI(ctx) {
                   .find((x) => x.id === b.dataset.id)
                   ?.repairs.find((x) => x.key === b.dataset.method);
       b.disabled = !o?.enabled;
-      b.title = o?.reason || '';
+      b.title = ctx.tr(o?.reason || '');
       const card = b.closest('.protection-option');
       if (o && card) {
         const description = ctx.$('[data-option-description]', card),
           cost = ctx.$('[data-option-cost]', card),
           reason = ctx.$('[data-option-reason]', card);
-        if (description) description.textContent = o.description;
-        if (cost) cost.textContent = ctx.optionSummary(o);
-        if (reason) reason.textContent = o.reason;
+        if (description) description.textContent = ctx.tr(o.description);
+        if (cost) cost.textContent = ctx.tr(ctx.optionSummary(o));
+        if (reason) reason.textContent = ctx.tr(o.reason);
       }
     });
     a.agents.forEach((agent) => {
@@ -260,11 +265,12 @@ export function createTelemetryUI(ctx) {
             ? ctx.state.agents.length >= m.agentLimit
             : false;
       b.disabled = balance < price || limit || !Number.isFinite(price);
-      b.title = limit
+      const budgetReason = limit
         ? 'Alle Plätze belegt – erschließe einen neuen Sektor.'
         : balance < price
           ? `Noch ${ctx.fmt(Math.ceil(price - balance))} ${b.dataset.costKind === 'research' ? 'FP' : 'CR'} nötig`
           : '';
+      b.title = ctx.tr(budgetReason);
     });
     ctx.$$('[data-action="upgradeServer"]').forEach((b) => {
       if (serverRows.get(b.dataset.id)?.status !== 'online') {

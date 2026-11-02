@@ -29,6 +29,7 @@ export function createPersistenceUI(ctx, platform = globalThis) {
     ctx.state.savedAt = now;
     for (const message of report?.constructionCompleted || [])
       ctx.toast(message, false, 'facility');
+    for (const message of report?.researchCompleted || []) ctx.toast(message, false, 'research');
     return { ...report, capped: elapsed > 43200 };
   }
 

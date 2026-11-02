@@ -61,20 +61,26 @@
       }
       return rooms;
     }
-    function groupDemand(room, group, includePending = false) {
+    function groupDemand(room, group, includePending = false, efficiency = 1) {
       const needs = SERVICES[group.kind].needs;
       const units = group.units + (includePending ? group.pending : 0);
       const profile = room.profile === SERVICES[group.kind].profile ? 0.9 : 1;
-      return Object.fromEntries(RESOURCES.map((key) => [key, (needs[key] || 0) * units * profile]));
+      return Object.fromEntries(
+        RESOURCES.map((key) => [key, (needs[key] || 0) * units * profile * efficiency]),
+      );
     }
-    function serviceSnapshot(s, hardware) {
+    function serviceSnapshot(s, hardware, customers = ctx.customerReadModel(s)) {
+      const premiums = customers.premiums;
+      const research = ctx.researchEffects(s);
       const physical = roomResources(s, hardware),
         rows = [],
         free = zeroResources(),
         committedFree = zeroResources();
       const byRoom = new Map(s.business.rooms.map((r) => [r.roomId, r]));
       const agents = new Map(
-        s.agents.filter((a) => ctx.agentProductive(s, a)).map((a) => [a.id, a]),
+        s.agents
+          .filter((a) => ctx.agentProductive(s, a, customers.assignments))
+          .map((a) => [a.id, a]),
       );
       let gross = 0,
         crewCost = 0,
@@ -87,8 +93,8 @@
           demand = zeroResources(),
           reserved = zeroResources();
         for (const group of room.groups) {
-          const active = groupDemand(room, group),
-            committed = groupDemand(room, group, true);
+          const active = groupDemand(room, group, false, research.serviceEfficiency),
+            committed = groupDemand(room, group, true, research.serviceEfficiency);
           for (const key of RESOURCES) {
             demand[key] += active[key];
             reserved[key] += committed[key];
@@ -96,15 +102,7 @@
         }
         const units = room.groups.reduce((sum, g) => sum + g.units, 0);
         const manager = agents.get(room.managerId);
-        const management = manager
-          ? 1 +
-            Math.min(
-              0.2,
-              Math.log2(1 + manager.level) * 0.025 +
-                (manager.role === 'operator' ? 0.025 : 0) +
-                ctx.agentEffects(manager).management,
-            )
-          : 1;
+        const management = ctx.managerMultiplier(manager);
         const crewCapacity = room.crew * 24 * management;
         const crewFactor =
           Math.min(1, crewCapacity / Math.max(1, units)) * (room.changeRemaining > 0 ? 0.5 : 1);
@@ -114,7 +112,7 @@
         const consumed = zeroResources(),
           groups = [];
         for (const group of room.groups) {
-          const needs = groupDemand(room, group);
+          const needs = groupDemand(room, group, false, research.serviceEfficiency);
           // Only resources needed by this service can block it. A missing GPU
           // must not stop hosting or archives sharing the same room.
           const supplied =
@@ -128,12 +126,20 @@
           for (const key of RESOURCES) consumed[key] += needs[key] * supplied;
           roomDelivered += group.units * supplied;
           groups.push({ ...group, supplied });
-          const premium = group.premium ? 1.15 : 1;
+          const contracted = premiums.get(room.roomId + '/' + group.kind);
+          const premiumShare =
+            contracted?.units === group.units && group.units
+              ? contracted.premium / group.units
+              : group.premium
+                ? 1
+                : 0;
+          const premium = 1 + 0.15 * premiumShare;
           const compensation =
-            group.premium && s.time >= s.business.transitionUntil ? 0.2 * (1 - supplied) : 0;
+            s.time >= s.business.transitionUntil ? 0.2 * premiumShare * (1 - supplied) : 0;
           revenue +=
             group.units *
             SERVICES[group.kind].fee *
+            (group.kind === 'inference' ? research.inferenceIncome : 1) *
             trust *
             Math.max(0, supplied * premium - compensation);
         }

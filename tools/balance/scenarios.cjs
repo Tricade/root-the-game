@@ -70,6 +70,11 @@ function fleet(count = 24, seed = 101) {
   };
   s.operations.partsTarget = Math.min(20 * roomCount, 30);
   s.operations.autoParts = true;
+  // This fixture constructs the historical service ledger, then follows the
+  // real migration path to named customer contracts and an empty research lab.
+  s.version = 5;
+  delete s.customers;
+  delete s.lab;
   return E.normalizeState(s);
 }
 module.exports = { fresh, fleet };

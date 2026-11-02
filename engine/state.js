@@ -22,7 +22,9 @@
     function hasId(s, id) {
       return (
         s.operations?.queue.some((x) => x.id === id) ||
-        false ||
+        s.customers?.contracts.some((x) => x.id === id) ||
+        s.customers?.leads.some((x) => x.id === id) ||
+        s.customers?.history.some((x) => x.id === id) ||
         s.servers.some((x) => x.id === id) ||
         s.agents.some((x) => x.id === id) ||
         s.jobs.some((x) => x.id === id) ||
@@ -55,7 +57,7 @@
     function createState(seed = 12345) {
       const nseed = (Number.isInteger(seed) ? seed : 12345) >>> 0;
       const s = {
-        version: 5,
+        version: 7,
         seed: nseed,
         rng: nseed || 0x6d2b79f5,
         networkName: 'Mein Netzwerk',
@@ -180,6 +182,8 @@
       s.business = context.businessDefaults(s);
       s.operations = context.operationsDefaults();
       context.migratePersonnel(s);
+      context.migrateCustomers(s);
+      context.migrateResearch(s);
       s.offers.push(makeJob(s), makeJob(s));
       addLog(s, 'system', 'ROOT ist bereit. Dein erster Überwachungsauftrag läuft.');
       updateAchievementUnlocks(s);

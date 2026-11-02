@@ -1,11 +1,18 @@
+import { NAVIGATION_ITEMS } from './ui/navigation.js';
+import { createAchievementsUI } from './ui/achievements.js';
 import { createRacks } from './rack-ui.js';
 import { createUIFoundation } from './ui/foundation.js';
 import { createChromeUI } from './ui/chrome.js';
 import { createOverviewUI } from './ui/overview.js';
+import { createDashboardUI } from './ui/dashboard.js';
+import { createAgentDevelopmentUI } from './ui/agent-development.js';
 import { createWorkforceUI } from './ui/workforce.js';
 import { createPersonnelUI } from './ui/personnel.js';
 import { createWorkloadsUI } from './ui/workloads.js';
+import { createResearchUI } from './ui/research.js';
 import { createBusinessUI } from './ui/business.js';
+import { createRoomOperationsUI } from './ui/room-operations.js';
+import { selectWorkspaceRoom } from './ui/room-context.js';
 import { createOperationsUI } from './ui/operations.js';
 import { createOfflineUI } from './ui/offline.js';
 import { createProtectionUI } from './ui/protection.js';
@@ -83,7 +90,7 @@ import { createRoom } from './room.js';
     },
     openProtection: () => navigate('resilience'),
     openView: (id, roomId) => {
-      if (roomId) R.selectRoom(roomId);
+      selectWorkspaceRoom(ctx, roomId);
       navigate(id);
     },
     onExit: () => {
@@ -119,10 +126,6 @@ import { createRoom } from './room.js';
     `<button class="button primary" data-modal="servers">${icon('plus')}Server hinzufügen</button>`;
 
   const serverStatusNames = { ...R.statusNames, failed: 'Ausgefallen' };
-
-  navs.push(['facility', 'layers', 'Gebäude & Technik']);
-  navs.push(['business', 'jobs', 'Kunden & Betrieb']);
-  navs.push(['operations', 'automation', 'Betriebspläne']);
 
   // The controller owns shared UI state. Getters keep async callbacks and mounted
   // feature modules on the same current save rather than capturing an old object.
@@ -352,10 +355,14 @@ import { createRoom } from './room.js';
   };
   Object.assign(ctx, createChromeUI(ctx));
   Object.assign(ctx, createOverviewUI(ctx));
+  Object.assign(ctx, createDashboardUI(ctx));
+  Object.assign(ctx, createAgentDevelopmentUI(ctx));
   Object.assign(ctx, createPersonnelUI(ctx));
   Object.assign(ctx, createWorkforceUI(ctx));
   Object.assign(ctx, createWorkloadsUI(ctx));
+  Object.assign(ctx, createResearchUI(ctx));
   Object.assign(ctx, createBusinessUI(ctx));
+  Object.assign(ctx, createRoomOperationsUI(ctx));
   Object.assign(ctx, createOperationsUI(ctx));
   Object.assign(ctx, createOfflineUI(ctx));
   Object.assign(ctx, createProtectionUI(ctx));
@@ -366,20 +373,10 @@ import { createRoom } from './room.js';
   Object.assign(ctx, createFacilityUI(ctx));
   Object.assign(ctx, createEventsUI(ctx));
   Object.assign(ctx, createDesktopUI(ctx));
-  const viewFunctions = {
-    overview: ctx.overviewView,
-    network: ctx.networkView,
-    agents: ctx.agentsView,
-    jobs: ctx.jobsView,
-    research: ctx.researchView,
-    automation: ctx.automationView,
-    resilience: ctx.resilienceView,
-    inbox: ctx.inboxView,
-    log: ctx.logView,
-    facility: ctx.facilityView,
-    business: ctx.businessView,
-    operations: ctx.operationsView,
-  };
+  Object.assign(ctx, createAchievementsUI(ctx));
+  const viewFunctions = Object.fromEntries(
+    NAVIGATION_ITEMS.map(([id, , , renderer]) => [id, ctx[renderer]]),
+  );
 
   function render() {
     if (!state) return;
@@ -408,8 +405,8 @@ import { createRoom } from './room.js';
           : '';
     const rewards = pendingAchievements();
     const rewardAlert =
-      rewards.length && view !== 'research'
-        ? `<aside class="reward-banner" role="status">${icon('trophy')}<div><strong>${rewards.length === 1 ? 'Ein Erfolg wartet auf dich' : rewards.length + ' Erfolge warten auf dich'}</strong><span>${rewards.map((a) => '<span>' + esc(a.name) + '</span>').join(' · ')} · ${ctx.stat('achievementReward')} <span>CR abholbereit</span></span></div><button class="button small" data-nav="research">Belohnung abholen${icon('arrow')}</button></aside>`
+      rewards.length && view !== 'achievements'
+        ? `<aside class="reward-banner" role="status">${icon('trophy')}<div><strong>${rewards.length === 1 ? 'Ein Erfolg wartet auf dich' : rewards.length + ' Erfolge warten auf dich'}</strong><span>${rewards.map((a) => '<span>' + esc(a.name) + '</span>').join(' · ')} · ${ctx.stat('achievementReward')} <span>CR abholbereit</span></span></div><button class="button small" data-nav="achievements">Belohnung abholen${icon('arrow')}</button></aside>`
         : '';
     container.innerHTML = `${saveError ? `<div class="save-warning" role="status">${esc(saveError)}${saveConflict ? '<button class="button small" data-command="reload">Aktuellen Stand laden</button>' : ''}</div>` : ''}${alert}${rewardAlert}<div class="view-content">${roomMode && view === 'overview' ? ctx.consoleOverviewView() : viewFunctions[view]()}</div><footer class="bottom-caption"><span><i class="live-dot"></i>${ctx.stat('systemStatus')} · ${ctx.stat('runtime')}</span><span>DEIN NETZWERK. DEINE REGELN.</span></footer>`;
     $$('.nav-item[data-nav]').forEach((el) => {
@@ -479,6 +476,7 @@ import { createRoom } from './room.js';
           'repairServer',
           'resolveIncident',
           'dispatchAgent',
+          'upgradeAgent',
           'hireCandidate',
           'dismissAgent',
         ].includes(action)
@@ -520,7 +518,7 @@ import { createRoom } from './room.js';
       state
         ? [
             state.networkName,
-            ...state.servers.map((s) => s.name),
+            ...state.servers.filter((s) => !I18N.isGeneratedServerName(s)).map((s) => s.name),
             ...state.agents.map((a) => a.name),
             ...state.facility.racks.map((r) => r.name),
           ]

@@ -7,9 +7,10 @@
   'use strict';
   return function (ctx) {
     const { clamp, RESOURCES, fraction, zeroResources } = ctx;
-    function serviceMetrics(s, base, hardware) {
-      const services = ctx.serviceSnapshot(s, hardware);
-      const active = s.agents.filter((a) => ctx.agentProductive(s, a));
+    function serviceMetrics(s, base, hardware, customers) {
+      const research = ctx.researchEffects(s);
+      const services = ctx.serviceSnapshot(s, hardware, customers);
+      const active = s.agents.filter((a) => ctx.agentProductive(s, a, customers.assignments));
       const engineers = active
         .filter((a) => a.role === 'engineer')
         .reduce((sum, a) => sum + a.level * ctx.agentEffects(a).care, 0);
@@ -52,7 +53,8 @@
       );
       const energy =
         (base.powerW / 1000) *
-        (s.policies.power === 'eco' ? 0.045 : s.policies.power === 'performance' ? 0.09 : 0.065);
+        (s.policies.power === 'eco' ? 0.045 : s.policies.power === 'performance' ? 0.09 : 0.065) *
+        research.energy;
       const assetCare = s.servers.reduce(
         (sum, a) =>
           sum +
@@ -85,6 +87,8 @@
         );
       const workPerSecond =
         workBase *
+        research.work *
+        (s.lab?.project ? 0.9 : 1) *
         (1 + 0.12 * (s.upgrades.routing || 0)) *
         workforce *
         (s.resilience.operation?.kind === 'backup' ? 0.5 : 1) *
@@ -116,7 +120,8 @@
         ]),
       );
       const researchPerSecond = base.onlineServers
-        ? (0.008 + analysts * 0.026 + researchFocus * 0.012) *
+        ? research.research *
+          (0.008 + analysts * 0.026 + researchFocus * 0.012) *
           (1 + (0.6 * (s.upgrades.synthesis || 0)) / ((s.upgrades.synthesis || 0) + 12)) *
           base.hardwareFactor
         : 0;
@@ -124,13 +129,25 @@
         ...base,
         heat,
         reliability,
-        riskPerHour,
+        riskPerHour: clamp(riskPerHour * research.risk, 1, 70),
         upkeep,
         incomePerSecond: recoveryAllowance > 0 ? 0.08 : rawIncome,
         workPerSecond,
         researchPerSecond,
         jobRates,
         serviceIncome: services.gross,
+        serviceModel: services,
+        customerSupply: Object.fromEntries(
+          services.rooms.map((r) => [
+            r.roomId,
+            {
+              ...Object.fromEntries(r.groups.map((g) => [g.kind, g.supplied])),
+              available: r.available,
+              reserved: r.reserved,
+              changing: r.changeRemaining > 0 || Boolean(r.conversion),
+            },
+          ]),
+        ),
         personnelCost: personnel,
         recoveryAllowance,
         serviceUnits: services.totalUnits,

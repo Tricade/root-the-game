@@ -202,6 +202,7 @@ export function createRoom({
 
   return {
     markup: ctx.markup,
+    enter: ctx.startExploration,
     mount: ctx.mount,
     update: ctx.update,
     hide: ctx.hide,

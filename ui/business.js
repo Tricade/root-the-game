@@ -7,9 +7,9 @@ export function createBusinessUI(ctx) {
   const cards = createCustomerCards(ctx),
     controls = createCustomerControls(ctx);
   function businessView() {
-    const model = ctx.E.getBusinessModel(ctx.state),
-      book = ctx.E.getCustomers(ctx.state);
+    const model = ctx.E.getBusinessModel(ctx.state);
     if (!model.rooms.some((r) => r.roomId === selectedRoom)) selectedRoom = model.rooms[0].roomId;
+    const book = ctx.E.getCustomers(ctx.state, { roomId: selectedRoom });
     const room = model.rooms.find((r) => r.roomId === selectedRoom),
       layout = ctx.E.getFacilityLayout(ctx.state);
     const contracts = book.contracts.filter((c) => c.roomId === selectedRoom);
@@ -124,11 +124,14 @@ export function createBusinessUI(ctx) {
       ctx.state.jobs.map((j) => j.id),
     ]);
   }
-  function updateBusiness() {
+  function updateBusiness(metrics = null) {
     if (!['overview', 'business', 'automation'].includes(ctx.view)) return;
-    const model = ctx.E.getBusinessModel(ctx.state),
-      m = ctx.E.getMetrics(ctx.state),
-      book = ctx.E.getCustomers(ctx.state);
+    const m = metrics || ctx.E.getMetrics(ctx.state),
+      model = ctx.E.getBusinessModel(ctx.state, m),
+      book = ctx.E.getCustomers(ctx.state, {
+        roomId: selectedRoom,
+        summaryOnly: ctx.view !== 'business',
+      });
     const room = model.rooms.find((r) => r.roomId === selectedRoom);
     const values = {
       gross: ctx.dec(model.gross * 60) + ' CR',
@@ -149,6 +152,8 @@ export function createBusinessUI(ctx) {
         const key = el.dataset.roomResource;
         el.textContent = ctx.dec(room.reserved[key]) + ' / ' + ctx.dec(room.available[key]);
       });
+    const spent = ctx.$('[data-customer-spent]');
+    if (spent) spent.textContent = ctx.fmt(book.spent) + ' CR';
     if (ctx.view !== 'business') return;
     for (const c of book.contracts.filter((c) => c.roomId === selectedRoom)) {
       const supplied =
@@ -161,7 +166,10 @@ export function createBusinessUI(ctx) {
       write('time', ctx.duration(c.stage === 'setup' ? c.term : c.remaining));
       write('notice', ctx.duration(c.notice));
       write('satisfaction', ctx.dec(c.satisfaction) + ' %');
-      write('supply', ctx.dec(supplied * 100) + ' %');
+      write(
+        'supply',
+        c.stage === 'setup' ? ctx.tr('Noch nicht eingerichtet') : ctx.dec(supplied * 100) + ' %',
+      );
       const agent = ctx.state.agents.find((a) => a.id === c.agentId);
       write(
         'work',
@@ -179,8 +187,6 @@ export function createBusinessUI(ctx) {
         ? ''
         : ctx.tr('Das verfügbare Budget reicht nicht aus.');
     });
-    const spent = ctx.$('[data-customer-spent]');
-    if (spent) spent.textContent = ctx.fmt(book.spent) + ' CR';
   }
   return {
     ...controls,

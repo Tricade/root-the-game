@@ -93,3 +93,17 @@
     max-width: none;
   }
 }
+
+.customer-requirements {
+  display: grid;
+  gap: 8px;
+  padding: 12px 0;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.8;
+}
+.customer-requirements strong {
+  color: var(--text);
+  font-size: 11px;
+}

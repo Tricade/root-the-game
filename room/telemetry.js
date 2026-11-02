@@ -19,7 +19,7 @@ export function createRoomTelemetry(sceneContext) {
               '" data-room-server-light="' +
               sceneContext.escapeHtml(server.id) +
               '"></span><span>' +
-              sceneContext.escapeHtml(server.name) +
+              sceneContext.escapeHtml(sceneContext.serverName(server)) +
               '</span><small data-room-server-status="' +
               sceneContext.escapeHtml(server.id) +
               '">' +
@@ -444,7 +444,7 @@ export function createRoomTelemetry(sceneContext) {
           (sceneContext.rackRefs.get(rack.id)?.cabinet?.doorOpen ? 'Tür schließen' : 'Tür öffnen');
       else if (rack && server)
         text =
-          server.name +
+          sceneContext.serverName(server) +
           ' · ' +
           (STATUS_TEXT[server.status] || server.status) +
           ' · E / Klick: Server verwalten';

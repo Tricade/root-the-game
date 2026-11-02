@@ -126,9 +126,16 @@ async function captureDocumentation({ window, output }) {
       );
     }
   }
-  await contents.executeJavaScript(
-    `(async()=>{document.querySelector('.sidebar [data-nav="agents"]').click();document.querySelector('[data-modal="agent-upgrade"]').click();await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));})()`,
-  );
+  const upgradeOpacity = await contents.executeJavaScript(`(async()=>{
+    document.querySelector('.sidebar [data-nav="agents"]').click();
+    document.querySelector('[data-modal="agent-upgrade"]').click();
+    await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
+    // Presented frames can still belong to the modal's 150ms fade-in. Wait for
+    // its finite animation, as the page captures above already do.
+    await Promise.all(document.getAnimations().filter(animation=>Number.isFinite(animation.effect.getTiming().iterations)).map(animation=>animation.finished.catch(()=>{})));
+    return getComputedStyle(document.querySelector('.modal-backdrop')).opacity;
+  })()`);
+  assert.equal(upgradeOpacity, '1', 'The upgrade comparison must be fully opaque before capture');
   const upgrade = await presentedFrame(contents);
   await fs.writeFile(path.join(directory, 'agent-upgrade.jpg'), upgrade.toJPEG(88));
   await contents.executeJavaScript(

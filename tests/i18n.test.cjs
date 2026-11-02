@@ -15,6 +15,7 @@ test('customer workflow, research dialogs and development controls have complete
     ],
     ['Noch nicht eingerichtet', 'Not provisioned yet'],
     ['Agent entwickelt.', 'Agent upgraded.'],
+    ['Netzwerkstand gespeichert.', 'Network saved.'],
     ['Schwerpunkt angepasst.', 'Focus updated.'],
     ['19 Zoll · 18 HE', '19 in · 18 RU'],
     ['3 Server · 9 / 16 HE', '3 servers · 9 / 16 RU'],

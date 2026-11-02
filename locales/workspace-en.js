@@ -5,6 +5,7 @@
 })(typeof globalThis !== 'undefined' ? globalThis : this, function (translate) {
   return {
     pairs: [
+      ['Netzwerkstand gespeichert.', 'Network saved.'],
       ['19 Zoll · 18 HE', '19 in · 18 RU'],
       [
         'Der zentrale Ausbau ist derzeit nicht verfügbar.',

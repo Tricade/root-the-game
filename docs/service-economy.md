@@ -1,6 +1,6 @@
 # Customers, connected utilities and operating plans
 
-This overhaul uses save schema **4**. Browser and desktop use the same simulation and actions. Existing money, hardware, research and accepted jobs survive migration; old implicit income becomes a conservative set of customer commitments. Migrated networks receive twelve simulated hours without premium compensation charges. Keep an export before upgrading: older releases cannot load schema 4.
+Current development uses save schema **7**: named customer contracts and paid lab projects join the existing personnel, room and operating-plan state. Older saves migrate while preserving progress; cached older clients cannot write over the new state. The first new-format write preserves the previous raw save as a backup. Older releases cannot load schema 7.
 
 ## Income follows delivered work
 
@@ -13,7 +13,7 @@ Installed hardware provides CPU, RAM, storage, network throughput, GPU and VRAM.
 | Database     |           0.44 | 4 CPU, 24 GB RAM, 80 Mbit/s     |
 | AI inference |           0.72 | 0.5 GPU, 24 GB VRAM, 100 Mbit/s |
 
-Full resource requirements are shown before contracting. New customers require ten minutes of onboarding and a one-time fee equal to thirty minutes of base revenue. Contracts last three simulated days, with optional renewal. Premium pays 15% more and imposes outage compensation; a premium change takes effect at renewal, so an outage cannot be escaped by toggling a switch.
+Full resource requirements are quoted before accepting an enquiry. New customers require 600 units of agent work and a one-time fee equal to thirty minutes of base revenue. Contracts last one, three or seven simulated days after setup, with optional renewal. See the [customer lifecycle](customer-contracts.md) for support, commercial departures and SLA notices. Premium pays 15% more and imposes outage compensation; a premium change takes effect at renewal, so an outage cannot be escaped by toggling a switch.
 
 Room specialization saves 10% of matching resources; changing it takes two minutes at half delivery. A reserve limits new commitments, leaving capacity for faults and project work. Each paid crew supports 24 customer units. A qualified agent can lead one room, with a bounded management bonus. Staff, hardware care, energy, racks and central plant all incur costs. Automation discounts energy and hardware care by up to 25%; research synthesis approaches a 60% bonus. These bonuses have diminishing returns.
 
@@ -64,7 +64,7 @@ A plan can contain up to twelve explicit actions: backup, rack upgrade, central 
 
 Run `node tools/balance/bench.cjs`. It uses fictional fixtures and fixed seeds, performs 24-hour scenarios as two allowed twelve-hour sessions, compares identical online/offline decisions, and measures one minute at 60, 240 and 960 servers. It never reads a player save. Results are observations, not wall-clock CI thresholds or a guarantee that every seed avoids incidents.
 
-In the recorded Node 24.22.1 run, the three unchanged one-server starts earned approximately 27,000 CR in 24 hours with automatic jobs enabled. The mixed 24-server fixture earned approximately 3.51 million. The scale cases took 19, 82 and 366 ms respectively for one simulated minute; this is **not** a full twelve-hour large-fleet benchmark. Another fixed fresh seed encountered a corruption incident and required manual recovery, confirming that uninterrupted income is not guaranteed.
+The current bounded results and their precise conditions are recorded in [balance verification](balance-verification.md). Natural starts, constructed mature fleets, outage behavior and limited scale probes are identified separately; a constructed fleet is not evidence of first-day player income.
 
 Room excavation starts at 20 million CR; another floor starts at 500 million, with costs increasing for further expansion. See [construction](construction.md). Expanding customer utilization and room capacity is necessary to finance later floors; a fixed small installation is intentionally a slow route.
 

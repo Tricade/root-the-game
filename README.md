@@ -51,22 +51,32 @@ Manage everything through the **web console**, or walk the facility in **first p
 
 ## The web console
 
+The interface is grouped into **Control room, Business, Data center, Team & development, and Operations**. The dashboard summarizes delivered customer services, finances and pending work; room profiles and central connections belong to Buildings & utilities. The physical monitors use the same route names and live readings.
+
 Physical hardware is also fully manageable from the ordinary interface: server specifications, GPU usage, switch ports, wiring, power profiles and upgrade consequences are exposed directly.
 
-[![The web hardware view: a selected AI server, simulated GPU/VRAM usage, rack equipment and power draw](screenshots/readme/hardware.jpg)](screenshots/readme/hardware-full.jpg)
+[![Dashboard with customer delivery, recurring margin, staffing and current research](screenshots/readme/overview.jpg)](screenshots/readme/overview-full.jpg)
 
 <table>
   <tr>
-    <td width="50%"><a href="screenshots/readme/overview.jpg"><img src="screenshots/readme/overview-thumb.jpg" alt="Web dashboard with income, capacity, research, reliability and live room preview" width="480"></a><br><strong>Network overview</strong><br>Income, capacity, research, reliability, decisions and live infrastructure.</td>
-    <td width="50%"><a href="screenshots/readme/agents.jpg"><img src="screenshots/readme/agents.jpg" alt="Agent roster with roles, focus selectors, upgrades and assignment status" width="480"></a><br><strong>Agents and assignments</strong><br>Choose a focus, develop specialists and decide who can leave normal operations.</td>
+    <td width="50%"><a href="screenshots/readme/overview.jpg"><img src="screenshots/readme/overview.jpg" alt="Dashboard: Customer delivery, recurring margin, staffing and actions needing attention." width="480"></a><br><strong>Dashboard</strong><br>Customer delivery, recurring margin, staffing and actions needing attention.</td>
+    <td width="50%"><a href="screenshots/readme/customers.jpg"><img src="screenshots/readme/customers.jpg" alt="Customers & contracts: Incoming enquiries, staffed provisioning, support, contract terms and departures." width="480"></a><br><strong>Customers & contracts</strong><br>Incoming enquiries, staffed provisioning, support, contract terms and departures.</td>
   </tr>
   <tr>
-    <td><a href="screenshots/readme/jobs.jpg"><img src="screenshots/readme/jobs.jpg" alt="Contract board with CPU and GPU workloads, rewards and capacity requirements" width="480"></a><br><strong>Client workloads</strong><br>Compare reward, research, load and GPU requirements before accepting work.</td>
-    <td><a href="screenshots/readme/resilience-full.jpg"><img src="screenshots/readme/resilience.jpg" alt="Operations and resilience interface with repairs, parts, reserve and backups" width="480"></a><br><strong>Operations and resilience</strong><br>Manage defects, repairs, parts, protected money and operations backups.</td>
+    <td width="50%"><a href="screenshots/readme/agents.jpg"><img src="screenshots/readme/agents.jpg" alt="Robot agents: Compare independently rolled strengths, drawbacks, running costs and assignments." width="480"></a><br><strong>Robot agents</strong><br>Compare independently rolled strengths, drawbacks, running costs and assignments.</td>
+    <td width="50%"><a href="screenshots/readme/agent-upgrade.jpg"><img src="screenshots/readme/agent-upgrade.jpg" alt="Upgrade comparisons: See the actual network benefit and extra running cost before paying." width="480"></a><br><strong>Upgrade comparisons</strong><br>See the actual network benefit and extra running cost before paying.</td>
   </tr>
   <tr>
-    <td><a href="screenshots/readme/research.jpg"><img src="screenshots/readme/research.jpg" alt="Research interface with repeatable upgrades and achievements" width="480"></a><br><strong>Research and milestones</strong><br>Improve the whole network and claim achievement rewards.</td>
-    <td><a href="screenshots/readme/construction-full.jpg"><img src="screenshots/readme/construction.jpg" alt="Facility plan with owned rooms, vacant plots and active basement construction" width="480"></a><br><strong>Building and utilities</strong><br>Buy space, follow construction and plan cooling, UPS and power distribution.</td>
+    <td width="50%"><a href="screenshots/readme/research-tree.jpg"><img src="screenshots/readme/research-tree.jpg" alt="Research branches: Follow prerequisites and choose which paid lab project gets the next time slot." width="480"></a><br><strong>Research branches</strong><br>Follow prerequisites and choose which paid lab project gets the next time slot.</td>
+    <td width="50%"><a href="screenshots/readme/achievements.jpg"><img src="screenshots/readme/achievements.jpg" alt="Achievements: A dedicated page for milestones, progress and claimable rewards." width="480"></a><br><strong>Achievements</strong><br>A dedicated page for milestones, progress and claimable rewards.</td>
+  </tr>
+  <tr>
+    <td width="50%"><a href="screenshots/readme/jobs.jpg"><img src="screenshots/readme/jobs.jpg" alt="Project jobs: Compare resource demands and rewards alongside ongoing customer commitments." width="480"></a><br><strong>Project jobs</strong><br>Compare resource demands and rewards alongside ongoing customer commitments.</td>
+    <td width="50%"><a href="screenshots/readme/resilience.jpg"><img src="screenshots/readme/resilience.jpg" alt="Incidents & backups: Manage defects, repairs, parts, reserves and operations backups." width="480"></a><br><strong>Incidents & backups</strong><br>Manage defects, repairs, parts, reserves and operations backups.</td>
+  </tr>
+  <tr>
+    <td width="50%"><a href="screenshots/readme/construction.jpg"><img src="screenshots/readme/construction.jpg" alt="Buildings & utilities: Buy space and configure room profiles, crews, reserves and central connections." width="480"></a><br><strong>Buildings & utilities</strong><br>Buy space and configure room profiles, crews, reserves and central connections.</td>
+    <td width="50%"><a href="screenshots/readme/room-console.jpg"><img src="screenshots/readme/room-console.jpg" alt="The same controls in 3D: Grouped navigation and live business readings inside the room console." width="480"></a><br><strong>The same controls in 3D</strong><br>Grouped navigation and live business readings inside the room console.</td>
   </tr>
 </table>
 
@@ -87,12 +97,13 @@ _Real application captures using a separate synthetic demonstration save. Click 
 ### Customers, room specialization and connected utilities
 
 - **Resource-backed customers:** hosting, archives, databases and AI inference reserve CPU, RAM, storage, network, GPUs and VRAM. Only delivered service earns income; unused hardware still costs money.
-- **Commitments and reserves:** three-day contracts, ten-minute onboarding, premium obligations, room profiles, paid crews and agent team leads give expansion real operating consequences.
-- **Paid room conversion:** connect existing rooms to central cooling, distribution or UPS, or retain local backup capacity. Only the converting room stops. Original pipework and bus ducts reflect the connection in 3D.
+- **A real customer lifecycle:** incoming enquiries, one-, three- or seven-day contracts, staffed provisioning, support, renewal, commercial departures and SLA cancellation notices. Quotes reserve real resources; revenue starts after setup. Optional customer automation has its own budget.
+- **Commitments and reserves:** premium obligations, room profiles, paid crews and agent team leads give expansion real operating consequences. Customer sales and room engineering have separate pages.
+- **Paid room conversion:** connect existing rooms to central cooling, distribution or UPS, or retain local backup capacity. Only the converting room stops. Original pipework and cable trays reflect the connection in 3D.
 - **Fifteen project families and 46 titles:** different memory, network, storage and accelerator needs keep contract choices varied. Longer agent projects trade ordinary contributions for fixed research, reputation or optimization rewards.
 - **Responsive offline calculation:** up to twelve hours run in a background worker with progress feedback; the same policies and simulation rules apply online and offline.
 
-[Read the service economy, failure boundaries and operating-plan rules →](docs/service-economy.md)
+[Customer contract lifecycle →](docs/customer-contracts.md) · [Service economy and failure boundaries →](docs/service-economy.md) · [Measured balance and scaling →](docs/balance-verification.md)
 
 ### Agents, contracts and research
 
@@ -102,7 +113,9 @@ _Real application captures using a separate synthetic demonstration save. Click 
 - **Automatic self-maintenance:** individual units can temporarily go offline. Their normal contributions and paid assignments pause; other systems continue, rewards are preserved, and units return automatically. [Recruitment and balance rules →](docs/personnel.md)
 - **Special assignments:** network diagnostics reduce risk, load optimization improves throughput, and research assignments deliver research points. The assigned agent contributes nothing to normal operations until completion, then has a cooldown. Matching roles complete their specialist work more efficiently.
 - **Competing contracts:** monitoring, migration, audits, optimization, recovery, research and AI work share finite capacity. Rewards, reputation and research arrive when a contract finishes. Automatic acceptance can favor a balanced mix, income or research.
-- **Five repeatable research tracks:** routing, cooling, contract analysis, workflow efficiency and knowledge synthesis improve the whole fleet. Achievements provide separately claimable credit rewards.
+- **Timed research trees:** four branches with sixteen technologies, cross-branch prerequisites and five ongoing research tracks. One paid lab project reserves 10% of project throughput; cancellation gives no refund. Existing research levels survive migration. [Laboratory rules →](docs/research.md)
+- **Visible upgrade consequences:** agent development compares actual before/after throughput, research, risk, wear, capabilities and running costs, including capped benefits.
+- **Dedicated achievements:** milestones, progress and claimable rewards have their own page, badge and notifications.
 - **Decisions and sectors:** optional events offer different benefits and wait without a timer; up to three can remain pending. Sector expansion requires credits and operational milestones; it unlocks further progression without creating free rooms.
 
 ### Failures, repairs and backups
@@ -200,7 +213,7 @@ Open **[127.0.0.1:18473](http://127.0.0.1:18473/)**. On Windows, double-click **
 <details>
 <summary><strong>Preview status, progression limits and verification</strong></summary>
 
-ROOT is an evolving **1.5.1 preview**. Balance, localization, accessibility and 3D presentation remain open to contributions. Progression extends beyond six racks; current validation ceilings are 10,000 racks, 10,000 servers and 1,000,000 sectors, with five central-utility levels. Only the selected room is rendered. Maximum-size save validation does not establish acceptable real-time performance at that size.
+ROOT is an evolving **1.5.1 preview**. Balance, localization, accessibility and 3D presentation remain open to contributions. Progression extends beyond six racks; current validation ceilings are 10,000 racks, 10,000 servers and 1,000,000 sectors, with 100 central-utility levels. Only the selected room is rendered. Maximum-size save validation does not establish acceptable real-time performance at that size.
 
 See the [integration verification](docs/verification-construction.md), [runtime notes](docs/runtime-1.4.md) and [asset checks](docs/asset-audit.md) for tested behavior and limits. Desktop package tests complement the earlier 1.4 integration evidence; see the [desktop verification scope and limits](docs/desktop.md).
 

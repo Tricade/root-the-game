@@ -1,6 +1,18 @@
 # README media
 
-These are real application captures made for the ROOT · Network OS README. The interface gallery was recorded on 2026-10-30 using the construction integration at `b4d2682` and an isolated synthetic `ROOT / OPERATIONS` demonstration save, never a personal network. Ordinary interface captures use English. Room ownership, equipment, contracts, research, assignments and faults are valid demonstration presets rendered by the normal application.
+The interface gallery was refreshed on **2026-11-02** for the customer, research and dashboard integration. It uses an isolated fictional `ROOT / OPERATIONS` fixture with 18 servers, six racks, six robot agents, four named customer contracts and a funded research project. The preset and capture workflow are maintained in `desktop/docs-capture.cjs`; no player network is read or changed. Normal interface and room captures use English.
+
+The native Electron 45.2.1 run verifies the requested route, decoded images and actual presented frames before recording. The control-room capture additionally waits for that physical room to render. Transient toast notifications are hidden only for the documentation capture; milestones, pending work, costs and normal controls remain visible. The gallery shows the grouped menus, dedicated achievements, resource-backed customer business, the research graph, actual upgrade comparisons and the shared room console. These captures were visually reviewed; they do not establish appearance on every platform or GPU.
+
+To reproduce on PowerShell:
+
+```powershell
+$env:ROOT_CAPTURE_DOCS = '1'
+node tools/desktop/launch.cjs --smoke --output=.desktop-build/docs-capture
+Remove-Item Env:ROOT_CAPTURE_DOCS
+```
+
+On a POSIX shell, prefix the same Node command with `ROOT_CAPTURE_DOCS=1`. The resulting JPEGs are in the output's `documentation` directory. Keep the native result report separate from public media because it contains runtime and hardware diagnostics. Copy only reviewed images into this directory.
 
 `arrival.webp` was refreshed on 2026-11-01 for version 1.5.1. It contains 51 actual Electron presentation frames of the English bunker arrival with the **root. / NETWORK OS** wordmark. Frame durations follow the capture timestamps, with a short first/last hold for readability. The isolated capture hides achievement toasts only while recording. `arrival-poster.jpg` is a frame from the entrance approach. The README uses the poster when reduced motion is requested and also links it directly. No generated scene has been substituted for a runtime capture.
 

@@ -5,6 +5,7 @@
 })(typeof globalThis !== 'undefined' ? globalThis : this, function (translate) {
   return {
     pairs: [
+      ['19 Zoll · 18 HE', '19 in · 18 RU'],
       [
         'Der zentrale Ausbau ist derzeit nicht verfügbar.',
         'The central upgrade is currently unavailable.',
@@ -182,6 +183,10 @@
       ],
     ],
     patterns: [
+      [
+        /^(\d+) Server( · .*)?$/,
+        (_, n, rest) => n + ' server' + (Number(n) === 1 ? '' : 's') + translate(rest || ''),
+      ],
       [
         /^(.+?) ist bereits im Einsatz: (.+?)\.$/,
         (_, agent, mission) => agent + ' is already on assignment: ' + translate(mission) + '.',

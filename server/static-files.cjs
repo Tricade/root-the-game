@@ -31,6 +31,7 @@ function createStaticFiles(root) {
     ['/ui/customer-cards.js', ['ui/customer-cards.js', 'text/javascript; charset=utf-8']],
     ['/ui/customer-controls.js', ['ui/customer-controls.js', 'text/javascript; charset=utf-8']],
     ['/ui/room-operations.js', ['ui/room-operations.js', 'text/javascript; charset=utf-8']],
+    ['/ui/room-context.js', ['ui/room-context.js', 'text/javascript; charset=utf-8']],
     ['/locales/customers-en.js', ['locales/customers-en.js', 'text/javascript; charset=utf-8']],
     ['/customers.css', ['customers.css', 'text/css; charset=utf-8']],
     ['/locales/research-en.js', ['locales/research-en.js', 'text/javascript; charset=utf-8']],

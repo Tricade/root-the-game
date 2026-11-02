@@ -589,7 +589,7 @@ export function createRoomWorld(sceneContext) {
     terminalButton.textContent = 'Konsole';
     terminalButton.addEventListener('click', () => {
       if (!sceneContext.exploring) sceneContext.startExploration();
-      sceneContext.openView?.('overview');
+      sceneContext.openView?.('overview', sceneContext.locationId);
     });
     sceneContext.shell.querySelector('.root-room-controls').appendChild(terminalButton);
     sceneContext.consolePanel = document.createElement('section');

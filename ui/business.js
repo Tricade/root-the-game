@@ -4,6 +4,11 @@ import { createCustomerControls } from './customer-controls.js';
 /** Customer sales, contracts and service quality. Room engineering lives in Facility. */
 export function createBusinessUI(ctx) {
   let selectedRoom = null;
+  function selectCustomerRoom(id) {
+    if (!ctx.state.business.rooms.some((r) => r.roomId === id)) return false;
+    selectedRoom = id;
+    return true;
+  }
   const cards = createCustomerCards(ctx),
     controls = createCustomerControls(ctx);
   function businessView() {
@@ -190,6 +195,7 @@ export function createBusinessUI(ctx) {
   }
   return {
     ...controls,
+    selectCustomerRoom,
     businessView,
     businessClick,
     businessChange,

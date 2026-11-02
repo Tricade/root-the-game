@@ -1,6 +1,11 @@
 /** Physical room operation belongs with buildings and utilities, separate from customer sales. */
 export function createRoomOperationsUI(ctx) {
   let selectedRoom = null;
+  function selectRoomOperations(id) {
+    if (!ctx.state.business.rooms.some((r) => r.roomId === id)) return false;
+    selectedRoom = id;
+    return true;
+  }
   const modes = {
     local: 'Lokal',
     central: 'Zentral',
@@ -69,5 +74,5 @@ export function createRoomOperationsUI(ctx) {
     if (change) change.textContent = room.changeRemaining ? ctx.duration(room.changeRemaining) : '';
     if (conversion) conversion.textContent = conversionStatus(room);
   }
-  return { roomOperationsView, roomOperationsChange, updateRoomOperations };
+  return { selectRoomOperations, roomOperationsView, roomOperationsChange, updateRoomOperations };
 }

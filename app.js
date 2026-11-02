@@ -12,6 +12,7 @@ import { createWorkloadsUI } from './ui/workloads.js';
 import { createResearchUI } from './ui/research.js';
 import { createBusinessUI } from './ui/business.js';
 import { createRoomOperationsUI } from './ui/room-operations.js';
+import { selectWorkspaceRoom } from './ui/room-context.js';
 import { createOperationsUI } from './ui/operations.js';
 import { createOfflineUI } from './ui/offline.js';
 import { createProtectionUI } from './ui/protection.js';
@@ -89,7 +90,7 @@ import { createRoom } from './room.js';
     },
     openProtection: () => navigate('resilience'),
     openView: (id, roomId) => {
-      if (roomId) R.selectRoom(roomId);
+      selectWorkspaceRoom(ctx, roomId);
       navigate(id);
     },
     onExit: () => {
